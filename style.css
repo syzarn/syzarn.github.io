@@ -1,0 +1,101 @@
+@font-face {
+  font-family: 'BIOSDOS';
+  src: url('./font/jetbrains/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  color: white;
+  font-family: 'JetBrains Mono Regular', 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: 0.4px;
+}
+
+#terminal {
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.4em;
+}
+
+.output {
+  margin-bottom: 10px;
+}
+
+.line {
+  display: flex;
+}
+
+.prompt {
+  margin-right: 5px;
+}
+
+.printed-prompt {
+  color: #0f0;
+  margin-right: 5px;
+}
+
+.live-prompt {
+  color: #0f0;
+  margin-right: 5px;
+}
+
+#cli-input {
+  background: black;
+  color: white;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  white-space: pre;
+  caret-color: transparent;
+  border: none;
+  min-width: 1ch;
+  display: inline-block;
+  position: relative;
+  user-select: text;
+}
+
+#cli-input::after {
+  content: "_";
+  position: absolute;
+  animation: blink 1s steps(1) infinite;
+  color: white;
+  pointer-events: none;
+  top: 0;
+  left: var(--cursor-left, 0);
+  width: 1ch;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  #terminal {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  body {
+    font-size: 14px;
+  }
+
+  #terminal {
+    padding: 12px;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  50.1%, 100% {
+    opacity: 0;
+  }
+}
