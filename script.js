@@ -163,20 +163,20 @@ function handleCommand(cmdLine) {
   switch (command) {
     case 'help': {
       const builtins = [
-        'about*',
-        'cat*',
-        'cd*',
-        'clear*',
-        'exit*',
-        'help*',
-        'ls*',
-        'whoami*'
+        'about',
+        'cat',
+        'cd',
+        'clear',
+        'exit',
+        'help',
+        'ls',
+        'whoami'
       ];
 
       if (!arg) {
         return `syzarn shell v1.0 - antar’s cli portfolio
 these shell commands are defined internally. type 'help <name>' for more info.
-a star (*) next to a name means it is interactive.
+a star (*) next to a name means that the command is disabled.
 
 ${formatCommandsInColumns(builtins, 3)}`;
       }
