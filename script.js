@@ -76,15 +76,15 @@ const fileSystem = {
     contents: {
       'email.url': {
         type: 'file',
-        content: 'mailto:you@example.com'
+        content: 'mailto:syzarn@outlook.com'
       },
       'linkedin.url': {
         type: 'file',
-        content: 'https://linkedin.com/in/antar'
+        content: 'https://www.linkedin.com/in/shoaib-islam-antor'
       },
       'github.url': {
         type: 'file',
-        content: 'https://github.com/antar'
+        content: 'https://github.com/syzarn'
       }
     }
   },
@@ -256,7 +256,7 @@ lists contents of the current directory.`;
       if (dir && dir[arg] && dir[arg].type === 'file') {
         if (arg.endsWith('.pdf')) {
           const link = document.createElement('a');
-          link.href = '/cv.pdf';
+          link.href = '/files/cv.pdf';
           link.download = 'cv.pdf';
           link.click();
           return 'downloading cv...';
@@ -266,7 +266,16 @@ lists contents of the current directory.`;
         }
         return dir[arg].content;
       }
+        if (arg.trim() === 'tumi nai') {
+          const link = document.createElement('a');
+          link.href = '/files/tumi nai.flac';
+          link.download = 'tumi nai.flac';
+          link.click();
+          return `tobu acho ghire`;
+      }
       return `cat: ${arg}: no such file`;
+
+    
 
     case 'clear':
       terminal.innerHTML = '';
