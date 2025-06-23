@@ -164,9 +164,11 @@ function handleCommand(cmdLine) {
     case 'help': {
       const builtins = [
         'about',
+        'cal',
         'cat',
         'cd',
         'clear',
+        'date',
         'exit',
         'help',
         'ls',
@@ -185,6 +187,9 @@ ${formatCommandsInColumns(builtins, 3)}`;
         case 'about':
           return `about
 displays information about this system.`;
+        case 'cal':
+          return `cal
+displays a simple calendar.`;
         case 'cat':
           return `cat <file>
 concatenate files and print on the standard output. use 'cat cv.pdf' to download the cv.`;
@@ -194,6 +199,9 @@ changes the current directory. use '..' to go up. supports relative and absolute
         case 'clear':
           return `clear
 clears the terminal screen.`;
+        case 'date':
+          return `date
+displays date and time in the given format.`;
         case 'whoami':
       return `whoami
 displays information about the current user and system environment.`;
@@ -276,6 +284,42 @@ lists contents of the current directory.`;
       return `cat: ${arg}: no such file`;
 
     
+    case 'date': {
+      if (args.length > 0 && args[0].startsWith('+')) {
+        try {
+          const formatter = new Intl.DateTimeFormat('en-GB', {
+            weekday: args[0].includes('%A') ? 'long' : undefined,
+            year: args[0].includes('%Y') ? 'numeric' : undefined,
+            month: args[0].includes('%B') ? 'long' : args[0].includes('%m') ? '2-digit' : undefined,
+            day: args[0].includes('%d') ? '2-digit' : undefined
+          });
+          return formatter.format(new Date());
+        } catch {
+          return 'date: invalid format';
+        }
+      } else {
+        return new Date().toString();
+      }
+    }
+
+    case 'cal': {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const start = new Date(year, month, 1);
+      const end = new Date(year, month + 1, 0);
+      let output = `    ${now.toLocaleString('default', { month: 'long' })} ${year}
+Su Mo Tu We Th Fr Sa
+`;
+      const offset = start.getDay();
+      output += '   '.repeat(offset);
+      for (let i = 1; i <= end.getDate(); i++) {
+        output += (i < 10 ? ' ' : '') + i + ' ';
+        if ((i + offset) % 7 === 0) output += '
+';
+      }
+      return output.trim();
+    }
 
     case 'clear':
       terminal.innerHTML = '';
