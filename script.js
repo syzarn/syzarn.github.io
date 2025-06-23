@@ -315,8 +315,7 @@ Su Mo Tu We Th Fr Sa
       output += '   '.repeat(offset);
       for (let i = 1; i <= end.getDate(); i++) {
         output += (i < 10 ? ' ' : '') + i + ' ';
-        if ((i + offset) % 7 === 0) output += '
-';
+        if ((i + offset) % 7 === 0) output += '';
       }
       return output.trim();
     }
