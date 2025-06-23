@@ -259,7 +259,7 @@ lists contents of the current directory.`;
           link.href = '/files/cv.pdf';
           link.download = 'cv.pdf';
           link.click();
-          return `opening: ${dir[arg].content}`;
+          return `opening: cv.pdf`;
         } else if (arg.endsWith('.url')) {
           window.open(dir[arg].content, '_blank');
           return `opening: ${dir[arg].content}`;
