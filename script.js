@@ -10,7 +10,13 @@ function getWhoAmI() {
     `screen         : ${screen.width}x${screen.height} @ ${window.devicePixelRatio}x`,
     `available size : ${screen.availWidth}x${screen.availHeight}`,
     `timezone       : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-    `do not track   : ${navigator.doNotTrack}`,
+    `do not track   : ${
+      navigator.doNotTrack === '1'
+        ? 'Yes'
+        : navigator.doNotTrack === '0'
+        ? 'No'
+        : 'Unknown'
+    }`,
     `cookies enabled : ${navigator.cookieEnabled}`,
     `online         : ${navigator.onLine ? 'Yes' : 'No'}`,
     `clipboard api  : ${'clipboard' in navigator ? 'Yes' : 'No'}`,
@@ -21,26 +27,42 @@ function getWhoAmI() {
   ].join('\n');
 }
 
-
 const terminal = document.getElementById('terminal');
 const input = document.getElementById('cli-input');
 const promptSpan = document.getElementById('prompt');
 
-let pathStack = ['~'];
+let pathStack = ['~']; // Represents the current path segments, starting with '~' for home
 let currentIP = 'user';
 
 // Fetch IP and initialize prompt
 fetch('https://api.ipify.org?format=json')
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  })
   .then(data => {
     currentIP = data.ip;
+    updatePrompt();
+  })
+  .catch(error => {
+    console.error("Failed to fetch IP:", error);
+    currentIP = '0.0.0.0'; // Fallback IP
     updatePrompt();
   });
 
 // Prompt generator
 function getPrompt() {
-  const relativePath = '/' + pathStack.slice(1).join('/');
-  return `${currentIP}@syzarn:${relativePath || '/'}` + '$';
+  let displayedPath = '';
+  if (pathStack.length === 1 && pathStack[0] === '~') {
+    displayedPath = '~'; // When in home, show ~
+  } else if (pathStack[0] === '~') { // For paths under home
+    displayedPath = '~/' + pathStack.slice(1).join('/');
+  } else { // For absolute paths starting from root (if implemented later beyond this scope)
+    displayedPath = '/' + pathStack.join('/');
+  }
+  return `${currentIP}@syzarn:${displayedPath}$`;
 }
 
 function updatePrompt() {
@@ -49,80 +71,141 @@ function updatePrompt() {
 
 // File system
 const fileSystem = {
-  'about': {
+  '~': { // Representing the root of the user's simulated file system (which is their home)
     type: 'folder',
     contents: {
-      'bio.txt': {
+      'about': {
+        type: 'folder',
+        contents: {
+          'bio.txt': {
+            type: 'file',
+            content: 'i am antar, a web developer passionate about building responsive and creative uis.'
+          }
+        }
+      },
+      'projects': {
+        type: 'folder',
+        contents: {
+          'cli-ui.txt': {
+            type: 'file',
+            content: 'cli ui project: a portfolio styled like linux shell using html, css, and javascript.'
+          },
+          'ocr-engine.txt': {
+            type: 'file',
+            content: 'ocr project: bengali ocr system powered by python and ml.'
+          }
+        }
+      },
+      'contacts': {
+        type: 'folder',
+        contents: {
+          'email.url': {
+            type: 'file',
+            content: 'mailto:syzarn@outlook.com'
+          },
+          'linkedin.url': {
+            type: 'file',
+            content: 'https://www.linkedin.com/in/shoaib-islam-antor'
+          },
+          'github.url': {
+            type: 'file',
+            content: 'https://github.com/syzarn'
+          }
+        }
+      },
+      'cv.pdf': {
         type: 'file',
-        content: 'i am antar, a web developer passionate about building responsive and creative uis.'
+        content: '' // Content for PDF is handled by href
+      },
+      // Easter egg file
+      'tumi nai': {
+        type: 'file',
+        content: '' // Content for FLAC is handled by href
       }
     }
-  },
-  'projects': {
-    type: 'folder',
-    contents: {
-      'cli-ui.txt': {
-        type: 'file',
-        content: 'cli ui project: a portfolio styled like linux shell using html, css, and javascript.'
-      },
-      'ocr-engine.txt': {
-        type: 'file',
-        content: 'ocr project: bengali ocr system powered by python and ml.'
-      }
-    }
-  },
-  'contacts': {
-    type: 'folder',
-    contents: {
-      'email.url': {
-        type: 'file',
-        content: 'mailto:syzarn@outlook.com'
-      },
-      'linkedin.url': {
-        type: 'file',
-        content: 'https://www.linkedin.com/in/shoaib-islam-antor'
-      },
-      'github.url': {
-        type: 'file',
-        content: 'https://github.com/syzarn'
-      }
-    }
-  },
-  'cv.pdf': {
-    type: 'file',
-    content: ''
   }
 };
 
-// Path & directory resolution
-function getCurrentDir() {
-  let dir = fileSystem;
-  for (let i = 1; i < pathStack.length; i++) {
-    const segment = pathStack[i];
-    if (dir[segment] && dir[segment].type === 'folder') {
-      dir = dir[segment].contents;
-    } else {
-      return null;
+// --- START: Radical Path & Directory Resolution Refactor ---
+
+/**
+ * Resolves a given path (absolute or relative) against the fileSystem.
+ * Returns the target node (file or folder contents) and its name, or null if not found.
+ * @param {string[]} currentPathStack The current directory path (e.g., ['~', 'projects'])
+ * @param {string} targetPath The path to resolve (e.g., 'about', '../', '/projects/cli-ui.txt', '~/contacts')
+ * @returns {{node: object, name: string} | null} The target node (file or folder contents) and its name, or null.
+ */
+function resolvePath(currentPathStack, targetPath) {
+  let resolvedSegments = [];
+  if (targetPath === '~' || targetPath === '/') {
+    resolvedSegments = ['~'];
+  } else if (targetPath.startsWith('/')) {
+    // For simplicity, treating / as ~/ in this simulated FS
+    // If you had a true root that wasn't home, this would need more logic.
+    resolvedSegments = ['~', ...targetPath.substring(1).split('/').filter(s => s !== '')];
+  } else if (targetPath.startsWith('~/')) {
+    resolvedSegments = ['~', ...targetPath.substring(2).split('/').filter(s => s !== '')];
+  } else {
+    resolvedSegments = [...currentPathStack]; // Start from current path
+    const targetSegments = targetPath.split('/').filter(s => s !== '');
+
+    for (const segment of targetSegments) {
+      if (segment === '..') {
+        if (resolvedSegments.length > 1) { // Cannot go above '~'
+          resolvedSegments.pop();
+        }
+      } else if (segment === '.') {
+        // Do nothing, stay in current segment
+      } else {
+        resolvedSegments.push(segment);
+      }
     }
   }
-  return dir;
+
+  let current = fileSystem;
+  let node = null;
+  let currentSegmentName = resolvedSegments[0]; // For "~"
+  let pathIsValid = true;
+
+  for (let i = 0; i < resolvedSegments.length; i++) {
+    const segment = resolvedSegments[i];
+
+    if (!current[segment]) {
+      pathIsValid = false;
+      break;
+    }
+
+    node = current[segment];
+    currentSegmentName = segment;
+
+    if (node.type === 'folder') {
+      if (i < resolvedSegments.length - 1) { // If it's a folder and not the last segment, dive in
+        current = node.contents;
+      } else { // It's the target folder
+        return { node: node, name: currentSegmentName, path: resolvedSegments };
+      }
+    } else { // It's a file
+      if (i < resolvedSegments.length - 1) { // A file encountered mid-path means invalid path
+        pathIsValid = false;
+        break;
+      } else { // It's the target file
+        return { node: node, name: currentSegmentName, path: resolvedSegments };
+      }
+    }
+  }
+
+  if (!pathIsValid) {
+    return null;
+  }
+  // This case handles resolving a path to a folder where we reached the end of segments
+  // and 'current' holds the contents of the last resolved folder.
+  // The 'node' variable holds the actual folder node.
+  return { node: node, name: currentSegmentName, path: resolvedSegments };
 }
 
-function isInFile() {
-  let dir = fileSystem;
-  for (let i = 1; i < pathStack.length; i++) {
-    const segment = pathStack[i];
-    if (!dir[segment]) return false;
-    if (dir[segment].type === 'folder') {
-      dir = dir[segment].contents;
-    } else if (i === pathStack.length - 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  return false;
-}
+
+// --- END: Radical Path & Directory Resolution Refactor ---
+
 
 // Format commands into Linux-style columns
 function formatCommandsInColumns(cmdArray, columns = 3) {
@@ -146,7 +229,7 @@ function formatCommandsInColumns(cmdArray, columns = 3) {
 function printOutput(text) {
   const outputDiv = document.createElement('div');
   outputDiv.className = 'output';
-  outputDiv.textContent = text;
+  outputDiv.textContent = text; // Use textContent for safety and correct display of newlines
   terminal.insertBefore(outputDiv, input.parentElement);
 }
 
@@ -154,10 +237,14 @@ function printOutput(text) {
 function handleCommand(cmdLine) {
   const [command, ...args] = cmdLine.trim().split(' ');
   const arg = args.join(' ');
-  const dir = getCurrentDir();
 
-  if (isInFile()) {
-    return `you are currently inside a file. use 'cd ..' to return.`;
+  // Special check: If pathStack currently points to a file (not a folder's contents)
+  // this state should ideally be prevented by cd not allowing it.
+  // However, for robustness, check if the current path leads to a file.
+  const currentNode = resolvePath(pathStack, '.'); // Resolve current path
+  if (currentNode && currentNode.node.type === 'file') {
+    // This state should not be reachable if cd logic is robust
+    return `you are currently viewing a file. use 'cd ..' to return to its parent directory.`;
   }
 
   switch (command) {
@@ -203,9 +290,9 @@ clears the terminal screen.`;
           return `date
 displays date and time in the given format.`;
         case 'whoami':
-      return `whoami
+          return `whoami
 displays information about the current user and system environment.`;
-    case 'exit':
+        case 'exit':
           return `exit
 terminates the session and disables further input.`;
         case 'help':
@@ -222,100 +309,119 @@ lists contents of the current directory.`;
     case 'about':
       return `this portfolio is built by antar in a custom linux shell-styled cli interface.`;
 
-    case 'ls':
-      return dir ? Object.keys(dir).join('  ') : '';
+    case 'ls': {
+      const currentDirNode = resolvePath(pathStack, '.');
+      if (!currentDirNode || currentDirNode.node.type !== 'folder') {
+        // This case should ideally not be reached if cd works correctly
+        return `ls: cannot access current directory`;
+      }
+      return Object.keys(currentDirNode.node.contents).join('  ') || '';
+    }
 
-    case 'cd':
-      if (!arg) return 'directory name required';
+    case 'cd': {
+      if (!arg) return 'cd: directory name required';
 
-      if (arg === '~' || arg === '/') {
-        pathStack = ['~'];
-        break;
+      const resolved = resolvePath(pathStack, arg);
+
+      if (!resolved) {
+        return `cd: no such file or directory: ${arg}`;
       }
 
-      if (arg.startsWith('/') || arg.startsWith('~/')) {
-        const parts = arg.replace(/^~?\//, '').split('/');
-        let current = fileSystem;
-        for (let i = 0; i < parts.length; i++) {
-          if (current[parts[i]] && current[parts[i]].type === 'folder') {
-            current = current[parts[i]].contents;
-          } else {
-            return `cd: no such file or directory: ${arg}`;
-          }
-        }
-        pathStack = ['~', ...parts];
-        break;
+      if (resolved.node.type === 'file') {
+        return `cd: ${arg}: not a directory`;
       }
 
-      if (arg === '..') {
-        if (pathStack.length > 1) pathStack.pop();
-        break;
+      // If it's a folder, update pathStack to the resolved path
+      pathStack = resolved.path;
+      break;
+    }
+
+    case 'cat': {
+      if (!arg) return 'cat: file name required';
+
+      const targetNode = resolvePath(pathStack, arg);
+
+      if (!targetNode || targetNode.node.type !== 'file') {
+        return `cat: ${arg}: no such file`;
       }
 
-      if (dir && dir[arg] && dir[arg].type === 'folder') {
-        pathStack.push(arg);
-        break;
+      // Handle special file types
+      if (arg.endsWith('.pdf')) {
+        const link = document.createElement('a');
+        link.href = '/files/cv.pdf'; // Assumes cv.pdf is in /files/ on your web server
+        link.download = 'cv.pdf';
+        link.click();
+        return `opening: cv.pdf`;
+      } else if (arg.endsWith('.url')) {
+        window.open(targetNode.node.content, '_blank');
+        return `opening: ${targetNode.node.content}`;
+      } else if (arg.trim() === 'tumi nai') { // Easter egg for specific filename
+        const link = document.createElement('a');
+        link.href = '/files/tumi nai.flac'; // Assumes tumi nai.flac is in /files/ on your web server
+        link.download = 'tumi nai.flac';
+        link.click();
+        return `tobu acho ghire`;
       }
+      return targetNode.node.content; // Regular text file content
+    }
 
-      return `cd: no such file or directory: ${arg}`;
-
-    case 'cat':
-      if (!arg) return 'file name required';
-      if (dir && dir[arg] && dir[arg].type === 'file') {
-        if (arg.endsWith('.pdf')) {
-          const link = document.createElement('a');
-          link.href = '/files/cv.pdf';
-          link.download = 'cv.pdf';
-          link.click();
-          return `opening: cv.pdf`;
-        } else if (arg.endsWith('.url')) {
-          window.open(dir[arg].content, '_blank');
-          return `opening: ${dir[arg].content}`;
-        }
-        return dir[arg].content;
-      }
-        if (arg.trim() === 'tumi nai') {
-          const link = document.createElement('a');
-          link.href = '/files/tumi nai.flac';
-          link.download = 'tumi nai.flac';
-          link.click();
-          return `tobu acho ghire`;
-      }
-      return `cat: ${arg}: no such file`;
-
-    
     case 'date': {
+      // Very basic date formatting, not a full `date` command emulation
+      const now = new Date();
       if (args.length > 0 && args[0].startsWith('+')) {
         try {
-          const formatter = new Intl.DateTimeFormat('en-GB', {
-            weekday: args[0].includes('%A') ? 'long' : undefined,
-            year: args[0].includes('%Y') ? 'numeric' : undefined,
-            month: args[0].includes('%B') ? 'long' : args[0].includes('%m') ? '2-digit' : undefined,
-            day: args[0].includes('%d') ? '2-digit' : undefined
-          });
-          return formatter.format(new Date());
-        } catch {
+          const formatString = args[0].substring(1);
+          let result = formatString;
+
+          // Replace common format specifiers (simple implementation)
+          result = result.replace(/%Y/g, now.getFullYear());
+          result = result.replace(/%m/g, (now.getMonth() + 1).toString().padStart(2, '0'));
+          result = result.replace(/%d/g, now.getDate().toString().padStart(2, '0'));
+          result = result.replace(/%H/g, now.getHours().toString().padStart(2, '0'));
+          result = result.replace(/%M/g, now.getMinutes().toString().padStart(2, '0'));
+          result = result.replace(/%S/g, now.getSeconds().toString().padStart(2, '0'));
+          result = result.replace(/%A/g, now.toLocaleString('default', { weekday: 'long' }));
+          result = result.replace(/%B/g, now.toLocaleString('default', { month: 'long' }));
+          result = result.replace(/%Z/g, Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+          // Fallback for unrecognized %x or literal %
+          result = result.replace(/%%/g, '%'); // Handle escaped %
+
+          return result;
+        } catch (e) {
+          console.error("Date formatting error:", e);
           return 'date: invalid format';
         }
       } else {
-        return new Date().toString();
+        return now.toString(); // Default date output
       }
     }
 
     case 'cal': {
       const now = new Date();
       const year = now.getFullYear();
-      const month = now.getMonth();
+      const month = now.getMonth(); // 0-indexed
       const start = new Date(year, month, 1);
-      const end = new Date(year, month + 1, 0);
-      let output = `    ${now.toLocaleString('default', { month: 'long' })} ${year}
-Su Mo Tu We Th Fr Sa
-`;
-      const offset = start.getDay();
-      output += '   '.repeat(offset);
+      const end = new Date(year, month + 1, 0); // Last day of current month
+
+      const monthName = now.toLocaleString('default', { month: 'long' });
+      const monthYearStr = `${monthName} ${year}`;
+
+      // Calculate padding to center the month/year string (assuming 20 chars wide for days)
+      const daysHeaderWidth = 20; // "Su Mo Tu We Th Fr Sa" is 20 chars
+      const paddingSpaces = Math.floor((daysHeaderWidth - monthYearStr.length) / 2);
+      let output = ' '.repeat(Math.max(0, paddingSpaces)) + monthYearStr + '\n';
+      output += 'Su Mo Tu We Th Fr Sa\n';
+
+      const offset = start.getDay(); // Day of week for 1st of month (0 for Sunday)
+      output += '   '.repeat(offset); // Indent for the first day
+
       for (let i = 1; i <= end.getDate(); i++) {
-        output += (i < 10 ? ' ' : '') + i + ' ';
-        if ((i + offset) % 7 === 0) output += '';
+        output += (i < 10 ? ' ' : '') + i + ' '; // Single digit padding
+
+        if ((i + offset) % 7 === 0) {
+          output += '\n'; // Newline at end of week
+        }
       }
       return output.trim();
     }
@@ -344,14 +450,24 @@ input.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     e.preventDefault();
     const command = input.innerText.trim();
-    if (!command) return;
+    if (!command) { // If command is empty, just print a new prompt
+      const emptyLine = document.createElement('div');
+      emptyLine.innerHTML = `<span class="printed-prompt">${getPrompt()}&nbsp;</span>`;
+      terminal.insertBefore(emptyLine, input.parentElement);
+      input.innerText = '';
+      updatePrompt();
+      updateCursor();
+      setTimeout(() => input.focus(), 0);
+      return;
+    }
 
     const commandLine = document.createElement('div');
+    // Using innerHTML here is fine as getPrompt() is controlled and command is user input (displayed as is)
     commandLine.innerHTML = `<span class="printed-prompt">${getPrompt()}&nbsp;</span>${command}`;
     terminal.insertBefore(commandLine, input.parentElement);
 
     const output = handleCommand(command);
-    if (typeof output === 'string' && output.trim()) {
+    if (typeof output === 'string' && output.trim() !== '') { // Only print if there's actual output
       printOutput(output);
     }
 
@@ -370,7 +486,7 @@ function updateCursor() {
   temp.style.position = 'absolute';
   temp.style.whiteSpace = 'pre';
   temp.style.visibility = 'hidden';
-  temp.style.font = getComputedStyle(input).font;
+  temp.style.font = getComputedStyle(input).font; // Ensure font matches for accurate width
   document.body.appendChild(temp);
   const width = temp.offsetWidth;
   document.body.removeChild(temp);
