@@ -115,12 +115,12 @@ const fileSystem = {
       },
       'cv.pdf': {
         type: 'file',
-        content: '' // Content for PDF is handled by href
+        content: '' 
       },
       // Easter egg file
-      'tumi nai': {
+      '‎': {
         type: 'file',
-        content: '' // Content for FLAC is handled by href
+        content: ''
       }
     }
   }
@@ -263,7 +263,7 @@ function handleCommand(cmdLine) {
       ];
 
       if (!arg) {
-        return `syzarn shell v1.0 - antar’s cli portfolio
+        return `rsh v1.0
 these shell commands are defined internally. type 'help <name>' for more info.
 a star (*) next to a name means that the command is disabled.
 
