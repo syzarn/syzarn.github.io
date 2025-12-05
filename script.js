@@ -264,7 +264,9 @@ function handleCommand(cmdLine) {
 
       if (!arg) {
         return `rsh v1.0
-these shell commands are defined internally. type 'help <name>' for more info.
+these shell commands are defined internally.
+type 'help <name>' for more info.
+type 'cat cv.pdf' to download the cv.
 a star (*) next to a name means that the command is disabled.
 
 ${formatCommandsInColumns(builtins, 3)}`;
