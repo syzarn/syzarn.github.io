@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'TX-02 Regular';
-  src: url('./font/tx-02/TX-02-Regular.otf') format('otf');
+  src: url('./font/tx-02/TX-02-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
