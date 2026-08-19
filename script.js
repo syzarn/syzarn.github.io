@@ -313,6 +313,7 @@ Mobile : +1 (309) 438-8145`
             }
           }
         },
+<<<<<<< HEAD
 
         'text-tools': {
           type: 'folder',
@@ -412,6 +413,8 @@ Quick Commands:
             }
           }
         },
+=======
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
         'media': {
           type: 'folder',
           date: 'Jul  2 13:05',
@@ -438,6 +441,10 @@ Quick Commands:
           date: 'Oct 30 17:50',
           content: `Type 'help' for commands. Quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`
         },
+<<<<<<< HEAD
+=======
+        // Easter egg
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
         '‎': {
           type: 'file',
           date: 'Jul 17 19:25',
@@ -863,6 +870,7 @@ Volume  : ${vol}%`;
     }
   };
 
+<<<<<<< HEAD
   function extractTextInput(args, stdin, options = {}) {
     if (stdin !== undefined && stdin !== null && stdin !== '') {
       return { text: String(stdin), isPipe: true };
@@ -3313,6 +3321,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
+=======
+  const commands = {
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
     help: {
       desc: 'display available shell commands and usage info',
       usage: 'help [command]',
@@ -3322,7 +3333,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           const target = commands[cmdName];
           if (target) {
             return `<span class="c-accent ansi-bold">${escapeHTML(cmdName)}</span>: ${escapeHTML(target.desc)}
+<<<<<<< HEAD
 <span class="c-dim">usage:</span> ${escapeHTML(target.usage || cmdName)}`;
+=======
+<span class="c-dim">Usage:</span> ${escapeHTML(target.usage || cmdName)}`;
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
           }
           return `help: no help topic found for '${escapeHTML(cmdName)}'`;
         }
@@ -3332,7 +3347,10 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
+<<<<<<< HEAD
           'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode'],
+=======
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -4297,11 +4315,14 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
           return `Opening: <a href="${escapeHTML(target)}" target="_blank" class="term-link">${escapeHTML(target)}</a>`;
         }
 
+<<<<<<< HEAD
         if (target === 'textmanip' || target === 'text-manipulation' || target === 'workbench' || target === 'text-tools' || target === 'tools') {
           textManipWorkbench.open('count');
           return `<span class="c-accent">Opened Text Manipulation Workbench.</span>`;
         }
 
+=======
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
         const resolved = resolvePath(pathStack, target);
         if (resolved && resolved.node.type === 'file') {
           return commands.cat.exec([target]);
@@ -4541,7 +4562,11 @@ Address: 103.48.16.12`;
       exec(args) {
         const valid = ['matrix', 'catppuccin', 'nord', 'dracula', 'gruvbox', 'cyberpunk', 'amber', 'monokai', 'light'];
         if (!args[0]) {
+<<<<<<< HEAD
           return `current theme: <span class="c-accent">${env.THEME}</span>\navailable themes: ${valid.join(', ')}\nusage: 'theme &lt;name&gt;'`;
+=======
+          return `Current theme: <span class="c-accent">${env.THEME}</span>\nAvailable themes: ${valid.join(', ')}\nUsage: 'theme &lt;name&gt;'`;
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
         }
         const name = args[0].toLowerCase();
         if (applyTheme(name)) {
@@ -4557,6 +4582,7 @@ Address: 103.48.16.12`;
       exec(args) {
         const valid = ['tx02', 'jetbrains', 'cartograph', 'system'];
         if (!args[0]) {
+<<<<<<< HEAD
           return `current font: <span class="c-accent">${env.FONT}</span>\navailable fonts: ${valid.join(', ')}\nusage: 'font &lt;name&gt;'`;
         }
         const name = args[0].toLowerCase();
@@ -4564,6 +4590,15 @@ Address: 103.48.16.12`;
           return `font family switched to: <span class="c-accent">${name}</span>`;
         }
         return `font: invalid font '${name}'. available: ${valid.join(', ')}`;
+=======
+          return `Current font: <span class="c-accent">${env.FONT}</span>\nAvailable fonts: ${valid.join(', ')}\nUsage: 'font &lt;name&gt;'`;
+        }
+        const name = args[0].toLowerCase();
+        if (applyFont(name)) {
+          return `Font family switched to: <span class="c-accent">${name}</span>`;
+        }
+        return `font: invalid font '${name}'. Available: ${valid.join(', ')}`;
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
       }
     },
 
@@ -4583,7 +4618,11 @@ Address: 103.48.16.12`;
         } else if (sub === 'vol' || sub === 'volume') {
           return audioModule.setVolume(args[1]);
         }
+<<<<<<< HEAD
         return `music: unknown action '${sub}'. usage: 'music [play|pause|stop|status|vol <0-100>]'`;
+=======
+        return `music: unknown action '${sub}'. Usage: 'music [play|pause|stop|status|vol <0-100>]'`;
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
       }
     },
 
@@ -4898,6 +4937,7 @@ __(@)(@)--------------------------------------(@)(@)__`;
       return;
     }
 
+<<<<<<< HEAD
     if (activeInteractiveMode === 'textmanip') {
       if (e.key === 'Escape') {
         textManipWorkbench.close();
@@ -4912,6 +4952,14 @@ __(@)(@)--------------------------------------(@)(@)__`;
       return;
     }
 
+=======
+    if (activeInteractiveMode === 'matrix') {
+      matrixModule.stop();
+      e.preventDefault();
+      return;
+    }
+
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
     if (e.ctrlKey && e.key.toLowerCase() === 'l') {
       e.preventDefault();
       commands.clear.exec();
@@ -5005,6 +5053,10 @@ __(@)(@)--------------------------------------(@)(@)__`;
     }
   });
 
+<<<<<<< HEAD
+=======
+  // Mobile toolbar
+>>>>>>> 7095a2948c7f5b8a5e7c687076a1ff116cf799e3
   const mobileBar = document.getElementById('mobile-bar');
   if (mobileBar) {
     mobileBar.addEventListener('click', (e) => {
