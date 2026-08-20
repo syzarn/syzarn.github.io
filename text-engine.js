@@ -1191,6 +1191,485 @@
       return String.fromCodePoint(...codePoints);
     },
 
+    diffMaps(map1Input, map2Input, options = {}) {
+      let map1, map2;
+      try {
+        if (typeof map1Input === 'string') {
+          const trimmed = map1Input.trim();
+          if ((!map2Input || map2Input === '') && trimmed.startsWith('{')) {
+            const match = trimmed.match(/^(\{[\s\S]*?\})\s*(\{[\s\S]*?\})$/);
+            if (match) {
+              map1 = JSON.parse(match[1]);
+              map2 = JSON.parse(match[2]);
+            } else {
+              map1 = JSON.parse(trimmed);
+            }
+          } else {
+            map1 = JSON.parse(trimmed);
+          }
+        } else {
+          map1 = map1Input || {};
+        }
+      } catch (e) {
+        return {
+          error: "Invalid JSON input for Map 1: " + e.message,
+          isError: true,
+          textReport: "Error: Invalid JSON for Map 1 (" + e.message + ")",
+          htmlReport: '<span class="c-err">Error: Invalid JSON for Map 1 (' + (e.message || '') + ')</span>'
+        };
+      }
+
+      if (map2 === undefined) {
+        try {
+          if (typeof map2Input === 'string') {
+            map2 = JSON.parse(map2Input.trim());
+          } else {
+            map2 = map2Input || {};
+          }
+        } catch (e) {
+          return {
+            error: "Invalid JSON input for Map 2: " + e.message,
+            isError: true,
+            textReport: "Error: Invalid JSON for Map 2 (" + e.message + ")",
+            htmlReport: '<span class="c-err">Error: Invalid JSON for Map 2 (' + (e.message || '') + ')</span>'
+          };
+        }
+      }
+
+      const missingInMap2 = {};
+      const missingInMap1 = {};
+      const mismatched = {};
+
+      for (const [key, val] of Object.entries(map1)) {
+        if (!(key in map2)) {
+          missingInMap2[key] = val;
+        } else {
+          const v1 = val;
+          const v2 = map2[key];
+          const isMatch = (typeof v1 === 'object' && v1 !== null && typeof v2 === 'object' && v2 !== null)
+            ? JSON.stringify(v1) === JSON.stringify(v2)
+            : (v1 === v2);
+          if (!isMatch) {
+            mismatched[key] = { expected: val, actual: map2[key] };
+          }
+        }
+      }
+
+      for (const [key, val] of Object.entries(map2)) {
+        if (!(key in map1)) {
+          missingInMap1[key] = val;
+        }
+      }
+
+      const identical = Object.keys(missingInMap2).length === 0 &&
+                        Object.keys(missingInMap1).length === 0 &&
+                        Object.keys(mismatched).length === 0;
+
+      let textReport = "";
+      if (Object.keys(missingInMap2).length > 0) {
+        textReport += `Missing in Map 2:\n${JSON.stringify(missingInMap2, null, 2)}\n\n`;
+      }
+      if (Object.keys(missingInMap1).length > 0) {
+        textReport += `Extra in Map 2:\n${JSON.stringify(missingInMap1, null, 2)}\n\n`;
+      }
+      if (Object.keys(mismatched).length > 0) {
+        textReport += `Mismatched values:\n`;
+        for (const key in mismatched) {
+          const pair = mismatched[key];
+          const expStr = typeof pair.expected === 'object' ? JSON.stringify(pair.expected) : String(pair.expected);
+          const actStr = typeof pair.actual === 'object' ? JSON.stringify(pair.actual) : String(pair.actual);
+          textReport += `  ${key}: expected "${expStr}", actual "${actStr}"\n`;
+        }
+        textReport += '\n';
+      }
+      if (identical) {
+        textReport = "Maps are identical!\n";
+      }
+
+      function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      let htmlReport = "";
+      if (Object.keys(missingInMap2).length > 0) {
+        htmlReport += `<div class="diff-section"><span class="c-err ansi-bold">Missing in Map 2:</span>\n<span class="c-err">${esc(JSON.stringify(missingInMap2, null, 2))}</span></div>\n`;
+      }
+      if (Object.keys(missingInMap1).length > 0) {
+        htmlReport += `<div class="diff-section"><span class="c-accent ansi-bold">Extra in Map 2:</span>\n<span class="c-accent">${esc(JSON.stringify(missingInMap1, null, 2))}</span></div>\n`;
+      }
+      if (Object.keys(mismatched).length > 0) {
+        htmlReport += `<div class="diff-section"><span class="c-user ansi-bold">Mismatched values:</span>\n`;
+        for (const key in mismatched) {
+          const pair = mismatched[key];
+          const expStr = typeof pair.expected === 'object' ? JSON.stringify(pair.expected) : String(pair.expected);
+          const actStr = typeof pair.actual === 'object' ? JSON.stringify(pair.actual) : String(pair.actual);
+          htmlReport += `  ${esc(key)}: expected "<span class="c-err">${esc(expStr)}</span>", actual "<span class="c-accent">${esc(actStr)}</span>"\n`;
+        }
+        htmlReport += `</div>\n`;
+      }
+      if (identical) {
+        htmlReport = `<span class="c-accent ansi-bold">✓ Maps are identical!</span>`;
+      }
+
+      return {
+        missingInMap2,
+        missingInMap1,
+        mismatched,
+        identical,
+        diffCount: Object.keys(missingInMap2).length + Object.keys(missingInMap1).length + Object.keys(mismatched).length,
+        textReport: textReport.trim(),
+        htmlReport
+      };
+    },
+
+    bijoyToUnicode(text) {
+      if (!text) return "";
+      let processed = String(text);
+      const bijoy_map = {
+        "|": "।", "i¨": "র‌্য", "ª¨": "্র্য", "°": "ক্ক", "±": "ক্ট", "³": "ক্ত", 
+        "K¡": "ক্ব", "µ": "ক্র", "K¬": "ক্ল", "¶": "ক্ষ", "¨y": "্যু", "®ú": "ষ্প",
+        "ÿ": "ক্ষ", "·": "ক্স", "¸": "গু", "»": "গ্ধ", "Mœ": "গ্ন", "¤§": "ম্ম", 
+        "M¥": "গ্ম", "M­": "গ্ল", "¼": "ঙ্ক", "•¶": "ঙ্ক্ষ", "•L": "ঙ্খ", "½": "ঙ্গ",
+        "•N": "ঙ্ঘ", "”P": "চ্চ", "”Q": "চ্ছ", "”Q¡": "চ্ছ্ব", "”T": "চ্ঞ", "¾¡": "জ্জ্ব", 
+        "g¥": "ম্ন", "¾": "জ্জ", "fz¨": "ভ্যু", "À": "জ্ঝ", "Á": "জ্ঞ", "R¡": "জ্ব",
+        "Â": "ঞ্চ", "Ã": "ঞ্ছ", "Ä": "ঞ্জ", "Å": "ঞ্ঝ", "Æ": "ট্ট", "U¡": "ট্ব",
+        "U¥": "ট্ম", "Ç": "ড্ড", "È": "ণ্ট", "É": "ণ্ঠ", "Ý": "ন্স", "Ê": "ণ্ড", 
+        "š‘": "ন্তু", "Y^": "ণ্ব", "Ë": "ত্ত", "Ë¡": "ত্ত্ব", "Ì": "ত্থ", "Z¥": "ত্ম", 
+        "š—¡": "ন্ত্ব", "Z¡": "ত্ব", "Î": "ত্র", "_¡": "থ্ব", "˜M": "দ্গ", "˜N": "দ্ঘ",
+        "Ï": "দ্দ", "ï": "শু", "×": "দ্ধ", "Ø": "দ্ব", "™¢": "দ্ভ", "Ù": "দ্ম", 
+        "`ª“": "দ্রু", "aŸ": "ধ্ব", "a¥": "ধ্ম", "›U": "ন্ট", "Ú": "ন্ঠ", "Û": "ন্ড", 
+        "šÍ": "ন্ত", "š—": "ন্ত", "š¿": "ন্ত্র", "š’": "ন্থ", "›`": "ন্দ", "›Ø": "ন্দ্ব", 
+        "Ü": "ন্ধ", "bœ": "ন্ন", "š^": "ন্ব", "b¥": "ন্ম", "Þ": "প্ট", "ß": "প্ত", 
+        "cœ": "প্ন", "à": "প্প", "cø": "প্ল", "kø": "শ্ল", "jø": "ল্ল", "c­": "প্ল", 
+        "á": "প্স", "d¬": "ফ্ল", "â": "ব্জ", "ã": "ব্দ", "ä": "ব্ধ", "eŸ": "ব্ব", 
+        "e­": "ব্ল", "å": "ভ্র", "gœ": "ম্ন", "¤ú": "ম্প", "ç": "ম্ফ", "¤^": "ম্ব", 
+        "¤¢": "ম্ভ", "¤£": "ম্ভ্র", "¤¬": "ম্ল", "j¨": "ক্য", "l¨": "দ্য", "i“": "রু", 
+        "iƒ": "রূ", "…": "ৃ", "†": "ে", "‡": "ে", "ë": "ল্ট", "ü": "হৃ", 
+        "ú": "ু", "û": "হু", "ˆ": "ৈ", "‰": "ৈ", "Š": "ৗ", "Œ": "ৌ",
+        "•": "ঙ্", "œ": "ণ", "Ÿ": "্ব", "¡": "্ব", "¢": "্ভ", "£": "্ভ্র", 
+        "¥": "্ম", "¦": "্ব", "§": "্ম", "©": "র্", "ª": "্র", "«": "্র", 
+        "¬": "্ল", "­": "্ল", "Av": "আ", "B": "ই", "®‹": "ষ্ক", "Y¡": "ণ্ব",
+        "C": "ঈ", "D": "উ", "E": "ঊ", "F": "ঋ", "G": "এ", "H": "ঐ", 
+        "I": "ও", "J": "ঔ", "K": "ক", "L": "খ", "M": "গ", "N": "ঘ", 
+        "O": "ঙ", "P": "চ", "Q": "ছ", "R": "জ", "S": "ঝ", "T": "ঞ", 
+        "U": "ট", "V": "ঠ", "W": "ড", "X": "ঢ", "Y": "ণ", "Z": "ত",
+        "r": "ৎ", "_": "থ", "`": "দ", "a": "ধ", "b": "ন", "c": "প", 
+        "d": "ফ", "e": "ব", "f": "ভ", "g": "ম", "h": "য", "i": "র", 
+        "j": "ল", "k": "শ", "l": "ষ", "m": "স", "n": "হ", "o": "ড়", 
+        "p": "ঢ়", "q": "য়", "s": "ং", "t": "ঃ", "u": "ঁ", "w": "ি", 
+        "‚": "ূ", "x": "ী", "y": "ু", "z": "ু", "v": "া", "0": "০", 
+        "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", 
+        "7": "৭", "8": "৮", "9": "৯", "&": "্", "‘": "‘", "’": "’", 
+        "“": "“", "”": "”", "ô": "ষ্ঠ", "μ": "ক্র", "é": "ল্ক", "^": "্ব",
+        "Ð": "ণ্ড", " ̧": "গু", "ð": "শ্চ", "æ": "ু", "„": "ৃ", "mœ": "স্ন",
+        " ̈": "্য", "A": "অ", "Ö": "্র", "ó": "ষ্ট", "~": "ূ", "j¦": "ল্ব",
+        "ê": "ল্গ", "ì": "ল্ড", "¯ú": "স্প", " ̄ú": "স্প",  "j¥": "ল্ম", "kœ": "শ্ন", 
+        "k¦": "শ্ব", "k¥": "শ্ম", "k­": "শ্ল", "®Œ": "ষ্ক্র", "ò": "ষ্ণ", "õ": "ষ্ফ",
+        "®§": "ষ্ম", "ö": "স্খ", "¯¿": "স্ত্র", "̄¿": "স্ত্র", "ù": "স্ফ", "¯­": "স্ল",
+        "þ": "হ্ম", "n¬": "হ্ল", "...": "ৃ", "¨": "্য", "˜¡": "দ্ব", "î": "ল্ফ",
+        "¯Œ": "স্ক্র", " ̄Œ": "স্ক্র", "¯‹": "স্ক", " ̄‹": "স্ক", "¯‘": "স্তু", "̄‘": "স্তু", 
+        "¯’": "স্থ", " ̄’": "স্থ", "¯^": "স্ব", " ̄^": "স্ব", "¯§": "স্ম", "̄§": "স্ম", 
+        "¯ø": "স্ল", "̄ø": "স্ল", "¯Í": "স্ত", " ̄Í": "স্ত", "÷": "স্ট", " ̄^©": "র্স্ব", 
+        "í": "ল্প", "²": "ক্ষ্ম", "ý": "হ্ন", "nè": "হ্ণ", "¶œ": "ক্ষ্ন", "¶è": "ক্ষ্ণ", 
+        "¶¨©": "র্ক্ষ্য", "M¨©": "র্গ্য", "MÖ©": "র্গ্র", "N¨©": "র্ঘ্য", "½©": "র্ঙ্গ", "”Q©": "র্চ্ছ", 
+        "P¨©": "র্চ্য", "Á©": "র্জ্ঞ", "R¨©": "র্জ্য", "R¡©": "র্জ্ব", "X¨©": "র্ঢ্য", "Y¨©": "র্ণ্য", 
+        "Ë©": "র্ত্ত", "Z¥©": "র্ত্ম", "Z¨©": "র্ত্য", "Î©": "র্ত্র", "Z¡©": "র্ত্ব", "_¨©": "র্থ্য", 
+        "×©": "র্দ্ধ", "`¨©": "র্দ্য", "`ª©": "র্দ্র", "Ø©": "র্দ্ব", "aœ©": "র্ধ্ন", "a¥©": "র্ধ্ম", 
+        "a¨©": "র্ধ্য", "aª©": "র্ধ্র", "aŸ©": "র্ধ্ব", "b¨©": "র্ন্য", "eª©": "র্ব্র", "f¨©": "র্ভ্য", 
+        "å©": "র্ভ্র", "g¨©": "র্ম্য", "e¨©": "র্ব্য", "k¦©": "র্শ্ব", "ó©": "র্ষ্ট", "ò©": "র্ষ্ণ",
+        "®§©": "র্ষ্ম", "l¨©": "র্ষ্য", "óª©": "র্ষ্ট্র", "¯^©": "র্স্ব", "n¨©": "র্হ্য","nª©": "র্হ্র",
+        "Ñ": "—", "Ô": "‘", "Õ": "’", "Ò": "“", "Ó": "”", "র্": "র্"
+      };
+
+      const isBanglaBanjonborno = (c) => c && "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ".includes(c);
+      const isBanglaPreKar = (c) => c && "িেৈ".includes(c);
+      const isBanglaHalant = (c) => c === '্';
+
+      const sortedKeys = Object.keys(bijoy_map).sort((a, b) => b.length - a.length);
+      for (const key of sortedKeys) {
+        const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escapedKey, 'g');
+        processed = processed.replace(regex, bijoy_map[key]);
+      }
+
+      processed = processed.replace(/([ক-হড়ঢ়য়ংঃঁ])(র্)([ািীুূৃৄৢৣেৈোৌ]?)/g, '$2$1$3');
+
+      let processedText = "";
+      for (let i = 0; i < processed.length; i++) {
+        if (isBanglaPreKar(processed[i]) && i + 1 < processed.length) {
+          let clusterEnd = i + 1;
+          while (clusterEnd < processed.length) {
+            if (isBanglaBanjonborno(processed[clusterEnd]) && isBanglaHalant(processed[clusterEnd + 1])) {
+              clusterEnd += 2;
+            } else if (isBanglaBanjonborno(processed[clusterEnd])) {
+              clusterEnd += 1;
+              break;
+            } else {
+              break;
+            }
+          }
+          const cluster = processed.substring(i + 1, clusterEnd);
+          processedText += cluster + processed[i];
+          i = clusterEnd - 1;
+        } else {
+          processedText += processed[i];
+        }
+      }
+      return processedText.replace(/\u09C7\u09BE/g, '\u09CB').replace(/\u09C7\u09D7/g, '\u09CC');
+    },
+
+    unicodeToBijoy(text) {
+      if (!text) return "";
+      let str = String(text);
+
+      const unicode_to_bijoy_map = {
+        "র্ক্ষ্য": "¶¨©", "র্গ্য": "M¨©", "র্গ্র": "MÖ©", "র্ঘ্য": "N¨©", "র্ঙ্গ": "½©", "র্চ্ছ": "”Q©", 
+        "র্চ্য": "P¨©", "র্জ্ঞ": "Á©", "র্জ্য": "R¨©", "র্জ্ব": "R¡©", "র্ঢ্য": "X¨©", "র্ণ্য": "Y¨©", 
+        "র্ত্ত": "Ë©", "র্ত্ম": "Z¥©", "র্ত্য": "Z¨©", "র্ত্র": "Î©", "র্ত্ব": "Z¡©", "র্থ্য": "_¨©", 
+        "র্দ্ধ": "×©", "র্দ্য": "`¨©", "র্দ্র": "`ª©", "র্দ্ব": "Ø©", "র্ধ্ন": "aœ©", "র্ধ্ম": "a¥©", 
+        "র্ধ্য": "a¨©", "র্ধ্র": "aª©", "র্ধ্ব": "aŸ©", "র্ন্য": "b¨©", "র্ব্র": "eª©", "র্ভ্য": "f¨©", 
+        "র্ভ্র": "å©", "র্ম্য": "g¨©", "র্ব্য": "e¨©", "র্শ্ব": "k¦©", "র্ষ্ট": "ó©", "র্ষ্ণ": "ò©", 
+        "র্ষ্ম": "®§©", "র্ষ্য": "l¨©", "র্ষ্ট্র": "óª©", "র্স্ব": "¯^©", "র্হ্য": "n¨©", "র্হ্র": "nª©",
+
+        "চ্ছ্ব": "”Q¡", "জ্জ্ব": "¾¡", "ভ্যু": "fz¨", "ন্ত্ব": "š—¡", "ত্ত্ব": "Ë¡", 
+        "দ্রু": "`ª“", "ম্ভ্র": "¤£", "ক্ষ্ম": "²", "ক্ষ্ন": "¶œ", "ক্ষ্ণ": "¶è", 
+        "স্ক্র": "¯Œ", "স্ক": "¯‹", "স্তু": "¯‘", "স্থ": "¯’", "স্ব": "¯^", 
+        "স্ম": "¯§", "স্ল": "¯ø", "স্ত": "¯Í", "স্ট": "÷", "স্ত্র": "¯¿", 
+        "স্প": "¯ú", "স্ফ": "ù", "স্খ": "ö", "স্ন": "mœ", "শ্ল": "kø", 
+        "শ্ম": "k¥", "শ্ব": "k¦", "শ্ন": "kœ", "শ্চ": "ð", "শু": "ï", 
+        "ষ্প": "®ú", "ষ্ক": "®‹", "ষ্ক্র": "®Œ", "ষ্ণ": "ò", "ষ্ফ": "õ", 
+        "ষ্ম": "®§", "ষ্ঠ": "ô", "ষ্ট": "ó", "হ্ম": "þ", "হ্ন": "ý", 
+        "হ্ণ": "nè", "হ্ল": "n¬", "হৃ": "ü", "হু": "û", "ল্ক": "é", 
+        "ল্গ": "ê", "ল্ট": "ë", "ল্ড": "ì", "ল্প": "í", "ল্ফ": "î", 
+        "ল্ল": "jø", "ল্ব": "j¦", "ল্ম": "j¥", "প্ল": "cø", "প্প": "à", 
+        "প্ন": "cœ", "প্ট": "Þ", "প্ত": "ß", "প্স": "á", "ফ্ল": "d¬", 
+        "ব্জ": "â", "ব্দ": "ã", "ব্ধ": "ä", "ব্ব": "eŸ", "ব্ল": "e­", 
+        "ভ্র": "å", "ম্ন": "gœ", "ম্প": "¤ú", "ম্ফ": "ç", "ম্ব": "¤^", 
+        "ম্ভ": "¤¢", "ম্ম": "¤§", "ম্ল": "¤¬", "ন্দ": "›`", "ন্দ্ব": "›Ø", 
+        "ন্ধ": "Ü", "ন্ন": "bœ", "ন্ব": "š^", "ন্ম": "b¥", "ন্ট": "›U", 
+        "ন্ঠ": "Ú", "ন্ড": "Û", "ন্ত": "šÍ", "ন্ত্র": "š¿", "ন্থ": "š’", 
+        "ন্স": "Ý", "দ্গ": "˜M", "দ্ঘ": "˜N", "দ্দ": "Ï", "দ্ধ": "×", 
+        "দ্ব": "Ø", "দ্ভ": "™¢", "দ্ম": "Ù", "ধ্ব": "aŸ", "ধ্ম": "a¥", 
+        "ত্ত": "Ë", "ত্থ": "Ì", "ত্ম": "Z¥", "ত্ব": "Z¡", "ত্র": "Î", 
+        "থ্ব": "_¡", "ট্ট": "Æ", "ট্ব": "U¡", "ট্ম": "U¥", "ড্ড": "Ç", 
+        "ণ্ট": "È", "ণ্ঠ": "É", "ণ্ড": "Ê", "ণ্ব": "Y^", "চ্চ": "”P", 
+        "চ্ছ": "”Q", "চ্ঞ": "”T", "জ্জ": "¾", "জ্ঝ": "À", "জ্ঞ": "Á", 
+        "জ্ব": "R¡", "ঞ্চ": "Â", "ঞ্ছ": "Ã", "ঞ্জ": "Ä", "ঞ্ঝ": "Å", 
+        "ঙ্ক": "¼", "ঙ্ক্ষ": "•¶", "ঙ্খ": "•L", "ঙ্গ": "½", "ঙ্ঘ": "•N", 
+        "ক্ক": "°", "ক্ট": "±", "ক্ত": "³", "ক্ব": "K¡", "ক্র": "µ", 
+        "ক্ল": "K¬", "ক্ষ": "¶", "ক্স": "·", "গু": "¸", "গ্ধ": "»", 
+        "গ্ন": "Mœ", "গ্ম": "M¥", "গ্ল": "M­", "গ্র": "MÖ", "প্র": "cÖ",
+        "ফ্র": "d«", "ব্র": "eª", "শ্র": "kÖ", "হ্র": "nÖ", "দ্র": "`ª",
+        "ধ্র": "aª", "ত্র": "Î", "র‌্য": "i¨", "্র্য": "ª¨", "ক্য": "K¨", 
+        "দ্য": "`¨", "রু": "i“", "রূ": "iƒ", "্যু": "¨y",
+
+        "অ": "A", "আ": "Av", "ই": "B", "ঈ": "C", "উ": "D", "ঊ": "E", 
+        "ঋ": "F", "এ": "G", "ঐ": "H", "ও": "I", "ঔ": "J",
+
+        "ক": "K", "খ": "L", "গ": "M", "ঘ": "N", "ঙ": "O", "চ": "P", 
+        "ছ": "Q", "জ": "R", "ঝ": "S", "ঞ": "T", "ট": "U", "ঠ": "V", 
+        "ড": "W", "ঢ": "X", "ণ": "Y", "ত": "Z", "থ": "_", "দ": "`", 
+        "ধ": "a", "ন": "b", "প": "c", "ফ": "d", "ব": "e", "ভ": "f", 
+        "ম": "g", "য": "h", "র": "i", "ল": "j", "শ": "k", "ষ": "l", 
+        "স": "m", "হ": "n", "ড়": "o", "ঢ়": "p", "য়": "q", "ৎ": "r", 
+        "ং": "s", "ঃ": "t", "ঁ": "u",
+
+        "া": "v", "ি": "w", "ী": "x", "ু": "y", "ূ": "~", "ৃ": "…", 
+        "ে": "†", "ৈ": "ˆ", "ৌ": "Š", "্": "&", "্য": "¨", "্র": "ª", 
+        "্ব": "^", "্ম": "¥",
+
+        "০": "0", "১": "1", "২": "2", "৩": "3", "৪": "4", "৫": "5", 
+        "৬": "6", "৭": "7", "৮": "8", "৯": "9",
+
+        "।": "|", "—": "Ñ", "‘": "‘", "’": "’", "“": "“", "”": "”"
+      };
+
+      str = str.replace(/\u09C7\u09BE/g, "\u09CB");
+      str = str.replace(/\u09C7\u09D7/g, "\u09CC");
+
+      str = str.replace(/র্([ক-হড়ঢ়য়](?:্[ক-হড়ঢ়য়])*(?:্[যর্বণন্ম])?)/g, '$1©');
+
+      const clusterRegex = '([ক-হড়ঢ়য়](?:্[ক-হড়ঢ়য়])*(?:্[যর্বণন্ম])?©?)';
+
+      str = str.replace(new RegExp(clusterRegex + '([ঁ]?)ো', 'g'), '†$1$2v');
+      str = str.replace(new RegExp(clusterRegex + '([ঁ]?)ৌ', 'g'), '†$1$2Š');
+      str = str.replace(new RegExp(clusterRegex + '([ঁ]?)ি', 'g'), 'w$1$2');
+      str = str.replace(new RegExp(clusterRegex + '([ঁ]?)ে', 'g'), '†$1$2');
+      str = str.replace(new RegExp(clusterRegex + '([ঁ]?)ৈ', 'g'), 'ˆ$1$2');
+
+      const sortedKeys = Object.keys(unicode_to_bijoy_map).sort((a, b) => b.length - a.length);
+      for (const key of sortedKeys) {
+        const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        str = str.replace(new RegExp(escaped, 'g'), unicode_to_bijoy_map[key]);
+      }
+
+      return str;
+    },
+
+    convertBijoy(text, mode = "auto") {
+      const raw = String(text || "");
+      if (!raw) return "";
+      if (mode === "ansi2uni" || mode === "bijoy2unicode" || mode === "unicode") {
+        return this.bijoyToUnicode(raw);
+      }
+      if (mode === "uni2ansi" || mode === "unicode2bijoy" || mode === "ansi" || mode === "bijoy") {
+        return this.unicodeToBijoy(raw);
+      }
+      if (/[\u0980-\u09FF]/.test(raw)) {
+        return this.unicodeToBijoy(raw);
+      }
+      return this.bijoyToUnicode(raw);
+    },
+
+    diffText(text1Input, text2Input, options = {}) {
+      const mode = options.mode || 'line';
+      const ignoreCase = options.ignoreCase || false;
+      const ignoreWhitespace = options.ignoreWhitespace || false;
+      const raw1 = String(text1Input !== undefined && text1Input !== null ? text1Input : '');
+      const raw2 = String(text2Input !== undefined && text2Input !== null ? text2Input : '');
+
+      let aTokens = [];
+      let bTokens = [];
+
+      if (mode === 'word') {
+        aTokens = raw1.match(/\s+|[^\s]+/g) || [];
+        bTokens = raw2.match(/\s+|[^\s]+/g) || [];
+      } else if (mode === 'char') {
+        aTokens = Array.from(raw1);
+        bTokens = Array.from(raw2);
+      } else {
+        aTokens = raw1.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+        bTokens = raw2.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+      }
+
+      function norm(str) {
+        let s = String(str || '');
+        if (ignoreCase) s = s.toLowerCase();
+        if (ignoreWhitespace) s = s.replace(/\s+/g, ' ').trim();
+        return s;
+      }
+
+      const n = aTokens.length;
+      const m = bTokens.length;
+
+      if (n === 0 && m === 0) {
+        return {
+          chunks: [],
+          added: 0,
+          removed: 0,
+          unchanged: 0,
+          identical: true,
+          textReport: 'Texts are identical!\n',
+          htmlReport: '<span class="c-accent ansi-bold">✓ Texts are identical! (0 differences)</span>'
+        };
+      }
+
+      const dp = Array.from({ length: n + 1 }, () => new Uint32Array(m + 1));
+
+      for (let i = 1; i <= n; i++) {
+        const ai = norm(aTokens[i - 1]);
+        for (let j = 1; j <= m; j++) {
+          if (ai === norm(bTokens[j - 1])) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+
+      let i = n, j = m;
+      const chunks = [];
+      let addedCount = 0;
+      let removedCount = 0;
+      let unchangedCount = 0;
+
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && norm(aTokens[i - 1]) === norm(bTokens[j - 1])) {
+          chunks.push({ type: 'unchanged', value: aTokens[i - 1], line1: i, line2: j });
+          unchangedCount++;
+          i--;
+          j--;
+        } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          chunks.push({ type: 'added', value: bTokens[j - 1], line2: j });
+          addedCount++;
+          j--;
+        } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+          chunks.push({ type: 'removed', value: aTokens[i - 1], line1: i });
+          removedCount++;
+          i--;
+        }
+      }
+
+      chunks.reverse();
+
+      const identical = (addedCount === 0 && removedCount === 0);
+
+      function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      let textReport = '';
+      if (identical) {
+        textReport = '=== text diff report ===\nTexts are identical! (0 differences)\n';
+      } else {
+        textReport = `--- Text 1 (Original)\n+++ Text 2 (Modified)\n@@ -${n} lines, +${m} lines (diff: +${addedCount}, -${removedCount}) @@\n`;
+        if (mode === 'line') {
+          for (const chunk of chunks) {
+            if (chunk.type === 'added') textReport += `+ ${chunk.value}\n`;
+            else if (chunk.type === 'removed') textReport += `- ${chunk.value}\n`;
+            else textReport += `  ${chunk.value}\n`;
+          }
+        } else {
+          for (const chunk of chunks) {
+            if (chunk.type === 'added') textReport += `[+${chunk.value}]`;
+            else if (chunk.type === 'removed') textReport += `[-${chunk.value}]`;
+            else textReport += chunk.value;
+          }
+          textReport += '\n';
+        }
+      }
+
+      let htmlReport = '';
+      if (identical) {
+        htmlReport = '<span class="c-accent ansi-bold">✓ Texts are identical! (0 differences)</span>';
+      } else {
+        htmlReport += `<div class="c-dim" style="margin-bottom:6px;"><span class="c-accent ansi-bold">+${addedCount} added</span>, <span class="c-err ansi-bold">-${removedCount} removed</span>, <span class="c-file">${unchangedCount} unchanged</span></div>\n`;
+        htmlReport += '<div class="diff-view" style="font-family:inherit; line-height:1.45;">';
+        if (mode === 'line') {
+          for (const chunk of chunks) {
+            if (chunk.type === 'added') {
+              htmlReport += `<div style="color:var(--accent-color); background:rgba(0,255,102,0.08); padding:1px 4px;"><span class="ansi-bold">+</span> ${esc(chunk.value)}</div>`;
+            } else if (chunk.type === 'removed') {
+              htmlReport += `<div style="color:var(--err-color); background:rgba(255,51,51,0.08); padding:1px 4px;"><span class="ansi-bold">-</span> ${esc(chunk.value)}</div>`;
+            } else {
+              htmlReport += `<div style="color:var(--dim-color); padding:1px 4px;">  ${esc(chunk.value)}</div>`;
+            }
+          }
+        } else {
+          for (const chunk of chunks) {
+            if (chunk.type === 'added') {
+              htmlReport += `<span style="color:var(--accent-color); background:rgba(0,255,102,0.18); font-weight:bold; padding:0 2px;">+${esc(chunk.value)}</span>`;
+            } else if (chunk.type === 'removed') {
+              htmlReport += `<span style="color:var(--err-color); background:rgba(255,51,51,0.18); text-decoration:line-through; padding:0 2px;">-${esc(chunk.value)}</span>`;
+            } else {
+              htmlReport += `<span style="color:var(--text-color);">${esc(chunk.value)}</span>`;
+            }
+          }
+        }
+        htmlReport += '</div>';
+      }
+
+      return {
+        chunks,
+        added: addedCount,
+        removed: removedCount,
+        unchanged: unchangedCount,
+        identical,
+        textReport: textReport.trim(),
+        htmlReport
+      };
+    },
+
     toolsCatalog: [
       { id: "count", name: "count characters words sentences lines", category: "basic tools", desc: "analyze character, word, sentence, line and byte statistics with word frequency.", cli: "count [-c|-w|-s|-l|--freq] [file/text]" },
       { id: "replace", name: "find and replace", category: "basic tools", desc: "find and replace text using literal strings or regular expressions.", cli: "replace [-i|-g|-r] <search> <replace> [file/text]" },
@@ -1219,6 +1698,9 @@
       { id: "shuffle", name: "string randomizer", category: "randomization", desc: "randomly shuffle characters or delimited words/items.", cli: "shuffle [-d delim] [file/text]" },
       { id: "cut", name: "extract delimited column", category: "miscellaneous", desc: "extract nth column from delimited lines (csv, tsv, custom separator).", cli: "cut -d <delim> -f <col_number> [file/text]" },
       { id: "unicode", name: "unicode converter", category: "miscellaneous", desc: "convert text to HTML decimal, HTML hex, UTF-16, C-source escape or codepoints.", cli: "unicode [-f html_dec|html_hex|utf16_hex|c_source|codepoint] [file/text]" },
+      { id: "diff", name: "text difference checker (diff)", category: "developer & data", desc: "compare two texts, code snippets, or files line-by-line or word-by-word with unified diff output.", cli: "diff [-w|-i|-W|--word|--char] <file1/text1> <file2/text2>" },
+      { id: "mapdiff", name: "json map difference checker", category: "developer & data", desc: "compare two JSON objects or key-value maps to find missing, extra, and mismatched keys/values.", cli: "mapdiff <file1/json1> <file2/json2>" },
+      { id: "bijoy", name: "bijoy (ANSI) ⇄ unicode converter", category: "linguistics & encoding", desc: "convert Bengali text between Bijoy (ANSI) encoding and standard Unicode (mjcdi engine).", cli: "bijoy [-a|-u] [file/text] or ansi2uni / uni2ansi" },
       { id: "url", name: "url encode / decode (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
       { id: "base64", name: "base64 encoder & decoder", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
       { id: "iconv", name: "character encoding converter & detector", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },

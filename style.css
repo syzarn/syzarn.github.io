@@ -948,6 +948,62 @@ a.term-link:hover {
   font-size: 0.9em;
   margin-bottom: 6px;
 }
+
+.tm-map2-textarea {
+  width: 100%;
+  height: 90px;
+  background: #111;
+  color: var(--text-color);
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  resize: vertical;
+}
+
+.tm-map2-textarea:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.diff-section {
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.diff-view {
+  font-family: inherit;
+  line-height: 1.45;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 6px 8px;
+  overflow-x: auto;
+}
+
+.diff-add {
+  color: var(--accent-color);
+  background: rgba(0, 255, 102, 0.09);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.diff-del {
+  color: var(--err-color);
+  background: rgba(255, 51, 51, 0.09);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.diff-ctx {
+  color: var(--dim-color);
+  padding: 1px 4px;
+}
+
+
 @media (max-width: 860px) {
   .tm-window {
     width: 98vw;

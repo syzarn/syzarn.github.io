@@ -199,6 +199,22 @@ Source   : https://github.com/syzarn/syzarn.github.io`
 Stack    : Web Audio API, WebAssembly, HTML5 Canvas
 ------------------------------------------------------------
 - Experimental browser-based additive synthesizer and audio spectrum visualizer.`
+            },
+            'mjcdi.txt': {
+              type: 'file',
+              date: 'May 12 14:10',
+              content: `Project  : MJcdi - Bijoy ANSI ⇄ Unicode Engine & Converter
+Stack    : Vanilla JavaScript, Regular Expressions, Bengali Linguistics
+------------------------------------------------------------
+- High-performance bidirectional converter between Bijoy (ANSI) typography encoding and standard Unicode with conjunct reordering and Reph handling.`
+            },
+            'mapdiff.txt': {
+              type: 'file',
+              date: 'Jun  2 16:20',
+              content: `Project  : JSON Map Difference Checker (MapDiffChecker)
+Stack    : JavaScript, Object Diffing, Terminal ANSI / GUI
+------------------------------------------------------------
+- Fast JSON map comparator detecting missing keys, extra keys, and mismatched values with structured visual reports.`
             }
           }
         },
@@ -436,7 +452,7 @@ Quick Commands:
         'README.md': {
           type: 'file',
           date: 'Oct 30 17:50',
-          content: `Type 'help' for commands. Quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`
+          content: `type 'help' for commands. quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`
         },
         '‎': {
           type: 'file',
@@ -1653,6 +1669,60 @@ Volume  : ${vol}%`;
             </div>
           `;
           break;
+        case 'diff':
+          html = `
+            <div class="tm-control-row" style="justify-content: space-between;">
+              <span class="c-accent ansi-bold">Comparison Text (Text 2):</span>
+              <div style="display: flex; gap: 6px;">
+                <label class="tm-btn" style="cursor:pointer;">
+                  load text 2
+                  <input type="file" id="tm-diff-file" style="display:none;">
+                </label>
+                <button type="button" class="tm-btn" id="tm-diff-swap">⇄ swap text 1 & 2</button>
+              </div>
+            </div>
+            <div class="tm-control-row" style="align-items: stretch; margin-top: 4px;">
+              <textarea class="tm-map2-textarea" id="tm-diff2-val" placeholder="Enter or paste Text 2 (modified) to compare against Editor (Text 1)..." spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;"></textarea>
+            </div>
+            <div class="tm-control-row" style="margin-top: 6px; gap: 14px; flex-wrap: wrap;">
+              <span>mode:</span>
+              <select class="tm-select" id="tm-diff-mode">
+                <option value="line">Line by line (unified diff)</option>
+                <option value="word">Word by word</option>
+                <option value="char">Character by character</option>
+              </select>
+              <label class="tm-checkbox-label"><input type="checkbox" id="tm-diff-ignore-ws"> ignore whitespace</label>
+              <label class="tm-checkbox-label"><input type="checkbox" id="tm-diff-ignore-case"> ignore case</label>
+            </div>
+          `;
+          break;
+        case 'mapdiff':
+          html = `
+            <div class="tm-control-row" style="justify-content: space-between;">
+              <span class="c-accent ansi-bold">Map 2 (JSON Object to compare with Editor Map 1):</span>
+              <div style="display: flex; gap: 6px;">
+                <label class="tm-btn" style="cursor:pointer;">
+                  load map 2 file
+                  <input type="file" id="tm-mapdiff-file" style="display:none;">
+                </label>
+                <button type="button" class="tm-btn" id="tm-mapdiff-swap">⇄ swap map 1 & 2</button>
+              </div>
+            </div>
+            <div class="tm-control-row" style="align-items: stretch; margin-top: 4px;">
+              <textarea class="tm-map2-textarea" id="tm-map2-val" placeholder='Enter or paste Map 2 JSON here, e.g.:&#10;{ "z": "a", "x": "y", "extra": "correct", "new": "value" }' spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;">{ "z": "a", "x": "y", "extra": "correct", "new": "value" }</textarea>
+            </div>
+          `;
+          break;
+        case 'bijoy':
+          html = `
+            <div class="tm-control-row">
+              <span>conversion direction:</span>
+              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="auto" checked> auto-detect</label>
+              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="ansi2uni"> Bijoy (ANSI) → Unicode</label>
+              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="uni2ansi"> Unicode → Bijoy (ANSI)</label>
+            </div>
+          `;
+          break;
       }
 
       pane.innerHTML = html;
@@ -1673,6 +1743,64 @@ Volume  : ${vol}%`;
           revBtn.addEventListener('click', () => {
             const matches = window.TextEngine.revowel(revIn.value);
             revOut.textContent = matches.length ? 'Matches: ' + matches.join(', ') : 'No matches found';
+          });
+        }
+      } else if (toolId === 'diff') {
+        const fileIn = document.getElementById('tm-diff-file');
+        const diff2Val = document.getElementById('tm-diff2-val');
+        const swapBtn = document.getElementById('tm-diff-swap');
+        const textarea = document.getElementById('tm-textarea');
+        if (fileIn && diff2Val) {
+          fileIn.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (ev) => {
+                diff2Val.value = ev.target.result;
+                this.setStatus(`Loaded Text 2: ${file.name}`);
+              };
+              reader.readAsText(file);
+            }
+          });
+        }
+        if (swapBtn && textarea && diff2Val) {
+          swapBtn.addEventListener('click', () => {
+            this.saveHistory();
+            const temp = textarea.value;
+            textarea.value = diff2Val.value;
+            diff2Val.value = temp;
+            this.updateLineCounter();
+            this.updateStats();
+            this.setStatus('Swapped Text 1 and Text 2');
+          });
+        }
+      } else if (toolId === 'mapdiff') {
+        const fileIn = document.getElementById('tm-mapdiff-file');
+        const map2Val = document.getElementById('tm-map2-val');
+        const swapBtn = document.getElementById('tm-mapdiff-swap');
+        const textarea = document.getElementById('tm-textarea');
+        if (fileIn && map2Val) {
+          fileIn.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (ev) => {
+                map2Val.value = ev.target.result;
+                this.setStatus(`Loaded Map 2: ${file.name}`);
+              };
+              reader.readAsText(file);
+            }
+          });
+        }
+        if (swapBtn && textarea && map2Val) {
+          swapBtn.addEventListener('click', () => {
+            this.saveHistory();
+            const temp = textarea.value;
+            textarea.value = map2Val.value;
+            map2Val.value = temp;
+            this.updateLineCounter();
+            this.updateStats();
+            this.setStatus('Swapped Map 1 and Map 2');
           });
         }
       }
@@ -1999,6 +2127,45 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
               textarea.value = window.TextEngine.ucs2Encode(tokens);
               this.setStatus('encoded code points to string');
             }
+            break;
+          }
+          case 'diff': {
+            const text2Input = document.getElementById('tm-diff2-val')?.value || '';
+            const mode = document.getElementById('tm-diff-mode')?.value || 'line';
+            const ignoreWhitespace = !!document.getElementById('tm-diff-ignore-ws')?.checked;
+            const ignoreCase = !!document.getElementById('tm-diff-ignore-case')?.checked;
+
+            const res = window.TextEngine.diffText(text, text2Input, { mode, ignoreWhitespace, ignoreCase });
+            if (res.identical) {
+              this.setStatus('Texts are identical! (0 differences)');
+            } else {
+              this.setStatus(`Diff: +${res.added} added, -${res.removed} removed`);
+            }
+            textarea.value = res.textReport;
+            break;
+          }
+          case 'mapdiff': {
+            const map2Input = document.getElementById('tm-map2-val')?.value || '';
+            const diff = window.TextEngine.diffMaps(text, map2Input);
+            if (diff.isError) {
+              this.setStatus(diff.error);
+              textarea.value = diff.textReport;
+            } else {
+              if (diff.identical) {
+                this.setStatus('Maps are identical! (0 differences)');
+              } else {
+                this.setStatus(`Differences found: ${diff.diffCount}`);
+              }
+              textarea.value = diff.textReport;
+            }
+            break;
+          }
+          case 'bijoy': {
+            const dir = document.querySelector('input[name="tm-bijoy-dir"]:checked')?.value || 'auto';
+            textarea.value = window.TextEngine.convertBijoy(text, dir);
+            if (dir === 'ansi2uni') this.setStatus('converted Bijoy (ANSI) to Unicode');
+            else if (dir === 'uni2ansi') this.setStatus('converted Unicode to Bijoy (ANSI)');
+            else this.setStatus('converted text (auto-detected)');
             break;
           }
         }
@@ -3313,6 +3480,268 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
+    diff: {
+      desc: 'compare two files, code snippets, or strings line-by-line or word-by-word',
+      usage: 'diff [-w|--ignore-all-space] [-i|--ignore-case] [-W|--word] [-c|--char] <file1/text1> <file2/text2> | cat file2.txt | diff file1.txt',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'diff: text engine not loaded';
+
+        if (args.includes('--ui') || args.includes('-u') || args.includes('--gui')) {
+          textManipWorkbench.open('diff', stdin || '');
+          return '<span class="c-accent">opened diff checker in text manipulation workbench.</span>';
+        }
+
+        const flags = args.filter(a => a.startsWith('-'));
+        const nonFlags = args.filter(a => !a.startsWith('-'));
+
+        if (nonFlags.length === 0 && (stdin === undefined || stdin === null || stdin === '')) {
+          return `<div class="tool-result-box">
+<div class="tool-result-header">Text Difference Checker (diff)</div>
+<div><span class="c-accent ansi-bold">usage:</span></div>
+<div>  diff &lt;file1/text1&gt; &lt;file2/text2&gt;</div>
+<div>  cat file2.txt | diff file1.txt</div>
+<div>  diff --word &lt;file1&gt; &lt;file2&gt;</div>
+<div>  diff --ui</div>
+<div class="c-dim" style="margin-top:6px;">options: -w (ignore whitespace), -i (ignore case), -W/--word (word diff), -c/--char (char diff)</div>
+</div>`;
+        }
+
+        const ignoreWhitespace = flags.includes('-w') || flags.includes('--ignore-all-space') || flags.includes('--ignore-space-change');
+        const ignoreCase = flags.includes('-i') || flags.includes('--ignore-case');
+        let mode = 'line';
+        if (flags.includes('-W') || flags.includes('--word') || flags.includes('-w-diff')) mode = 'word';
+        else if (flags.includes('-c') || flags.includes('--char')) mode = 'char';
+
+        let text1Str = '';
+        let text2Str = '';
+
+        if (stdin !== undefined && stdin !== null && stdin !== '') {
+          text2Str = String(stdin);
+          if (nonFlags.length > 0) {
+            const resolved = resolvePath(pathStack, nonFlags[0]);
+            if (resolved && resolved.node.type === 'file') {
+              text1Str = resolved.node.content;
+            } else {
+              text1Str = nonFlags[0];
+            }
+          }
+        } else if (nonFlags.length >= 2) {
+          const res1 = resolvePath(pathStack, nonFlags[0]);
+          text1Str = (res1 && res1.node.type === 'file') ? res1.node.content : nonFlags[0];
+
+          const res2 = resolvePath(pathStack, nonFlags[1]);
+          text2Str = (res2 && res2.node.type === 'file') ? res2.node.content : nonFlags[1];
+        } else if (nonFlags.length === 1) {
+          const res1 = resolvePath(pathStack, nonFlags[0]);
+          text1Str = (res1 && res1.node.type === 'file') ? res1.node.content : nonFlags[0];
+        }
+
+        const diffRes = window.TextEngine.diffText(text1Str, text2Str, { mode, ignoreWhitespace, ignoreCase });
+        let out = '<div class="tool-result-box">';
+        out += '<div class="tool-result-header">Text Difference Checker (diff)</div>';
+        out += diffRes.htmlReport;
+        out += '</div>';
+        return out;
+      }
+    },
+
+    diffchecker: {
+      desc: 'alias for diff',
+      usage: 'diffchecker <file1/text1> <file2/text2>',
+      exec(args, stdin) {
+        return commands.diff.exec(args, stdin);
+      }
+    },
+
+    textdiff: {
+      desc: 'alias for diff',
+      usage: 'textdiff <file1/text1> <file2/text2>',
+      exec(args, stdin) {
+        return commands.diff.exec(args, stdin);
+      }
+    },
+
+    wdiff: {
+      desc: 'word-by-word diff checker (alias for diff --word)',
+      usage: 'wdiff <file1/text1> <file2/text2>',
+      exec(args, stdin) {
+        return commands.diff.exec(['--word', ...args], stdin);
+      }
+    },
+
+    'unified-diff': {
+      desc: 'alias for diff',
+      usage: 'unified-diff <file1/text1> <file2/text2>',
+      exec(args, stdin) {
+        return commands.diff.exec(args, stdin);
+      }
+    },
+
+    mapdiff: {
+      desc: 'compare two JSON objects or key-value maps to find missing, extra, and mismatched values',
+      usage: 'mapdiff <file1/json1> <file2/json2> | cat file2.json | mapdiff file1.json | mapdiff --ui',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'mapdiff: text engine not loaded';
+        if (args.length === 0 && (stdin === undefined || stdin === null || stdin === '')) {
+          return `<div class="tool-result-box">
+<div class="tool-result-header">JSON Map Difference Checker</div>
+<div><span class="c-accent ansi-bold">usage:</span></div>
+<div>  mapdiff &lt;file1/json1&gt; &lt;file2/json2&gt;</div>
+<div>  cat file2.json | mapdiff file1.json</div>
+<div>  mapdiff --ui</div>
+<div class="c-dim" style="margin-top:6px;">example: mapdiff '{"a": 1, "b": 2}' '{"b": 3, "c": 4}'</div>
+</div>`;
+        }
+
+        if (args.includes('--ui') || args.includes('-u') || args.includes('--gui')) {
+          textManipWorkbench.open('mapdiff', stdin || '');
+          return '<span class="c-accent">opened mapdiff in text manipulation workbench.</span>';
+        }
+
+        let map1Str = '';
+        let map2Str = '';
+
+        if (stdin !== undefined && stdin !== null && stdin !== '') {
+          map2Str = String(stdin);
+          if (args.length > 0) {
+            const resolved = resolvePath(pathStack, args[0]);
+            if (resolved && resolved.node.type === 'file') {
+              map1Str = resolved.node.content;
+            } else {
+              map1Str = args[0];
+            }
+          }
+        } else if (args.length >= 2) {
+          const res1 = resolvePath(pathStack, args[0]);
+          map1Str = (res1 && res1.node.type === 'file') ? res1.node.content : args[0];
+
+          const res2 = resolvePath(pathStack, args[1]);
+          map2Str = (res2 && res2.node.type === 'file') ? res2.node.content : args[1];
+        } else if (args.length === 1) {
+          const res1 = resolvePath(pathStack, args[0]);
+          map1Str = (res1 && res1.node.type === 'file') ? res1.node.content : args[0];
+        }
+
+        const diff = window.TextEngine.diffMaps(map1Str, map2Str);
+        if (diff.isError) {
+          return `<span class="c-err">${escapeHTML(diff.error)}</span>`;
+        }
+
+        let out = '<div class="tool-result-box">';
+        out += '<div class="tool-result-header">JSON Map Difference Checker</div>';
+        out += diff.htmlReport;
+        out += '</div>';
+        return out;
+      }
+    },
+
+    diffmap: {
+      desc: 'alias for mapdiff',
+      usage: 'diffmap <file1/json1> <file2/json2>',
+      exec(args, stdin) {
+        return commands.mapdiff.exec(args, stdin);
+      }
+    },
+
+    diffmaps: {
+      desc: 'alias for mapdiff',
+      usage: 'diffmaps <file1/json1> <file2/json2>',
+      exec(args, stdin) {
+        return commands.mapdiff.exec(args, stdin);
+      }
+    },
+
+    mapdiffchecker: {
+      desc: 'alias for mapdiff',
+      usage: 'mapdiffchecker <file1/json1> <file2/json2>',
+      exec(args, stdin) {
+        return commands.mapdiff.exec(args, stdin);
+      }
+    },
+
+    bijoy: {
+      desc: 'convert Bengali text between Bijoy (ANSI) and Unicode (mjcdi engine)',
+      usage: 'bijoy [-a|--ansi | -u|--unicode | --auto] [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'bijoy: text engine not loaded';
+        let mode = 'auto';
+        const textArgs = [];
+        for (let i = 0; i < args.length; i++) {
+          const a = args[i];
+          if (a === '-u' || a === '--unicode' || a === 'ansi2uni') mode = 'ansi2uni';
+          else if (a === '-a' || a === '--ansi' || a === 'uni2ansi') mode = 'uni2ansi';
+          else if (a === '--auto') mode = 'auto';
+          else if (!a.startsWith('-')) textArgs.push(a);
+        }
+        const input = extractTextInput(textArgs, stdin);
+        if (!input.text && input.isEmpty) return 'bijoy: missing input text or file';
+        return window.TextEngine.convertBijoy(input.text, mode);
+      }
+    },
+
+    ansi2uni: {
+      desc: 'convert Bijoy (ANSI) encoded Bengali text to standard Unicode (mjcdi)',
+      usage: 'ansi2uni [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'ansi2uni: text engine not loaded';
+        const input = extractTextInput(args, stdin);
+        if (!input.text && input.isEmpty) return 'ansi2uni: missing input text or file';
+        return window.TextEngine.bijoyToUnicode(input.text);
+      }
+    },
+
+    uni2ansi: {
+      desc: 'convert standard Unicode Bengali text to Bijoy (ANSI) encoding (mjcdi)',
+      usage: 'uni2ansi [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'uni2ansi: text engine not loaded';
+        const input = extractTextInput(args, stdin);
+        if (!input.text && input.isEmpty) return 'uni2ansi: missing input text or file';
+        return window.TextEngine.unicodeToBijoy(input.text);
+      }
+    },
+
+    mjcdi: {
+      desc: 'Bijoy ANSI ⇄ Unicode PDF/Text Converter CLI Suite',
+      usage: 'mjcdi <ansi2uni|uni2ansi> [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'mjcdi: text engine not loaded';
+        if (args.length === 0 && (stdin === undefined || stdin === null || stdin === '')) {
+          return `<div class="tool-result-box">
+<div class="tool-result-header">MJcdi - Bijoy ANSI ⇄ Unicode Converter [β]</div>
+<div><span class="c-accent ansi-bold">commands:</span></div>
+<div>  mjcdi ansi2uni &lt;input_file/text&gt;  - Convert Bijoy ANSI text to Unicode</div>
+<div>  mjcdi uni2ansi &lt;input_file/text&gt;  - Convert Unicode Bengali to Bijoy ANSI</div>
+<div class="c-dim" style="margin-top:6px;">example: echo "Avwg evsjvq Mvb MvB" | mjcdi ansi2uni</div>
+</div>`;
+        }
+        const subCmd = (args[0] || '').toLowerCase();
+        if (subCmd === 'ansi2uni' || subCmd === 'a2u') {
+          return commands.ansi2uni.exec(args.slice(1), stdin);
+        }
+        if (subCmd === 'uni2ansi' || subCmd === 'u2a') {
+          return commands.uni2ansi.exec(args.slice(1), stdin);
+        }
+        return commands.bijoy.exec(args, stdin);
+      }
+    },
+
+    bijoy2unicode: {
+      desc: 'alias for ansi2uni',
+      usage: 'bijoy2unicode [file/text...]',
+      exec(args, stdin) {
+        return commands.ansi2uni.exec(args, stdin);
+      }
+    },
+
+    unicode2bijoy: {
+      desc: 'alias for uni2ansi',
+      usage: 'unicode2bijoy [file/text...]',
+      exec(args, stdin) {
+        return commands.uni2ansi.exec(args, stdin);
+      }
+    },
+
     help: {
       desc: 'display available shell commands and usage info',
       usage: 'help [command]',
@@ -3329,10 +3758,10 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const categories = {
           'profile & CV': ['about', 'experience', 'projects', 'works', 'skills', 'languages', 'education', 'contact', 'references', 'resume'],
-          'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
+          'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -3562,7 +3991,15 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
 <span class="c-user ansi-bold">4. NeuroSynth Audio Synthesizer</span>
    Stack: Web Audio API, WebAssembly, HTML5 Canvas
-   • Real-time procedural audio synthesis, DSP filters, and visualizer suite.`;
+   • Real-time procedural audio synthesis, DSP filters, and visualizer suite.
+
+<span class="c-user ansi-bold">5. MJcdi - Bijoy ANSI ⇄ Unicode Engine & Converter</span>
+   Stack: Vanilla JS, Node.js CLI, Regular Expressions, Bengali Philology
+   • High-performance bidirectional converter between Bijoy (ANSI) typography encoding and standard Unicode with conjunct reordering.
+
+<span class="c-user ansi-bold">6. JSON Map Difference Checker (MapDiffChecker)</span>
+   Stack: Vanilla JS, Object Diffing, Terminal ANSI / Interactive Workbench
+   • Key-value map comparison utility computing missing keys, extra keys, and mismatched values with structured visual reports.`;
       }
     },
 
@@ -5050,7 +5487,7 @@ __(@)(@)--------------------------------------(@)(@)__`;
   }
 
   function renderWelcomeBanner() {
-    bannerEl.innerHTML = `type 'help' for commands. quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`;
+    bannerEl.innerHTML = `type 'help' for commands.<br>quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`;
   }
 
   window.addEventListener('DOMContentLoaded', () => {
