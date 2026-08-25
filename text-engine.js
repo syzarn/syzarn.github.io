@@ -1862,6 +1862,7 @@
       if (clean === 'datamatrix' || clean === 'dm') return 'datamatrix';
       if (clean === 'aztec' || clean === 'azteccode') return 'aztec';
       if (clean === 'maxicode' || clean === 'maxi') return 'maxicode';
+      if (clean === 'dotcode' || clean === 'dot' || clean === 'dot-code' || clean === 'dots') return 'dotcode';
       return clean;
     },
 
@@ -1901,6 +1902,12 @@
           if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
         } else if (normType === 'maxicode') {
           if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        } else if (normType === 'dotcode') {
+          if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+          if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+          if (options.ratio) bwipOpts.ratio = Number(options.ratio);
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+          if (options.fastfind) bwipOpts.fastfind = true;
         }
 
         if (normType === 'maxicode') {
@@ -1925,7 +1932,8 @@
 
         const typeNames = {
           datamatrix: 'Data Matrix',
-          aztec: 'Aztec Code'
+          aztec: 'Aztec Code',
+          dotcode: 'DotCode'
         };
 
         return {
@@ -2034,6 +2042,12 @@
           if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
         } else if (normType === 'maxicode') {
           if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        } else if (normType === 'dotcode') {
+          if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+          if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+          if (options.ratio) bwipOpts.ratio = Number(options.ratio);
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+          if (options.fastfind) bwipOpts.fastfind = true;
         }
         return bwip.toSVG({ bcid, text: String(text || ' '), ...bwipOpts });
       } catch (e) {
@@ -2075,6 +2089,12 @@
           if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
         } else if (normType === 'maxicode') {
           if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        } else if (normType === 'dotcode') {
+          if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+          if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+          if (options.ratio) bwipOpts.ratio = Number(options.ratio);
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+          if (options.fastfind) bwipOpts.fastfind = true;
         }
         bwip.toCanvas(canvas, { bcid, text: String(text || ' '), ...bwipOpts });
         return canvas;
@@ -2466,6 +2486,15 @@
         notes: 'fixed-size honeycomb matrix of 884 hexagons in 33 rows with central concentric bullseye finder.',
         example: 'STANDARD-MAXICODE-PAYLOAD'
       },
+      dotcode: {
+        id: 'dotcode',
+        name: 'DotCode (AIM ISS / ISO/IEC 21471)',
+        type: '2D Matrix (Discontinuous Dots)',
+        allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes. GS1 application identifiers supported via FNC1',
+        lengthLimit: 'variable grid size up to ~1,500+ characters (flexible width and height aspect ratio; sum of width and height must be odd)',
+        notes: 'checkerboard dot matrix optimized for ultra-high-speed industrial inkjet & laser on-the-fly printing (tobacco track & trace, pharmaceuticals, liquor packaging). uses Reed-Solomon error correction with ~33% redundancy.',
+        example: 'DOTCODE-SAMPLE-2026'
+      },
 
       CODE128: {
         id: 'CODE128',
@@ -2647,6 +2676,7 @@
       if (key === 'datamatrix' || key === 'dm') return this.symbologyRestrictions.datamatrix;
       if (key === 'aztec' || key === 'azteccode') return this.symbologyRestrictions.aztec;
       if (key === 'maxicode' || key === 'maxi') return this.symbologyRestrictions.maxicode;
+      if (key === 'dotcode' || key === 'dot' || key === 'dot-code' || key === 'dots') return this.symbologyRestrictions.dotcode;
       if (key === 'pdf417') return this.symbologyRestrictions.pdf417;
       if (key === 'compactpdf417' || key === 'micropdf417') return this.symbologyRestrictions.compactpdf417;
 
@@ -2689,17 +2719,17 @@
       { id: "randstr", name: "random string generator", category: "randomization", desc: "generate n random strings of length L from custom character sets.", cli: "randstr [-n count] [-l length] [-c charset]" },
       { id: "shuffle", name: "string randomizer", category: "randomization", desc: "randomly shuffle characters or delimited words/items.", cli: "shuffle [-d delim] [file/text]" },
       { id: "cut", name: "extract delimited column", category: "miscellaneous", desc: "extract nth column from delimited lines (csv, tsv, custom separator).", cli: "cut -d <delim> -f <col_number> [file/text]" },
-      { id: "unicode", name: "unicode converter", category: "miscellaneous", desc: "convert text to HTML decimal, HTML hex, UTF-16, C-source escape or codepoints.", cli: "unicode [-f html_dec|html_hex|utf16_hex|c_source|codepoint] [file/text]" },
+      { id: "unicode", name: "unicode inspector", category: "miscellaneous", desc: "convert text to HTML decimal, HTML hex, UTF-16, C-source escape or codepoints.", cli: "unicode [-f html_dec|html_hex|utf16_hex|c_source|codepoint] [file/text]" },
       { id: "diff", name: "text difference checker (diff)", category: "developer & data", desc: "compare two texts, code snippets, or files line-by-line or word-by-word with unified diff output.", cli: "diff [-w|-i|-W|--word|--char] <file1/text1> <file2/text2>" },
       { id: "mapdiff", name: "json map difference checker", category: "developer & data", desc: "compare two JSON objects or key-value maps to find missing, extra, and mismatched keys/values.", cli: "mapdiff <file1/json1> <file2/json2>" },
-      { id: "bijoy", name: "bijoy (ANSI) ⇄ unicode converter", category: "linguistics & encoding", desc: "convert Bengali text between Bijoy (ANSI) encoding and standard Unicode (mjcdi engine).", cli: "bijoy [-a|-u] [file/text] or ansi2uni / uni2ansi" },
-      { id: "url", name: "url encode / decode (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
-      { id: "base64", name: "base64 encoder & decoder", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
-      { id: "iconv", name: "character encoding converter & detector", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
+      { id: "bijoy", name: "bijoy (ANSI)", category: "linguistics & encoding", desc: "convert Bengali text between Bijoy (ANSI) encoding and standard Unicode (mjcdi engine).", cli: "bijoy [-a|-u] [file/text] or ansi2uni / uni2ansi" },
+      { id: "url", name: "url (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
+      { id: "base64", name: "base64", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
+      { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
       { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
-      { id: "qrcode", name: "2D matrix generator", category: "encoding & web", desc: "generate 2D matrix codes (QR code, data matrix, aztec code, maxicode) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|datamatrix|aztec|maxicode] [-f ascii|svg|png] [file/text]" },
-      { id: "barcode", name: "1D & stacked barcode generator", category: "encoding & web", desc: "generate 1D and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
+      { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, data matrix, aztec code, maxicode, dotcode) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-f ascii|svg|png] [file/text]" },
+      { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
     ]
   };
 

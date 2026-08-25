@@ -1448,7 +1448,7 @@ Volume  : ${vol}%`;
             </div>
             <div class="tm-control-row">
               <span>password (up to 16 chars):</span>
-              <input type="text" class="tm-input" id="tm-enc-pass" placeholder="Enter encryption password" style="width:200px;">
+              <input type="text" class="tm-input" id="tm-enc-pass" placeholder="enter encryption password" style="width:200px;">
               <button type="button" class="tm-btn" id="tm-enc-genpass">generate random password</button>
             </div>
           `;
@@ -1682,14 +1682,14 @@ Volume  : ${vol}%`;
               </div>
             </div>
             <div class="tm-control-row" style="align-items: stretch; margin-top: 4px;">
-              <textarea class="tm-map2-textarea" id="tm-diff2-val" placeholder="Enter or paste Text 2 (modified) to compare against Editor (Text 1)..." spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;"></textarea>
+              <textarea class="tm-map2-textarea" id="tm-diff2-val" placeholder="enter or paste text 2 (modified) to compare against editor (text 1)..." spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;"></textarea>
             </div>
             <div class="tm-control-row" style="margin-top: 6px; gap: 14px; flex-wrap: wrap;">
               <span>mode:</span>
               <select class="tm-select" id="tm-diff-mode">
-                <option value="line">Line by line (unified diff)</option>
-                <option value="word">Word by word</option>
-                <option value="char">Character by character</option>
+                <option value="line">line by line (unified diff)</option>
+                <option value="word">word by word</option>
+                <option value="char">character by character</option>
               </select>
               <label class="tm-checkbox-label"><input type="checkbox" id="tm-diff-ignore-ws"> ignore whitespace</label>
               <label class="tm-checkbox-label"><input type="checkbox" id="tm-diff-ignore-case"> ignore case</label>
@@ -1731,10 +1731,11 @@ Volume  : ${vol}%`;
                 <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
                   <span>2D type:</span>
                   <select class="tm-select" id="tm-qr-type" style="width: 140px;">
-                    <option value="qr" selected>QR code</option>
-                    <option value="datamatrix">data matrix</option>
-                    <option value="aztec">aztec code</option>
-                    <option value="maxicode">maxicode</option>
+                    <option value="qr" selected>QR Code</option>
+                    <option value="datamatrix">Data Matrix</option>
+                    <option value="aztec">Aztec Code</option>
+                    <option value="maxicode">MaxiCode</option>
+                    <option value="dotcode">DotCode</option>
                   </select>
                   <span>format:</span>
                   <select class="tm-select" id="tm-qr-fmt" style="width: 140px;">
@@ -1797,6 +1798,16 @@ Volume  : ${vol}%`;
                     <option value="3">mode 3 (intl. postal)</option>
                     <option value="5">mode 5 (enhanced ECC)</option>
                   </select>
+                </div>
+                <div id="tm-qr-opts-dotcode" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>cols:</span>
+                  <input type="number" class="tm-input" id="tm-dot-cols" value="0" min="0" max="100" style="width: 50px;" title="0 for auto">
+                  <span>rows:</span>
+                  <input type="number" class="tm-input" id="tm-dot-rows" value="0" min="0" max="100" style="width: 50px;" title="0 for auto">
+                  <span>ratio:</span>
+                  <input type="number" class="tm-input" id="tm-dot-ratio" value="" min="0.1" max="10" step="0.1" style="width: 50px;" placeholder="auto">
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-dot-parsefnc"> parse FNC</label>
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-dot-fastfind"> fast find</label>
                 </div>
                 <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
                   <span>scale:</span>
@@ -2033,6 +2044,12 @@ Volume  : ${vol}%`;
         const dmOptsRow = document.getElementById('tm-qr-opts-dm');
         const aztecOptsRow = document.getElementById('tm-qr-opts-aztec');
         const maxiOptsRow = document.getElementById('tm-qr-opts-maxi');
+        const dotOptsRow = document.getElementById('tm-qr-opts-dotcode');
+        const dotColsInput = document.getElementById('tm-dot-cols');
+        const dotRowsInput = document.getElementById('tm-dot-rows');
+        const dotRatioInput = document.getElementById('tm-dot-ratio');
+        const dotParseCheck = document.getElementById('tm-dot-parsefnc');
+        const dotFastfindCheck = document.getElementById('tm-dot-fastfind');
 
         const updateTypeVisibility = () => {
           const type = typeSelect ? typeSelect.value : 'qr';
@@ -2040,6 +2057,7 @@ Volume  : ${vol}%`;
           if (dmOptsRow) dmOptsRow.style.display = (type === 'datamatrix') ? 'flex' : 'none';
           if (aztecOptsRow) aztecOptsRow.style.display = (type === 'aztec') ? 'flex' : 'none';
           if (maxiOptsRow) maxiOptsRow.style.display = (type === 'maxicode') ? 'flex' : 'none';
+          if (dotOptsRow) dotOptsRow.style.display = (type === 'dotcode') ? 'flex' : 'none';
         };
 
         const updateLiveQr = () => {
@@ -2064,6 +2082,7 @@ Volume  : ${vol}%`;
             if (type === 'datamatrix') content = 'DATA MATRIX';
             else if (type === 'aztec') content = 'AZTEC CODE';
             else if (type === 'maxicode') content = 'THIS IS MAXICODE';
+            else if (type === 'dotcode') content = 'DOTCODE';
             else content = 'https://syzarn.github.io';
           }
 
@@ -2092,6 +2111,12 @@ Volume  : ${vol}%`;
             if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
           } else if (type === 'maxicode') {
             opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+          } else if (type === 'dotcode') {
+            if (dotColsInput && parseInt(dotColsInput.value, 10) > 0) opts.columns = parseInt(dotColsInput.value, 10);
+            if (dotRowsInput && parseInt(dotRowsInput.value, 10) > 0) opts.rows = parseInt(dotRowsInput.value, 10);
+            if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
+            if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
+            if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
           }
 
           const res = window.TextEngine.generate2DCode(content, type, opts);
@@ -2117,6 +2142,8 @@ Volume  : ${vol}%`;
               metaEl.textContent = `Aztec (${res.width}x${res.height}) | ${content.length} chars`;
             } else if (type === 'maxicode') {
               metaEl.textContent = `MaxiCode (Mode ${res.mode || 4}) | ${content.length} chars`;
+            } else if (type === 'dotcode') {
+              metaEl.textContent = `DotCode (${res.width}x${res.height}) | ${content.length} chars`;
             }
           }
         };
@@ -2151,7 +2178,7 @@ Volume  : ${vol}%`;
           });
         }
 
-        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
+        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
           if (el) {
             el.addEventListener('input', updateLiveQr);
             el.addEventListener('change', updateLiveQr);
@@ -2169,7 +2196,7 @@ Volume  : ${vol}%`;
 
         if (dlPngBtn) {
           dlPngBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
             const scale = parseInt(scaleInput ? scaleInput.value : 8, 10) || 8;
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
@@ -2188,6 +2215,12 @@ Volume  : ${vol}%`;
               if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
             } else if (type === 'maxicode') {
               opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            } else if (type === 'dotcode') {
+              if (dotColsInput && parseInt(dotColsInput.value, 10) > 0) opts.columns = parseInt(dotColsInput.value, 10);
+              if (dotRowsInput && parseInt(dotRowsInput.value, 10) > 0) opts.rows = parseInt(dotRowsInput.value, 10);
+              if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
+              if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
+              if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
             }
 
             const dataUrl = window.TextEngine.generate2DCodeDataUrl(content, type, opts);
@@ -2204,7 +2237,7 @@ Volume  : ${vol}%`;
 
         if (dlSvgBtn) {
           dlSvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
             const darkColor = darkInput ? darkInput.value : '#000000';
@@ -2222,6 +2255,12 @@ Volume  : ${vol}%`;
               if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
             } else if (type === 'maxicode') {
               opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            } else if (type === 'dotcode') {
+              if (dotColsInput && parseInt(dotColsInput.value, 10) > 0) opts.columns = parseInt(dotColsInput.value, 10);
+              if (dotRowsInput && parseInt(dotRowsInput.value, 10) > 0) opts.rows = parseInt(dotRowsInput.value, 10);
+              if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
+              if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
+              if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
             }
 
             const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
@@ -2240,7 +2279,7 @@ Volume  : ${vol}%`;
 
         if (copyAsciiBtn) {
           copyAsciiBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
             const opts = { border: 1 };
             if (type === 'qr') {
@@ -2255,6 +2294,12 @@ Volume  : ${vol}%`;
               if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
             } else if (type === 'maxicode') {
               opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            } else if (type === 'dotcode') {
+              if (dotColsInput && parseInt(dotColsInput.value, 10) > 0) opts.columns = parseInt(dotColsInput.value, 10);
+              if (dotRowsInput && parseInt(dotRowsInput.value, 10) > 0) opts.rows = parseInt(dotRowsInput.value, 10);
+              if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
+              if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
+              if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
             }
 
             const res = window.TextEngine.generate2DCode(content, type, opts);
@@ -2270,7 +2315,7 @@ Volume  : ${vol}%`;
 
         if (copySvgBtn) {
           copySvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
             const darkColor = darkInput ? darkInput.value : '#000000';
@@ -2288,6 +2333,12 @@ Volume  : ${vol}%`;
               if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
             } else if (type === 'maxicode') {
               opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            } else if (type === 'dotcode') {
+              if (dotColsInput && parseInt(dotColsInput.value, 10) > 0) opts.columns = parseInt(dotColsInput.value, 10);
+              if (dotRowsInput && parseInt(dotRowsInput.value, 10) > 0) opts.rows = parseInt(dotRowsInput.value, 10);
+              if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
+              if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
+              if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
             }
 
             const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
@@ -2456,7 +2507,7 @@ Volume  : ${vol}%`;
 
         if (dlPngBtn) {
           dlPngBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -2491,7 +2542,7 @@ Volume  : ${vol}%`;
 
         if (dlSvgBtn) {
           dlSvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -2529,7 +2580,7 @@ Volume  : ${vol}%`;
 
         if (copyAsciiBtn) {
           copyAsciiBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const displayValue = displayValCheck ? displayValCheck.checked : true;
             const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
@@ -2553,7 +2604,7 @@ Volume  : ${vol}%`;
 
         if (copySvgBtn) {
           copySvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -4671,8 +4722,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     qrcode: {
-      desc: 'generate fast, customizable 2D barcodes (QR Code, Data Matrix, Aztec Code, MaxiCode)',
-      usage: 'qrcode [-t qr|datamatrix|aztec|maxicode] [-e low|med|quart|high] [-s scale] [-b border] [-f ascii|full-ascii|svg|dataurl|raw] [flags] [file/text...]',
+      desc: 'generate customizable 2D matrix (QR Code, Data Matrix, Aztec Code, MaxiCode, DotCode)',
+      usage: 'qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-e low|med|quart|high] [-s scale] [-b border] [-f ascii|full-ascii|svg|dataurl|raw] [flags] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'qrcode: text engine not loaded';
 
@@ -4702,6 +4753,10 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let aztecLayers = undefined;
         let aztecEcc = undefined;
         let maxiMode = undefined;
+        let dotCols = undefined;
+        let dotRows = undefined;
+        let dotRatio = undefined;
+        let dotFastfind = false;
 
         for (let i = 0; i < args.length; i++) {
           const a = args[i];
@@ -4752,6 +4807,17 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           } else if (a === '--mode' && args[i + 1]) {
             maxiMode = parseInt(args[i + 1], 10);
             i++;
+          } else if ((a === '--columns' || a === '--cols') && args[i + 1]) {
+            dotCols = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--rows' && args[i + 1]) {
+            dotRows = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--ratio' && args[i + 1]) {
+            dotRatio = Number(args[i + 1]);
+            i++;
+          } else if (a === '--fastfind') {
+            dotFastfind = true;
           } else if (a === '--no-boost') {
             boostEcc = false;
           } else if (a === '-i' || a === '--invert') {
@@ -4774,30 +4840,33 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         const input = extractTextInput(textArgs, stdin);
         if (!input.text && input.isEmpty) {
           return `<div class="tool-result-box">
-<div class="tool-result-header">2D Barcode Generator (QR Code, Data Matrix, Aztec, MaxiCode)</div>
+<div class="tool-result-header">2D matrix generator</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
+<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
 <div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
-<div class="c-dim">  qrcode -t datamatrix --shape square "DATA-MATRIX-PAYLOAD"</div>
+<div class="c-dim">  qrcode -t dotcode --ratio 2 "EIKHI-2002"</div>
+<div class="c-dim">  qrcode -t datamatrix --shape square "EIKHI"</div>
 <div class="c-dim">  qrcode --ui "custom payload"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">types & input restrictions:</span></div>
 <div class="c-dim">  qr          : UTF-8, Latin-1, binary, numeric, alphanumeric, Kanji (up to 7,089 digits / 2,953 bytes)</div>
 <div class="c-dim">  datamatrix  : Full ASCII (0-127), extended (128-255), UTF-8, binary (up to 3,116 digits / 1,555 bytes)</div>
 <div class="c-dim">  aztec       : Full 8-bit binary/ASCII (compact 1-4 layers, full 1-32 layers; up to 3,832 digits)</div>
 <div class="c-dim">  maxicode    : Mode 4 standard (93 chars), Mode 5 secure (77 chars), Mode 2/3 postal SCM</div>
+<div class="c-dim">  dotcode     : Full ASCII (0-127), extended (128-255), UTF-8, GS1 FNC1 (up to ~1,500+ chars/bytes)</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
-<div class="c-dim">  -t, --type &lt;type&gt;    : Symbology type (qr, datamatrix, aztec, maxicode)</div>
-<div class="c-dim">  -f, --format &lt;fmt&gt;   : Output format (ascii, full-ascii, svg, dataurl, raw)</div>
-<div class="c-dim">  -s, --scale &lt;N&gt;      : Module pixel scale for image/canvas (default: 8)</div>
-<div class="c-dim">  -b, --border &lt;N&gt;     : Quiet zone border modules (default: 2 for ascii, 4 for image)</div>
-<div class="c-dim">  --dark, --color &lt;hex&gt;: Dark module color (default: #000000)</div>
-<div class="c-dim">  --light, --bg &lt;hex&gt;  : Light module color (default: #ffffff)</div>
-<div class="c-dim">  --ui                 : Launch interactive 2D code generator in workbench</div>
+<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, datamatrix, aztec, maxicode, dotcode)</div>
+<div class="c-dim">  -f, --format &lt;fmt&gt;   : output format (ascii, full-ascii, svg, dataurl, raw)</div>
+<div class="c-dim">  -s, --scale &lt;N&gt;      : module pixel scale for image/canvas (default: 8)</div>
+<div class="c-dim">  -b, --border &lt;N&gt;     : quiet zone border modules (default: 2 for ascii, 4 for image)</div>
+<div class="c-dim">  --dark, --color &lt;hex&gt;: dark module color (default: #000000)</div>
+<div class="c-dim">  --light, --bg &lt;hex&gt;  : light module color (default: #ffffff)</div>
+<div class="c-dim">  --ui                 : launch interactive 2D matrix generator in workbench</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">type-specific flags:</span></div>
 <div class="c-dim">  QR Code     : -e, --ecc &lt;low|medium|quartile|high&gt;, --mask &lt;0-7&gt;, --no-boost</div>
 <div class="c-dim">  Data Matrix : --shape &lt;square|rect&gt;, --parsefnc</div>
 <div class="c-dim">  Aztec Code  : --aztec-format &lt;compact|full&gt;, --layers &lt;1-32&gt;, --eclevel &lt;5-95&gt;</div>
 <div class="c-dim">  MaxiCode    : --mode &lt;2|3|4|5|6&gt;</div>
+<div class="c-dim">  DotCode     : --columns &lt;N&gt;, --rows &lt;N&gt;, --ratio &lt;N&gt;, --parsefnc, --fastfind</div>
 </div>`;
         }
 
@@ -4823,6 +4892,12 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           if (aztecEcc) opts.eclevel = aztecEcc;
         } else if (type === 'maxicode') {
           if (maxiMode) opts.mode = maxiMode;
+        } else if (type === 'dotcode') {
+          if (dotCols) opts.columns = dotCols;
+          if (dotRows) opts.rows = dotRows;
+          if (dotRatio) opts.ratio = dotRatio;
+          if (dmParsefnc) opts.parsefnc = true;
+          if (dotFastfind) opts.fastfind = true;
         }
 
         const codeRes = window.TextEngine.generate2DCode(input.text, type, opts);
@@ -4973,6 +5048,30 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'maxi [flags] [file/text...]',
       exec(args, stdin) {
         return commands.maxicode.exec(args, stdin);
+      }
+    },
+
+    dotcode: {
+      desc: 'generate 2D DotCode barcodes (high-speed industrial dot matrix; ASCII/binary up to 1,500+ chars)',
+      usage: 'dotcode [--columns N] [--rows N] [--ratio N] [--parsefnc] [--fastfind] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'dotcode', ...args], stdin);
+      }
+    },
+
+    dot: {
+      desc: 'alias for dotcode',
+      usage: 'dot [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.dotcode.exec(args, stdin);
+      }
+    },
+
+    'dot-code': {
+      desc: 'alias for dotcode',
+      usage: 'dot-code [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.dotcode.exec(args, stdin);
       }
     },
 
@@ -5201,7 +5300,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'barcode', 'bc', 'pdf417'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -6171,17 +6270,17 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
 
         if (target.startsWith('http://') || target.startsWith('https://')) {
           window.open(target, '_blank', 'noopener,noreferrer');
-          return `Opening: <a href="${escapeHTML(target)}" target="_blank" class="term-link">${escapeHTML(target)}</a>`;
+          return `opening: <a href="${escapeHTML(target)}" target="_blank" class="term-link">${escapeHTML(target)}</a>`;
         }
 
         if (target === 'textmanip' || target === 'text-manipulation' || target === 'workbench' || target === 'text-tools' || target === 'tools') {
           textManipWorkbench.open('count');
-          return `<span class="c-accent">Opened Text Manipulation Workbench.</span>`;
+          return `<span class="c-accent">opened text manipulation workbench.</span>`;
         }
 
         if (target === 'qr' || target === 'qrcode' || target === 'qrcodegen') {
           textManipWorkbench.open('qrcode');
-          return `<span class="c-accent">Opened QR Code Generator in Text Manipulation Workbench.</span>`;
+          return `<span class="c-accent">opened QR code generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'datamatrix' || target === 'dm') {
@@ -6191,7 +6290,7 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
             typeSel.value = 'datamatrix';
             typeSel.dispatchEvent(new Event('change'));
           }
-          return `<span class="c-accent">Opened Data Matrix Generator in Text Manipulation Workbench.</span>`;
+          return `<span class="c-accent">opened data matrix generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'aztec' || target === 'azteccode') {
@@ -6201,7 +6300,7 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
             typeSel.value = 'aztec';
             typeSel.dispatchEvent(new Event('change'));
           }
-          return `<span class="c-accent">Opened Aztec Code Generator in Text Manipulation Workbench.</span>`;
+          return `<span class="c-accent">opened aztec code generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'maxicode' || target === 'maxi') {
@@ -6211,7 +6310,17 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
             typeSel.value = 'maxicode';
             typeSel.dispatchEvent(new Event('change'));
           }
-          return `<span class="c-accent">Opened MaxiCode Generator in Text Manipulation Workbench.</span>`;
+          return `<span class="c-accent">opened maxi code generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'dotcode' || target === 'dot' || target === 'dot-code') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'dotcode';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened dotcode generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'barcode' || target === 'bc') {
