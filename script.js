@@ -1827,8 +1827,18 @@ Volume  : ${vol}%`;
                     <option value="cyberpunk">cyberpunk</option>
                   </select>
                 </div>
-                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap;">
+                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap; align-items: center;">
                   <button type="button" class="tm-btn" id="tm-qr-dl-png">download PNG</button>
+                  <select class="tm-select" id="tm-qr-png-size" style="width: 140px;" title="PNG download resolution (max 4000x4000 or adjusted width/height for rectangular)">
+                    <option value="auto">size: auto</option>
+                    <option value="512">size: 512 px</option>
+                    <option value="1024">size: 1024 px</option>
+                    <option value="2048">size: 2048 px</option>
+                    <option value="3000">size: 3000 px</option>
+                    <option value="4000" selected>size: 4000 px</option>
+                    <option value="custom">size: custom...</option>
+                  </select>
+                  <input type="number" class="tm-input" id="tm-qr-custom-size" value="4000" min="50" max="4000" step="50" style="width: 75px; display: none;" placeholder="px (max 4000)" title="Custom max dimension in px (max 4000)">
                   <button type="button" class="tm-btn" id="tm-qr-dl-svg">download SVG</button>
                   <button type="button" class="tm-btn" id="tm-qr-copy-ascii">copy ASCII</button>
                   <button type="button" class="tm-btn" id="tm-qr-copy-svg">copy SVG</button>
@@ -1926,8 +1936,18 @@ Volume  : ${vol}%`;
                     <option value="cyberpunk">cyberpunk</option>
                   </select>
                 </div>
-                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap;">
+                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap; align-items: center;">
                   <button type="button" class="tm-btn" id="tm-bc-dl-png">download PNG</button>
+                  <select class="tm-select" id="tm-bc-png-size" style="width: 140px;" title="PNG download resolution (max 4000x4000 or adjusted width/height for rectangular)">
+                    <option value="auto">size: auto</option>
+                    <option value="512">size: 512 px</option>
+                    <option value="1024">size: 1024 px</option>
+                    <option value="2048">size: 2048 px</option>
+                    <option value="3000">size: 3000 px</option>
+                    <option value="4000" selected>size: 4000 px</option>
+                    <option value="custom">size: custom...</option>
+                  </select>
+                  <input type="number" class="tm-input" id="tm-bc-custom-size" value="4000" min="50" max="4000" step="50" style="width: 75px; display: none;" placeholder="px (max 4000)" title="Custom max dimension in px (max 4000)">
                   <button type="button" class="tm-btn" id="tm-bc-dl-svg">download SVG</button>
                   <button type="button" class="tm-btn" id="tm-bc-copy-ascii">copy ASCII</button>
                   <button type="button" class="tm-btn" id="tm-bc-copy-svg">copy SVG</button>
@@ -2189,6 +2209,20 @@ Volume  : ${vol}%`;
           textarea.addEventListener('input', updateLiveQr);
         }
 
+        const qrPngSizeSelect = document.getElementById('tm-qr-png-size');
+        const qrCustomSizeInput = document.getElementById('tm-qr-custom-size');
+
+        if (qrPngSizeSelect && qrCustomSizeInput) {
+          qrPngSizeSelect.addEventListener('change', () => {
+            if (qrPngSizeSelect.value === 'custom') {
+              qrCustomSizeInput.style.display = 'inline-block';
+              qrCustomSizeInput.focus();
+            } else {
+              qrCustomSizeInput.style.display = 'none';
+            }
+          });
+        }
+
         const dlPngBtn = document.getElementById('tm-qr-dl-png');
         const dlSvgBtn = document.getElementById('tm-qr-dl-svg');
         const copyAsciiBtn = document.getElementById('tm-qr-copy-ascii');
@@ -2223,15 +2257,25 @@ Volume  : ${vol}%`;
               if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
             }
 
-            const dataUrl = window.TextEngine.generate2DCodeDataUrl(content, type, opts);
-            if (!dataUrl) return this.setStatus('failed to generate PNG image');
+            if (qrPngSizeSelect) {
+              if (qrPngSizeSelect.value === 'custom' && qrCustomSizeInput) {
+                opts.targetSize = Math.min(4000, Math.max(50, parseInt(qrCustomSizeInput.value, 10) || 4000));
+              } else if (qrPngSizeSelect.value !== 'auto') {
+                opts.targetSize = Math.min(4000, Math.max(50, parseInt(qrPngSizeSelect.value, 10) || 4000));
+              }
+            }
+
+            const canvas = window.TextEngine.generate2DCodeCanvas(content, type, opts);
+            if (!canvas) return this.setStatus('failed to generate PNG image');
+            const dataUrl = canvas.toDataURL ? canvas.toDataURL('image/png') : '';
+            if (!dataUrl) return this.setStatus('failed to export PNG data');
             const a = document.createElement('a');
             a.href = dataUrl;
             a.download = `${type}-code.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            this.setStatus(`downloaded ${type}-code.png`);
+            this.setStatus(`downloaded ${type}-code.png (${canvas.width}×${canvas.height} px)`);
           });
         }
 
@@ -2500,6 +2544,20 @@ Volume  : ${vol}%`;
           textarea.addEventListener('input', updateLiveBarcode);
         }
 
+        const bcPngSizeSelect = document.getElementById('tm-bc-png-size');
+        const bcCustomSizeInput = document.getElementById('tm-bc-custom-size');
+
+        if (bcPngSizeSelect && bcCustomSizeInput) {
+          bcPngSizeSelect.addEventListener('change', () => {
+            if (bcPngSizeSelect.value === 'custom') {
+              bcCustomSizeInput.style.display = 'inline-block';
+              bcCustomSizeInput.focus();
+            } else {
+              bcCustomSizeInput.style.display = 'none';
+            }
+          });
+        }
+
         const dlPngBtn = document.getElementById('tm-bc-dl-png');
         const dlSvgBtn = document.getElementById('tm-bc-dl-svg');
         const copyAsciiBtn = document.getElementById('tm-bc-copy-ascii');
@@ -2527,16 +2585,25 @@ Volume  : ${vol}%`;
               if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
             }
 
-            const res = window.TextEngine.generateBarcode(content, bcOpts);
-            if (res.error) return this.setStatus('barcode error: ' + res.error);
-            const dataUrl = window.TextEngine.generateBarcodeDataUrl(content, bcOpts);
+            if (bcPngSizeSelect) {
+              if (bcPngSizeSelect.value === 'custom' && bcCustomSizeInput) {
+                bcOpts.targetSize = Math.min(4000, Math.max(50, parseInt(bcCustomSizeInput.value, 10) || 4000));
+              } else if (bcPngSizeSelect.value !== 'auto') {
+                bcOpts.targetSize = Math.min(4000, Math.max(50, parseInt(bcPngSizeSelect.value, 10) || 4000));
+              }
+            }
+
+            const canvas = window.TextEngine.generateBarcodeCanvas(content, bcOpts);
+            if (!canvas) return this.setStatus('failed to generate PNG image');
+            const dataUrl = canvas.toDataURL ? canvas.toDataURL('image/png') : '';
+            if (!dataUrl) return this.setStatus('failed to export PNG data');
             const a = document.createElement('a');
             a.href = dataUrl;
             a.download = `barcode-${format.toLowerCase()}.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            this.setStatus(`downloaded barcode-${format.toLowerCase()}.png`);
+            this.setStatus(`downloaded barcode-${format.toLowerCase()}.png (${canvas.width}×${canvas.height} px)`);
           });
         }
 
@@ -4757,6 +4824,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let dotRows = undefined;
         let dotRatio = undefined;
         let dotFastfind = false;
+        let targetSize = undefined;
 
         for (let i = 0; i < args.length; i++) {
           const a = args[i];
@@ -4768,6 +4836,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             i++;
           } else if ((a === '-s' || a === '--scale') && args[i + 1]) {
             scale = parseInt(args[i + 1], 10) || scale;
+            i++;
+          } else if ((a === '--size' || a === '--max-dim' || a === '--png-size') && args[i + 1]) {
+            targetSize = Math.min(4000, Math.max(50, parseInt(args[i + 1], 10) || 4000));
             i++;
           } else if ((a === '-b' || a === '--border' || a === '-m' || a === '--margin') && args[i + 1]) {
             border = parseInt(args[i + 1], 10);
@@ -4857,6 +4928,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, datamatrix, aztec, maxicode, dotcode)</div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;   : output format (ascii, full-ascii, svg, dataurl, raw)</div>
 <div class="c-dim">  -s, --scale &lt;N&gt;      : module pixel scale for image/canvas (default: 8)</div>
+<div class="c-dim">  --size &lt;N&gt;           : target PNG image size / max dimension (max: 4000)</div>
 <div class="c-dim">  -b, --border &lt;N&gt;     : quiet zone border modules (default: 2 for ascii, 4 for image)</div>
 <div class="c-dim">  --dark, --color &lt;hex&gt;: dark module color (default: #000000)</div>
 <div class="c-dim">  --light, --bg &lt;hex&gt;  : light module color (default: #ffffff)</div>
@@ -4874,7 +4946,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           scale: Math.max(1, Math.min(20, Math.round(scale / 2) || 3)),
           border: border !== undefined ? border : (type === 'qr' ? 2 : 1),
           darkColor,
-          lightColor
+          lightColor,
+          targetSize
         };
 
         if (type === 'qr') {
@@ -5103,6 +5176,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let rows = undefined;
         let eclevel = undefined;
         let compact = false;
+        let targetSize = undefined;
         const textArgs = [];
 
         for (let i = 0; i < args.length; i++) {
@@ -5112,6 +5186,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             i++;
           } else if ((a === '-w' || a === '--width') && args[i + 1]) {
             width = parseInt(args[i + 1], 10) || width;
+            i++;
+          } else if ((a === '--size' || a === '--max-dim' || a === '--png-size') && args[i + 1]) {
+            targetSize = Math.min(4000, Math.max(50, parseInt(args[i + 1], 10) || 4000));
             i++;
           } else if ((a === '-h' || a === '--height') && args[i + 1]) {
             height = parseInt(args[i + 1], 10) || height;
@@ -5161,7 +5238,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           return `<div class="tool-result-box">
 <div class="tool-result-header">Barcode Generator (1D & Stacked PDF417 Barcodes)</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [file/text...]</div>
+<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [--size 4000] [file/text...]</div>
 <div class="c-dim">  echo "123456789012" | barcode -f EAN13</div>
 <div class="c-dim">  echo "SECURE-PAYLOAD" | barcode -f pdf417 --columns 4 --eclevel 3</div>
 <div class="c-dim">  barcode --ui "HELLO-128"</div>
@@ -5187,6 +5264,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  -w, --width &lt;N&gt;      : Bar/module width (default: 2)</div>
 <div class="c-dim">  -h, --height &lt;N&gt;     : Bar height in pixels (default: 80)</div>
 <div class="c-dim">  -m, --margin &lt;N&gt;     : Margin quiet zone (default: 10)</div>
+<div class="c-dim">  --size &lt;N&gt;           : Target PNG image size / max dimension (max: 4000, aspect-ratio adjusted)</div>
 <div class="c-dim">  --no-text            : Hide human-readable text beneath barcode</div>
 <div class="c-dim">  --color &lt;hex&gt;        : Bar line color (default: #000000)</div>
 <div class="c-dim">  --bg &lt;hex&gt;           : Background color (default: #ffffff)</div>
@@ -5203,7 +5281,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const cleanText = input.text.trim();
         const bcOpts = {
-          format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background
+          format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background, targetSize
         };
         if (columns) bcOpts.columns = columns;
         if (rows) bcOpts.rows = rows;

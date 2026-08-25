@@ -1808,14 +1808,26 @@
 
     generateQrCanvas(qr, options = {}, targetCanvas = null) {
       if (!qr) return null;
-      const qrObj = qr.qr ? qr.qr : qr;
-      if (!qrObj || typeof qrObj.getModule !== 'function') return null;
-      const scale = Math.max(1, Math.min(50, parseInt(options.scale, 10) || 8));
-      const border = Math.max(0, Math.min(50, (options.border !== undefined) ? parseInt(options.border, 10) : 4));
-      const lightColor = options.lightColor || '#FFFFFF';
-      const darkColor = options.darkColor || '#000000';
+      let qrObj = qr.qr ? qr.qr : qr;
+      if (!qrObj || typeof qrObj.getModule !== 'function') {
+        const gen = this.generateQr(String(qr), options);
+        if (gen.error || !gen.qr) return null;
+        qrObj = gen.qr;
+      }
+      const border = Math.max(0, Math.min(100, (options.border !== undefined) ? parseInt(options.border, 10) : 4));
+      const lightColor = options.lightColor || options.background || '#FFFFFF';
+      const darkColor = options.darkColor || options.color || '#000000';
+      const fullModules = qrObj.size + border * 2;
 
-      const dim = (qrObj.size + border * 2) * scale;
+      let dim;
+      const targetSize = options.targetSize || options.sizePx || options.maxDim || options.targetWidth || options.targetHeight;
+      if (targetSize && targetSize !== 'auto') {
+        dim = Math.min(4000, Math.max(32, parseInt(targetSize, 10) || 4000));
+      } else {
+        const scale = Math.max(1, Math.min(100, parseInt(options.scale, 10) || 8));
+        dim = Math.min(4000, Math.max(32, fullModules * scale));
+      }
+
       const canvas = targetCanvas || (typeof document !== 'undefined' ? document.createElement('canvas') : null);
       if (!canvas) return null;
 
@@ -1824,14 +1836,20 @@
       const ctx = canvas.getContext('2d');
       if (!ctx) return null;
 
+      ctx.imageSmoothingEnabled = false;
       ctx.fillStyle = lightColor;
       ctx.fillRect(0, 0, dim, dim);
       ctx.fillStyle = darkColor;
 
+      const modSize = dim / fullModules;
       for (let y = 0; y < qrObj.size; y++) {
         for (let x = 0; x < qrObj.size; x++) {
           if (qrObj.getModule(x, y)) {
-            ctx.fillRect((x + border) * scale, (y + border) * scale, scale, scale);
+            const startX = Math.round((x + border) * modSize);
+            const startY = Math.round((y + border) * modSize);
+            const endX = Math.round((x + border + 1) * modSize);
+            const endY = Math.round((y + border + 1) * modSize);
+            ctx.fillRect(startX, startY, Math.max(1, endX - startX), Math.max(1, endY - startY));
           }
         }
       }
@@ -1893,8 +1911,8 @@
         if (options.padding != null) bwipOpts.padding = Number(options.padding);
         if (options.border != null) bwipOpts.padding = Number(options.border);
         if (normType === 'datamatrix') {
-          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
-          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
+          if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
         } else if (normType === 'aztec') {
           if (options.format) bwipOpts.format = options.format;
@@ -2033,8 +2051,8 @@
           barcolor: (options.darkColor || options.color || '000000').replace(/^#/, '')
         };
         if (normType === 'datamatrix') {
-          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
-          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
+          if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
         } else if (normType === 'aztec') {
           if (options.format) bwipOpts.format = options.format;
@@ -2073,15 +2091,19 @@
 
       try {
         const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        const padding = options.border != null ? options.border : 2;
+        const lightColor = options.lightColor || options.background || '#ffffff';
+        const darkColor = options.darkColor || options.color || '#000000';
+
         const bwipOpts = {
           scale: options.scale || 3,
-          padding: options.border != null ? options.border : 2,
-          backgroundcolor: (options.lightColor || options.background || 'ffffff').replace(/^#/, ''),
-          barcolor: (options.darkColor || options.color || '000000').replace(/^#/, '')
+          padding: padding,
+          backgroundcolor: lightColor.replace(/^#/, ''),
+          barcolor: darkColor.replace(/^#/, '')
         };
         if (normType === 'datamatrix') {
-          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
-          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
+          if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
         } else if (normType === 'aztec') {
           if (options.format) bwipOpts.format = options.format;
@@ -2096,6 +2118,65 @@
           if (options.parsefnc) bwipOpts.parsefnc = true;
           if (options.fastfind) bwipOpts.fastfind = true;
         }
+
+        const targetSize = options.targetSize || options.sizePx || options.maxDim || options.targetWidth || options.targetHeight;
+        if (targetSize && targetSize !== 'auto') {
+          const T = Math.min(4000, Math.max(32, parseInt(targetSize, 10) || 4000));
+
+          if (normType === 'maxicode') {
+            const scale = Math.min(36, Math.max(1, Math.floor(T / 112)));
+            bwip.toCanvas(canvas, { bcid: 'maxicode', text: String(text || ' '), ...bwipOpts, scale });
+            return canvas;
+          }
+
+          const rawList = bwip.raw(bcid, String(text || ' '), bwipOpts);
+          if (rawList && rawList[0]) {
+            const raw = rawList[0];
+            const width = raw.pixx;
+            const height = raw.pixy;
+            const M_w = width + padding * 2;
+            const M_h = height + padding * 2;
+
+            let canvasWidth, canvasHeight;
+            if (M_w >= M_h) {
+              canvasWidth = T;
+              canvasHeight = Math.max(1, Math.round(T * (M_h / M_w)));
+            } else {
+              canvasHeight = T;
+              canvasWidth = Math.max(1, Math.round(T * (M_w / M_h)));
+            }
+            canvasWidth = Math.min(4000, canvasWidth);
+            canvasHeight = Math.min(4000, canvasHeight);
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.imageSmoothingEnabled = false;
+              ctx.fillStyle = lightColor.startsWith('#') ? lightColor : '#' + lightColor;
+              ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+              ctx.fillStyle = darkColor.startsWith('#') ? darkColor : '#' + darkColor;
+
+              const modSizeX = canvasWidth / M_w;
+              const modSizeY = canvasHeight / M_h;
+              const pixs = raw.pixs;
+
+              for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                  if (pixs[y * width + x] === 1) {
+                    const startX = Math.round((x + padding) * modSizeX);
+                    const startY = Math.round((y + padding) * modSizeY);
+                    const endX = Math.round((x + padding + 1) * modSizeX);
+                    const endY = Math.round((y + padding + 1) * modSizeY);
+                    ctx.fillRect(startX, startY, Math.max(1, endX - startX), Math.max(1, endY - startY));
+                  }
+                }
+              }
+              return canvas;
+            }
+          }
+        }
+
         bwip.toCanvas(canvas, { bcid, text: String(text || ' '), ...bwipOpts });
         return canvas;
       } catch (e) {
@@ -2404,14 +2485,15 @@
       }
       if (!canvas) return null;
 
-      if (format === 'pdf417' || format === 'micropdf417') {
+      const targetSize = options.targetSize || options.sizePx || options.maxDim || options.targetWidth || options.targetHeight;
+
+      if (format === 'pdf417' || format === 'compactpdf417') {
         const bwip = this.getBwipLib();
         if (bwip) {
           try {
+            const padding = options.margin != null ? options.margin : 10;
             const bwipOpts = {
-              scale: options.width || 2,
-              height: options.height ? Math.round(options.height / 8) : 10,
-              padding: options.margin != null ? options.margin : 10,
+              padding,
               backgroundcolor: (options.background || 'ffffff').replace(/^#/, ''),
               barcolor: (options.lineColor || '000000').replace(/^#/, '')
             };
@@ -2419,6 +2501,57 @@
             if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
             if (options.eclevel !== undefined && options.eclevel !== null && options.eclevel !== '') bwipOpts.eclevel = parseInt(options.eclevel, 10);
             if (options.compact) bwipOpts.compact = true;
+
+            if (targetSize && targetSize !== 'auto') {
+              const rawList = bwip.raw(format, String(text || ' '), bwipOpts);
+              if (rawList && rawList[0]) {
+                const raw = rawList[0];
+                const width = raw.pixx;
+                const height = raw.pixy;
+                const M_w = width + padding * 2;
+                const M_h = height + padding * 2;
+                const T = Math.min(4000, Math.max(32, parseInt(targetSize, 10) || 4000));
+
+                let canvasWidth, canvasHeight;
+                if (M_w >= M_h) {
+                  canvasWidth = T;
+                  canvasHeight = Math.max(1, Math.round(T * (M_h / M_w)));
+                } else {
+                  canvasHeight = T;
+                  canvasWidth = Math.max(1, Math.round(T * (M_w / M_h)));
+                }
+                canvasWidth = Math.min(4000, canvasWidth);
+                canvasHeight = Math.min(4000, canvasHeight);
+
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                  ctx.imageSmoothingEnabled = false;
+                  ctx.fillStyle = options.background || '#ffffff';
+                  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                  ctx.fillStyle = options.lineColor || '#000000';
+
+                  const modW = canvasWidth / M_w;
+                  const modH = canvasHeight / M_h;
+                  for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                      if (raw.pixs[y * width + x] === 1) {
+                        const sx = Math.round((x + padding) * modW);
+                        const sy = Math.round((y + padding) * modH);
+                        const ex = Math.round((x + padding + 1) * modW);
+                        const ey = Math.round((y + padding + 1) * modH);
+                        ctx.fillRect(sx, sy, Math.max(1, ex - sx), Math.max(1, ey - sy));
+                      }
+                    }
+                  }
+                  return canvas;
+                }
+              }
+            }
+
+            bwipOpts.scale = options.width || 2;
+            bwipOpts.height = options.height ? Math.round(options.height / 8) : 10;
             bwip.toCanvas(canvas, {
               bcid: format,
               text: String(text || ' '),
@@ -2427,6 +2560,70 @@
             return canvas;
           } catch (e) {
             return null;
+          }
+        }
+      }
+
+      if (targetSize && targetSize !== 'auto') {
+        const res = this.generateBarcode(text, options);
+        if (res && res.binary) {
+          const binary = res.binary;
+          const baseWidth = options.width || 2;
+          const baseHeight = options.height || 80;
+          const baseMargin = options.margin != null ? options.margin : 10;
+          const baseFontSize = options.fontSize || 16;
+          const displayValue = options.displayValue !== false;
+          const textPosition = options.textPosition || 'bottom';
+          const textAlign = options.textAlign || 'center';
+          const lineColor = options.lineColor || options.color || '#000000';
+          const background = options.background || options.bg || '#ffffff';
+
+          const textHeight = displayValue ? baseFontSize + 8 : 0;
+          const W_base = (binary.length * baseWidth) + (baseMargin * 2);
+          const H_base = baseHeight + (baseMargin * 2) + textHeight;
+
+          const T = Math.min(4000, Math.max(50, parseInt(targetSize, 10) || 4000));
+          const S = Math.min(T / W_base, T / H_base);
+
+          const canvasWidth = Math.min(4000, Math.max(10, Math.round(W_base * S)));
+          const canvasHeight = Math.min(4000, Math.max(10, Math.round(H_base * S)));
+
+          canvas.width = canvasWidth;
+          canvas.height = canvasHeight;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.imageSmoothingEnabled = false;
+            ctx.fillStyle = background;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            const marginX = Math.round(baseMargin * S);
+            const marginY = Math.round(baseMargin * S);
+            const barHeight = Math.round(baseHeight * S);
+            const fontSize = Math.round(baseFontSize * S);
+            const barAreaWidth = canvasWidth - (marginX * 2);
+            const barY = (displayValue && textPosition === 'top') ? marginY + fontSize + Math.round(4 * S) : marginY;
+
+            ctx.fillStyle = lineColor;
+            for (let i = 0; i < binary.length; i++) {
+              if (binary[i] === '1') {
+                const x1 = marginX + Math.round(i * (barAreaWidth / binary.length));
+                const x2 = marginX + Math.round((i + 1) * (barAreaWidth / binary.length));
+                ctx.fillRect(x1, barY, Math.max(1, x2 - x1), barHeight);
+              }
+            }
+
+            if (displayValue) {
+              ctx.fillStyle = lineColor;
+              ctx.font = `bold ${fontSize}px monospace, sans-serif`;
+              ctx.textAlign = textAlign;
+              let textX = canvasWidth / 2;
+              if (textAlign === 'left') textX = marginX;
+              else if (textAlign === 'right') textX = canvasWidth - marginX;
+
+              const textY = (textPosition === 'top') ? marginY + fontSize : barY + barHeight + fontSize + Math.round(2 * S);
+              ctx.fillText(res.text || String(text), textX, textY);
+            }
+            return canvas;
           }
         }
       }
