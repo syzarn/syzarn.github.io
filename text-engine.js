@@ -2655,9 +2655,9 @@
         id: formatOrType,
         name: formatOrType,
         type: 'Barcode',
-        allowedChars: 'Standard barcode payload',
+        allowedChars: 'standard barcode payload',
         lengthLimit: 'variable',
-        notes: 'Ensure input matches symbology specification.',
+        notes: 'ensure input matches symbology specification.',
         example: 'SAMPLE-128'
       };
     },
