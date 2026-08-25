@@ -1881,6 +1881,7 @@
       if (clean === 'aztec' || clean === 'azteccode') return 'aztec';
       if (clean === 'maxicode' || clean === 'maxi') return 'maxicode';
       if (clean === 'dotcode' || clean === 'dot' || clean === 'dot-code' || clean === 'dots') return 'dotcode';
+      if (clean === 'hanxin' || clean === 'hanxincode' || clean === 'han-xin' || clean === 'hx') return 'hanxin';
       return clean;
     },
 
@@ -1926,6 +1927,22 @@
           if (options.ratio) bwipOpts.ratio = Number(options.ratio);
           if (options.parsefnc) bwipOpts.parsefnc = true;
           if (options.fastfind) bwipOpts.fastfind = true;
+        } else if (normType === 'hanxin') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === '1' || ec === 'LOW' || ec === 'L') ec = 'L1';
+            else if (ec === '2' || ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'L2';
+            else if (ec === '3' || ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'L3';
+            else if (ec === '4' || ec === 'HIGH' || ec === 'H') ec = 'L4';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && parseInt(options.version, 10) > 0) {
+            bwipOpts.version = parseInt(options.version, 10);
+          }
+          if (options.mask && parseInt(options.mask, 10) > 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
         }
 
         if (normType === 'maxicode') {
@@ -1951,7 +1968,8 @@
         const typeNames = {
           datamatrix: 'Data Matrix',
           aztec: 'Aztec Code',
-          dotcode: 'DotCode'
+          dotcode: 'DotCode',
+          hanxin: 'Han Xin Code'
         };
 
         return {
@@ -2066,6 +2084,22 @@
           if (options.ratio) bwipOpts.ratio = Number(options.ratio);
           if (options.parsefnc) bwipOpts.parsefnc = true;
           if (options.fastfind) bwipOpts.fastfind = true;
+        } else if (normType === 'hanxin') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === '1' || ec === 'LOW' || ec === 'L') ec = 'L1';
+            else if (ec === '2' || ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'L2';
+            else if (ec === '3' || ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'L3';
+            else if (ec === '4' || ec === 'HIGH' || ec === 'H') ec = 'L4';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && parseInt(options.version, 10) > 0) {
+            bwipOpts.version = parseInt(options.version, 10);
+          }
+          if (options.mask && parseInt(options.mask, 10) > 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
         }
         return bwip.toSVG({ bcid, text: String(text || ' '), ...bwipOpts });
       } catch (e) {
@@ -2117,6 +2151,22 @@
           if (options.ratio) bwipOpts.ratio = Number(options.ratio);
           if (options.parsefnc) bwipOpts.parsefnc = true;
           if (options.fastfind) bwipOpts.fastfind = true;
+        } else if (normType === 'hanxin') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === '1' || ec === 'LOW' || ec === 'L') ec = 'L1';
+            else if (ec === '2' || ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'L2';
+            else if (ec === '3' || ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'L3';
+            else if (ec === '4' || ec === 'HIGH' || ec === 'H') ec = 'L4';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && parseInt(options.version, 10) > 0) {
+            bwipOpts.version = parseInt(options.version, 10);
+          }
+          if (options.mask && parseInt(options.mask, 10) > 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
         }
 
         const targetSize = options.targetSize || options.sizePx || options.maxDim || options.targetWidth || options.targetHeight;
@@ -2671,7 +2721,7 @@
         type: '2D Matrix',
         allowedChars: 'full 8-bit ASCII / binary data (all 256 byte values) and UTF-8',
         lengthLimit: 'compact: 1-4 layers (up to 89 numeric / 53 bytes); full-range: 1-32 layers (up to 3,832 numeric / 1,914 bytes)',
-        notes: 'central square bullseye finder. adjustable Reed-Solomon ECC from 5% to 95% (default 23%). does not require a quiet zone.',
+        notes: 'central square bullseye finder. adjustable Reed-Solomon ECC. does not require a quiet zone.',
         example: 'AZTEC-CODE-PAYLOAD'
       },
       maxicode: {
@@ -2689,8 +2739,17 @@
         type: '2D Matrix (Discontinuous Dots)',
         allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes. GS1 application identifiers supported via FNC1',
         lengthLimit: 'variable grid size up to ~1,500+ characters (flexible width and height aspect ratio; sum of width and height must be odd)',
-        notes: 'checkerboard dot matrix optimized for ultra-high-speed industrial inkjet & laser on-the-fly printing (tobacco track & trace, pharmaceuticals, liquor packaging). uses Reed-Solomon error correction with ~33% redundancy.',
+        notes: 'checkerboard dot matrix optimized for ultra-high-speed industrial inkjet & laser on-the-fly printing (tobacco track & trace, pharmaceuticals, liquor packaging). uses Reed-Solomon ECC.',
         example: 'DOTCODE-SAMPLE-2026'
+      },
+      hanxin: {
+        id: 'hanxin',
+        name: 'Han Xin Code (汉信码 / Chinese Sensible Code / ISO/IEC 20830)',
+        type: '2D Matrix (4 Corner Finders)',
+        allowedChars: 'chinese characters (GB18030 / GB2312), full ASCII (0-127), latin, numeric digits, and raw 8-bit binary bytes',
+        lengthLimit: 'up to 7,827 digits, 4,350 alphanumeric, 2,174 chinese chars, or 3,261 bytes)',
+        notes: 'specifically optimized for 2-byte and 4-byte chinese ideographs with 4 distinct corner finder patterns. features Reed-Solomon ECC and 4 mask evaluation patterns.',
+        example: '述而不作、信而好古'
       },
 
       CODE128: {
@@ -2874,6 +2933,7 @@
       if (key === 'aztec' || key === 'azteccode') return this.symbologyRestrictions.aztec;
       if (key === 'maxicode' || key === 'maxi') return this.symbologyRestrictions.maxicode;
       if (key === 'dotcode' || key === 'dot' || key === 'dot-code' || key === 'dots') return this.symbologyRestrictions.dotcode;
+      if (key === 'hanxin' || key === 'hanxincode' || key === 'han-xin' || key === 'hx') return this.symbologyRestrictions.hanxin;
       if (key === 'pdf417') return this.symbologyRestrictions.pdf417;
       if (key === 'compactpdf417' || key === 'micropdf417') return this.symbologyRestrictions.compactpdf417;
 

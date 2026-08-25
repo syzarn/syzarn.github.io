@@ -1736,6 +1736,7 @@ Volume  : ${vol}%`;
                     <option value="aztec">Aztec Code</option>
                     <option value="maxicode">MaxiCode</option>
                     <option value="dotcode">DotCode</option>
+                    <option value="hanxin">Han Xin Code (汉信码)</option>
                   </select>
                   <span>format:</span>
                   <select class="tm-select" id="tm-qr-fmt" style="width: 140px;">
@@ -1808,6 +1809,26 @@ Volume  : ${vol}%`;
                   <input type="number" class="tm-input" id="tm-dot-ratio" value="" min="0.1" max="10" step="0.1" style="width: 50px;" placeholder="auto">
                   <label class="tm-checkbox-label"><input type="checkbox" id="tm-dot-parsefnc"> parse FNC</label>
                   <label class="tm-checkbox-label"><input type="checkbox" id="tm-dot-fastfind"> fast find</label>
+                </div>
+                <div id="tm-qr-opts-hanxin" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>ECC:</span>
+                  <select class="tm-select" id="tm-hx-ecc" style="width: 105px;" title="Han Xin error correction level">
+                    <option value="L1">L1 (~8%)</option>
+                    <option value="L2" selected>L2 (~15%)</option>
+                    <option value="L3">L3 (~23%)</option>
+                    <option value="L4">L4 (~30%)</option>
+                  </select>
+                  <span>version:</span>
+                  <input type="number" class="tm-input" id="tm-hx-version" value="0" min="0" max="84" style="width: 50px;" title="0 for auto version (1 to 84)">
+                  <span>mask:</span>
+                  <select class="tm-select" id="tm-hx-mask" style="width: 80px;" title="Mask pattern (1-4 or auto)">
+                    <option value="0" selected>auto</option>
+                    <option value="1">mask 1</option>
+                    <option value="2">mask 2</option>
+                    <option value="3">mask 3</option>
+                    <option value="4">mask 4</option>
+                  </select>
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-hx-parsefnc"> parse FNC</label>
                 </div>
                 <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
                   <span>scale:</span>
@@ -2070,6 +2091,11 @@ Volume  : ${vol}%`;
         const dotRatioInput = document.getElementById('tm-dot-ratio');
         const dotParseCheck = document.getElementById('tm-dot-parsefnc');
         const dotFastfindCheck = document.getElementById('tm-dot-fastfind');
+        const hxOptsRow = document.getElementById('tm-qr-opts-hanxin');
+        const hxEccSelect = document.getElementById('tm-hx-ecc');
+        const hxVersionInput = document.getElementById('tm-hx-version');
+        const hxMaskSelect = document.getElementById('tm-hx-mask');
+        const hxParseCheck = document.getElementById('tm-hx-parsefnc');
 
         const updateTypeVisibility = () => {
           const type = typeSelect ? typeSelect.value : 'qr';
@@ -2078,6 +2104,7 @@ Volume  : ${vol}%`;
           if (aztecOptsRow) aztecOptsRow.style.display = (type === 'aztec') ? 'flex' : 'none';
           if (maxiOptsRow) maxiOptsRow.style.display = (type === 'maxicode') ? 'flex' : 'none';
           if (dotOptsRow) dotOptsRow.style.display = (type === 'dotcode') ? 'flex' : 'none';
+          if (hxOptsRow) hxOptsRow.style.display = (type === 'hanxin') ? 'flex' : 'none';
         };
 
         const updateLiveQr = () => {
@@ -2099,11 +2126,12 @@ Volume  : ${vol}%`;
           const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
           let content = rawContent;
           if (!content) {
-            if (type === 'datamatrix') content = 'DATA MATRIX';
-            else if (type === 'aztec') content = 'AZTEC CODE';
-            else if (type === 'maxicode') content = 'THIS IS MAXICODE';
-            else if (type === 'dotcode') content = 'DOTCODE';
-            else content = 'https://syzarn.github.io';
+            if (type === 'datamatrix') content = 'Il n\'y a pas de hors-texte.';
+            else if (type === 'aztec') content = 'Il n\'y a pas de hors-texte.';
+            else if (type === 'maxicode') content = 'Il n\'y a pas de hors-texte.';
+            else if (type === 'dotcode') content = 'Il n\'y a pas de hors-texte.';
+            else if (type === 'hanxin') content = '述而不作、信而好古';
+            else content = 'Il n\'y a pas de hors-texte.';
           }
 
           const scale = parseInt(scaleInput ? scaleInput.value : 8, 10) || 8;
@@ -2137,6 +2165,11 @@ Volume  : ${vol}%`;
             if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
             if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
             if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
+          } else if (type === 'hanxin') {
+            opts.eclevel = hxEccSelect ? hxEccSelect.value : 'L2';
+            if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
+            if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
+            if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
           }
 
           const res = window.TextEngine.generate2DCode(content, type, opts);
@@ -2164,6 +2197,8 @@ Volume  : ${vol}%`;
               metaEl.textContent = `MaxiCode (Mode ${res.mode || 4}) | ${content.length} chars`;
             } else if (type === 'dotcode') {
               metaEl.textContent = `DotCode (${res.width}x${res.height}) | ${content.length} chars`;
+            } else if (type === 'hanxin') {
+              metaEl.textContent = `Han Xin Code/汉信码 (${res.width}x${res.height}) | ${content.length} chars`;
             }
           }
         };
@@ -2198,7 +2233,7 @@ Volume  : ${vol}%`;
           });
         }
 
-        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
+        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, hxEccSelect, hxVersionInput, hxMaskSelect, hxParseCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
           if (el) {
             el.addEventListener('input', updateLiveQr);
             el.addEventListener('change', updateLiveQr);
@@ -2255,6 +2290,11 @@ Volume  : ${vol}%`;
               if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
               if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
               if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
+            } else if (type === 'hanxin') {
+              opts.eclevel = hxEccSelect ? hxEccSelect.value : 'L2';
+              if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
+              if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
+              if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
             }
 
             if (qrPngSizeSelect) {
@@ -2305,6 +2345,11 @@ Volume  : ${vol}%`;
               if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
               if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
               if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
+            } else if (type === 'hanxin') {
+              opts.eclevel = hxEccSelect ? hxEccSelect.value : 'L2';
+              if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
+              if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
+              if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
             }
 
             const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
@@ -2344,6 +2389,11 @@ Volume  : ${vol}%`;
               if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
               if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
               if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
+            } else if (type === 'hanxin') {
+              opts.eclevel = hxEccSelect ? hxEccSelect.value : 'L2';
+              if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
+              if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
+              if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
             }
 
             const res = window.TextEngine.generate2DCode(content, type, opts);
@@ -2383,6 +2433,11 @@ Volume  : ${vol}%`;
               if (dotRatioInput && dotRatioInput.value) opts.ratio = Number(dotRatioInput.value);
               if (dotParseCheck && dotParseCheck.checked) opts.parsefnc = true;
               if (dotFastfindCheck && dotFastfindCheck.checked) opts.fastfind = true;
+            } else if (type === 'hanxin') {
+              opts.eclevel = hxEccSelect ? hxEccSelect.value : 'L2';
+              if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
+              if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
+              if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
             }
 
             const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
@@ -4789,8 +4844,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     qrcode: {
-      desc: 'generate customizable 2D matrix (QR Code, Data Matrix, Aztec Code, MaxiCode, DotCode)',
-      usage: 'qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-e low|med|quart|high] [-s scale] [-b border] [-f ascii|full-ascii|svg|dataurl|raw] [flags] [file/text...]',
+      desc: 'generate customizable 2D matrix (QR Code, Data Matrix, Aztec Code, MaxiCode, DotCode, Han Xin Code)',
+      usage: 'qrcode [-t qr|datamatrix|aztec|maxicode|dotcode|hanxin] [-e low|med|quart|high|L1|L2|L3|L4] [-v version] [-s scale] [-b border] [-f ascii|full-ascii|svg|dataurl|raw] [flags] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'qrcode: text engine not loaded';
 
@@ -4824,6 +4879,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let dotRows = undefined;
         let dotRatio = undefined;
         let dotFastfind = false;
+        let hxVersion = undefined;
         let targetSize = undefined;
 
         for (let i = 0; i < args.length; i++) {
@@ -4836,6 +4892,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             i++;
           } else if ((a === '-s' || a === '--scale') && args[i + 1]) {
             scale = parseInt(args[i + 1], 10) || scale;
+            i++;
+          } else if ((a === '-v' || a === '--version') && args[i + 1]) {
+            hxVersion = parseInt(args[i + 1], 10);
             i++;
           } else if ((a === '--size' || a === '--max-dim' || a === '--png-size') && args[i + 1]) {
             targetSize = Math.min(4000, Math.max(50, parseInt(args[i + 1], 10) || 4000));
@@ -4913,9 +4972,10 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           return `<div class="tool-result-box">
 <div class="tool-result-header">2D matrix generator</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
+<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
 <div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
 <div class="c-dim">  qrcode -t dotcode --ratio 2 "EIKHI-2002"</div>
+<div class="c-dim">  qrcode -t hanxin -e L3 "述而不作、信而好古"</div>
 <div class="c-dim">  qrcode -t datamatrix --shape square "EIKHI"</div>
 <div class="c-dim">  qrcode --ui "custom payload"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">types & input restrictions:</span></div>
@@ -4924,8 +4984,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  aztec       : Full 8-bit binary/ASCII (compact 1-4 layers, full 1-32 layers; up to 3,832 digits)</div>
 <div class="c-dim">  maxicode    : Mode 4 standard (93 chars), Mode 5 secure (77 chars), Mode 2/3 postal SCM</div>
 <div class="c-dim">  dotcode     : Full ASCII (0-127), extended (128-255), UTF-8, GS1 FNC1 (up to ~1,500+ chars/bytes)</div>
+<div class="c-dim">  hanxin      : Chinese (GB18030), full ASCII, Latin, digits, binary (84 versions up to 7,827 digits / 2,174 Chinese chars)</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
-<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, datamatrix, aztec, maxicode, dotcode)</div>
+<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, datamatrix, aztec, maxicode, dotcode, hanxin)</div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;   : output format (ascii, full-ascii, svg, dataurl, raw)</div>
 <div class="c-dim">  -s, --scale &lt;N&gt;      : module pixel scale for image/canvas (default: 8)</div>
 <div class="c-dim">  --size &lt;N&gt;           : target PNG image size / max dimension (max: 4000)</div>
@@ -4939,6 +5000,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  Aztec Code  : --aztec-format &lt;compact|full&gt;, --layers &lt;1-32&gt;, --eclevel &lt;5-95&gt;</div>
 <div class="c-dim">  MaxiCode    : --mode &lt;2|3|4|5|6&gt;</div>
 <div class="c-dim">  DotCode     : --columns &lt;N&gt;, --rows &lt;N&gt;, --ratio &lt;N&gt;, --parsefnc, --fastfind</div>
+<div class="c-dim">  Han Xin Code/汉信码: -e, --ecc &lt;L1|L2|L3|L4&gt;, -v, --version &lt;1-84&gt;, --mask &lt;1-4&gt;, --parsefnc</div>
 </div>`;
         }
 
@@ -4971,6 +5033,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           if (dotRatio) opts.ratio = dotRatio;
           if (dmParsefnc) opts.parsefnc = true;
           if (dotFastfind) opts.fastfind = true;
+        } else if (type === 'hanxin') {
+          if (ecc) opts.eclevel = ecc;
+          if (hxVersion) opts.version = hxVersion;
+          if (mask > 0) opts.mask = mask;
+          if (dmParsefnc) opts.parsefnc = true;
         }
 
         const codeRes = window.TextEngine.generate2DCode(input.text, type, opts);
@@ -5145,6 +5212,38 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'dot-code [flags] [file/text...]',
       exec(args, stdin) {
         return commands.dotcode.exec(args, stdin);
+      }
+    },
+
+    hanxin: {
+      desc: 'generate 2D Han Xin code (汉信码 / chinese sensible code / ISO/IEC 20830; up to 7,827 digits / 2,174 chinese chars)',
+      usage: 'hanxin [-e L1|L2|L3|L4] [-v version] [--mask 1-4] [--parsefnc] [-s scale] [-b border] [--size 4000] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'hanxin', ...args], stdin);
+      }
+    },
+
+    hx: {
+      desc: 'alias for hanxin',
+      usage: 'hx [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.hanxin.exec(args, stdin);
+      }
+    },
+
+    'han-xin': {
+      desc: 'alias for hanxin',
+      usage: 'han-xin [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.hanxin.exec(args, stdin);
+      }
+    },
+
+    hanxincode: {
+      desc: 'alias for hanxin',
+      usage: 'hanxincode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.hanxin.exec(args, stdin);
       }
     },
 
@@ -5378,7 +5477,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'barcode', 'bc', 'pdf417'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -6399,6 +6498,16 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
             typeSel.dispatchEvent(new Event('change'));
           }
           return `<span class="c-accent">opened dotcode generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'hanxin' || target === 'hx' || target === 'han-xin' || target === 'hanxincode') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'hanxin';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened han xin code generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'barcode' || target === 'bc') {
