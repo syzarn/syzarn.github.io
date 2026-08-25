@@ -1117,8 +1117,53 @@ a.term-link:hover {
   word-break: break-word;
 }
 
+.tm-restriction-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(0, 255, 102, 0.03);
+  border: 1px dashed rgba(0, 255, 102, 0.22);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: #cccccc;
+  margin: 2px 0;
+  width: 100%;
+}
 
+.tm-restriction-title {
+  color: var(--accent, #00ff66);
+  font-weight: bold;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
+.tm-restriction-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tm-restriction-label {
+  color: #888888;
+  font-weight: 500;
+  min-width: 65px;
+}
+
+.tm-restriction-val {
+  color: #e0e0e0;
+  flex: 1;
+}
+
+.tm-restriction-note {
+  color: #8fa397;
+  font-size: 0.72rem;
+  margin-top: 2px;
+  font-style: italic;
+}
 
 @media (max-width: 860px) {
   .tm-window {

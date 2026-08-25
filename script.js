@@ -1745,6 +1745,7 @@ Volume  : ${vol}%`;
                     <option value="dataurl">data URL (PNG)</option>
                   </select>
                 </div>
+                <div id="tm-qr-restriction-note" class="tm-restriction-box"></div>
                 <div id="tm-qr-opts-qr" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
                   <span>ECC:</span>
                   <select class="tm-select" id="tm-qr-ecc" style="width: 120px;">
@@ -1850,7 +1851,7 @@ Volume  : ${vol}%`;
                     <option value="ITF14">ITF-14</option>
                     <option value="ITF">ITF</option>
                     <option value="pdf417">PDF417 (stacked 2D)</option>
-                    <option value="compactpdf417">compact PDF417</option>
+                    <option value="compactpdf417">Compact PDF417</option>
                     <option value="pharmacode">Pharmacode</option>
                     <option value="codabar">Codabar</option>
                     <option value="CODE93">CODE93</option>
@@ -1866,6 +1867,7 @@ Volume  : ${vol}%`;
                     <option value="dataurl">data URL (PNG)</option>
                   </select>
                 </div>
+                <div id="tm-bc-restriction-note" class="tm-restriction-box"></div>
                 <div id="tm-bc-pdf-opts" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
                   <span>PDF417 cols:</span>
                   <input type="number" class="tm-input" id="tm-pdf-cols" value="0" min="0" max="30" style="width: 50px;" title="0 for auto">
@@ -2045,6 +2047,17 @@ Volume  : ${vol}%`;
           const type = typeSelect ? typeSelect.value : 'qr';
           updateTypeVisibility();
 
+          const rest = window.TextEngine.getSymbologyRestriction(type);
+          const noteEl = document.getElementById('tm-qr-restriction-note');
+          if (noteEl && rest) {
+            noteEl.innerHTML = `
+              <div class="tm-restriction-title">ℹ ${escapeHTML(rest.name)} &bull; <span class="c-dim">${escapeHTML(rest.type)}</span></div>
+              <div class="tm-restriction-row"><span class="tm-restriction-label">allowed:</span> <span class="tm-restriction-val">${escapeHTML(rest.allowedChars)}</span></div>
+              <div class="tm-restriction-row"><span class="tm-restriction-label">capacity:</span> <span class="tm-restriction-val">${escapeHTML(rest.lengthLimit)}</span></div>
+              <div class="tm-restriction-note">${escapeHTML(rest.notes)}</div>
+            `;
+          }
+
           const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
           let content = rawContent;
           if (!content) {
@@ -2085,7 +2098,7 @@ Volume  : ${vol}%`;
 
           if (res.error) {
             if (metaEl) metaEl.textContent = 'Error: ' + res.error;
-            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;">${escapeHTML(res.error)}</span>`;
+            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;display:block;">${escapeHTML(res.error)}</span>`;
             return;
           }
 
@@ -2317,17 +2330,32 @@ Volume  : ${vol}%`;
         const updateLiveBarcode = () => {
           if (!window.TextEngine) return;
           updateBcFormatVisibility();
-          const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
           const format = formatSelect ? formatSelect.value : 'CODE128';
+
+          const rest = window.TextEngine.getSymbologyRestriction(format);
+          const noteEl = document.getElementById('tm-bc-restriction-note');
+          if (noteEl && rest) {
+            noteEl.innerHTML = `
+              <div class="tm-restriction-title">ℹ ${escapeHTML(rest.name)} &bull; <span class="c-dim">${escapeHTML(rest.type)}</span></div>
+              <div class="tm-restriction-row"><span class="tm-restriction-label">allowed:</span> <span class="tm-restriction-val">${escapeHTML(rest.allowedChars)}</span></div>
+              <div class="tm-restriction-row"><span class="tm-restriction-label">length:</span> <span class="tm-restriction-val">${escapeHTML(rest.lengthLimit)}</span></div>
+              <div class="tm-restriction-note">${escapeHTML(rest.notes)}</div>
+            `;
+          }
+
+          const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
           let content = rawContent;
           if (!content) {
-            if (format === 'EAN13') content = '978020137962';
-            else if (format === 'EAN8') content = '12345670';
-            else if (format === 'UPC') content = '123456789012';
-            else if (format === 'pharmacode') content = '1234';
-            else if (format === 'ITF14') content = '12345678901231';
-            else if (format === 'pdf417' || format === 'compactpdf417') content = 'PDF417-SAMPLE';
-            else content = 'HELLO-128';
+            if (format === 'EAN13') content = '202604062336';
+            else if (format === 'EAN8') content = '2710199';
+            else if (format === 'UPC') content = '19971123021';
+            else if (format === 'CODE128A') content = 'NULL';
+            else if (format === 'pharmacode') content = '1710';
+            else if (format === 'ITF14') content = '2002120912009';
+            else if (format === 'codabar') content = 'B00B';
+            else if (format === 'MSI', 'MSI10', 'MSI11') content = '20040317';
+            else if (format === 'pdf417' || format === 'compactpdf417') content = 'KI KORIS?';
+            else content = 'RSVA-2711';
           }
 
           const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
@@ -2364,7 +2392,7 @@ Volume  : ${vol}%`;
 
           if (res.error) {
             if (metaEl) metaEl.textContent = 'error: ' + res.error;
-            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;">${escapeHTML(res.error)}</span>`;
+            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;display:block;">${escapeHTML(res.error)}</span>`;
             return;
           }
 
@@ -4751,8 +4779,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
 <div class="c-dim">  qrcode -t datamatrix --shape square "DATA-MATRIX-PAYLOAD"</div>
 <div class="c-dim">  qrcode --ui "custom payload"</div>
-<div style="margin-top:6px;"><span class="c-accent ansi-bold">types:</span></div>
-<div class="c-dim">  qr (default), datamatrix (dm), aztec (azteccode), maxicode (maxi)</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">types & input restrictions:</span></div>
+<div class="c-dim">  qr          : UTF-8, Latin-1, binary, numeric, alphanumeric, Kanji (up to 7,089 digits / 2,953 bytes)</div>
+<div class="c-dim">  datamatrix  : Full ASCII (0-127), extended (128-255), UTF-8, binary (up to 3,116 digits / 1,555 bytes)</div>
+<div class="c-dim">  aztec       : Full 8-bit binary/ASCII (compact 1-4 layers, full 1-32 layers; up to 3,832 digits)</div>
+<div class="c-dim">  maxicode    : Mode 4 standard (93 chars), Mode 5 secure (77 chars), Mode 2/3 postal SCM</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
 <div class="c-dim">  -t, --type &lt;type&gt;    : Symbology type (qr, datamatrix, aztec, maxicode)</div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;   : Output format (ascii, full-ascii, svg, dataurl, raw)</div>
@@ -4796,7 +4827,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         const codeRes = window.TextEngine.generate2DCode(input.text, type, opts);
 
         if (codeRes.error) {
-          return `qrcode: error: ${escapeHTML(codeRes.error)}`;
+          const rest = window.TextEngine.getSymbologyRestriction(type);
+          const hint = rest ? `\n<span class="c-dim">note for ${rest.name}: allowed: ${rest.allowedChars}. capacity: ${rest.lengthLimit}. ${rest.notes}</span>` : '';
+          return `qrcode: error: ${escapeHTML(codeRes.error)}${hint}`;
         }
 
         if (format === 'svg') {
@@ -4895,7 +4928,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     datamatrix: {
-      desc: 'generate 2D Data Matrix barcodes (square or rectangular)',
+      desc: 'generate 2D Data Matrix barcodes (square or rectangular; ASCII 0-255 / binary up to 3,116 digits)',
       usage: 'datamatrix [--shape square|rect] [--parsefnc] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(['-t', 'datamatrix', ...args], stdin);
@@ -4911,7 +4944,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     aztec: {
-      desc: 'generate 2D Aztec Code barcodes (high-density matrix)',
+      desc: 'generate 2D Aztec Code barcodes (compact/full 8-bit binary / ASCII up to 3,832 digits)',
       usage: 'aztec [--format compact|full] [--layers N] [--eclevel 5-95] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(['-t', 'aztec', ...args], stdin);
@@ -4927,7 +4960,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     maxicode: {
-      desc: 'generate 2D MaxiCode barcodes (hexagonal grid postal symbol)',
+      desc: 'generate 2D MaxiCode barcodes (hexagonal postal symbols; Mode 4 standard 93 chars, Mode 2/3 SCM)',
       usage: 'maxicode [--mode 2|3|4|5|6] [-s scale] [--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(['-t', 'maxicode', ...args], stdin);
@@ -5032,8 +5065,23 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  echo "123456789012" | barcode -f EAN13</div>
 <div class="c-dim">  echo "SECURE-PAYLOAD" | barcode -f pdf417 --columns 4 --eclevel 3</div>
 <div class="c-dim">  barcode --ui "HELLO-128"</div>
-<div style="margin-top:6px;"><span class="c-accent ansi-bold">formats:</span></div>
-<div class="c-dim">  CODE128 (auto, A, B, C), EAN-13, EAN-8, UPC (UPC-A), UPC-E, CODE39, ITF-14, ITF, PDF417, compact PDF417, Pharmacode, Codabar, CODE93, MSI</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">formats & input restrictions:</span></div>
+<div class="c-dim">  CODE128 (auto) : Full ASCII 0-127 (auto A/B/C compaction)</div>
+<div class="c-dim">  CODE128A       : Uppercase A-Z, digits 0-9, punctuation, control chars (NO lowercase)</div>
+<div class="c-dim">  CODE128B       : ASCII printable 32-127 (mixed case letters, digits, symbols)</div>
+<div class="c-dim">  CODE128C       : Numeric digits ONLY (0-9), must be an EVEN number of digits</div>
+<div class="c-dim">  EAN-13         : Exactly 12 or 13 numeric digits (0-9)</div>
+<div class="c-dim">  EAN-8          : Exactly 7 or 8 numeric digits (0-9)</div>
+<div class="c-dim">  UPC (UPC-A)    : Exactly 11 or 12 numeric digits (0-9)</div>
+<div class="c-dim">  UPC-E          : 6, 7, or 8 numeric digits (0-9)</div>
+<div class="c-dim">  CODE39         : Uppercase A-Z, digits 0-9, space, symbols (- . $ / + %)</div>
+<div class="c-dim">  CODE93         : Uppercase A-Z, digits 0-9, symbols (full ASCII via escapes)</div>
+<div class="c-dim">  ITF-14         : Exactly 13 or 14 numeric digits (0-9)</div>
+<div class="c-dim">  ITF            : Numeric digits ONLY (0-9), must be an EVEN number of digits</div>
+<div class="c-dim">  Pharmacode     : Numeric integer from 3 to 131070</div>
+<div class="c-dim">  Codabar        : Digits 0-9, symbols (- $ : / . +), start/stop (A, B, C, D)</div>
+<div class="c-dim">  MSI / 10 / 11  : Numeric digits ONLY (0-9)</div>
+<div class="c-dim">  PDF417         : Full ASCII, text, binary (up to 1,850 chars / 1,108 bytes; 1-30 cols, 3-90 rows)</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">flags:</span></div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;    : Symbology format (default: CODE128)</div>
 <div class="c-dim">  -w, --width &lt;N&gt;      : Bar/module width (default: 2)</div>
@@ -5065,7 +5113,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         const bcRes = window.TextEngine.generateBarcode(cleanText, bcOpts);
 
         if (bcRes.error) {
-          return `barcode: error: ${escapeHTML(bcRes.error)}`;
+          const rest = window.TextEngine.getSymbologyRestriction(format);
+          const hint = rest ? `\n<span class="c-dim">note for ${rest.name}: allowed: ${rest.allowedChars}. length: ${rest.lengthLimit}. ${rest.notes}</span>` : '';
+          return `barcode: error: ${escapeHTML(bcRes.error)}${hint}`;
         }
 
         if (outputMode === 'svg') {
@@ -5124,7 +5174,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     pdf417: {
-      desc: 'generate stacked 2D PDF417 barcodes',
+      desc: 'generate stacked 2D PDF417 barcodes (full ASCII/binary up to 1,850 chars; 1-30 cols, 3-90 rows)',
       usage: 'pdf417 [--columns N] [--rows N] [--eclevel 0-8] [--compact] [-w width] [-h height] [--ascii|--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.barcode.exec(['-f', 'pdf417', ...args], stdin);

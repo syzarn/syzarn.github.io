@@ -2429,6 +2429,239 @@
       return canvas.toDataURL('image/png');
     },
 
+    symbologyRestrictions: {
+      qr: {
+        id: 'qr',
+        name: 'QR Code (Quick Response Matrix)',
+        type: '2D Matrix',
+        allowedChars: 'all characters (UTF-8, Latin-1, binary bytes, numeric 0-9, alphanumeric A-Z 0-9 space $%*+-./:, kanji)',
+        lengthLimit: 'up to 7,089 numeric, 4,296 alphanumeric, or 2,953 binary bytes (versions 1 to 40)',
+        notes: 'supports 4 error correction levels (low ~7%, medium ~15%, quartile ~25%, high ~30%) and 8 mask patterns.',
+        example: 'https://syzarn.github.io'
+      },
+      datamatrix: {
+        id: 'datamatrix',
+        name: 'Data Matrix (ISO/IEC 16022)',
+        type: '2D Matrix',
+        allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes',
+        lengthLimit: 'up to 3,116 numeric, 2,335 alphanumeric, or 1,555 binary bytes (10x10 to 144x144)',
+        notes: 'supports square and rectangular shapes. supports GS1/FNC1 parsing with --parsefnc.',
+        example: 'DATA-MATRIX-SAMPLE-2026'
+      },
+      aztec: {
+        id: 'aztec',
+        name: 'Aztec Code (ISO/IEC 24778)',
+        type: '2D Matrix',
+        allowedChars: 'full 8-bit ASCII / binary data (all 256 byte values) and UTF-8',
+        lengthLimit: 'compact: 1-4 layers (up to 89 numeric / 53 bytes); full-range: 1-32 layers (up to 3,832 numeric / 1,914 bytes)',
+        notes: 'central square bullseye finder. adjustable Reed-Solomon ECC from 5% to 95% (default 23%). does not require a quiet zone.',
+        example: 'AZTEC-CODE-PAYLOAD'
+      },
+      maxicode: {
+        id: 'maxicode',
+        name: 'MaxiCode (UPS / ISO/IEC 16023)',
+        type: '2D Matrix',
+        allowedChars: 'Mode 4 (standard) & Mode 5 (secure): full ASCII text/data. Mode 2 (US SCM) & Mode 3 (Intl SCM): structured carrier message (postal code, 3-digit country, 3-digit class of service)',
+        lengthLimit: 'Mode 4: max 93 alphanumeric chars. Mode 5: max 77 alphanumeric chars (enhanced ECC)',
+        notes: 'fixed-size honeycomb matrix of 884 hexagons in 33 rows with central concentric bullseye finder.',
+        example: 'STANDARD-MAXICODE-PAYLOAD'
+      },
+
+      CODE128: {
+        id: 'CODE128',
+        name: 'Code 128 (Auto-switching A/B/C)',
+        type: '1D Linear',
+        allowedChars: 'full 128 standard ASCII character set (ASCII 0-127: letters, numbers, symbols, control chars)',
+        lengthLimit: 'variable',
+        notes: 'automatically switches between subsets A, B, and C for optimal density. includes modulo-103 checksum.',
+        example: 'CODE128-Payload-2026'
+      },
+      CODE128A: {
+        id: 'CODE128A',
+        name: 'Code 128 Subset A',
+        type: '1D Linear',
+        allowedChars: 'uppercase letters (A-Z), digits (0-9), punctuation (ASCII 32-95), and control characters (0-31, NUL to US). no lowercase letters',
+        lengthLimit: 'variable',
+        notes: 'used when control codes (e.g. CR, LF, TAB) or uppercase alphanumeric characters are needed.',
+        example: 'UPPERCASE-ONLY-128A'
+      },
+      CODE128B: {
+        id: 'CODE128B',
+        name: 'Code 128 Subset B',
+        type: '1D Linear',
+        allowedChars: 'standard printable ASCII characters (ASCII 32-127): uppercase (A-Z), lowercase (a-z), digits (0-9), and punctuation',
+        lengthLimit: 'variable',
+        notes: 'standard format for general-purpose mixed-case alphanumeric text and barcodes.',
+        example: 'MixedCaseText-128B'
+      },
+      CODE128C: {
+        id: 'CODE128C',
+        name: 'Code 128 Subset C',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9).',
+        lengthLimit: 'variable even number of digits [2n] (encoded in pairs 00-99)',
+        notes: 'encodes 2 numeric digits per symbol character for ultra-high density.',
+        example: '123456789012'
+      },
+      EAN13: {
+        id: 'EAN13',
+        name: 'EAN-13 (International Article Number)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9). must be exactly 12 or 13 digits',
+        lengthLimit: 'exactly 12 digits (auto-appends 13th checksum) or 13 digits (with valid mod-10 checksum)',
+        notes: 'worldwide retail standard barcode.',
+        example: '978020137962'
+      },
+      EAN8: {
+        id: 'EAN8',
+        name: 'EAN-8 (Compact European Article Number)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9). must be exactly 7 or 8 digits',
+        lengthLimit: 'exactly 7 digits (auto-appends 8th checksum) or 8 digits (with valid mod-10 checksum)',
+        notes: 'compact retail barcode for small product packages.',
+        example: '12345670'
+      },
+      UPC: {
+        id: 'UPC',
+        name: 'UPC-A (Universal Product Code)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9). must be exactly 11 or 12 digits',
+        lengthLimit: 'exactly 11 digits (auto-appends 12th checksum) or 12 digits (with valid mod-10 checksum)',
+        notes: 'standard retail product barcode widely used in north america.',
+        example: '123456789012'
+      },
+      UPCE: {
+        id: 'UPCE',
+        name: 'UPC-E (Zero-Suppressed UPC)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9). 6, 7, or 8 digits (or compressible 11/12-digit UPC-A)',
+        lengthLimit: '6, 7, or 8 digits',
+        notes: 'zero-compressed version of UPC-A for small packages in US retail.',
+        example: '01234565'
+      },
+      CODE39: {
+        id: 'CODE39',
+        name: 'Code 39 (Alpha39 / USD-2)',
+        type: '1D Linear',
+        allowedChars: 'uppercase letters (A-Z), numeric digits (0-9), space, and symbols: - . $ / + %',
+        lengthLimit: 'variable (recommended <30 chars for scan reliability)',
+        notes: 'lowercase letters are automatically capitalized. start/stop asterisk (*) delimiters are handled automatically.',
+        example: 'CODE-39-TEST'
+      },
+      CODE93: {
+        id: 'CODE93',
+        name: 'Code 93 (High-Density Alpha)',
+        type: '1D Linear',
+        allowedChars: 'uppercase letters (A-Z), numeric digits (0-9), space, and symbols: - . $ / + % (Full ASCII via escapes)',
+        lengthLimit: 'variable',
+        notes: 'higher density than Code 39 with dual-check characters (C & K) for enhanced data security.',
+        example: 'CODE93-DATA'
+      },
+      ITF14: {
+        id: 'ITF14',
+        name: 'ITF-14 (Packaging / Master Carton)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9). must be exactly 13 or 14 digits',
+        lengthLimit: 'exactly 13 digits (auto-appends 14th checksum) or 14 digits',
+        notes: 'used on outer shipping cartons and corrugated cardboard boxes for Master/Carton packaging.',
+        example: '12345678901231'
+      },
+      ITF: {
+        id: 'ITF',
+        name: 'Interleaved 2 of 5 (ITF / I25)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9).',
+        lengthLimit: 'variable even number of digits [2n]',
+        notes: 'encodes pairs of digits simultaneously (bars encode one, spaces encode the other). odd count requires a leading zero.',
+        example: '12345678'
+      },
+      pharmacode: {
+        id: 'pharmacode',
+        name: 'Pharmacode (Pharmaceutical Binary Code)',
+        type: '1D Linear',
+        allowedChars: 'numeric integer digits (0-9)',
+        lengthLimit: 'single integer value from 3 to 131070',
+        notes: 'single-track binary barcode used in pharmaceutical packaging inspection.',
+        example: '12345'
+      },
+      codabar: {
+        id: 'codabar',
+        name: 'Codabar (NW-7 / Ames Code)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits (0-9), symbols (- $ : / . +), with start and stop characters (A, B, C, D, T, N, *, or E)',
+        lengthLimit: 'variable',
+        notes: 'commonly used in blood banks, libraries, photo labs, and airbills. must start and end with valid delimiters.',
+        example: 'A123456789B'
+      },
+      MSI: {
+        id: 'MSI',
+        name: 'MSI Plessey',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9)',
+        lengthLimit: 'variable',
+        notes: 'continuous symbology primarily used for supermarket warehouse shelves and retail inventory.',
+        example: '1234567'
+      },
+      MSI10: {
+        id: 'MSI10',
+        name: 'MSI Plessey (Mod 10 Check Digit)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9)',
+        lengthLimit: 'variable',
+        notes: 'MSI Plessey barcode with automatically computed mod-10 check digit.',
+        example: '1234567'
+      },
+      MSI11: {
+        id: 'MSI11',
+        name: 'MSI Plessey (Mod 11 Check Digit)',
+        type: '1D Linear',
+        allowedChars: 'numeric digits only (0-9)',
+        lengthLimit: 'variable',
+        notes: 'MSI Plessey barcode with automatically computed mod-11 check digit.',
+        example: '1234567'
+      },
+      pdf417: {
+        id: 'pdf417',
+        name: 'PDF417 (Portable Data File 417)',
+        type: 'Stacked 2D Barcode',
+        allowedChars: 'full ASCII (0-127), text, numbers, and raw binary bytes (0-255)',
+        lengthLimit: 'up to ~1,850 text characters, 2,710 numeric digits, or 1,108 binary bytes (1-30 columns, 3-90 rows)',
+        notes: 'stacked linear 2D barcode widely used on ID cards, driver licenses, boarding passes, and shipping labels.',
+        example: 'PDF417-PAYLOAD-2026'
+      },
+      compactpdf417: {
+        id: 'compactpdf417',
+        name: 'Compact PDF417 (Truncated PDF417)',
+        type: 'Stacked 2D Barcode',
+        allowedChars: 'full ASCII, text, numbers, and raw binary bytes (same as PDF417)',
+        lengthLimit: 'up to ~1,850 text characters or 1,108 binary bytes (1-30 columns, 3-90 rows)',
+        notes: 'truncated right-side stop pattern to conserve horizontal space in clean scanning environments.',
+        example: 'COMPACT-PDF417-DATA'
+      }
+    },
+
+    getSymbologyRestriction(formatOrType) {
+      if (!formatOrType) return this.symbologyRestrictions.CODE128;
+      const key = String(formatOrType).toLowerCase();
+      if (key === 'qr' || key === 'qrcode' || key === 'qrcodegen') return this.symbologyRestrictions.qr;
+      if (key === 'datamatrix' || key === 'dm') return this.symbologyRestrictions.datamatrix;
+      if (key === 'aztec' || key === 'azteccode') return this.symbologyRestrictions.aztec;
+      if (key === 'maxicode' || key === 'maxi') return this.symbologyRestrictions.maxicode;
+      if (key === 'pdf417') return this.symbologyRestrictions.pdf417;
+      if (key === 'compactpdf417' || key === 'micropdf417') return this.symbologyRestrictions.compactpdf417;
+
+      const norm = this.normalizeBarcodeFormat(formatOrType);
+      return this.symbologyRestrictions[norm] || this.symbologyRestrictions[formatOrType] || {
+        id: formatOrType,
+        name: formatOrType,
+        type: 'Barcode',
+        allowedChars: 'Standard barcode payload',
+        lengthLimit: 'variable',
+        notes: 'Ensure input matches symbology specification.',
+        example: 'SAMPLE-128'
+      };
+    },
+
     toolsCatalog: [
       { id: "count", name: "count characters words sentences lines", category: "basic tools", desc: "analyze character, word, sentence, line and byte statistics with word frequency.", cli: "count [-c|-w|-s|-l|--freq] [file/text]" },
       { id: "replace", name: "find and replace", category: "basic tools", desc: "find and replace text using literal strings or regular expressions.", cli: "replace [-i|-g|-r] <search> <replace> [file/text]" },
