@@ -1877,6 +1877,8 @@
       if (!type) return 'qr';
       const clean = String(type).toLowerCase().replace(/[^a-z0-9]/g, '');
       if (clean === 'qr' || clean === 'qrcode' || clean === 'qrcodegen') return 'qr';
+      if (clean === 'microqr' || clean === 'microqrcode' || clean === 'mqr' || clean === 'uqr') return 'microqr';
+      if (clean === 'rmqr' || clean === 'rectmicroqr' || clean === 'rectmicroqrcode' || clean === 'rectangularmicroqrcode' || clean === 'rmqrcode') return 'rmqr';
       if (clean === 'datamatrix' || clean === 'dm') return 'datamatrix';
       if (clean === 'aztec' || clean === 'azteccode') return 'aztec';
       if (clean === 'maxicode' || clean === 'maxi') return 'maxicode';
@@ -1906,12 +1908,68 @@
       }
 
       try {
-        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        let bcid = normType;
+        if (normType === 'aztec') bcid = 'azteccode';
+        else if (normType === 'microqr') bcid = 'microqrcode';
+        else if (normType === 'rmqr') bcid = 'rectangularmicroqrcode';
+
         const bwipOpts = {};
         if (options.scale) bwipOpts.scale = Number(options.scale);
         if (options.padding != null) bwipOpts.padding = Number(options.padding);
         if (options.border != null) bwipOpts.padding = Number(options.border);
-        if (normType === 'datamatrix') {
+
+        if (normType === 'microqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'LOW' || ec === 'L') ec = 'L';
+            else if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'Q';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            let v = String(options.version).toUpperCase();
+            if (!v.startsWith('M') && ['1', '2', '3', '4'].includes(v)) v = 'M' + v;
+            bwipOpts.version = v;
+          }
+          if (options.mask != null && parseInt(options.mask, 10) >= 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'rmqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'HIGH' || ec === 'H') ec = 'H';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            const vStr = String(options.version).trim();
+            const vMatch = vStr.match(/^r?(\d+)[xX](\d+)$/i);
+            bwipOpts.version = vMatch ? ('R' + vMatch[1] + 'x' + vMatch[2]) : vStr;
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+
+          if (!bwipOpts.version) {
+            const rmqrSizes = [
+              'R11x27', 'R7x43', 'R13x27', 'R9x43', 'R7x59', 'R11x43', 'R9x59', 'R7x77',
+              'R13x43', 'R15x43', 'R11x59', 'R7x99', 'R9x77', 'R17x43', 'R13x59', 'R11x77',
+              'R15x59', 'R9x99', 'R7x139', 'R13x77', 'R17x59', 'R11x99', 'R15x77', 'R9x139',
+              'R13x99', 'R17x77', 'R15x99', 'R11x139', 'R17x99', 'R13x139', 'R15x139', 'R17x139'
+            ];
+            for (const s of rmqrSizes) {
+              try {
+                const testRaw = bwip.raw(bcid, textStr, { ...bwipOpts, version: s });
+                if (testRaw && testRaw[0]) {
+                  bwipOpts.version = s;
+                  break;
+                }
+              } catch (e) { }
+            }
+            if (!bwipOpts.version) {
+              return { error: 'Payload exceeds maximum capacity of rMQR Code (R17x139)' };
+            }
+          }
+        } else if (normType === 'datamatrix') {
           if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
           if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
@@ -1966,6 +2024,8 @@
         const pixs = raw.pixs;
 
         const typeNames = {
+          microqr: 'Micro QR Code',
+          rmqr: 'rMQR Code',
           datamatrix: 'Data Matrix',
           aztec: 'Aztec Code',
           dotcode: 'DotCode',
@@ -2061,14 +2121,67 @@
       if (!bwip) return `<svg xmlns="http://www.w3.org/2000/svg"><text>bwip-js not loaded</text></svg>`;
 
       try {
-        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        let bcid = normType;
+        if (normType === 'aztec') bcid = 'azteccode';
+        else if (normType === 'microqr') bcid = 'microqrcode';
+        else if (normType === 'rmqr') bcid = 'rectangularmicroqrcode';
+
         const bwipOpts = {
           scale: options.scale || 3,
           padding: options.border != null ? options.border : 2,
           backgroundcolor: (options.lightColor || options.background || 'ffffff').replace(/^#/, ''),
           barcolor: (options.darkColor || options.color || '000000').replace(/^#/, '')
         };
-        if (normType === 'datamatrix') {
+        if (normType === 'microqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'LOW' || ec === 'L') ec = 'L';
+            else if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'Q';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            let v = String(options.version).toUpperCase();
+            if (!v.startsWith('M') && ['1', '2', '3', '4'].includes(v)) v = 'M' + v;
+            bwipOpts.version = v;
+          }
+          if (options.mask != null && parseInt(options.mask, 10) >= 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'rmqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'HIGH' || ec === 'H') ec = 'H';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            const vStr = String(options.version).trim();
+            const vMatch = vStr.match(/^r?(\d+)[xX](\d+)$/i);
+            bwipOpts.version = vMatch ? ('R' + vMatch[1] + 'x' + vMatch[2]) : vStr;
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+
+          if (!bwipOpts.version) {
+            const rmqrSizes = [
+              'R11x27', 'R7x43', 'R13x27', 'R9x43', 'R7x59', 'R11x43', 'R9x59', 'R7x77',
+              'R13x43', 'R15x43', 'R11x59', 'R7x99', 'R9x77', 'R17x43', 'R13x59', 'R11x77',
+              'R15x59', 'R9x99', 'R7x139', 'R13x77', 'R17x59', 'R11x99', 'R15x77', 'R9x139',
+              'R13x99', 'R17x77', 'R15x99', 'R11x139', 'R17x99', 'R13x139', 'R15x139', 'R17x139'
+            ];
+            for (const s of rmqrSizes) {
+              try {
+                const testRaw = bwip.raw(bcid, String(text || ' '), { ...bwipOpts, version: s });
+                if (testRaw && testRaw[0]) {
+                  bwipOpts.version = s;
+                  break;
+                }
+              } catch (e) { }
+            }
+            if (!bwipOpts.version) bwipOpts.version = 'R17x139';
+          }
+        } else if (normType === 'datamatrix') {
           if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
           if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
@@ -2124,7 +2237,11 @@
       if (!canvas) return null;
 
       try {
-        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        let bcid = normType;
+        if (normType === 'aztec') bcid = 'azteccode';
+        else if (normType === 'microqr') bcid = 'microqrcode';
+        else if (normType === 'rmqr') bcid = 'rectangularmicroqrcode';
+
         const padding = options.border != null ? options.border : 2;
         const lightColor = options.lightColor || options.background || '#ffffff';
         const darkColor = options.darkColor || options.color || '#000000';
@@ -2135,7 +2252,56 @@
           backgroundcolor: lightColor.replace(/^#/, ''),
           barcolor: darkColor.replace(/^#/, '')
         };
-        if (normType === 'datamatrix') {
+        if (normType === 'microqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'LOW' || ec === 'L') ec = 'L';
+            else if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'QUART' || ec === 'QUARTILE' || ec === 'Q') ec = 'Q';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            let v = String(options.version).toUpperCase();
+            if (!v.startsWith('M') && ['1', '2', '3', '4'].includes(v)) v = 'M' + v;
+            bwipOpts.version = v;
+          }
+          if (options.mask != null && parseInt(options.mask, 10) >= 0) {
+            bwipOpts.mask = parseInt(options.mask, 10);
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'rmqr') {
+          if (options.eclevel) {
+            let ec = String(options.eclevel).toUpperCase();
+            if (ec === 'MED' || ec === 'MEDIUM' || ec === 'M') ec = 'M';
+            else if (ec === 'HIGH' || ec === 'H') ec = 'H';
+            bwipOpts.eclevel = ec;
+          }
+          if (options.version && options.version !== 'auto') {
+            const vStr = String(options.version).trim();
+            const vMatch = vStr.match(/^r?(\d+)[xX](\d+)$/i);
+            bwipOpts.version = vMatch ? ('R' + vMatch[1] + 'x' + vMatch[2]) : vStr;
+          }
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+
+          if (!bwipOpts.version) {
+            const rmqrSizes = [
+              'R11x27', 'R7x43', 'R13x27', 'R9x43', 'R7x59', 'R11x43', 'R9x59', 'R7x77',
+              'R13x43', 'R15x43', 'R11x59', 'R7x99', 'R9x77', 'R17x43', 'R13x59', 'R11x77',
+              'R15x59', 'R9x99', 'R7x139', 'R13x77', 'R17x59', 'R11x99', 'R15x77', 'R9x139',
+              'R13x99', 'R17x77', 'R15x99', 'R11x139', 'R17x99', 'R13x139', 'R15x139', 'R17x139'
+            ];
+            for (const s of rmqrSizes) {
+              try {
+                const testRaw = bwip.raw(bcid, String(text || ' '), { ...bwipOpts, version: s });
+                if (testRaw && testRaw[0]) {
+                  bwipOpts.version = s;
+                  break;
+                }
+              } catch (e) { }
+            }
+            if (!bwipOpts.version) bwipOpts.version = 'R17x139';
+          }
+        } else if (normType === 'datamatrix') {
           if (options.shape === 'rect' || options.shape === 'rectangular' || options.shape === 'rectangle') bwipOpts.format = 'rectangle';
           if (options.shape === 'square') bwipOpts.format = 'square';
           if (options.parsefnc) bwipOpts.parsefnc = true;
@@ -2706,6 +2872,24 @@
         notes: 'supports 4 error correction levels (low ~7%, medium ~15%, quartile ~25%, high ~30%) and 8 mask patterns.',
         example: 'https://syzarn.github.io'
       },
+      microqr: {
+        id: 'microqr',
+        name: 'Micro QR Code (ISO/IEC 18004)',
+        type: '2D Matrix (Single Corner Finder)',
+        allowedChars: 'numeric digits (0-9), alphanumeric (A-Z, 0-9, space, $%*+-./:), 8-bit binary / UTF-8, and kanji',
+        lengthLimit: 'up to 35 numeric, 21 alphanumeric, 15 binary bytes, or 9 kanji',
+        notes: 'compact single-finder QR code designed for small electronic components, direct part marking (DPM), and tight printed spaces. M1 (detection only), M2/M3 (L/M), M4 (L/M/Q).',
+        example: '12345678'
+      },
+      rmqr: {
+        id: 'rmqr',
+        name: 'rMQR Code (Rectangular Micro QR / ISO/IEC 23943:2022)',
+        type: '2D Rectangular Matrix',
+        allowedChars: 'numeric digits (0-9), alphanumeric, 8-bit binary / UTF-8, and kanji',
+        lengthLimit: 'up to 361 numeric, 219 alphanumeric, 150 binary bytes, or 92 kanji',
+        notes: 'rectangular 2D matrix symbology designed for narrow elongated strips (test tubes, PCB margins, blister packs). features finder and sub-finder patterns with M (~15%) and H (~30%) error correction.',
+        example: 'RMQR-2026'
+      },
       datamatrix: {
         id: 'datamatrix',
         name: 'Data Matrix (ISO/IEC 16022)',
@@ -2738,7 +2922,7 @@
         name: 'DotCode (AIM ISS / ISO/IEC 21471)',
         type: '2D Matrix (Discontinuous Dots)',
         allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes. GS1 application identifiers supported via FNC1',
-        lengthLimit: 'variable grid size up to ~1,500+ characters (flexible width and height aspect ratio; sum of width and height must be odd)',
+        lengthLimit: 'up to ~1,500+ characters (flexible width and height aspect ratio; sum of width and height must be odd)',
         notes: 'checkerboard dot matrix optimized for ultra-high-speed industrial inkjet & laser on-the-fly printing (tobacco track & trace, pharmaceuticals, liquor packaging). uses Reed-Solomon ECC.',
         example: 'DOTCODE-SAMPLE-2026'
       },
@@ -2929,6 +3113,8 @@
       if (!formatOrType) return this.symbologyRestrictions.CODE128;
       const key = String(formatOrType).toLowerCase();
       if (key === 'qr' || key === 'qrcode' || key === 'qrcodegen') return this.symbologyRestrictions.qr;
+      if (key === 'microqr' || key === 'microqrcode' || key === 'mqr' || key === 'uqr') return this.symbologyRestrictions.microqr;
+      if (key === 'rmqr' || key === 'rectmicroqr' || key === 'rectmicroqrcode' || key === 'rectangularmicroqrcode' || key === 'rmqrcode') return this.symbologyRestrictions.rmqr;
       if (key === 'datamatrix' || key === 'dm') return this.symbologyRestrictions.datamatrix;
       if (key === 'aztec' || key === 'azteccode') return this.symbologyRestrictions.aztec;
       if (key === 'maxicode' || key === 'maxi') return this.symbologyRestrictions.maxicode;
@@ -2985,7 +3171,7 @@
       { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
       { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
-      { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, data matrix, aztec code, maxicode, dotcode) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|datamatrix|aztec|maxicode|dotcode] [-f ascii|svg|png] [file/text]" },
+      { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, Micro QR, rMQR, data matrix, aztec code, maxicode, dotcode, han xin) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|png] [file/text]" },
       { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
     ]
   };

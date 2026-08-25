@@ -1732,6 +1732,8 @@ Volume  : ${vol}%`;
                   <span>2D type:</span>
                   <select class="tm-select" id="tm-qr-type" style="width: 140px;">
                     <option value="qr" selected>QR Code</option>
+                    <option value="microqr">Micro QR Code</option>
+                    <option value="rmqr">rMQR Code</option>
                     <option value="datamatrix">Data Matrix</option>
                     <option value="aztec">Aztec Code</option>
                     <option value="maxicode">MaxiCode</option>
@@ -1768,6 +1770,86 @@ Volume  : ${vol}%`;
                     <option value="5">5</option>
                     <option value="6">6</option>
                     <option value="7">7</option>
+                  </select>
+                </div>
+                <div id="tm-qr-opts-microqr" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>version:</span>
+                  <select class="tm-select" id="tm-mqr-version" style="width: 105px;" title="Micro QR version">
+                    <option value="auto" selected>auto</option>
+                    <option value="M1">M1 (11x11)</option>
+                    <option value="M2">M2 (13x13)</option>
+                    <option value="M3">M3 (15x15)</option>
+                    <option value="M4">M4 (17x17)</option>
+                  </select>
+                  <span>ECC:</span>
+                  <select class="tm-select" id="tm-mqr-ecc" style="width: 95px;" title="Micro QR error correction level">
+                    <option value="auto" selected>auto</option>
+                    <option value="L">L (~7%)</option>
+                    <option value="M">M (~15%)</option>
+                    <option value="Q">Q (~25%)</option>
+                  </select>
+                  <span>mask:</span>
+                  <select class="tm-select" id="tm-mqr-mask" style="width: 80px;" title="Mask pattern (0-3 or auto)">
+                    <option value="-1" selected>auto</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+                <div id="tm-qr-opts-rmqr" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>size:</span>
+                  <select class="tm-select" id="tm-rmqr-version" style="width: 130px;" title="rMQR rectangular dimensions">
+                    <option value="auto" selected>auto (best fit)</option>
+                    <optgroup label="Height R7">
+                      <option value="R7x43">R7x43</option>
+                      <option value="R7x59">R7x59</option>
+                      <option value="R7x77">R7x77</option>
+                      <option value="R7x99">R7x99</option>
+                      <option value="R7x139">R7x139</option>
+                    </optgroup>
+                    <optgroup label="Height R9">
+                      <option value="R9x43">R9x43</option>
+                      <option value="R9x59">R9x59</option>
+                      <option value="R9x77">R9x77</option>
+                      <option value="R9x99">R9x99</option>
+                      <option value="R9x139">R9x139</option>
+                    </optgroup>
+                    <optgroup label="Height R11">
+                      <option value="R11x27">R11x27</option>
+                      <option value="R11x43">R11x43</option>
+                      <option value="R11x59">R11x59</option>
+                      <option value="R11x77">R11x77</option>
+                      <option value="R11x99">R11x99</option>
+                      <option value="R11x139">R11x139</option>
+                    </optgroup>
+                    <optgroup label="Height R13">
+                      <option value="R13x27">R13x27</option>
+                      <option value="R13x43">R13x43</option>
+                      <option value="R13x59">R13x59</option>
+                      <option value="R13x77">R13x77</option>
+                      <option value="R13x99">R13x99</option>
+                      <option value="R13x139">R13x139</option>
+                    </optgroup>
+                    <optgroup label="Height R15">
+                      <option value="R15x43">R15x43</option>
+                      <option value="R15x59">R15x59</option>
+                      <option value="R15x77">R15x77</option>
+                      <option value="R15x99">R15x99</option>
+                      <option value="R15x139">R15x139</option>
+                    </optgroup>
+                    <optgroup label="Height R17">
+                      <option value="R17x43">R17x43</option>
+                      <option value="R17x59">R17x59</option>
+                      <option value="R17x77">R17x77</option>
+                      <option value="R17x99">R17x99</option>
+                      <option value="R17x139">R17x139</option>
+                    </optgroup>
+                  </select>
+                  <span>ECC:</span>
+                  <select class="tm-select" id="tm-rmqr-ecc" style="width: 100px;" title="rMQR error correction level">
+                    <option value="M" selected>M (~15%)</option>
+                    <option value="H">H (~30%)</option>
                   </select>
                 </div>
                 <div id="tm-qr-opts-dm" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
@@ -2082,6 +2164,13 @@ Volume  : ${vol}%`;
         const metaEl = document.getElementById('tm-qr-meta');
 
         const qrOptsRow = document.getElementById('tm-qr-opts-qr');
+        const mqrOptsRow = document.getElementById('tm-qr-opts-microqr');
+        const mqrVersionSelect = document.getElementById('tm-mqr-version');
+        const mqrEccSelect = document.getElementById('tm-mqr-ecc');
+        const mqrMaskSelect = document.getElementById('tm-mqr-mask');
+        const rmqrOptsRow = document.getElementById('tm-qr-opts-rmqr');
+        const rmqrVersionSelect = document.getElementById('tm-rmqr-version');
+        const rmqrEccSelect = document.getElementById('tm-rmqr-ecc');
         const dmOptsRow = document.getElementById('tm-qr-opts-dm');
         const aztecOptsRow = document.getElementById('tm-qr-opts-aztec');
         const maxiOptsRow = document.getElementById('tm-qr-opts-maxi');
@@ -2100,6 +2189,8 @@ Volume  : ${vol}%`;
         const updateTypeVisibility = () => {
           const type = typeSelect ? typeSelect.value : 'qr';
           if (qrOptsRow) qrOptsRow.style.display = (type === 'qr') ? 'flex' : 'none';
+          if (mqrOptsRow) mqrOptsRow.style.display = (type === 'microqr') ? 'flex' : 'none';
+          if (rmqrOptsRow) rmqrOptsRow.style.display = (type === 'rmqr') ? 'flex' : 'none';
           if (dmOptsRow) dmOptsRow.style.display = (type === 'datamatrix') ? 'flex' : 'none';
           if (aztecOptsRow) aztecOptsRow.style.display = (type === 'aztec') ? 'flex' : 'none';
           if (maxiOptsRow) maxiOptsRow.style.display = (type === 'maxicode') ? 'flex' : 'none';
@@ -2124,9 +2215,18 @@ Volume  : ${vol}%`;
           }
 
           const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
+          if (textarea && !textarea.value) {
+            if (type === 'hanxin') textarea.placeholder = 'e.g. 述而不作、信而好古';
+            else if (type === 'microqr') textarea.placeholder = 'e.g. 12345';
+            else if (type === 'rmqr') textarea.placeholder = 'e.g. RMQR-2026';
+            else textarea.placeholder = 'type or paste payload text to generate 2D code...';
+          }
+
           let content = rawContent;
           if (!content) {
-            if (type === 'datamatrix') content = 'Il n\'y a pas de hors-texte.';
+            if (type === 'microqr') content = '12345';
+            else if (type === 'rmqr') content = 'RMQR-2026';
+            else if (type === 'datamatrix') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'aztec') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'maxicode') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'dotcode') content = 'Il n\'y a pas de hors-texte.';
@@ -2150,6 +2250,13 @@ Volume  : ${vol}%`;
             opts.ecc = eccSelect ? eccSelect.value : 'medium';
             opts.boostEcc = boostCheck ? boostCheck.checked : true;
             opts.mask = parseInt(maskSelect ? maskSelect.value : -1, 10);
+          } else if (type === 'microqr') {
+            if (mqrVersionSelect && mqrVersionSelect.value !== 'auto') opts.version = mqrVersionSelect.value;
+            if (mqrEccSelect && mqrEccSelect.value !== 'auto') opts.eclevel = mqrEccSelect.value;
+            if (mqrMaskSelect && parseInt(mqrMaskSelect.value, 10) >= 0) opts.mask = parseInt(mqrMaskSelect.value, 10);
+          } else if (type === 'rmqr') {
+            if (rmqrVersionSelect && rmqrVersionSelect.value !== 'auto') opts.version = rmqrVersionSelect.value;
+            if (rmqrEccSelect) opts.eclevel = rmqrEccSelect.value;
           } else if (type === 'datamatrix') {
             if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
             if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
@@ -2189,6 +2296,10 @@ Volume  : ${vol}%`;
           if (metaEl) {
             if (type === 'qr') {
               metaEl.textContent = `QR Ver ${res.version} (${res.size}x${res.size}) | ${res.eccName} | Mask ${res.mask}`;
+            } else if (type === 'microqr') {
+              metaEl.textContent = `Micro QR (${res.width}x${res.height}) | ${content.length} chars`;
+            } else if (type === 'rmqr') {
+              metaEl.textContent = `rMQR (${res.width}x${res.height}) | ${content.length} chars`;
             } else if (type === 'datamatrix') {
               metaEl.textContent = `Data Matrix (${res.width}x${res.height}) | ${content.length} chars`;
             } else if (type === 'aztec') {
@@ -2233,7 +2344,7 @@ Volume  : ${vol}%`;
           });
         }
 
-        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, hxEccSelect, hxVersionInput, hxMaskSelect, hxParseCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
+        [eccSelect, boostCheck, maskSelect, mqrVersionSelect, mqrEccSelect, mqrMaskSelect, rmqrVersionSelect, rmqrEccSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, hxEccSelect, hxVersionInput, hxMaskSelect, hxParseCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
           if (el) {
             el.addEventListener('input', updateLiveQr);
             el.addEventListener('change', updateLiveQr);
@@ -2258,6 +2369,15 @@ Volume  : ${vol}%`;
           });
         }
 
+        const getContentFor2D = (t) => {
+          const val = (textarea && textarea.value) ? textarea.value.trim() : '';
+          if (val) return val;
+          if (t === 'hanxin') return '述而不作、信而好古';
+          if (t === 'microqr') return '12345';
+          if (t === 'rmqr') return 'RMQR-2026';
+          return 'Il n\'y a pas de hors-texte.';
+        };
+
         const dlPngBtn = document.getElementById('tm-qr-dl-png');
         const dlSvgBtn = document.getElementById('tm-qr-dl-svg');
         const copyAsciiBtn = document.getElementById('tm-qr-copy-ascii');
@@ -2265,8 +2385,8 @@ Volume  : ${vol}%`;
 
         if (dlPngBtn) {
           dlPngBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
+            const content = getContentFor2D(type);
             const scale = parseInt(scaleInput ? scaleInput.value : 8, 10) || 8;
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
             const darkColor = darkInput ? darkInput.value : '#000000';
@@ -2275,6 +2395,13 @@ Volume  : ${vol}%`;
             if (type === 'qr') {
               opts.ecc = eccSelect ? eccSelect.value : 'medium';
               opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'microqr') {
+              if (mqrVersionSelect && mqrVersionSelect.value !== 'auto') opts.version = mqrVersionSelect.value;
+              if (mqrEccSelect && mqrEccSelect.value !== 'auto') opts.eclevel = mqrEccSelect.value;
+              if (mqrMaskSelect && parseInt(mqrMaskSelect.value, 10) >= 0) opts.mask = parseInt(mqrMaskSelect.value, 10);
+            } else if (type === 'rmqr') {
+              if (rmqrVersionSelect && rmqrVersionSelect.value !== 'auto') opts.version = rmqrVersionSelect.value;
+              if (rmqrEccSelect) opts.eclevel = rmqrEccSelect.value;
             } else if (type === 'datamatrix') {
               if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
               if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
@@ -2321,8 +2448,8 @@ Volume  : ${vol}%`;
 
         if (dlSvgBtn) {
           dlSvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
+            const content = getContentFor2D(type);
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
             const darkColor = darkInput ? darkInput.value : '#000000';
             const lightColor = lightInput ? lightInput.value : '#ffffff';
@@ -2330,6 +2457,13 @@ Volume  : ${vol}%`;
             if (type === 'qr') {
               opts.ecc = eccSelect ? eccSelect.value : 'medium';
               opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'microqr') {
+              if (mqrVersionSelect && mqrVersionSelect.value !== 'auto') opts.version = mqrVersionSelect.value;
+              if (mqrEccSelect && mqrEccSelect.value !== 'auto') opts.eclevel = mqrEccSelect.value;
+              if (mqrMaskSelect && parseInt(mqrMaskSelect.value, 10) >= 0) opts.mask = parseInt(mqrMaskSelect.value, 10);
+            } else if (type === 'rmqr') {
+              if (rmqrVersionSelect && rmqrVersionSelect.value !== 'auto') opts.version = rmqrVersionSelect.value;
+              if (rmqrEccSelect) opts.eclevel = rmqrEccSelect.value;
             } else if (type === 'datamatrix') {
               if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
               if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
@@ -2368,12 +2502,19 @@ Volume  : ${vol}%`;
 
         if (copyAsciiBtn) {
           copyAsciiBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
+            const content = getContentFor2D(type);
             const opts = { border: 1 };
             if (type === 'qr') {
               opts.ecc = eccSelect ? eccSelect.value : 'medium';
               opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'microqr') {
+              if (mqrVersionSelect && mqrVersionSelect.value !== 'auto') opts.version = mqrVersionSelect.value;
+              if (mqrEccSelect && mqrEccSelect.value !== 'auto') opts.eclevel = mqrEccSelect.value;
+              if (mqrMaskSelect && parseInt(mqrMaskSelect.value, 10) >= 0) opts.mask = parseInt(mqrMaskSelect.value, 10);
+            } else if (type === 'rmqr') {
+              if (rmqrVersionSelect && rmqrVersionSelect.value !== 'auto') opts.version = rmqrVersionSelect.value;
+              if (rmqrEccSelect) opts.eclevel = rmqrEccSelect.value;
             } else if (type === 'datamatrix') {
               if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
               if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
@@ -2409,8 +2550,8 @@ Volume  : ${vol}%`;
 
         if (copySvgBtn) {
           copySvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
             const type = typeSelect ? typeSelect.value : 'qr';
+            const content = getContentFor2D(type);
             const border = parseInt(borderInput ? borderInput.value : 4, 10);
             const darkColor = darkInput ? darkInput.value : '#000000';
             const lightColor = lightInput ? lightInput.value : '#ffffff';
@@ -2418,6 +2559,13 @@ Volume  : ${vol}%`;
             if (type === 'qr') {
               opts.ecc = eccSelect ? eccSelect.value : 'medium';
               opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'microqr') {
+              if (mqrVersionSelect && mqrVersionSelect.value !== 'auto') opts.version = mqrVersionSelect.value;
+              if (mqrEccSelect && mqrEccSelect.value !== 'auto') opts.eclevel = mqrEccSelect.value;
+              if (mqrMaskSelect && parseInt(mqrMaskSelect.value, 10) >= 0) opts.mask = parseInt(mqrMaskSelect.value, 10);
+            } else if (type === 'rmqr') {
+              if (rmqrVersionSelect && rmqrVersionSelect.value !== 'auto') opts.version = rmqrVersionSelect.value;
+              if (rmqrEccSelect) opts.eclevel = rmqrEccSelect.value;
             } else if (type === 'datamatrix') {
               if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
               if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
@@ -4880,6 +5028,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let dotRatio = undefined;
         let dotFastfind = false;
         let hxVersion = undefined;
+        let mqrVersion = undefined;
+        let rmqrSize = undefined;
         let targetSize = undefined;
 
         for (let i = 0; i < args.length; i++) {
@@ -4894,7 +5044,20 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             scale = parseInt(args[i + 1], 10) || scale;
             i++;
           } else if ((a === '-v' || a === '--version') && args[i + 1]) {
-            hxVersion = parseInt(args[i + 1], 10);
+            const vVal = args[i + 1];
+            if (/^M[1-4]$/i.test(vVal) || ['1', '2', '3', '4'].includes(vVal)) {
+              mqrVersion = vVal;
+            } else if (/^R\d+x\d+$/i.test(vVal)) {
+              rmqrSize = vVal;
+            } else {
+              hxVersion = parseInt(vVal, 10);
+            }
+            i++;
+          } else if ((a === '--mqr-version' || a === '--mqr-ver') && args[i + 1]) {
+            mqrVersion = args[i + 1];
+            i++;
+          } else if ((a === '--rmqr-size' || a === '--rmqr-version') && args[i + 1]) {
+            rmqrSize = args[i + 1];
             i++;
           } else if ((a === '--size' || a === '--max-dim' || a === '--png-size') && args[i + 1]) {
             targetSize = Math.min(4000, Math.max(50, parseInt(args[i + 1], 10) || 4000));
@@ -4972,21 +5135,24 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           return `<div class="tool-result-box">
 <div class="tool-result-header">2D matrix generator</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
+<div class="c-dim">  qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
 <div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
+<div class="c-dim">  qrcode -t microqr -v M3 "12345678"</div>
+<div class="c-dim">  qrcode -t rmqr --rmqr-size R11x43 "RMQR-SAMPLE"</div>
 <div class="c-dim">  qrcode -t dotcode --ratio 2 "EIKHI-2002"</div>
 <div class="c-dim">  qrcode -t hanxin -e L3 "述而不作、信而好古"</div>
-<div class="c-dim">  qrcode -t datamatrix --shape square "EIKHI"</div>
 <div class="c-dim">  qrcode --ui "custom payload"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">types & input restrictions:</span></div>
 <div class="c-dim">  qr          : UTF-8, Latin-1, binary, numeric, alphanumeric, Kanji (up to 7,089 digits / 2,953 bytes)</div>
+<div class="c-dim">  microqr     : Compact single-finder QR code (M1-M4, up to 35 digits / 15 bytes / 9 Kanji)</div>
+<div class="c-dim">  rmqr        : Rectangular Micro QR (32 sizes R7x43..R17x139, up to 361 digits / 150 bytes)</div>
 <div class="c-dim">  datamatrix  : Full ASCII (0-127), extended (128-255), UTF-8, binary (up to 3,116 digits / 1,555 bytes)</div>
 <div class="c-dim">  aztec       : Full 8-bit binary/ASCII (compact 1-4 layers, full 1-32 layers; up to 3,832 digits)</div>
 <div class="c-dim">  maxicode    : Mode 4 standard (93 chars), Mode 5 secure (77 chars), Mode 2/3 postal SCM</div>
 <div class="c-dim">  dotcode     : Full ASCII (0-127), extended (128-255), UTF-8, GS1 FNC1 (up to ~1,500+ chars/bytes)</div>
 <div class="c-dim">  hanxin      : Chinese (GB18030), full ASCII, Latin, digits, binary (84 versions up to 7,827 digits / 2,174 Chinese chars)</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
-<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, datamatrix, aztec, maxicode, dotcode, hanxin)</div>
+<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, microqr, rmqr, datamatrix, aztec, maxicode, dotcode, hanxin)</div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;   : output format (ascii, full-ascii, svg, dataurl, raw)</div>
 <div class="c-dim">  -s, --scale &lt;N&gt;      : module pixel scale for image/canvas (default: 8)</div>
 <div class="c-dim">  --size &lt;N&gt;           : target PNG image size / max dimension (max: 4000)</div>
@@ -4996,6 +5162,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  --ui                 : launch interactive 2D matrix generator in workbench</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">type-specific flags:</span></div>
 <div class="c-dim">  QR Code     : -e, --ecc &lt;low|medium|quartile|high&gt;, --mask &lt;0-7&gt;, --no-boost</div>
+<div class="c-dim">  Micro QR    : -v, --version &lt;M1|M2|M3|M4&gt;, -e, --ecc &lt;L|M|Q&gt;, --mask &lt;0-3&gt;</div>
+<div class="c-dim">  rMQR Code   : --rmqr-size &lt;R7x43..R17x139&gt;, -e, --ecc &lt;M|H&gt;</div>
 <div class="c-dim">  Data Matrix : --shape &lt;square|rect&gt;, --parsefnc</div>
 <div class="c-dim">  Aztec Code  : --aztec-format &lt;compact|full&gt;, --layers &lt;1-32&gt;, --eclevel &lt;5-95&gt;</div>
 <div class="c-dim">  MaxiCode    : --mode &lt;2|3|4|5|6&gt;</div>
@@ -5018,6 +5186,15 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           opts.maxVersion = maxVer;
           opts.mask = mask;
           opts.boostEcc = boostEcc;
+        } else if (type === 'microqr') {
+          if (ecc) opts.eclevel = ecc;
+          if (mqrVersion) opts.version = mqrVersion;
+          if (mask >= 0) opts.mask = mask;
+          if (dmParsefnc) opts.parsefnc = true;
+        } else if (type === 'rmqr') {
+          if (ecc) opts.eclevel = ecc;
+          if (rmqrSize) opts.version = rmqrSize;
+          if (dmParsefnc) opts.parsefnc = true;
         } else if (type === 'datamatrix') {
           if (dmShape) opts.shape = dmShape;
           if (dmParsefnc) opts.parsefnc = true;
@@ -5140,6 +5317,78 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'qrcodegen [flags] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(args, stdin);
+      }
+    },
+
+    microqr: {
+      desc: 'generate Micro QR Code (compact single-finder QR code for small items; up to 35 digits / 15 bytes; versions M1-M4)',
+      usage: 'microqr [-v M1-M4] [-e L|M|Q] [--mask 0-3] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'microqr', ...args], stdin);
+      }
+    },
+
+    mqr: {
+      desc: 'alias for microqr',
+      usage: 'mqr [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.microqr.exec(args, stdin);
+      }
+    },
+
+    microqrcode: {
+      desc: 'alias for microqr',
+      usage: 'microqrcode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.microqr.exec(args, stdin);
+      }
+    },
+
+    uqr: {
+      desc: 'alias for microqr',
+      usage: 'uqr [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.microqr.exec(args, stdin);
+      }
+    },
+
+    rmqr: {
+      desc: 'generate Rectangular Micro QR Code (rMQR / ISO/IEC 23943; 32 sizes from R7x43 to R17x139; M and H error correction)',
+      usage: 'rmqr [--rmqr-size R7x43..R17x139] [-e M|H] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'rmqr', ...args], stdin);
+      }
+    },
+
+    rectmicroqr: {
+      desc: 'alias for rmqr',
+      usage: 'rectmicroqr [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.rmqr.exec(args, stdin);
+      }
+    },
+
+    rectmicroqrcode: {
+      desc: 'alias for rmqr',
+      usage: 'rectmicroqrcode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.rmqr.exec(args, stdin);
+      }
+    },
+
+    rmqrcode: {
+      desc: 'alias for rmqr',
+      usage: 'rmqrcode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.rmqr.exec(args, stdin);
+      }
+    },
+
+    rectangularmicroqrcode: {
+      desc: 'alias for rmqr',
+      usage: 'rectangularmicroqrcode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.rmqr.exec(args, stdin);
       }
     },
 
@@ -5477,7 +5726,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -6458,6 +6707,26 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
         if (target === 'qr' || target === 'qrcode' || target === 'qrcodegen') {
           textManipWorkbench.open('qrcode');
           return `<span class="c-accent">opened QR code generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'microqr' || target === 'mqr' || target === 'microqrcode' || target === 'uqr') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'microqr';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened micro qr code generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'rmqr' || target === 'rectmicroqr' || target === 'rectmicroqrcode' || target === 'rmqrcode' || target === 'rectangularmicroqrcode') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'rmqr';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened rmqr code generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'datamatrix' || target === 'dm') {
