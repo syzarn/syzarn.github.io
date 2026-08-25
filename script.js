@@ -969,20 +969,20 @@ Volume  : ${vol}%`;
               </div>
               <div class="tm-editor-area">
                 <textarea class="tm-line-counter" id="tm-line-counter" readonly wrap="off" tabindex="-1">1.</textarea>
-                <textarea class="tm-textarea" id="tm-textarea" placeholder="Enter or paste text here, or load a file..." wrap="off" spellcheck="false"></textarea>
+                <textarea class="tm-textarea" id="tm-textarea" placeholder="enter or paste text here, or load a file..." wrap="off" spellcheck="false"></textarea>
               </div>
               <div class="tm-controls-pane" id="tm-controls-pane">
                 <div id="tm-controls-content"></div>
               </div>
               <div class="tm-stats-bar">
                 <div class="tm-stats-items">
-                  <div class="tm-stats-item">Chars: <span id="tm-stat-chars">0</span></div>
-                  <div class="tm-stats-item">Words: <span id="tm-stat-words">0</span></div>
-                  <div class="tm-stats-item">Sentences: <span id="tm-stat-sent">0</span></div>
-                  <div class="tm-stats-item">Lines: <span id="tm-stat-lines">0</span></div>
-                  <div class="tm-stats-item">Bytes: <span id="tm-stat-bytes">0</span></div>
+                  <div class="tm-stats-item">chars: <span id="tm-stat-chars">0</span></div>
+                  <div class="tm-stats-item">words: <span id="tm-stat-words">0</span></div>
+                  <div class="tm-stats-item">sentences: <span id="tm-stat-sent">0</span></div>
+                  <div class="tm-stats-item">lines: <span id="tm-stat-lines">0</span></div>
+                  <div class="tm-stats-item">bytes: <span id="tm-stat-bytes">0</span></div>
                 </div>
-                <div id="tm-status-msg" style="color: var(--accent-color);">Ready</div>
+                <div id="tm-status-msg" style="color: var(--accent-color);">ready</div>
               </div>
             </div>
           </div>
@@ -1699,7 +1699,7 @@ Volume  : ${vol}%`;
         case 'mapdiff':
           html = `
             <div class="tm-control-row" style="justify-content: space-between;">
-              <span class="c-accent ansi-bold">Map 2 (JSON Object to compare with Editor Map 1):</span>
+              <span class="c-accent ansi-bold">map 2 (JSON object to compare with editor map 1):</span>
               <div style="display: flex; gap: 6px;">
                 <label class="tm-btn" style="cursor:pointer;">
                   load map 2 file
@@ -1709,7 +1709,7 @@ Volume  : ${vol}%`;
               </div>
             </div>
             <div class="tm-control-row" style="align-items: stretch; margin-top: 4px;">
-              <textarea class="tm-map2-textarea" id="tm-map2-val" placeholder='Enter or paste Map 2 JSON here, e.g.:&#10;{ "z": "a", "x": "y", "extra": "correct", "new": "value" }' spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;">{ "z": "a", "x": "y", "extra": "correct", "new": "value" }</textarea>
+              <textarea class="tm-map2-textarea" id="tm-map2-val" placeholder='enter or paste map 2 JSON here, e.g.:&#10;{ "z": "a", "x": "y", "extra": "correct", "new": "value" }' spellcheck="false" style="width: 100%; height: 90px; background: #111; color: var(--text-color); border: 1px solid #333; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.88rem; resize: vertical;">{ "z": "a", "x": "y", "extra": "correct", "new": "value" }</textarea>
             </div>
           `;
           break;
@@ -1718,8 +1718,212 @@ Volume  : ${vol}%`;
             <div class="tm-control-row">
               <span>conversion direction:</span>
               <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="auto" checked> auto-detect</label>
-              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="ansi2uni"> Bijoy (ANSI) → Unicode</label>
-              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="uni2ansi"> Unicode → Bijoy (ANSI)</label>
+              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="ansi2uni"> bijoy (ANSI) → unicode</label>
+              <label class="tm-radio-label"><input type="radio" name="tm-bijoy-dir" value="uni2ansi"> unicode → bijoy (ANSI)</label>
+            </div>
+          `;
+          break;
+        case 'qrcode':
+        case 'qr':
+          html = `
+            <div class="tm-control-row" style="align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 8px;">
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>2D type:</span>
+                  <select class="tm-select" id="tm-qr-type" style="width: 140px;">
+                    <option value="qr" selected>QR code</option>
+                    <option value="datamatrix">data matrix</option>
+                    <option value="aztec">aztec code</option>
+                    <option value="maxicode">maxicode</option>
+                  </select>
+                  <span>format:</span>
+                  <select class="tm-select" id="tm-qr-fmt" style="width: 140px;">
+                    <option value="preview" selected>visual & ASCII</option>
+                    <option value="ascii">compact ASCII art</option>
+                    <option value="full-ascii">full block ASCII</option>
+                    <option value="svg">SVG code</option>
+                    <option value="dataurl">data URL (PNG)</option>
+                  </select>
+                </div>
+                <div id="tm-qr-opts-qr" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>ECC:</span>
+                  <select class="tm-select" id="tm-qr-ecc" style="width: 120px;">
+                    <option value="low">low (~7%)</option>
+                    <option value="medium" selected>medium (~15%)</option>
+                    <option value="quartile">quartile (~25%)</option>
+                    <option value="high">high (~30%)</option>
+                  </select>
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-qr-boost" checked> auto-boost</label>
+                  <span>mask:</span>
+                  <select class="tm-select" id="tm-qr-mask" style="width: 80px;">
+                    <option value="-1" selected>auto</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                  </select>
+                </div>
+                <div id="tm-qr-opts-dm" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>shape:</span>
+                  <select class="tm-select" id="tm-dm-shape" style="width: 120px;">
+                    <option value="auto" selected>auto</option>
+                    <option value="square">square</option>
+                    <option value="rect">rectangular</option>
+                  </select>
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-dm-parsefnc"> parse FNC</label>
+                </div>
+                <div id="tm-qr-opts-aztec" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>format:</span>
+                  <select class="tm-select" id="tm-aztec-fmt" style="width: 100px;">
+                    <option value="auto" selected>auto</option>
+                    <option value="compact">compact</option>
+                    <option value="full">full-range</option>
+                  </select>
+                  <span>ECC %:</span>
+                  <input type="number" class="tm-input" id="tm-aztec-ecc" value="23" min="5" max="95" style="width: 50px;">
+                  <span>layers:</span>
+                  <input type="number" class="tm-input" id="tm-aztec-layers" value="0" min="0" max="32" style="width: 50px;" title="0 for auto">
+                </div>
+                <div id="tm-qr-opts-maxi" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>mode:</span>
+                  <select class="tm-select" id="tm-maxi-mode" style="width: 170px;">
+                    <option value="4" selected>mode 4 (standard data)</option>
+                    <option value="2">mode 2 (US SCM postal)</option>
+                    <option value="3">mode 3 (intl. postal)</option>
+                    <option value="5">mode 5 (enhanced ECC)</option>
+                  </select>
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>scale:</span>
+                  <input type="number" class="tm-input" id="tm-qr-scale" value="8" min="1" max="40" style="width: 50px;">
+                  <span>border:</span>
+                  <input type="number" class="tm-input" id="tm-qr-border" value="4" min="0" max="30" style="width: 50px;">
+                  <span>colors:</span>
+                  <label class="tm-color-label" title="dark module color">dark: <input type="color" id="tm-qr-color-dark" value="#000000" class="tm-color-picker"></label>
+                  <label class="tm-color-label" title="light module color">light: <input type="color" id="tm-qr-color-light" value="#ffffff" class="tm-color-picker"></label>
+                  <span>theme:</span>
+                  <select class="tm-select" id="tm-qr-palette" style="width: 100px;">
+                    <option value="custom">custom</option>
+                    <option value="bw" selected>B/W</option>
+                    <option value="matrix">matrix</option>
+                    <option value="dracula">dracula</option>
+                    <option value="nord">nord</option>
+                    <option value="cyberpunk">cyberpunk</option>
+                  </select>
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap;">
+                  <button type="button" class="tm-btn" id="tm-qr-dl-png">download PNG</button>
+                  <button type="button" class="tm-btn" id="tm-qr-dl-svg">download SVG</button>
+                  <button type="button" class="tm-btn" id="tm-qr-copy-ascii">copy ASCII</button>
+                  <button type="button" class="tm-btn" id="tm-qr-copy-svg">copy SVG</button>
+                </div>
+              </div>
+              <div id="tm-qr-preview-box" class="tm-qr-preview-container">
+                <canvas id="tm-qr-canvas" class="tm-qr-canvas" style="display:none;"></canvas>
+                <div id="tm-qr-svg-wrap" class="tm-qr-svg-wrap"></div>
+                <div id="tm-qr-meta" class="tm-qr-meta c-dim">type text to generate 2D code</div>
+              </div>
+            </div>
+          `;
+          break;
+        case 'barcode':
+        case 'bc':
+          html = `
+            <div class="tm-control-row" style="align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 8px;">
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>symbology:</span>
+                  <select class="tm-select" id="tm-bc-format" style="width: 140px;">
+                    <option value="CODE128" selected>CODE128 (auto)</option>
+                    <option value="CODE128A">CODE128 A</option>
+                    <option value="CODE128B">CODE128 B</option>
+                    <option value="CODE128C">CODE128 C</option>
+                    <option value="EAN13">EAN-13</option>
+                    <option value="EAN8">EAN-8</option>
+                    <option value="UPC">UPC (UPC-A)</option>
+                    <option value="UPCE">UPC-E</option>
+                    <option value="CODE39">CODE39</option>
+                    <option value="ITF14">ITF-14</option>
+                    <option value="ITF">ITF</option>
+                    <option value="pdf417">PDF417 (stacked 2D)</option>
+                    <option value="compactpdf417">compact PDF417</option>
+                    <option value="pharmacode">Pharmacode</option>
+                    <option value="codabar">Codabar</option>
+                    <option value="CODE93">CODE93</option>
+                    <option value="MSI">MSI</option>
+                    <option value="MSI10">MSI 10</option>
+                    <option value="MSI11">MSI 11</option>
+                  </select>
+                  <span>output:</span>
+                  <select class="tm-select" id="tm-bc-output" style="width: 130px;">
+                    <option value="preview" selected>visual & ASCII</option>
+                    <option value="ascii">raw ASCII art</option>
+                    <option value="svg">SVG code</option>
+                    <option value="dataurl">data URL (PNG)</option>
+                  </select>
+                </div>
+                <div id="tm-bc-pdf-opts" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>PDF417 cols:</span>
+                  <input type="number" class="tm-input" id="tm-pdf-cols" value="0" min="0" max="30" style="width: 50px;" title="0 for auto">
+                  <span>rows:</span>
+                  <input type="number" class="tm-input" id="tm-pdf-rows" value="0" min="0" max="90" style="width: 50px;" title="0 for auto">
+                  <span>ECC (0-8):</span>
+                  <input type="number" class="tm-input" id="tm-pdf-ecc" value="" min="0" max="8" style="width: 50px;" placeholder="auto">
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-pdf-compact"> compact</label>
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>bar width:</span>
+                  <input type="number" class="tm-input" id="tm-bc-width" value="2" min="1" max="10" style="width: 50px;">
+                  <span>height:</span>
+                  <input type="number" class="tm-input" id="tm-bc-height" value="80" min="10" max="300" style="width: 60px;">
+                  <span>margin:</span>
+                  <input type="number" class="tm-input" id="tm-bc-margin" value="10" min="0" max="50" style="width: 50px;">
+                  <label class="tm-checkbox-label"><input type="checkbox" id="tm-bc-display-val" checked> show text</label>
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>text pos:</span>
+                  <select class="tm-select" id="tm-bc-textpos" style="width: 90px;">
+                    <option value="bottom" selected>bottom</option>
+                    <option value="top">top</option>
+                  </select>
+                  <span>align:</span>
+                  <select class="tm-select" id="tm-bc-textalign" style="width: 90px;">
+                    <option value="center" selected>center</option>
+                    <option value="left">left</option>
+                    <option value="right">right</option>
+                  </select>
+                  <span>font size:</span>
+                  <input type="number" class="tm-input" id="tm-bc-fontsize" value="16" min="8" max="40" style="width: 50px;">
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
+                  <span>colors:</span>
+                  <label class="tm-color-label" title="Bar color">bars: <input type="color" id="tm-bc-color-bar" value="#000000" class="tm-color-picker"></label>
+                  <label class="tm-color-label" title="Background color">BG: <input type="color" id="tm-bc-color-bg" value="#ffffff" class="tm-color-picker"></label>
+                  <span>theme:</span>
+                  <select class="tm-select" id="tm-bc-palette" style="width: 110px;">
+                    <option value="custom">custom</option>
+                    <option value="bw" selected>classic B/W</option>
+                    <option value="matrix">matrix green</option>
+                    <option value="dracula">dracula</option>
+                    <option value="nord">nord</option>
+                    <option value="cyberpunk">cyberpunk</option>
+                  </select>
+                </div>
+                <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap;">
+                  <button type="button" class="tm-btn" id="tm-bc-dl-png">download PNG</button>
+                  <button type="button" class="tm-btn" id="tm-bc-dl-svg">download SVG</button>
+                  <button type="button" class="tm-btn" id="tm-bc-copy-ascii">copy ASCII</button>
+                  <button type="button" class="tm-btn" id="tm-bc-copy-svg">copy SVG</button>
+                </div>
+              </div>
+              <div id="tm-bc-preview-box" class="tm-barcode-preview-container">
+                <div id="tm-bc-svg-wrap" class="tm-barcode-svg-wrap"></div>
+                <div id="tm-bc-meta" class="tm-barcode-meta c-dim">Enter text to generate barcode</div>
+              </div>
             </div>
           `;
           break;
@@ -1803,6 +2007,555 @@ Volume  : ${vol}%`;
             this.setStatus('Swapped Map 1 and Map 2');
           });
         }
+      } else if (toolId === 'qrcode' || toolId === 'qr') {
+        const textarea = document.getElementById('tm-textarea');
+        const typeSelect = document.getElementById('tm-qr-type');
+        const eccSelect = document.getElementById('tm-qr-ecc');
+        const boostCheck = document.getElementById('tm-qr-boost');
+        const maskSelect = document.getElementById('tm-qr-mask');
+        const dmShapeSelect = document.getElementById('tm-dm-shape');
+        const dmParseCheck = document.getElementById('tm-dm-parsefnc');
+        const aztecFmtSelect = document.getElementById('tm-aztec-fmt');
+        const aztecEccInput = document.getElementById('tm-aztec-ecc');
+        const aztecLayersInput = document.getElementById('tm-aztec-layers');
+        const maxiModeSelect = document.getElementById('tm-maxi-mode');
+        const scaleInput = document.getElementById('tm-qr-scale');
+        const borderInput = document.getElementById('tm-qr-border');
+        const darkInput = document.getElementById('tm-qr-color-dark');
+        const lightInput = document.getElementById('tm-qr-color-light');
+        const paletteSelect = document.getElementById('tm-qr-palette');
+        const svgWrap = document.getElementById('tm-qr-svg-wrap');
+        const metaEl = document.getElementById('tm-qr-meta');
+
+        const qrOptsRow = document.getElementById('tm-qr-opts-qr');
+        const dmOptsRow = document.getElementById('tm-qr-opts-dm');
+        const aztecOptsRow = document.getElementById('tm-qr-opts-aztec');
+        const maxiOptsRow = document.getElementById('tm-qr-opts-maxi');
+
+        const updateTypeVisibility = () => {
+          const type = typeSelect ? typeSelect.value : 'qr';
+          if (qrOptsRow) qrOptsRow.style.display = (type === 'qr') ? 'flex' : 'none';
+          if (dmOptsRow) dmOptsRow.style.display = (type === 'datamatrix') ? 'flex' : 'none';
+          if (aztecOptsRow) aztecOptsRow.style.display = (type === 'aztec') ? 'flex' : 'none';
+          if (maxiOptsRow) maxiOptsRow.style.display = (type === 'maxicode') ? 'flex' : 'none';
+        };
+
+        const updateLiveQr = () => {
+          if (!window.TextEngine) return;
+          const type = typeSelect ? typeSelect.value : 'qr';
+          updateTypeVisibility();
+
+          const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
+          let content = rawContent;
+          if (!content) {
+            if (type === 'datamatrix') content = 'DATA MATRIX';
+            else if (type === 'aztec') content = 'AZTEC CODE';
+            else if (type === 'maxicode') content = 'THIS IS MAXICODE';
+            else content = 'https://syzarn.github.io';
+          }
+
+          const scale = parseInt(scaleInput ? scaleInput.value : 8, 10) || 8;
+          const border = parseInt(borderInput ? borderInput.value : 4, 10);
+          const darkColor = darkInput ? darkInput.value : '#000000';
+          const lightColor = lightInput ? lightInput.value : '#ffffff';
+
+          const opts = {
+            scale: Math.max(1, Math.min(20, Math.round(scale / 2) || 3)),
+            border: Math.max(0, border !== undefined ? border : 2),
+            darkColor,
+            lightColor
+          };
+
+          if (type === 'qr') {
+            opts.ecc = eccSelect ? eccSelect.value : 'medium';
+            opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            opts.mask = parseInt(maskSelect ? maskSelect.value : -1, 10);
+          } else if (type === 'datamatrix') {
+            if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
+            if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
+          } else if (type === 'aztec') {
+            if (aztecFmtSelect && aztecFmtSelect.value !== 'auto') opts.format = aztecFmtSelect.value;
+            if (aztecEccInput && aztecEccInput.value) opts.eclevel = parseInt(aztecEccInput.value, 10);
+            if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
+          } else if (type === 'maxicode') {
+            opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+          }
+
+          const res = window.TextEngine.generate2DCode(content, type, opts);
+
+          if (res.error) {
+            if (metaEl) metaEl.textContent = 'Error: ' + res.error;
+            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;">${escapeHTML(res.error)}</span>`;
+            return;
+          }
+
+          const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
+
+          if (svgWrap) {
+            svgWrap.innerHTML = svgXml;
+            svgWrap.style.background = lightColor;
+          }
+          if (metaEl) {
+            if (type === 'qr') {
+              metaEl.textContent = `QR Ver ${res.version} (${res.size}x${res.size}) | ${res.eccName} | Mask ${res.mask}`;
+            } else if (type === 'datamatrix') {
+              metaEl.textContent = `Data Matrix (${res.width}x${res.height}) | ${content.length} chars`;
+            } else if (type === 'aztec') {
+              metaEl.textContent = `Aztec (${res.width}x${res.height}) | ${content.length} chars`;
+            } else if (type === 'maxicode') {
+              metaEl.textContent = `MaxiCode (Mode ${res.mode || 4}) | ${content.length} chars`;
+            }
+          }
+        };
+
+        if (paletteSelect && darkInput && lightInput) {
+          paletteSelect.addEventListener('change', () => {
+            const p = paletteSelect.value;
+            if (p === 'bw') {
+              darkInput.value = '#000000';
+              lightInput.value = '#ffffff';
+            } else if (p === 'matrix') {
+              darkInput.value = '#00ff66';
+              lightInput.value = '#000000';
+            } else if (p === 'dracula') {
+              darkInput.value = '#990000';
+              lightInput.value = '#000000';
+            } else if (p === 'nord') {
+              darkInput.value = '#88c0d0';
+              lightInput.value = '#2e3440';
+            } else if (p === 'cyberpunk') {
+              darkInput.value = '#00ffff';
+              lightInput.value = '#0d0221';
+            }
+            updateLiveQr();
+          });
+        }
+
+        if (typeSelect) {
+          typeSelect.addEventListener('change', () => {
+            updateTypeVisibility();
+            updateLiveQr();
+          });
+        }
+
+        [eccSelect, boostCheck, maskSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
+          if (el) {
+            el.addEventListener('input', updateLiveQr);
+            el.addEventListener('change', updateLiveQr);
+          }
+        });
+
+        if (textarea) {
+          textarea.addEventListener('input', updateLiveQr);
+        }
+
+        const dlPngBtn = document.getElementById('tm-qr-dl-png');
+        const dlSvgBtn = document.getElementById('tm-qr-dl-svg');
+        const copyAsciiBtn = document.getElementById('tm-qr-copy-ascii');
+        const copySvgBtn = document.getElementById('tm-qr-copy-svg');
+
+        if (dlPngBtn) {
+          dlPngBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const type = typeSelect ? typeSelect.value : 'qr';
+            const scale = parseInt(scaleInput ? scaleInput.value : 8, 10) || 8;
+            const border = parseInt(borderInput ? borderInput.value : 4, 10);
+            const darkColor = darkInput ? darkInput.value : '#000000';
+            const lightColor = lightInput ? lightInput.value : '#ffffff';
+            const opts = { scale, border, darkColor, lightColor };
+            if (type === 'qr') {
+              opts.ecc = eccSelect ? eccSelect.value : 'medium';
+              opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'datamatrix') {
+              if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
+              if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
+            } else if (type === 'aztec') {
+              if (aztecFmtSelect && aztecFmtSelect.value !== 'auto') opts.format = aztecFmtSelect.value;
+              if (aztecEccInput && aztecEccInput.value) opts.eclevel = parseInt(aztecEccInput.value, 10);
+              if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
+            } else if (type === 'maxicode') {
+              opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            }
+
+            const dataUrl = window.TextEngine.generate2DCodeDataUrl(content, type, opts);
+            if (!dataUrl) return this.setStatus('failed to generate PNG image');
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = `${type}-code.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.setStatus(`downloaded ${type}-code.png`);
+          });
+        }
+
+        if (dlSvgBtn) {
+          dlSvgBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const type = typeSelect ? typeSelect.value : 'qr';
+            const border = parseInt(borderInput ? borderInput.value : 4, 10);
+            const darkColor = darkInput ? darkInput.value : '#000000';
+            const lightColor = lightInput ? lightInput.value : '#ffffff';
+            const opts = { border, darkColor, lightColor };
+            if (type === 'qr') {
+              opts.ecc = eccSelect ? eccSelect.value : 'medium';
+              opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'datamatrix') {
+              if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
+              if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
+            } else if (type === 'aztec') {
+              if (aztecFmtSelect && aztecFmtSelect.value !== 'auto') opts.format = aztecFmtSelect.value;
+              if (aztecEccInput && aztecEccInput.value) opts.eclevel = parseInt(aztecEccInput.value, 10);
+              if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
+            } else if (type === 'maxicode') {
+              opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            }
+
+            const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
+            const blob = new Blob([svgXml], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${type}-code.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            this.setStatus(`downloaded ${type}-code.svg`);
+          });
+        }
+
+        if (copyAsciiBtn) {
+          copyAsciiBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const type = typeSelect ? typeSelect.value : 'qr';
+            const opts = { border: 1 };
+            if (type === 'qr') {
+              opts.ecc = eccSelect ? eccSelect.value : 'medium';
+              opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'datamatrix') {
+              if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
+              if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
+            } else if (type === 'aztec') {
+              if (aztecFmtSelect && aztecFmtSelect.value !== 'auto') opts.format = aztecFmtSelect.value;
+              if (aztecEccInput && aztecEccInput.value) opts.eclevel = parseInt(aztecEccInput.value, 10);
+              if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
+            } else if (type === 'maxicode') {
+              opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            }
+
+            const res = window.TextEngine.generate2DCode(content, type, opts);
+            if (res.error) return this.setStatus('2D code error: ' + res.error);
+            const ascii = window.TextEngine.generate2DCodeAscii(res, { border: 1 });
+            navigator.clipboard.writeText(ascii).then(() => {
+              this.setStatus(`copied ASCII ${res.typeName || type} to clipboard`);
+            }).catch(() => {
+              this.setStatus(`ASCII ready`);
+            });
+          });
+        }
+
+        if (copySvgBtn) {
+          copySvgBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-2D';
+            const type = typeSelect ? typeSelect.value : 'qr';
+            const border = parseInt(borderInput ? borderInput.value : 4, 10);
+            const darkColor = darkInput ? darkInput.value : '#000000';
+            const lightColor = lightInput ? lightInput.value : '#ffffff';
+            const opts = { border, darkColor, lightColor };
+            if (type === 'qr') {
+              opts.ecc = eccSelect ? eccSelect.value : 'medium';
+              opts.boostEcc = boostCheck ? boostCheck.checked : true;
+            } else if (type === 'datamatrix') {
+              if (dmShapeSelect && dmShapeSelect.value !== 'auto') opts.shape = dmShapeSelect.value;
+              if (dmParseCheck && dmParseCheck.checked) opts.parsefnc = true;
+            } else if (type === 'aztec') {
+              if (aztecFmtSelect && aztecFmtSelect.value !== 'auto') opts.format = aztecFmtSelect.value;
+              if (aztecEccInput && aztecEccInput.value) opts.eclevel = parseInt(aztecEccInput.value, 10);
+              if (aztecLayersInput && parseInt(aztecLayersInput.value, 10) > 0) opts.layers = parseInt(aztecLayersInput.value, 10);
+            } else if (type === 'maxicode') {
+              opts.mode = parseInt(maxiModeSelect ? maxiModeSelect.value : 4, 10);
+            }
+
+            const svgXml = window.TextEngine.generate2DCodeSvg(content, type, opts);
+            navigator.clipboard.writeText(svgXml).then(() => {
+              this.setStatus('copied SVG XML to clipboard');
+            }).catch(() => {
+              this.setStatus('SVG XML ready');
+            });
+          });
+        }
+
+        updateLiveQr();
+      } else if (toolId === 'barcode' || toolId === 'bc') {
+        const textarea = document.getElementById('tm-textarea');
+        const formatSelect = document.getElementById('tm-bc-format');
+        const pdfOptsRow = document.getElementById('tm-bc-pdf-opts');
+        const pdfColsInput = document.getElementById('tm-pdf-cols');
+        const pdfRowsInput = document.getElementById('tm-pdf-rows');
+        const pdfEccInput = document.getElementById('tm-pdf-ecc');
+        const pdfCompactCheck = document.getElementById('tm-pdf-compact');
+        const widthInput = document.getElementById('tm-bc-width');
+        const heightInput = document.getElementById('tm-bc-height');
+        const marginInput = document.getElementById('tm-bc-margin');
+        const displayValCheck = document.getElementById('tm-bc-display-val');
+        const textPosSelect = document.getElementById('tm-bc-textpos');
+        const textAlignSelect = document.getElementById('tm-bc-textalign');
+        const fontSizeInput = document.getElementById('tm-bc-fontsize');
+        const barColorInput = document.getElementById('tm-bc-color-bar');
+        const bgColorInput = document.getElementById('tm-bc-color-bg');
+        const paletteSelect = document.getElementById('tm-bc-palette');
+        const svgWrap = document.getElementById('tm-bc-svg-wrap');
+        const metaEl = document.getElementById('tm-bc-meta');
+
+        const updateBcFormatVisibility = () => {
+          const fmt = formatSelect ? formatSelect.value : 'CODE128';
+          const isPdf = fmt === 'pdf417' || fmt === 'compactpdf417';
+          if (pdfOptsRow) pdfOptsRow.style.display = isPdf ? 'flex' : 'none';
+        };
+
+        const updateLiveBarcode = () => {
+          if (!window.TextEngine) return;
+          updateBcFormatVisibility();
+          const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
+          const format = formatSelect ? formatSelect.value : 'CODE128';
+          let content = rawContent;
+          if (!content) {
+            if (format === 'EAN13') content = '978020137962';
+            else if (format === 'EAN8') content = '12345670';
+            else if (format === 'UPC') content = '123456789012';
+            else if (format === 'pharmacode') content = '1234';
+            else if (format === 'ITF14') content = '12345678901231';
+            else if (format === 'pdf417' || format === 'compactpdf417') content = 'PDF417-SAMPLE';
+            else content = 'HELLO-128';
+          }
+
+          const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
+          const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
+          const margin = parseInt(marginInput ? marginInput.value : 10, 10) || 10;
+          const displayValue = displayValCheck ? displayValCheck.checked : true;
+          const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
+          const textAlign = textAlignSelect ? textAlignSelect.value : 'center';
+          const fontSize = parseInt(fontSizeInput ? fontSizeInput.value : 16, 10) || 16;
+          const lineColor = barColorInput ? barColorInput.value : '#000000';
+          const background = bgColorInput ? bgColorInput.value : '#ffffff';
+
+          const bcOpts = {
+            format,
+            width,
+            height,
+            margin,
+            displayValue,
+            textPosition,
+            textAlign,
+            fontSize,
+            lineColor,
+            background
+          };
+
+          if (format === 'pdf417' || format === 'compactpdf417') {
+            if (pdfColsInput && parseInt(pdfColsInput.value, 10) > 0) bcOpts.columns = parseInt(pdfColsInput.value, 10);
+            if (pdfRowsInput && parseInt(pdfRowsInput.value, 10) > 0) bcOpts.rows = parseInt(pdfRowsInput.value, 10);
+            if (pdfEccInput && pdfEccInput.value !== '') bcOpts.eclevel = parseInt(pdfEccInput.value, 10);
+            if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
+          }
+
+          const res = window.TextEngine.generateBarcode(content, bcOpts);
+
+          if (res.error) {
+            if (metaEl) metaEl.textContent = 'error: ' + res.error;
+            if (svgWrap) svgWrap.innerHTML = `<span style="color:#ff5555;font-size:0.8rem;padding:6px;">${escapeHTML(res.error)}</span>`;
+            return;
+          }
+
+          const svgXml = window.TextEngine.generateBarcodeSvg(content, bcOpts);
+
+          if (svgWrap) {
+            svgWrap.innerHTML = svgXml;
+            svgWrap.style.background = background;
+          }
+          if (metaEl) {
+            metaEl.textContent = `${res.format} | ${res.totalModules} modules | ${content.length} chars`;
+          }
+        };
+
+        if (paletteSelect && barColorInput && bgColorInput) {
+          paletteSelect.addEventListener('change', () => {
+            const p = paletteSelect.value;
+            if (p === 'bw') {
+              barColorInput.value = '#000000';
+              bgColorInput.value = '#ffffff';
+            } else if (p === 'matrix') {
+              barColorInput.value = '#00ff66';
+              bgColorInput.value = '#000000';
+            } else if (p === 'dracula') {
+              barColorInput.value = '#990000';
+              bgColorInput.value = '#000000';
+            } else if (p === 'nord') {
+              barColorInput.value = '#88c0d0';
+              bgColorInput.value = '#2e3440';
+            } else if (p === 'cyberpunk') {
+              barColorInput.value = '#00ffff';
+              bgColorInput.value = '#0d0221';
+            }
+            updateLiveBarcode();
+          });
+        }
+
+        if (formatSelect) {
+          formatSelect.addEventListener('change', () => {
+            updateBcFormatVisibility();
+            updateLiveBarcode();
+          });
+        }
+
+        [pdfColsInput, pdfRowsInput, pdfEccInput, pdfCompactCheck, widthInput, heightInput, marginInput, displayValCheck, textPosSelect, textAlignSelect, fontSizeInput, barColorInput, bgColorInput].forEach(el => {
+          if (el) {
+            el.addEventListener('input', updateLiveBarcode);
+            el.addEventListener('change', updateLiveBarcode);
+          }
+        });
+
+        if (textarea) {
+          textarea.addEventListener('input', updateLiveBarcode);
+        }
+
+        const dlPngBtn = document.getElementById('tm-bc-dl-png');
+        const dlSvgBtn = document.getElementById('tm-bc-dl-svg');
+        const copyAsciiBtn = document.getElementById('tm-bc-copy-ascii');
+        const copySvgBtn = document.getElementById('tm-bc-copy-svg');
+
+        if (dlPngBtn) {
+          dlPngBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const format = formatSelect ? formatSelect.value : 'CODE128';
+            const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
+            const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
+            const margin = parseInt(marginInput ? marginInput.value : 10, 10) || 10;
+            const displayValue = displayValCheck ? displayValCheck.checked : true;
+            const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
+            const textAlign = textAlignSelect ? textAlignSelect.value : 'center';
+            const fontSize = parseInt(fontSizeInput ? fontSizeInput.value : 16, 10) || 16;
+            const lineColor = barColorInput ? barColorInput.value : '#000000';
+            const background = bgColorInput ? bgColorInput.value : '#ffffff';
+
+            const bcOpts = { format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background };
+            if (format === 'pdf417' || format === 'compactpdf417') {
+              if (pdfColsInput && parseInt(pdfColsInput.value, 10) > 0) bcOpts.columns = parseInt(pdfColsInput.value, 10);
+              if (pdfRowsInput && parseInt(pdfRowsInput.value, 10) > 0) bcOpts.rows = parseInt(pdfRowsInput.value, 10);
+              if (pdfEccInput && pdfEccInput.value !== '') bcOpts.eclevel = parseInt(pdfEccInput.value, 10);
+              if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
+            }
+
+            const res = window.TextEngine.generateBarcode(content, bcOpts);
+            if (res.error) return this.setStatus('barcode error: ' + res.error);
+            const dataUrl = window.TextEngine.generateBarcodeDataUrl(content, bcOpts);
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = `barcode-${format.toLowerCase()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.setStatus(`downloaded barcode-${format.toLowerCase()}.png`);
+          });
+        }
+
+        if (dlSvgBtn) {
+          dlSvgBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const format = formatSelect ? formatSelect.value : 'CODE128';
+            const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
+            const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
+            const margin = parseInt(marginInput ? marginInput.value : 10, 10) || 10;
+            const displayValue = displayValCheck ? displayValCheck.checked : true;
+            const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
+            const textAlign = textAlignSelect ? textAlignSelect.value : 'center';
+            const fontSize = parseInt(fontSizeInput ? fontSizeInput.value : 16, 10) || 16;
+            const lineColor = barColorInput ? barColorInput.value : '#000000';
+            const background = bgColorInput ? bgColorInput.value : '#ffffff';
+
+            const bcOpts = { format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background };
+            if (format === 'pdf417' || format === 'compactpdf417') {
+              if (pdfColsInput && parseInt(pdfColsInput.value, 10) > 0) bcOpts.columns = parseInt(pdfColsInput.value, 10);
+              if (pdfRowsInput && parseInt(pdfRowsInput.value, 10) > 0) bcOpts.rows = parseInt(pdfRowsInput.value, 10);
+              if (pdfEccInput && pdfEccInput.value !== '') bcOpts.eclevel = parseInt(pdfEccInput.value, 10);
+              if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
+            }
+
+            const res = window.TextEngine.generateBarcode(content, bcOpts);
+            if (res.error) return this.setStatus('barcode error: ' + res.error);
+            const svgXml = window.TextEngine.generateBarcodeSvg(content, bcOpts);
+            const blob = new Blob([svgXml], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `barcode-${format.toLowerCase()}.svg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            this.setStatus(`downloaded barcode-${format.toLowerCase()}.svg`);
+          });
+        }
+
+        if (copyAsciiBtn) {
+          copyAsciiBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const format = formatSelect ? formatSelect.value : 'CODE128';
+            const displayValue = displayValCheck ? displayValCheck.checked : true;
+            const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
+            const bcOpts = { format, displayValue, textPosition };
+            if (format === 'pdf417' || format === 'compactpdf417') {
+              if (pdfColsInput && parseInt(pdfColsInput.value, 10) > 0) bcOpts.columns = parseInt(pdfColsInput.value, 10);
+              if (pdfRowsInput && parseInt(pdfRowsInput.value, 10) > 0) bcOpts.rows = parseInt(pdfRowsInput.value, 10);
+              if (pdfEccInput && pdfEccInput.value !== '') bcOpts.eclevel = parseInt(pdfEccInput.value, 10);
+              if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
+            }
+            const res = window.TextEngine.generateBarcode(content, bcOpts);
+            if (res.error) return this.setStatus('Barcode Error: ' + res.error);
+            const ascii = window.TextEngine.generateBarcodeAscii(res, { height: 6, margin: 2, displayValue, textPosition });
+            navigator.clipboard.writeText(ascii).then(() => {
+              this.setStatus('Copied ASCII barcode to clipboard');
+            }).catch(() => {
+              this.setStatus('ASCII barcode ready');
+            });
+          });
+        }
+
+        if (copySvgBtn) {
+          copySvgBtn.addEventListener('click', () => {
+            const content = (textarea && textarea.value) ? textarea.value.trim() : 'SAMPLE-128';
+            const format = formatSelect ? formatSelect.value : 'CODE128';
+            const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
+            const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
+            const margin = parseInt(marginInput ? marginInput.value : 10, 10) || 10;
+            const displayValue = displayValCheck ? displayValCheck.checked : true;
+            const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
+            const textAlign = textAlignSelect ? textAlignSelect.value : 'center';
+            const fontSize = parseInt(fontSizeInput ? fontSizeInput.value : 16, 10) || 16;
+            const lineColor = barColorInput ? barColorInput.value : '#000000';
+            const background = bgColorInput ? bgColorInput.value : '#ffffff';
+
+            const bcOpts = { format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background };
+            if (format === 'pdf417' || format === 'compactpdf417') {
+              if (pdfColsInput && parseInt(pdfColsInput.value, 10) > 0) bcOpts.columns = parseInt(pdfColsInput.value, 10);
+              if (pdfRowsInput && parseInt(pdfRowsInput.value, 10) > 0) bcOpts.rows = parseInt(pdfRowsInput.value, 10);
+              if (pdfEccInput && pdfEccInput.value !== '') bcOpts.eclevel = parseInt(pdfEccInput.value, 10);
+              if (pdfCompactCheck && pdfCompactCheck.checked) bcOpts.compact = true;
+            }
+
+            const res = window.TextEngine.generateBarcode(content, bcOpts);
+            if (res.error) return this.setStatus('Barcode Error: ' + res.error);
+            const svgXml = window.TextEngine.generateBarcodeSvg(content, bcOpts);
+            navigator.clipboard.writeText(svgXml).then(() => {
+              this.setStatus('Copied Barcode SVG XML to clipboard');
+            }).catch(() => {
+              this.setStatus('Barcode SVG ready');
+            });
+          });
+        }
+
+        updateLiveBarcode();
       }
     },
 
@@ -2166,6 +2919,152 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             if (dir === 'ansi2uni') this.setStatus('converted Bijoy (ANSI) to Unicode');
             else if (dir === 'uni2ansi') this.setStatus('converted Unicode to Bijoy (ANSI)');
             else this.setStatus('converted text (auto-detected)');
+            break;
+          }
+          case 'qrcode':
+          case 'qr': {
+            const type = document.getElementById('tm-qr-type')?.value || 'qr';
+            const fmt = document.getElementById('tm-qr-fmt')?.value || 'preview';
+            const scale = parseInt(document.getElementById('tm-qr-scale')?.value, 10) || 8;
+            const border = parseInt(document.getElementById('tm-qr-border')?.value, 10) || 4;
+            const darkColor = document.getElementById('tm-qr-color-dark')?.value || '#000000';
+            const lightColor = document.getElementById('tm-qr-color-light')?.value || '#ffffff';
+
+            const opts = {
+              scale: Math.max(1, Math.min(20, Math.round(scale / 2) || 3)),
+              border: Math.max(0, border !== undefined ? border : 2),
+              darkColor,
+              lightColor
+            };
+
+            if (type === 'qr') {
+              opts.ecc = document.getElementById('tm-qr-ecc')?.value || 'medium';
+              opts.boostEcc = document.getElementById('tm-qr-boost')?.checked !== false;
+              opts.mask = parseInt(document.getElementById('tm-qr-mask')?.value, 10);
+            } else if (type === 'datamatrix') {
+              const shape = document.getElementById('tm-dm-shape')?.value;
+              if (shape && shape !== 'auto') opts.shape = shape;
+              if (document.getElementById('tm-dm-parsefnc')?.checked) opts.parsefnc = true;
+            } else if (type === 'aztec') {
+              const azFmt = document.getElementById('tm-aztec-fmt')?.value;
+              if (azFmt && azFmt !== 'auto') opts.format = azFmt;
+              const azEcc = document.getElementById('tm-aztec-ecc')?.value;
+              if (azEcc) opts.eclevel = parseInt(azEcc, 10);
+              const azLay = document.getElementById('tm-aztec-layers')?.value;
+              if (azLay && parseInt(azLay, 10) > 0) opts.layers = parseInt(azLay, 10);
+            } else if (type === 'maxicode') {
+              opts.mode = parseInt(document.getElementById('tm-maxi-mode')?.value || 4, 10);
+            }
+
+            const cleanText = text.trim() || ' ';
+            const codeRes = window.TextEngine.generate2DCode(cleanText, type, opts);
+            if (codeRes.error) {
+              this.setStatus('2D Code Error: ' + codeRes.error);
+              break;
+            }
+
+            const asciiArt = window.TextEngine.generate2DCodeAscii(codeRes, { border: Math.min(border, 4), mode: fmt === 'full-ascii' ? 'full' : 'half' });
+            const svgXml = window.TextEngine.generate2DCodeSvg(cleanText, type, opts);
+            const dataUrl = window.TextEngine.generate2DCodeDataUrl(cleanText, type, opts);
+
+            if (fmt === 'svg') {
+              textarea.value = svgXml;
+              this.setStatus(`Generated ${codeRes.typeName || type} SVG`);
+            } else if (fmt === 'ascii' || fmt === 'full-ascii') {
+              textarea.value = asciiArt;
+              this.setStatus(`Generated ASCII ${codeRes.typeName || type}`);
+            } else if (fmt === 'dataurl') {
+              textarea.value = dataUrl;
+              this.setStatus(`Generated PNG Data URL (${codeRes.typeName || type})`);
+            } else {
+              let titleMeta = codeRes.typeName || type;
+              if (type === 'qr') titleMeta += ` (Version ${codeRes.version}, Size ${codeRes.size}x${codeRes.size}, ECC ${codeRes.eccName}, Mask ${codeRes.mask})`;
+              else if (codeRes.width && codeRes.height) titleMeta += ` (${codeRes.width}x${codeRes.height})`;
+              textarea.value = `=== ${titleMeta} ===\n\n` + asciiArt + `\n\n=== Payload ===\n` + cleanText;
+              this.setStatus(`Generated ${codeRes.typeName || type}`);
+            }
+
+            const svgWrap = document.getElementById('tm-qr-svg-wrap');
+            if (svgWrap) {
+              svgWrap.innerHTML = svgXml;
+              svgWrap.style.background = lightColor;
+            }
+            const metaEl = document.getElementById('tm-qr-meta');
+            if (metaEl) {
+              if (type === 'qr') {
+                metaEl.textContent = `Ver ${codeRes.version} (${codeRes.size}x${codeRes.size}) | ECC ${codeRes.eccName} | Mask ${codeRes.mask} | ${cleanText.length} chars`;
+              } else if (codeRes.width && codeRes.height) {
+                metaEl.textContent = `${codeRes.typeName} (${codeRes.width}x${codeRes.height}) | ${cleanText.length} chars`;
+              } else {
+                metaEl.textContent = `${codeRes.typeName} | ${cleanText.length} chars`;
+              }
+            }
+            break;
+          }
+          case 'barcode':
+          case 'bc': {
+            const format = document.getElementById('tm-bc-format')?.value || 'CODE128';
+            const outputFmt = document.getElementById('tm-bc-output')?.value || 'preview';
+            const width = parseInt(document.getElementById('tm-bc-width')?.value, 10) || 2;
+            const height = parseInt(document.getElementById('tm-bc-height')?.value, 10) || 80;
+            const margin = parseInt(document.getElementById('tm-bc-margin')?.value, 10) || 10;
+            const displayValue = document.getElementById('tm-bc-display-val')?.checked !== false;
+            const textPosition = document.getElementById('tm-bc-textpos')?.value || 'bottom';
+            const textAlign = document.getElementById('tm-bc-textalign')?.value || 'center';
+            const fontSize = parseInt(document.getElementById('tm-bc-fontsize')?.value, 10) || 16;
+            const lineColor = document.getElementById('tm-bc-color-bar')?.value || '#000000';
+            const background = document.getElementById('tm-bc-color-bg')?.value || '#ffffff';
+
+            const cleanText = text.trim() || ' ';
+            const bcOpts = {
+              format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background
+            };
+            if (format === 'pdf417' || format === 'compactpdf417') {
+              const cols = parseInt(document.getElementById('tm-pdf-cols')?.value, 10);
+              if (cols > 0) bcOpts.columns = cols;
+              const rows = parseInt(document.getElementById('tm-pdf-rows')?.value, 10);
+              if (rows > 0) bcOpts.rows = rows;
+              const ecc = document.getElementById('tm-pdf-ecc')?.value;
+              if (ecc !== '' && ecc !== undefined) bcOpts.eclevel = parseInt(ecc, 10);
+              if (document.getElementById('tm-pdf-compact')?.checked) bcOpts.compact = true;
+            }
+
+            const bcRes = window.TextEngine.generateBarcode(cleanText, bcOpts);
+
+            if (bcRes.error) {
+              this.setStatus('Barcode Error: ' + bcRes.error);
+              break;
+            }
+
+            const asciiArt = window.TextEngine.generateBarcodeAscii(bcRes, { height: 6, margin: 2, displayValue, textPosition });
+            const svgXml = window.TextEngine.generateBarcodeSvg(cleanText, bcOpts);
+            const dataUrl = window.TextEngine.generateBarcodeDataUrl(cleanText, bcOpts);
+
+            if (outputFmt === 'svg') {
+              textarea.value = svgXml;
+              this.setStatus(`Generated Barcode SVG (${bcRes.format})`);
+            } else if (outputFmt === 'ascii') {
+              textarea.value = asciiArt;
+              this.setStatus(`Generated ASCII Barcode (${bcRes.format})`);
+            } else if (outputFmt === 'dataurl') {
+              textarea.value = dataUrl;
+              this.setStatus(`Generated PNG Data URL (${bcRes.format})`);
+            } else {
+              const modInfo = bcRes.totalModules ? `${bcRes.totalModules} modules` : `${bcRes.width}x${bcRes.height}`;
+              textarea.value = `=== Barcode (${bcRes.format}, ${modInfo}) ===\n\n` + asciiArt + `\n\n=== Payload ===\n` + cleanText;
+              this.setStatus(`Generated Barcode (${bcRes.format})`);
+            }
+
+            const svgWrap = document.getElementById('tm-bc-svg-wrap');
+            if (svgWrap) {
+              svgWrap.innerHTML = svgXml;
+              svgWrap.style.background = background;
+            }
+            const metaEl = document.getElementById('tm-bc-meta');
+            if (metaEl) {
+              const modInfo = bcRes.totalModules ? `${bcRes.totalModules} modules` : `${bcRes.width}x${bcRes.height}`;
+              metaEl.textContent = `${bcRes.format} | ${modInfo} | ${cleanText.length} chars`;
+            }
             break;
           }
         }
@@ -3742,6 +4641,496 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
+    qrcode: {
+      desc: 'generate fast, customizable 2D barcodes (QR Code, Data Matrix, Aztec Code, MaxiCode)',
+      usage: 'qrcode [-t qr|datamatrix|aztec|maxicode] [-e low|med|quart|high] [-s scale] [-b border] [-f ascii|full-ascii|svg|dataurl|raw] [flags] [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'qrcode: text engine not loaded';
+
+        if (args.includes('--ui') || args.includes('--gui') || args.includes('-u')) {
+          const nonUiArgs = args.filter(a => a !== '--ui' && a !== '--gui' && a !== '-u');
+          const input = extractTextInput(nonUiArgs, stdin);
+          textManipWorkbench.open('qrcode', input.text || '');
+          return '<span class="c-accent">opened 2D barcode generator in text manipulation workbench.</span>';
+        }
+
+        let type = 'qr';
+        const textArgs = [];
+        let ecc = 'medium';
+        let scale = 8;
+        let border = undefined;
+        let mask = -1;
+        let format = 'interactive';
+        let boostEcc = true;
+        let invert = false;
+        let darkColor = '#000000';
+        let lightColor = '#ffffff';
+        let minVer = 1;
+        let maxVer = 40;
+        let dmShape = undefined;
+        let dmParsefnc = false;
+        let aztecFmt = undefined;
+        let aztecLayers = undefined;
+        let aztecEcc = undefined;
+        let maxiMode = undefined;
+
+        for (let i = 0; i < args.length; i++) {
+          const a = args[i];
+          if ((a === '-t' || a === '--type' || a === '--symbology') && args[i + 1]) {
+            type = window.TextEngine.normalize2DType(args[i + 1]);
+            i++;
+          } else if ((a === '-e' || a === '--ecc' || a === '--level') && args[i + 1]) {
+            ecc = args[i + 1];
+            i++;
+          } else if ((a === '-s' || a === '--scale') && args[i + 1]) {
+            scale = parseInt(args[i + 1], 10) || scale;
+            i++;
+          } else if ((a === '-b' || a === '--border' || a === '-m' || a === '--margin') && args[i + 1]) {
+            border = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--mask' && args[i + 1]) {
+            mask = parseInt(args[i + 1], 10);
+            i++;
+          } else if ((a === '-f' || a === '--format' || a === '-o' || a === '--output') && args[i + 1]) {
+            format = args[i + 1].toLowerCase();
+            i++;
+          } else if (a === '--min-version' && args[i + 1]) {
+            minVer = parseInt(args[i + 1], 10) || 1;
+            i++;
+          } else if (a === '--max-version' && args[i + 1]) {
+            maxVer = parseInt(args[i + 1], 10) || 40;
+            i++;
+          } else if ((a === '--dark' || a === '--color') && args[i + 1]) {
+            darkColor = args[i + 1];
+            i++;
+          } else if ((a === '--light' || a === '--bg') && args[i + 1]) {
+            lightColor = args[i + 1];
+            i++;
+          } else if (a === '--shape' && args[i + 1]) {
+            dmShape = args[i + 1];
+            i++;
+          } else if (a === '--parsefnc') {
+            dmParsefnc = true;
+          } else if ((a === '--aztec-format' || a === '--aztec-fmt') && args[i + 1]) {
+            aztecFmt = args[i + 1];
+            i++;
+          } else if (a === '--layers' && args[i + 1]) {
+            aztecLayers = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--eclevel' && args[i + 1]) {
+            aztecEcc = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--mode' && args[i + 1]) {
+            maxiMode = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--no-boost') {
+            boostEcc = false;
+          } else if (a === '-i' || a === '--invert') {
+            invert = true;
+          } else if (a === '-a' || a === '--ascii') {
+            format = 'ascii';
+          } else if (a === '--full-ascii') {
+            format = 'full-ascii';
+          } else if (a === '--svg') {
+            format = 'svg';
+          } else if (a === '--dataurl' || a === '--base64' || a === '--png') {
+            format = 'dataurl';
+          } else if (a === '--raw') {
+            format = 'raw';
+          } else if (!a.startsWith('-')) {
+            textArgs.push(a);
+          }
+        }
+
+        const input = extractTextInput(textArgs, stdin);
+        if (!input.text && input.isEmpty) {
+          return `<div class="tool-result-box">
+<div class="tool-result-header">2D Barcode Generator (QR Code, Data Matrix, Aztec, MaxiCode)</div>
+<div><span class="c-accent ansi-bold">usage:</span></div>
+<div class="c-dim">  qrcode [-t qr|datamatrix|aztec|maxicode] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
+<div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
+<div class="c-dim">  qrcode -t datamatrix --shape square "DATA-MATRIX-PAYLOAD"</div>
+<div class="c-dim">  qrcode --ui "custom payload"</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">types:</span></div>
+<div class="c-dim">  qr (default), datamatrix (dm), aztec (azteccode), maxicode (maxi)</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
+<div class="c-dim">  -t, --type &lt;type&gt;    : Symbology type (qr, datamatrix, aztec, maxicode)</div>
+<div class="c-dim">  -f, --format &lt;fmt&gt;   : Output format (ascii, full-ascii, svg, dataurl, raw)</div>
+<div class="c-dim">  -s, --scale &lt;N&gt;      : Module pixel scale for image/canvas (default: 8)</div>
+<div class="c-dim">  -b, --border &lt;N&gt;     : Quiet zone border modules (default: 2 for ascii, 4 for image)</div>
+<div class="c-dim">  --dark, --color &lt;hex&gt;: Dark module color (default: #000000)</div>
+<div class="c-dim">  --light, --bg &lt;hex&gt;  : Light module color (default: #ffffff)</div>
+<div class="c-dim">  --ui                 : Launch interactive 2D code generator in workbench</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">type-specific flags:</span></div>
+<div class="c-dim">  QR Code     : -e, --ecc &lt;low|medium|quartile|high&gt;, --mask &lt;0-7&gt;, --no-boost</div>
+<div class="c-dim">  Data Matrix : --shape &lt;square|rect&gt;, --parsefnc</div>
+<div class="c-dim">  Aztec Code  : --aztec-format &lt;compact|full&gt;, --layers &lt;1-32&gt;, --eclevel &lt;5-95&gt;</div>
+<div class="c-dim">  MaxiCode    : --mode &lt;2|3|4|5|6&gt;</div>
+</div>`;
+        }
+
+        const opts = {
+          scale: Math.max(1, Math.min(20, Math.round(scale / 2) || 3)),
+          border: border !== undefined ? border : (type === 'qr' ? 2 : 1),
+          darkColor,
+          lightColor
+        };
+
+        if (type === 'qr') {
+          opts.ecc = ecc;
+          opts.minVersion = minVer;
+          opts.maxVersion = maxVer;
+          opts.mask = mask;
+          opts.boostEcc = boostEcc;
+        } else if (type === 'datamatrix') {
+          if (dmShape) opts.shape = dmShape;
+          if (dmParsefnc) opts.parsefnc = true;
+        } else if (type === 'aztec') {
+          if (aztecFmt) opts.format = aztecFmt;
+          if (aztecLayers) opts.layers = aztecLayers;
+          if (aztecEcc) opts.eclevel = aztecEcc;
+        } else if (type === 'maxicode') {
+          if (maxiMode) opts.mode = maxiMode;
+        }
+
+        const codeRes = window.TextEngine.generate2DCode(input.text, type, opts);
+
+        if (codeRes.error) {
+          return `qrcode: error: ${escapeHTML(codeRes.error)}`;
+        }
+
+        if (format === 'svg') {
+          return window.TextEngine.generate2DCodeSvg(input.text, type, opts);
+        }
+
+        if (format === 'dataurl' || format === 'png' || format === 'base64') {
+          return window.TextEngine.generate2DCodeDataUrl(input.text, type, opts);
+        }
+
+        if (format === 'ascii') {
+          return window.TextEngine.generate2DCodeAscii(codeRes, { border: opts.border, mode: 'half', invert });
+        }
+
+        if (format === 'full-ascii') {
+          return window.TextEngine.generate2DCodeAscii(codeRes, { border: opts.border, mode: 'full', invert });
+        }
+
+        if (format === 'raw') {
+          if (type === 'qr') {
+            let matrix = [];
+            for (let y = 0; y < codeRes.size; y++) {
+              let row = [];
+              for (let x = 0; x < codeRes.size; x++) {
+                row.push(codeRes.qr.getModule(x, y) ? 1 : 0);
+              }
+              matrix.push(row.join(''));
+            }
+            return matrix.join('\n');
+          } else if (codeRes.pixs && codeRes.width && codeRes.height) {
+            let matrix = [];
+            for (let y = 0; y < codeRes.height; y++) {
+              let row = [];
+              for (let x = 0; x < codeRes.width; x++) {
+                row.push(codeRes.isDark(x, y) ? '1' : '0');
+              }
+              matrix.push(row.join(''));
+            }
+            return matrix.join('\n');
+          }
+          return input.text;
+        }
+
+        // Interactive / rich terminal card
+        const asciiArt = window.TextEngine.generate2DCodeAscii(codeRes, { border: 1, mode: 'half', invert });
+        const svgCode = window.TextEngine.generate2DCodeSvg(input.text, type, { border: 4, darkColor: '#000000', lightColor: '#ffffff' });
+        const dataUrl = window.TextEngine.generate2DCodeDataUrl(input.text, type, { scale: 8, border: 4, darkColor: '#000000', lightColor: '#ffffff' });
+        const textSnippet = input.text.length > 80 ? input.text.substring(0, 77) + '...' : input.text;
+
+        const cardId = '2d-' + Math.random().toString(36).substring(2, 9);
+        const typeTitle = codeRes.typeName || type.toUpperCase();
+        let sizeInfo = '';
+        if (type === 'qr') sizeInfo = `Version ${codeRes.version} (${codeRes.size}&times;${codeRes.size})`;
+        else if (codeRes.width && codeRes.height) sizeInfo = `${codeRes.width}&times;${codeRes.height} modules`;
+        else if (type === 'maxicode') sizeInfo = `Mode ${codeRes.mode || 4}`;
+
+        let out = `<div class="tool-result-box" id="${cardId}">
+<div class="tool-result-header">${escapeHTML(typeTitle)} Symbol &bull; ${sizeInfo}</div>
+<div class="qr-terminal-display" style="margin: 8px 0; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+  <div style="background: #000; padding: 4px 8px; border: 1px solid #333; border-radius: 4px; font-family: monospace; line-height: 1; letter-spacing: 0; color: #fff; display: inline-block; user-select: all;">
+<pre style="margin:0; font-family:inherit; line-height:1; font-size: 11px;">${escapeHTML(asciiArt)}</pre>
+  </div>
+  <div style="flex: 1; min-width: 200px; font-size: 0.86rem; line-height: 1.5;">
+    <div><span class="c-dim">type    :</span> <span class="c-accent">${escapeHTML(typeTitle)}</span></div>
+    <div><span class="c-dim">size    :</span> <span class="c-file">${sizeInfo}</span></div>
+    ${type === 'qr' ? `<div><span class="c-dim">ECC     :</span> <span class="c-file">${codeRes.eccName}</span></div>
+    <div><span class="c-dim">mask    :</span> <span class="c-file">Pattern ${codeRes.mask}</span></div>` : ''}
+    <div><span class="c-dim">payload :</span> <span class="c-user">${escapeHTML(textSnippet)}</span> <span class="c-dim">(${input.text.length} chars)</span></div>
+    <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+      <button type="button" class="tm-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(asciiArt)}'))" title="copy ASCII representation">copy ASCII</button>
+      <button type="button" class="tm-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(svgCode)}'))" title="copy SVG XML">copy SVG</button>
+      <button type="button" class="tm-btn" onclick="const a=document.createElement('a'); a.href='${dataUrl}'; a.download='${type}-code.png'; a.click();" title="download PNG">download PNG</button>
+      <button type="button" class="tm-btn" onclick="const b=new Blob([decodeURIComponent('${encodeURIComponent(svgCode)}')],{type:'image/svg+xml'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download='${type}-code.svg'; a.click(); URL.revokeObjectURL(u);" title="download SVG">download SVG</button>
+    </div>
+  </div>
+</div>
+</div>`;
+        return out;
+      }
+    },
+
+    qr: {
+      desc: 'alias for qrcode',
+      usage: 'qr [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(args, stdin);
+      }
+    },
+
+    qrcodegen: {
+      desc: 'alias for qrcode',
+      usage: 'qrcodegen [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(args, stdin);
+      }
+    },
+
+    datamatrix: {
+      desc: 'generate 2D Data Matrix barcodes (square or rectangular)',
+      usage: 'datamatrix [--shape square|rect] [--parsefnc] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'datamatrix', ...args], stdin);
+      }
+    },
+
+    dm: {
+      desc: 'alias for datamatrix',
+      usage: 'dm [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.datamatrix.exec(args, stdin);
+      }
+    },
+
+    aztec: {
+      desc: 'generate 2D Aztec Code barcodes (high-density matrix)',
+      usage: 'aztec [--format compact|full] [--layers N] [--eclevel 5-95] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'aztec', ...args], stdin);
+      }
+    },
+
+    azteccode: {
+      desc: 'alias for aztec',
+      usage: 'azteccode [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.aztec.exec(args, stdin);
+      }
+    },
+
+    maxicode: {
+      desc: 'generate 2D MaxiCode barcodes (hexagonal grid postal symbol)',
+      usage: 'maxicode [--mode 2|3|4|5|6] [-s scale] [--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'maxicode', ...args], stdin);
+      }
+    },
+
+    maxi: {
+      desc: 'alias for maxicode',
+      usage: 'maxi [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.maxicode.exec(args, stdin);
+      }
+    },
+
+    barcode: {
+      desc: 'generate customizable 1D and stacked 2D barcodes (CODE128, EAN, UPC, PDF417, CODE39, etc.)',
+      usage: 'barcode [-f format] [-w width] [-h height] [-m margin] [--columns N] [--rows N] [--compact] [--no-text] [--color hex] [--bg hex] [--ascii|--svg|--dataurl] [--ui] [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'barcode: text engine not loaded';
+
+        if (args.includes('--ui') || args.includes('--gui') || args.includes('-u')) {
+          const nonUiArgs = args.filter(a => a !== '--ui' && a !== '--gui' && a !== '-u');
+          const input = extractTextInput(nonUiArgs, stdin);
+          textManipWorkbench.open('barcode', input.text || '');
+          return '<span class="c-accent">opened Barcode generator in text manipulation workbench.</span>';
+        }
+
+        let format = 'CODE128';
+        let width = 2;
+        let height = 80;
+        let margin = 10;
+        let displayValue = true;
+        let textPosition = 'bottom';
+        let textAlign = 'center';
+        let fontSize = 16;
+        let lineColor = '#000000';
+        let background = '#ffffff';
+        let outputMode = 'interactive';
+        let columns = undefined;
+        let rows = undefined;
+        let eclevel = undefined;
+        let compact = false;
+        const textArgs = [];
+
+        for (let i = 0; i < args.length; i++) {
+          const a = args[i];
+          if ((a === '-f' || a === '--format' || a === '--type' || a === '-s' || a === '--symbology') && args[i + 1]) {
+            format = args[i + 1];
+            i++;
+          } else if ((a === '-w' || a === '--width') && args[i + 1]) {
+            width = parseInt(args[i + 1], 10) || width;
+            i++;
+          } else if ((a === '-h' || a === '--height') && args[i + 1]) {
+            height = parseInt(args[i + 1], 10) || height;
+            i++;
+          } else if ((a === '-m' || a === '--margin') && args[i + 1]) {
+            margin = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--columns' && args[i + 1]) {
+            columns = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--rows' && args[i + 1]) {
+            rows = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--eclevel' && args[i + 1]) {
+            eclevel = parseInt(args[i + 1], 10);
+            i++;
+          } else if (a === '--compact') {
+            compact = true;
+          } else if (a === '--font-size' && args[i + 1]) {
+            fontSize = parseInt(args[i + 1], 10) || fontSize;
+            i++;
+          } else if ((a === '--color' || a === '--line-color') && args[i + 1]) {
+            lineColor = args[i + 1];
+            i++;
+          } else if ((a === '--bg' || a === '--background') && args[i + 1]) {
+            background = args[i + 1];
+            i++;
+          } else if (a === '--no-text' || a === '--notext' || a === '-n') {
+            displayValue = false;
+          } else if (a === '--text-top') {
+            textPosition = 'top';
+          } else if (a === '--ascii' || a === '-a') {
+            outputMode = 'ascii';
+          } else if (a === '--svg') {
+            outputMode = 'svg';
+          } else if (a === '--dataurl' || a === '--png' || a === '--base64') {
+            outputMode = 'dataurl';
+          } else if (a === '--raw') {
+            outputMode = 'raw';
+          } else if (!a.startsWith('-')) {
+            textArgs.push(a);
+          }
+        }
+
+        const input = extractTextInput(textArgs, stdin);
+        if (!input.text && input.isEmpty) {
+          return `<div class="tool-result-box">
+<div class="tool-result-header">Barcode Generator (1D & Stacked PDF417 Barcodes)</div>
+<div><span class="c-accent ansi-bold">usage:</span></div>
+<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [file/text...]</div>
+<div class="c-dim">  echo "123456789012" | barcode -f EAN13</div>
+<div class="c-dim">  echo "SECURE-PAYLOAD" | barcode -f pdf417 --columns 4 --eclevel 3</div>
+<div class="c-dim">  barcode --ui "HELLO-128"</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">formats:</span></div>
+<div class="c-dim">  CODE128 (auto, A, B, C), EAN-13, EAN-8, UPC (UPC-A), UPC-E, CODE39, ITF-14, ITF, PDF417, compact PDF417, Pharmacode, Codabar, CODE93, MSI</div>
+<div style="margin-top:6px;"><span class="c-accent ansi-bold">flags:</span></div>
+<div class="c-dim">  -f, --format &lt;fmt&gt;    : Symbology format (default: CODE128)</div>
+<div class="c-dim">  -w, --width &lt;N&gt;      : Bar/module width (default: 2)</div>
+<div class="c-dim">  -h, --height &lt;N&gt;     : Bar height in pixels (default: 80)</div>
+<div class="c-dim">  -m, --margin &lt;N&gt;     : Margin quiet zone (default: 10)</div>
+<div class="c-dim">  --no-text            : Hide human-readable text beneath barcode</div>
+<div class="c-dim">  --color &lt;hex&gt;        : Bar line color (default: #000000)</div>
+<div class="c-dim">  --bg &lt;hex&gt;           : Background color (default: #ffffff)</div>
+<div class="c-dim">  --columns &lt;N&gt;        : PDF417 data columns (1-30)</div>
+<div class="c-dim">  --rows &lt;N&gt;           : PDF417 rows (3-90)</div>
+<div class="c-dim">  --eclevel &lt;0-8&gt;      : PDF417 error correction level</div>
+<div class="c-dim">  --compact            : Generate compact / truncated PDF417</div>
+<div class="c-dim">  --ascii              : Output ASCII art directly</div>
+<div class="c-dim">  --svg                : Output standalone SVG XML code</div>
+<div class="c-dim">  --dataurl            : Output base64 PNG data URL</div>
+<div class="c-dim">  --ui                 : Launch interactive Barcode workbench UI</div>
+</div>`;
+        }
+
+        const cleanText = input.text.trim();
+        const bcOpts = {
+          format, width, height, margin, displayValue, textPosition, textAlign, fontSize, lineColor, background
+        };
+        if (columns) bcOpts.columns = columns;
+        if (rows) bcOpts.rows = rows;
+        if (eclevel !== undefined) bcOpts.eclevel = eclevel;
+        if (compact) bcOpts.compact = true;
+
+        const bcRes = window.TextEngine.generateBarcode(cleanText, bcOpts);
+
+        if (bcRes.error) {
+          return `barcode: error: ${escapeHTML(bcRes.error)}`;
+        }
+
+        if (outputMode === 'svg') {
+          return window.TextEngine.generateBarcodeSvg(cleanText, bcOpts);
+        }
+
+        if (outputMode === 'dataurl' || outputMode === 'png' || outputMode === 'base64') {
+          return window.TextEngine.generateBarcodeDataUrl(cleanText, bcOpts);
+        }
+
+        if (outputMode === 'ascii') {
+          return window.TextEngine.generateBarcodeAscii(bcRes, { height: 6, margin: 2, displayValue, textPosition });
+        }
+
+        if (outputMode === 'raw') {
+          return bcRes.binary;
+        }
+
+        // Rich interactive terminal card
+        const asciiArt = window.TextEngine.generateBarcodeAscii(bcRes, { height: 5, margin: 2, displayValue, textPosition });
+        const svgCode = window.TextEngine.generateBarcodeSvg(cleanText, bcOpts);
+        const dataUrl = window.TextEngine.generateBarcodeDataUrl(cleanText, bcOpts);
+        const textSnippet = cleanText.length > 60 ? cleanText.substring(0, 57) + '...' : cleanText;
+        const bcId = 'bc-' + Math.random().toString(36).substring(2, 9);
+        const modInfo = bcRes.totalModules ? `${bcRes.totalModules} modules` : `${bcRes.width}x${bcRes.height}`;
+
+        let out = `<div class="tool-result-box" id="${bcId}">
+<div class="tool-result-header">Barcode &bull; ${bcRes.format} (${modInfo})</div>
+<div class="barcode-terminal-display" style="margin: 8px 0; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+  <div style="background: #000; padding: 6px 10px; border: 1px solid #333; border-radius: 4px; font-family: monospace; line-height: 1; letter-spacing: 0; color: #fff; display: inline-block; overflow-x: auto; max-width: 100%; user-select: all;">
+<pre style="margin:0; font-family:inherit; line-height:1; font-size: 11px;">${escapeHTML(asciiArt)}</pre>
+  </div>
+  <div style="flex: 1; min-width: 200px; font-size: 0.86rem; line-height: 1.5;">
+    <div><span class="c-dim">Format  :</span> <span class="c-accent">${bcRes.format}</span></div>
+    <div><span class="c-dim">Size    :</span> <span class="c-file">${modInfo}</span></div>
+    <div><span class="c-dim">Payload :</span> <span class="c-user">${escapeHTML(textSnippet)}</span> <span class="c-dim">(${cleanText.length} chars)</span></div>
+    <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+      <button type="button" class="tm-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(asciiArt)}'))" title="copy ASCII representation">copy ASCII</button>
+      <button type="button" class="tm-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(svgCode)}'))" title="copy SVG XML">copy SVG</button>
+      <button type="button" class="tm-btn" onclick="const a=document.createElement('a'); a.href='${dataUrl}'; a.download='barcode-${bcRes.format.toLowerCase()}.png'; a.click();" title="download PNG">download PNG</button>
+      <button type="button" class="tm-btn" onclick="const b=new Blob([decodeURIComponent('${encodeURIComponent(svgCode)}')],{type:'image/svg+xml'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download='barcode-${bcRes.format.toLowerCase()}.svg'; a.click(); URL.revokeObjectURL(u);" title="download SVG">download SVG</button>
+    </div>
+  </div>
+</div>
+</div>`;
+        return out;
+      }
+    },
+
+    bc: {
+      desc: 'alias for barcode',
+      usage: 'bc [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.barcode.exec(args, stdin);
+      }
+    },
+
+    pdf417: {
+      desc: 'generate stacked 2D PDF417 barcodes',
+      usage: 'pdf417 [--columns N] [--rows N] [--eclevel 0-8] [--compact] [-w width] [-h height] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.barcode.exec(['-f', 'pdf417', ...args], stdin);
+      }
+    },
+
     help: {
       desc: 'display available shell commands and usage info',
       usage: 'help [command]',
@@ -3761,7 +5150,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -4739,6 +6128,56 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
           return `<span class="c-accent">Opened Text Manipulation Workbench.</span>`;
         }
 
+        if (target === 'qr' || target === 'qrcode' || target === 'qrcodegen') {
+          textManipWorkbench.open('qrcode');
+          return `<span class="c-accent">Opened QR Code Generator in Text Manipulation Workbench.</span>`;
+        }
+
+        if (target === 'datamatrix' || target === 'dm') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'datamatrix';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">Opened Data Matrix Generator in Text Manipulation Workbench.</span>`;
+        }
+
+        if (target === 'aztec' || target === 'azteccode') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'aztec';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">Opened Aztec Code Generator in Text Manipulation Workbench.</span>`;
+        }
+
+        if (target === 'maxicode' || target === 'maxi') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'maxicode';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">Opened MaxiCode Generator in Text Manipulation Workbench.</span>`;
+        }
+
+        if (target === 'barcode' || target === 'bc') {
+          textManipWorkbench.open('barcode');
+          return `<span class="c-accent">Opened Barcode Generator in Text Manipulation Workbench.</span>`;
+        }
+
+        if (target === 'pdf417') {
+          textManipWorkbench.open('barcode');
+          const fmtSel = document.getElementById('tm-bc-format');
+          if (fmtSel) {
+            fmtSel.value = 'pdf417';
+            fmtSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">Opened PDF417 Generator in Text Manipulation Workbench.</span>`;
+        }
+
         const resolved = resolvePath(pathStack, target);
         if (resolved && resolved.node.type === 'file') {
           return commands.cat.exec([target]);
@@ -4984,7 +6423,7 @@ Address: 103.48.16.12`;
         if (applyTheme(name)) {
           return `Theme switched to: <span class="c-accent">${name}</span>`;
         }
-        return `theme: invalid theme '${name}'. Available: ${valid.join(', ')}`;
+        return `theme: invalid theme '${name}'. available: ${valid.join(', ')}`;
       }
     },
 

@@ -1262,8 +1262,8 @@
       }
 
       const identical = Object.keys(missingInMap2).length === 0 &&
-                        Object.keys(missingInMap1).length === 0 &&
-                        Object.keys(mismatched).length === 0;
+        Object.keys(missingInMap1).length === 0 &&
+        Object.keys(mismatched).length === 0;
 
       let textReport = "";
       if (Object.keys(missingInMap2).length > 0) {
@@ -1326,58 +1326,58 @@
       if (!text) return "";
       let processed = String(text);
       const bijoy_map = {
-        "|": "।", "i¨": "র‌্য", "ª¨": "্র্য", "°": "ক্ক", "±": "ক্ট", "³": "ক্ত", 
+        "|": "।", "i¨": "র‌্য", "ª¨": "্র্য", "°": "ক্ক", "±": "ক্ট", "³": "ক্ত",
         "K¡": "ক্ব", "µ": "ক্র", "K¬": "ক্ল", "¶": "ক্ষ", "¨y": "্যু", "®ú": "ষ্প",
-        "ÿ": "ক্ষ", "·": "ক্স", "¸": "গু", "»": "গ্ধ", "Mœ": "গ্ন", "¤§": "ম্ম", 
+        "ÿ": "ক্ষ", "·": "ক্স", "¸": "গু", "»": "গ্ধ", "Mœ": "গ্ন", "¤§": "ম্ম",
         "M¥": "গ্ম", "M­": "গ্ল", "¼": "ঙ্ক", "•¶": "ঙ্ক্ষ", "•L": "ঙ্খ", "½": "ঙ্গ",
-        "•N": "ঙ্ঘ", "”P": "চ্চ", "”Q": "চ্ছ", "”Q¡": "চ্ছ্ব", "”T": "চ্ঞ", "¾¡": "জ্জ্ব", 
+        "•N": "ঙ্ঘ", "”P": "চ্চ", "”Q": "চ্ছ", "”Q¡": "চ্ছ্ব", "”T": "চ্ঞ", "¾¡": "জ্জ্ব",
         "g¥": "ম্ন", "¾": "জ্জ", "fz¨": "ভ্যু", "À": "জ্ঝ", "Á": "জ্ঞ", "R¡": "জ্ব",
         "Â": "ঞ্চ", "Ã": "ঞ্ছ", "Ä": "ঞ্জ", "Å": "ঞ্ঝ", "Æ": "ট্ট", "U¡": "ট্ব",
-        "U¥": "ট্ম", "Ç": "ড্ড", "È": "ণ্ট", "É": "ণ্ঠ", "Ý": "ন্স", "Ê": "ণ্ড", 
-        "š‘": "ন্তু", "Y^": "ণ্ব", "Ë": "ত্ত", "Ë¡": "ত্ত্ব", "Ì": "ত্থ", "Z¥": "ত্ম", 
+        "U¥": "ট্ম", "Ç": "ড্ড", "È": "ণ্ট", "É": "ণ্ঠ", "Ý": "ন্স", "Ê": "ণ্ড",
+        "š‘": "ন্তু", "Y^": "ণ্ব", "Ë": "ত্ত", "Ë¡": "ত্ত্ব", "Ì": "ত্থ", "Z¥": "ত্ম",
         "š—¡": "ন্ত্ব", "Z¡": "ত্ব", "Î": "ত্র", "_¡": "থ্ব", "˜M": "দ্গ", "˜N": "দ্ঘ",
-        "Ï": "দ্দ", "ï": "শু", "×": "দ্ধ", "Ø": "দ্ব", "™¢": "দ্ভ", "Ù": "দ্ম", 
-        "`ª“": "দ্রু", "aŸ": "ধ্ব", "a¥": "ধ্ম", "›U": "ন্ট", "Ú": "ন্ঠ", "Û": "ন্ড", 
-        "šÍ": "ন্ত", "š—": "ন্ত", "š¿": "ন্ত্র", "š’": "ন্থ", "›`": "ন্দ", "›Ø": "ন্দ্ব", 
-        "Ü": "ন্ধ", "bœ": "ন্ন", "š^": "ন্ব", "b¥": "ন্ম", "Þ": "প্ট", "ß": "প্ত", 
-        "cœ": "প্ন", "à": "প্প", "cø": "প্ল", "kø": "শ্ল", "jø": "ল্ল", "c­": "প্ল", 
-        "á": "প্স", "d¬": "ফ্ল", "â": "ব্জ", "ã": "ব্দ", "ä": "ব্ধ", "eŸ": "ব্ব", 
-        "e­": "ব্ল", "å": "ভ্র", "gœ": "ম্ন", "¤ú": "ম্প", "ç": "ম্ফ", "¤^": "ম্ব", 
-        "¤¢": "ম্ভ", "¤£": "ম্ভ্র", "¤¬": "ম্ল", "j¨": "ক্য", "l¨": "দ্য", "i“": "রু", 
-        "iƒ": "রূ", "…": "ৃ", "†": "ে", "‡": "ে", "ë": "ল্ট", "ü": "হৃ", 
+        "Ï": "দ্দ", "ï": "শু", "×": "দ্ধ", "Ø": "দ্ব", "™¢": "দ্ভ", "Ù": "দ্ম",
+        "`ª“": "দ্রু", "aŸ": "ধ্ব", "a¥": "ধ্ম", "›U": "ন্ট", "Ú": "ন্ঠ", "Û": "ন্ড",
+        "šÍ": "ন্ত", "š—": "ন্ত", "š¿": "ন্ত্র", "š’": "ন্থ", "›`": "ন্দ", "›Ø": "ন্দ্ব",
+        "Ü": "ন্ধ", "bœ": "ন্ন", "š^": "ন্ব", "b¥": "ন্ম", "Þ": "প্ট", "ß": "প্ত",
+        "cœ": "প্ন", "à": "প্প", "cø": "প্ল", "kø": "শ্ল", "jø": "ল্ল", "c­": "প্ল",
+        "á": "প্স", "d¬": "ফ্ল", "â": "ব্জ", "ã": "ব্দ", "ä": "ব্ধ", "eŸ": "ব্ব",
+        "e­": "ব্ল", "å": "ভ্র", "gœ": "ম্ন", "¤ú": "ম্প", "ç": "ম্ফ", "¤^": "ম্ব",
+        "¤¢": "ম্ভ", "¤£": "ম্ভ্র", "¤¬": "ম্ল", "j¨": "ক্য", "l¨": "দ্য", "i“": "রু",
+        "iƒ": "রূ", "…": "ৃ", "†": "ে", "‡": "ে", "ë": "ল্ট", "ü": "হৃ",
         "ú": "ু", "û": "হু", "ˆ": "ৈ", "‰": "ৈ", "Š": "ৗ", "Œ": "ৌ",
-        "•": "ঙ্", "œ": "ণ", "Ÿ": "্ব", "¡": "্ব", "¢": "্ভ", "£": "্ভ্র", 
-        "¥": "্ম", "¦": "্ব", "§": "্ম", "©": "র্", "ª": "্র", "«": "্র", 
+        "•": "ঙ্", "œ": "ণ", "Ÿ": "্ব", "¡": "্ব", "¢": "্ভ", "£": "্ভ্র",
+        "¥": "্ম", "¦": "্ব", "§": "্ম", "©": "র্", "ª": "্র", "«": "্র",
         "¬": "্ল", "­": "্ল", "Av": "আ", "B": "ই", "®‹": "ষ্ক", "Y¡": "ণ্ব",
-        "C": "ঈ", "D": "উ", "E": "ঊ", "F": "ঋ", "G": "এ", "H": "ঐ", 
-        "I": "ও", "J": "ঔ", "K": "ক", "L": "খ", "M": "গ", "N": "ঘ", 
-        "O": "ঙ", "P": "চ", "Q": "ছ", "R": "জ", "S": "ঝ", "T": "ঞ", 
+        "C": "ঈ", "D": "উ", "E": "ঊ", "F": "ঋ", "G": "এ", "H": "ঐ",
+        "I": "ও", "J": "ঔ", "K": "ক", "L": "খ", "M": "গ", "N": "ঘ",
+        "O": "ঙ", "P": "চ", "Q": "ছ", "R": "জ", "S": "ঝ", "T": "ঞ",
         "U": "ট", "V": "ঠ", "W": "ড", "X": "ঢ", "Y": "ণ", "Z": "ত",
-        "r": "ৎ", "_": "থ", "`": "দ", "a": "ধ", "b": "ন", "c": "প", 
-        "d": "ফ", "e": "ব", "f": "ভ", "g": "ম", "h": "য", "i": "র", 
-        "j": "ল", "k": "শ", "l": "ষ", "m": "স", "n": "হ", "o": "ড়", 
-        "p": "ঢ়", "q": "য়", "s": "ং", "t": "ঃ", "u": "ঁ", "w": "ি", 
-        "‚": "ূ", "x": "ী", "y": "ু", "z": "ু", "v": "া", "0": "০", 
-        "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬", 
-        "7": "৭", "8": "৮", "9": "৯", "&": "্", "‘": "‘", "’": "’", 
+        "r": "ৎ", "_": "থ", "`": "দ", "a": "ধ", "b": "ন", "c": "প",
+        "d": "ফ", "e": "ব", "f": "ভ", "g": "ম", "h": "য", "i": "র",
+        "j": "ল", "k": "শ", "l": "ষ", "m": "স", "n": "হ", "o": "ড়",
+        "p": "ঢ়", "q": "য়", "s": "ং", "t": "ঃ", "u": "ঁ", "w": "ি",
+        "‚": "ূ", "x": "ী", "y": "ু", "z": "ু", "v": "া", "0": "০",
+        "1": "১", "2": "২", "3": "৩", "4": "৪", "5": "৫", "6": "৬",
+        "7": "৭", "8": "৮", "9": "৯", "&": "্", "‘": "‘", "’": "’",
         "“": "“", "”": "”", "ô": "ষ্ঠ", "μ": "ক্র", "é": "ল্ক", "^": "্ব",
         "Ð": "ণ্ড", " ̧": "গু", "ð": "শ্চ", "æ": "ু", "„": "ৃ", "mœ": "স্ন",
         " ̈": "্য", "A": "অ", "Ö": "্র", "ó": "ষ্ট", "~": "ূ", "j¦": "ল্ব",
-        "ê": "ল্গ", "ì": "ল্ড", "¯ú": "স্প", " ̄ú": "স্প",  "j¥": "ল্ম", "kœ": "শ্ন", 
+        "ê": "ল্গ", "ì": "ল্ড", "¯ú": "স্প", " ̄ú": "স্প", "j¥": "ল্ম", "kœ": "শ্ন",
         "k¦": "শ্ব", "k¥": "শ্ম", "k­": "শ্ল", "®Œ": "ষ্ক্র", "ò": "ষ্ণ", "õ": "ষ্ফ",
         "®§": "ষ্ম", "ö": "স্খ", "¯¿": "স্ত্র", "̄¿": "স্ত্র", "ù": "স্ফ", "¯­": "স্ল",
         "þ": "হ্ম", "n¬": "হ্ল", "...": "ৃ", "¨": "্য", "˜¡": "দ্ব", "î": "ল্ফ",
-        "¯Œ": "স্ক্র", " ̄Œ": "স্ক্র", "¯‹": "স্ক", " ̄‹": "স্ক", "¯‘": "স্তু", "̄‘": "স্তু", 
-        "¯’": "স্থ", " ̄’": "স্থ", "¯^": "স্ব", " ̄^": "স্ব", "¯§": "স্ম", "̄§": "স্ম", 
-        "¯ø": "স্ল", "̄ø": "স্ল", "¯Í": "স্ত", " ̄Í": "স্ত", "÷": "স্ট", " ̄^©": "র্স্ব", 
-        "í": "ল্প", "²": "ক্ষ্ম", "ý": "হ্ন", "nè": "হ্ণ", "¶œ": "ক্ষ্ন", "¶è": "ক্ষ্ণ", 
-        "¶¨©": "র্ক্ষ্য", "M¨©": "র্গ্য", "MÖ©": "র্গ্র", "N¨©": "র্ঘ্য", "½©": "র্ঙ্গ", "”Q©": "র্চ্ছ", 
-        "P¨©": "র্চ্য", "Á©": "র্জ্ঞ", "R¨©": "র্জ্য", "R¡©": "র্জ্ব", "X¨©": "র্ঢ্য", "Y¨©": "র্ণ্য", 
-        "Ë©": "র্ত্ত", "Z¥©": "র্ত্ম", "Z¨©": "র্ত্য", "Î©": "র্ত্র", "Z¡©": "র্ত্ব", "_¨©": "র্থ্য", 
-        "×©": "র্দ্ধ", "`¨©": "র্দ্য", "`ª©": "র্দ্র", "Ø©": "র্দ্ব", "aœ©": "র্ধ্ন", "a¥©": "র্ধ্ম", 
-        "a¨©": "র্ধ্য", "aª©": "র্ধ্র", "aŸ©": "র্ধ্ব", "b¨©": "র্ন্য", "eª©": "র্ব্র", "f¨©": "র্ভ্য", 
+        "¯Œ": "স্ক্র", " ̄Œ": "স্ক্র", "¯‹": "স্ক", " ̄‹": "স্ক", "¯‘": "স্তু", "̄‘": "স্তু",
+        "¯’": "স্থ", " ̄’": "স্থ", "¯^": "স্ব", " ̄^": "স্ব", "¯§": "স্ম", "̄§": "স্ম",
+        "¯ø": "স্ল", "̄ø": "স্ল", "¯Í": "স্ত", " ̄Í": "স্ত", "÷": "স্ট", " ̄^©": "র্স্ব",
+        "í": "ল্প", "²": "ক্ষ্ম", "ý": "হ্ন", "nè": "হ্ণ", "¶œ": "ক্ষ্ন", "¶è": "ক্ষ্ণ",
+        "¶¨©": "র্ক্ষ্য", "M¨©": "র্গ্য", "MÖ©": "র্গ্র", "N¨©": "র্ঘ্য", "½©": "র্ঙ্গ", "”Q©": "র্চ্ছ",
+        "P¨©": "র্চ্য", "Á©": "র্জ্ঞ", "R¨©": "র্জ্য", "R¡©": "র্জ্ব", "X¨©": "র্ঢ্য", "Y¨©": "র্ণ্য",
+        "Ë©": "র্ত্ত", "Z¥©": "র্ত্ম", "Z¨©": "র্ত্য", "Î©": "র্ত্র", "Z¡©": "র্ত্ব", "_¨©": "র্থ্য",
+        "×©": "র্দ্ধ", "`¨©": "র্দ্য", "`ª©": "র্দ্র", "Ø©": "র্দ্ব", "aœ©": "র্ধ্ন", "a¥©": "র্ধ্ম",
+        "a¨©": "র্ধ্য", "aª©": "র্ধ্র", "aŸ©": "র্ধ্ব", "b¨©": "র্ন্য", "eª©": "র্ব্র", "f¨©": "র্ভ্য",
         "å©": "র্ভ্র", "g¨©": "র্ম্য", "e¨©": "র্ব্য", "k¦©": "র্শ্ব", "ó©": "র্ষ্ট", "ò©": "র্ষ্ণ",
-        "®§©": "র্ষ্ম", "l¨©": "র্ষ্য", "óª©": "র্ষ্ট্র", "¯^©": "র্স্ব", "n¨©": "র্হ্য","nª©": "র্হ্র",
+        "®§©": "র্ষ্ম", "l¨©": "র্ষ্য", "óª©": "র্ষ্ট্র", "¯^©": "র্স্ব", "n¨©": "র্হ্য", "nª©": "র্হ্র",
         "Ñ": "—", "Ô": "‘", "Õ": "’", "Ò": "“", "Ó": "”", "র্": "র্"
       };
 
@@ -1423,62 +1423,62 @@
       let str = String(text);
 
       const unicode_to_bijoy_map = {
-        "র্ক্ষ্য": "¶¨©", "র্গ্য": "M¨©", "র্গ্র": "MÖ©", "র্ঘ্য": "N¨©", "র্ঙ্গ": "½©", "র্চ্ছ": "”Q©", 
-        "র্চ্য": "P¨©", "র্জ্ঞ": "Á©", "র্জ্য": "R¨©", "র্জ্ব": "R¡©", "র্ঢ্য": "X¨©", "র্ণ্য": "Y¨©", 
-        "র্ত্ত": "Ë©", "র্ত্ম": "Z¥©", "র্ত্য": "Z¨©", "র্ত্র": "Î©", "র্ত্ব": "Z¡©", "র্থ্য": "_¨©", 
-        "র্দ্ধ": "×©", "র্দ্য": "`¨©", "র্দ্র": "`ª©", "র্দ্ব": "Ø©", "র্ধ্ন": "aœ©", "র্ধ্ম": "a¥©", 
-        "র্ধ্য": "a¨©", "র্ধ্র": "aª©", "র্ধ্ব": "aŸ©", "র্ন্য": "b¨©", "র্ব্র": "eª©", "র্ভ্য": "f¨©", 
-        "র্ভ্র": "å©", "র্ম্য": "g¨©", "র্ব্য": "e¨©", "র্শ্ব": "k¦©", "র্ষ্ট": "ó©", "র্ষ্ণ": "ò©", 
+        "র্ক্ষ্য": "¶¨©", "র্গ্য": "M¨©", "র্গ্র": "MÖ©", "র্ঘ্য": "N¨©", "র্ঙ্গ": "½©", "র্চ্ছ": "”Q©",
+        "র্চ্য": "P¨©", "র্জ্ঞ": "Á©", "র্জ্য": "R¨©", "র্জ্ব": "R¡©", "র্ঢ্য": "X¨©", "র্ণ্য": "Y¨©",
+        "র্ত্ত": "Ë©", "র্ত্ম": "Z¥©", "র্ত্য": "Z¨©", "র্ত্র": "Î©", "র্ত্ব": "Z¡©", "র্থ্য": "_¨©",
+        "র্দ্ধ": "×©", "র্দ্য": "`¨©", "র্দ্র": "`ª©", "র্দ্ব": "Ø©", "র্ধ্ন": "aœ©", "র্ধ্ম": "a¥©",
+        "র্ধ্য": "a¨©", "র্ধ্র": "aª©", "র্ধ্ব": "aŸ©", "র্ন্য": "b¨©", "র্ব্র": "eª©", "র্ভ্য": "f¨©",
+        "র্ভ্র": "å©", "র্ম্য": "g¨©", "র্ব্য": "e¨©", "র্শ্ব": "k¦©", "র্ষ্ট": "ó©", "র্ষ্ণ": "ò©",
         "র্ষ্ম": "®§©", "র্ষ্য": "l¨©", "র্ষ্ট্র": "óª©", "র্স্ব": "¯^©", "র্হ্য": "n¨©", "র্হ্র": "nª©",
 
-        "চ্ছ্ব": "”Q¡", "জ্জ্ব": "¾¡", "ভ্যু": "fz¨", "ন্ত্ব": "š—¡", "ত্ত্ব": "Ë¡", 
-        "দ্রু": "`ª“", "ম্ভ্র": "¤£", "ক্ষ্ম": "²", "ক্ষ্ন": "¶œ", "ক্ষ্ণ": "¶è", 
-        "স্ক্র": "¯Œ", "স্ক": "¯‹", "স্তু": "¯‘", "স্থ": "¯’", "স্ব": "¯^", 
-        "স্ম": "¯§", "স্ল": "¯ø", "স্ত": "¯Í", "স্ট": "÷", "স্ত্র": "¯¿", 
-        "স্প": "¯ú", "স্ফ": "ù", "স্খ": "ö", "স্ন": "mœ", "শ্ল": "kø", 
-        "শ্ম": "k¥", "শ্ব": "k¦", "শ্ন": "kœ", "শ্চ": "ð", "শু": "ï", 
-        "ষ্প": "®ú", "ষ্ক": "®‹", "ষ্ক্র": "®Œ", "ষ্ণ": "ò", "ষ্ফ": "õ", 
-        "ষ্ম": "®§", "ষ্ঠ": "ô", "ষ্ট": "ó", "হ্ম": "þ", "হ্ন": "ý", 
-        "হ্ণ": "nè", "হ্ল": "n¬", "হৃ": "ü", "হু": "û", "ল্ক": "é", 
-        "ল্গ": "ê", "ল্ট": "ë", "ল্ড": "ì", "ল্প": "í", "ল্ফ": "î", 
-        "ল্ল": "jø", "ল্ব": "j¦", "ল্ম": "j¥", "প্ল": "cø", "প্প": "à", 
-        "প্ন": "cœ", "প্ট": "Þ", "প্ত": "ß", "প্স": "á", "ফ্ল": "d¬", 
-        "ব্জ": "â", "ব্দ": "ã", "ব্ধ": "ä", "ব্ব": "eŸ", "ব্ল": "e­", 
-        "ভ্র": "å", "ম্ন": "gœ", "ম্প": "¤ú", "ম্ফ": "ç", "ম্ব": "¤^", 
-        "ম্ভ": "¤¢", "ম্ম": "¤§", "ম্ল": "¤¬", "ন্দ": "›`", "ন্দ্ব": "›Ø", 
-        "ন্ধ": "Ü", "ন্ন": "bœ", "ন্ব": "š^", "ন্ম": "b¥", "ন্ট": "›U", 
-        "ন্ঠ": "Ú", "ন্ড": "Û", "ন্ত": "šÍ", "ন্ত্র": "š¿", "ন্থ": "š’", 
-        "ন্স": "Ý", "দ্গ": "˜M", "দ্ঘ": "˜N", "দ্দ": "Ï", "দ্ধ": "×", 
-        "দ্ব": "Ø", "দ্ভ": "™¢", "দ্ম": "Ù", "ধ্ব": "aŸ", "ধ্ম": "a¥", 
-        "ত্ত": "Ë", "ত্থ": "Ì", "ত্ম": "Z¥", "ত্ব": "Z¡", "ত্র": "Î", 
-        "থ্ব": "_¡", "ট্ট": "Æ", "ট্ব": "U¡", "ট্ম": "U¥", "ড্ড": "Ç", 
-        "ণ্ট": "È", "ণ্ঠ": "É", "ণ্ড": "Ê", "ণ্ব": "Y^", "চ্চ": "”P", 
-        "চ্ছ": "”Q", "চ্ঞ": "”T", "জ্জ": "¾", "জ্ঝ": "À", "জ্ঞ": "Á", 
-        "জ্ব": "R¡", "ঞ্চ": "Â", "ঞ্ছ": "Ã", "ঞ্জ": "Ä", "ঞ্ঝ": "Å", 
-        "ঙ্ক": "¼", "ঙ্ক্ষ": "•¶", "ঙ্খ": "•L", "ঙ্গ": "½", "ঙ্ঘ": "•N", 
-        "ক্ক": "°", "ক্ট": "±", "ক্ত": "³", "ক্ব": "K¡", "ক্র": "µ", 
-        "ক্ল": "K¬", "ক্ষ": "¶", "ক্স": "·", "গু": "¸", "গ্ধ": "»", 
+        "চ্ছ্ব": "”Q¡", "জ্জ্ব": "¾¡", "ভ্যু": "fz¨", "ন্ত্ব": "š—¡", "ত্ত্ব": "Ë¡",
+        "দ্রু": "`ª“", "ম্ভ্র": "¤£", "ক্ষ্ম": "²", "ক্ষ্ন": "¶œ", "ক্ষ্ণ": "¶è",
+        "স্ক্র": "¯Œ", "স্ক": "¯‹", "স্তু": "¯‘", "স্থ": "¯’", "স্ব": "¯^",
+        "স্ম": "¯§", "স্ল": "¯ø", "স্ত": "¯Í", "স্ট": "÷", "স্ত্র": "¯¿",
+        "স্প": "¯ú", "স্ফ": "ù", "স্খ": "ö", "স্ন": "mœ", "শ্ল": "kø",
+        "শ্ম": "k¥", "শ্ব": "k¦", "শ্ন": "kœ", "শ্চ": "ð", "শু": "ï",
+        "ষ্প": "®ú", "ষ্ক": "®‹", "ষ্ক্র": "®Œ", "ষ্ণ": "ò", "ষ্ফ": "õ",
+        "ষ্ম": "®§", "ষ্ঠ": "ô", "ষ্ট": "ó", "হ্ম": "þ", "হ্ন": "ý",
+        "হ্ণ": "nè", "হ্ল": "n¬", "হৃ": "ü", "হু": "û", "ল্ক": "é",
+        "ল্গ": "ê", "ল্ট": "ë", "ল্ড": "ì", "ল্প": "í", "ল্ফ": "î",
+        "ল্ল": "jø", "ল্ব": "j¦", "ল্ম": "j¥", "প্ল": "cø", "প্প": "à",
+        "প্ন": "cœ", "প্ট": "Þ", "প্ত": "ß", "প্স": "á", "ফ্ল": "d¬",
+        "ব্জ": "â", "ব্দ": "ã", "ব্ধ": "ä", "ব্ব": "eŸ", "ব্ল": "e­",
+        "ভ্র": "å", "ম্ন": "gœ", "ম্প": "¤ú", "ম্ফ": "ç", "ম্ব": "¤^",
+        "ম্ভ": "¤¢", "ম্ম": "¤§", "ম্ল": "¤¬", "ন্দ": "›`", "ন্দ্ব": "›Ø",
+        "ন্ধ": "Ü", "ন্ন": "bœ", "ন্ব": "š^", "ন্ম": "b¥", "ন্ট": "›U",
+        "ন্ঠ": "Ú", "ন্ড": "Û", "ন্ত": "šÍ", "ন্ত্র": "š¿", "ন্থ": "š’",
+        "ন্স": "Ý", "দ্গ": "˜M", "দ্ঘ": "˜N", "দ্দ": "Ï", "দ্ধ": "×",
+        "দ্ব": "Ø", "দ্ভ": "™¢", "দ্ম": "Ù", "ধ্ব": "aŸ", "ধ্ম": "a¥",
+        "ত্ত": "Ë", "ত্থ": "Ì", "ত্ম": "Z¥", "ত্ব": "Z¡", "ত্র": "Î",
+        "থ্ব": "_¡", "ট্ট": "Æ", "ট্ব": "U¡", "ট্ম": "U¥", "ড্ড": "Ç",
+        "ণ্ট": "È", "ণ্ঠ": "É", "ণ্ড": "Ê", "ণ্ব": "Y^", "চ্চ": "”P",
+        "চ্ছ": "”Q", "চ্ঞ": "”T", "জ্জ": "¾", "জ্ঝ": "À", "জ্ঞ": "Á",
+        "জ্ব": "R¡", "ঞ্চ": "Â", "ঞ্ছ": "Ã", "ঞ্জ": "Ä", "ঞ্ঝ": "Å",
+        "ঙ্ক": "¼", "ঙ্ক্ষ": "•¶", "ঙ্খ": "•L", "ঙ্গ": "½", "ঙ্ঘ": "•N",
+        "ক্ক": "°", "ক্ট": "±", "ক্ত": "³", "ক্ব": "K¡", "ক্র": "µ",
+        "ক্ল": "K¬", "ক্ষ": "¶", "ক্স": "·", "গু": "¸", "গ্ধ": "»",
         "গ্ন": "Mœ", "গ্ম": "M¥", "গ্ল": "M­", "গ্র": "MÖ", "প্র": "cÖ",
         "ফ্র": "d«", "ব্র": "eª", "শ্র": "kÖ", "হ্র": "nÖ", "দ্র": "`ª",
-        "ধ্র": "aª", "ত্র": "Î", "র‌্য": "i¨", "্র্য": "ª¨", "ক্য": "K¨", 
+        "ধ্র": "aª", "ত্র": "Î", "র‌্য": "i¨", "্র্য": "ª¨", "ক্য": "K¨",
         "দ্য": "`¨", "রু": "i“", "রূ": "iƒ", "্যু": "¨y",
 
-        "অ": "A", "আ": "Av", "ই": "B", "ঈ": "C", "উ": "D", "ঊ": "E", 
+        "অ": "A", "আ": "Av", "ই": "B", "ঈ": "C", "উ": "D", "ঊ": "E",
         "ঋ": "F", "এ": "G", "ঐ": "H", "ও": "I", "ঔ": "J",
 
-        "ক": "K", "খ": "L", "গ": "M", "ঘ": "N", "ঙ": "O", "চ": "P", 
-        "ছ": "Q", "জ": "R", "ঝ": "S", "ঞ": "T", "ট": "U", "ঠ": "V", 
-        "ড": "W", "ঢ": "X", "ণ": "Y", "ত": "Z", "থ": "_", "দ": "`", 
-        "ধ": "a", "ন": "b", "প": "c", "ফ": "d", "ব": "e", "ভ": "f", 
-        "ম": "g", "য": "h", "র": "i", "ল": "j", "শ": "k", "ষ": "l", 
-        "স": "m", "হ": "n", "ড়": "o", "ঢ়": "p", "য়": "q", "ৎ": "r", 
+        "ক": "K", "খ": "L", "গ": "M", "ঘ": "N", "ঙ": "O", "চ": "P",
+        "ছ": "Q", "জ": "R", "ঝ": "S", "ঞ": "T", "ট": "U", "ঠ": "V",
+        "ড": "W", "ঢ": "X", "ণ": "Y", "ত": "Z", "থ": "_", "দ": "`",
+        "ধ": "a", "ন": "b", "প": "c", "ফ": "d", "ব": "e", "ভ": "f",
+        "ম": "g", "য": "h", "র": "i", "ল": "j", "শ": "k", "ষ": "l",
+        "স": "m", "হ": "n", "ড়": "o", "ঢ়": "p", "য়": "q", "ৎ": "r",
         "ং": "s", "ঃ": "t", "ঁ": "u",
 
-        "া": "v", "ি": "w", "ী": "x", "ু": "y", "ূ": "~", "ৃ": "…", 
-        "ে": "†", "ৈ": "ˆ", "ৌ": "Š", "্": "&", "্য": "¨", "্র": "ª", 
+        "া": "v", "ি": "w", "ী": "x", "ু": "y", "ূ": "~", "ৃ": "…",
+        "ে": "†", "ৈ": "ˆ", "ৌ": "Š", "্": "&", "্য": "¨", "্র": "ª",
         "্ব": "^", "্ম": "¥",
 
-        "০": "0", "১": "1", "২": "2", "৩": "3", "৪": "4", "৫": "5", 
+        "০": "0", "১": "1", "২": "2", "৩": "3", "৪": "4", "৫": "5",
         "৬": "6", "৭": "7", "৮": "8", "৯": "9",
 
         "।": "|", "—": "Ñ", "‘": "‘", "’": "’", "“": "“", "”": "”"
@@ -1670,6 +1670,765 @@
       };
     },
 
+    /*---- QR Code Generator Engine ----*/
+    getQrLib() {
+      if (typeof window !== 'undefined' && window.qrcodegen) return window.qrcodegen;
+      if (typeof globalThis !== 'undefined' && globalThis.qrcodegen) return globalThis.qrcodegen;
+      if (typeof qrcodegen !== 'undefined') return qrcodegen;
+      try {
+        return require('./qrcodegen');
+      } catch (e) {
+        return null;
+      }
+    },
+
+    parseQrEcc(eccStr) {
+      const qrc = this.getQrLib();
+      if (!qrc || !qrc.QrCode || !qrc.QrCode.Ecc) return null;
+      if (!eccStr) return qrc.QrCode.Ecc.MEDIUM;
+      if (typeof eccStr === 'object' && eccStr.ordinal !== undefined) return eccStr;
+      const s = String(eccStr).toLowerCase().trim();
+      if (s === 'low' || s === 'l' || s === '0' || s === '7%') return qrc.QrCode.Ecc.LOW;
+      if (s === 'medium' || s === 'med' || s === 'm' || s === '1' || s === '15%') return qrc.QrCode.Ecc.MEDIUM;
+      if (s === 'quartile' || s === 'quart' || s === 'q' || s === '2' || s === '25%') return qrc.QrCode.Ecc.QUARTILE;
+      if (s === 'high' || s === 'h' || s === '3' || s === '30%') return qrc.QrCode.Ecc.HIGH;
+      return qrc.QrCode.Ecc.MEDIUM;
+    },
+
+    generateQr(text, options = {}) {
+      const qrc = this.getQrLib();
+      if (!qrc || !qrc.QrCode) {
+        return { error: 'QR Code library (qrcodegen) is not loaded.' };
+      }
+      try {
+        const textStr = (text === undefined || text === null) ? '' : String(text);
+        const ecc = this.parseQrEcc(options.ecc || 'medium');
+        const minVer = Math.max(1, Math.min(40, parseInt(options.minVersion, 10) || 1));
+        const maxVer = Math.max(minVer, Math.min(40, parseInt(options.maxVersion, 10) || 40));
+        const mask = (options.mask !== undefined && options.mask !== null && options.mask !== '') ? parseInt(options.mask, 10) : -1;
+        const boostEcc = options.boostEcc !== undefined ? Boolean(options.boostEcc) : true;
+
+        let qr;
+        if (options.isBinary && (Array.isArray(text) || text instanceof Uint8Array)) {
+          qr = qrc.QrCode.encodeBinary(Array.from(text), ecc);
+        } else {
+          const segs = qrc.QrSegment.makeSegments(textStr);
+          qr = qrc.QrCode.encodeSegments(segs, ecc, minVer, maxVer, mask, boostEcc);
+        }
+
+        const eccNames = ['Low (~7%)', 'Medium (~15%)', 'Quartile (~25%)', 'High (~30%)'];
+        const eccName = eccNames[qr.errorCorrectionLevel.ordinal] || 'Unknown';
+
+        return {
+          qr,
+          size: qr.size,
+          version: qr.version,
+          mask: qr.mask,
+          ecc: qr.errorCorrectionLevel,
+          eccName,
+          text: textStr,
+          isDark: (x, y) => qr.getModule(x, y)
+        };
+      } catch (err) {
+        return { error: err.message || String(err) };
+      }
+    },
+
+    generateQrAscii(qr, options = {}) {
+      if (!qr) return '';
+      const qrObj = qr.qr ? qr.qr : qr;
+      if (!qrObj || typeof qrObj.getModule !== 'function') return '';
+      const size = qrObj.size;
+      const border = (options.border !== undefined) ? parseInt(options.border, 10) : 1;
+      const mode = options.mode || 'half';
+      const invert = Boolean(options.invert);
+
+      if (mode === 'full') {
+        const darkBlock = invert ? '  ' : '██';
+        const lightBlock = invert ? '██' : '  ';
+        let lines = [];
+        for (let y = -border; y < size + border; y++) {
+          let line = '';
+          for (let x = -border; x < size + border; x++) {
+            const isDark = (x >= 0 && x < size && y >= 0 && y < size) ? qrObj.getModule(x, y) : false;
+            line += isDark ? darkBlock : lightBlock;
+          }
+          lines.push(line);
+        }
+        return lines.join('\n');
+      }
+
+      // Compact Half-block mode (2 vertical module rows per terminal line)
+      let lines = [];
+      for (let y = -border; y < size + border; y += 2) {
+        let line = '';
+        for (let x = -border; x < size + border; x++) {
+          const topDark = (x >= 0 && x < size && y >= 0 && y < size) ? qrObj.getModule(x, y) : false;
+          const y2 = y + 1;
+          const btmDark = (x >= 0 && x < size && y2 >= 0 && y2 < size) ? qrObj.getModule(x, y2) : false;
+
+          let top = invert ? !topDark : topDark;
+          let btm = invert ? !btmDark : btmDark;
+
+          if (top && btm) line += '█';
+          else if (top && !btm) line += '▀';
+          else if (!top && btm) line += '▄';
+          else line += ' ';
+        }
+        lines.push(line);
+      }
+      return lines.join('\n');
+    },
+
+    generateQrSvg(qr, options = {}) {
+      if (!qr) return '';
+      const qrObj = qr.qr ? qr.qr : qr;
+      if (!qrObj || typeof qrObj.getModule !== 'function') return '';
+      const border = (options.border !== undefined && options.border >= 0) ? parseInt(options.border, 10) : 4;
+      const lightColor = options.lightColor || '#FFFFFF';
+      const darkColor = options.darkColor || '#000000';
+      const fullSize = qrObj.size + border * 2;
+
+      let pathD = '';
+      for (let y = 0; y < qrObj.size; y++) {
+        for (let x = 0; x < qrObj.size; x++) {
+          if (qrObj.getModule(x, y)) {
+            if (pathD.length > 0) pathD += ' ';
+            pathD += `M${x + border},${y + border}h1v1h-1z`;
+          }
+        }
+      }
+
+      return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${fullSize} ${fullSize}" stroke="none">
+  <rect width="100%" height="100%" fill="${lightColor}"/>
+  <path d="${pathD}" fill="${darkColor}"/>
+</svg>`;
+    },
+
+    generateQrCanvas(qr, options = {}, targetCanvas = null) {
+      if (!qr) return null;
+      const qrObj = qr.qr ? qr.qr : qr;
+      if (!qrObj || typeof qrObj.getModule !== 'function') return null;
+      const scale = Math.max(1, Math.min(50, parseInt(options.scale, 10) || 8));
+      const border = Math.max(0, Math.min(50, (options.border !== undefined) ? parseInt(options.border, 10) : 4));
+      const lightColor = options.lightColor || '#FFFFFF';
+      const darkColor = options.darkColor || '#000000';
+
+      const dim = (qrObj.size + border * 2) * scale;
+      const canvas = targetCanvas || (typeof document !== 'undefined' ? document.createElement('canvas') : null);
+      if (!canvas) return null;
+
+      canvas.width = dim;
+      canvas.height = dim;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      ctx.fillStyle = lightColor;
+      ctx.fillRect(0, 0, dim, dim);
+      ctx.fillStyle = darkColor;
+
+      for (let y = 0; y < qrObj.size; y++) {
+        for (let x = 0; x < qrObj.size; x++) {
+          if (qrObj.getModule(x, y)) {
+            ctx.fillRect((x + border) * scale, (y + border) * scale, scale, scale);
+          }
+        }
+      }
+      return canvas;
+    },
+
+    generateQrDataUrl(qr, options = {}) {
+      const canvas = this.generateQrCanvas(qr, options);
+      if (!canvas || !canvas.toDataURL) return '';
+      return canvas.toDataURL('image/png');
+    },
+
+    /*---- bwip-js Engine (Data Matrix, Aztec, MaxiCode, PDF417) ----*/
+    getBwipLib() {
+      if (typeof window !== 'undefined' && window.bwipjs) return window.bwipjs;
+      if (typeof globalThis !== 'undefined' && globalThis.bwipjs) return globalThis.bwipjs;
+      try {
+        return require('./bwipjs.min.js');
+      } catch (e) {
+        return null;
+      }
+    },
+
+    normalize2DType(type) {
+      if (!type) return 'qr';
+      const clean = String(type).toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (clean === 'qr' || clean === 'qrcode' || clean === 'qrcodegen') return 'qr';
+      if (clean === 'datamatrix' || clean === 'dm') return 'datamatrix';
+      if (clean === 'aztec' || clean === 'azteccode') return 'aztec';
+      if (clean === 'maxicode' || clean === 'maxi') return 'maxicode';
+      return clean;
+    },
+
+    generate2DCode(text, type = 'qr', options = {}) {
+      const normType = this.normalize2DType(type);
+      if (normType === 'qr') {
+        const qrRes = this.generateQr(text, options);
+        if (qrRes.error) return qrRes;
+        qrRes.type = 'qr';
+        qrRes.typeName = 'QR Code';
+        return qrRes;
+      }
+
+      const bwip = this.getBwipLib();
+      if (!bwip) {
+        return { error: 'bwip-js library not loaded' };
+      }
+
+      const textStr = (text === undefined || text === null) ? '' : String(text);
+      if (!textStr.trim()) {
+        return { error: 'Payload text cannot be empty' };
+      }
+
+      try {
+        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        const bwipOpts = {};
+        if (options.scale) bwipOpts.scale = Number(options.scale);
+        if (options.padding != null) bwipOpts.padding = Number(options.padding);
+        if (options.border != null) bwipOpts.padding = Number(options.border);
+        if (normType === 'datamatrix') {
+          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
+          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'aztec') {
+          if (options.format) bwipOpts.format = options.format;
+          if (options.layers) bwipOpts.layers = parseInt(options.layers, 10);
+          if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
+        } else if (normType === 'maxicode') {
+          if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        }
+
+        if (normType === 'maxicode') {
+          const svg = bwip.toSVG({ bcid: 'maxicode', text: textStr, ...bwipOpts });
+          return {
+            type: 'maxicode',
+            typeName: 'MaxiCode',
+            text: textStr,
+            svg: svg,
+            mode: bwipOpts.mode || 4
+          };
+        }
+
+        const rawList = bwip.raw(bcid, textStr, bwipOpts);
+        if (!rawList || !rawList[0]) {
+          return { error: `Failed to generate raw matrix for ${normType}` };
+        }
+        const raw = rawList[0];
+        const width = raw.pixx;
+        const height = raw.pixy;
+        const pixs = raw.pixs;
+
+        const typeNames = {
+          datamatrix: 'Data Matrix',
+          aztec: 'Aztec Code'
+        };
+
+        return {
+          type: normType,
+          typeName: typeNames[normType] || normType,
+          text: textStr,
+          size: Math.max(width, height),
+          width,
+          height,
+          pixs,
+          raw,
+          options: bwipOpts,
+          isDark: (x, y) => {
+            if (x < 0 || x >= width || y < 0 || y >= height) return false;
+            return pixs[y * width + x] === 1;
+          }
+        };
+      } catch (err) {
+        return { error: err && err.message ? err.message : String(err) };
+      }
+    },
+
+    generate2DCodeAscii(res, options = {}) {
+      if (!res || res.error) return `[2D Code Error: ${res ? res.error : 'Invalid code'}]`;
+      if (res.type === 'qr' || res.qr) {
+        return this.generateQrAscii(res, options);
+      }
+
+      if (res.type === 'maxicode') {
+        const lines = [
+          '  (●)  MaxiCode Symbology  (●)',
+          'Mode: ' + (res.mode || 4) + ' | Payload: ' + res.text,
+          '[Use SVG or Canvas view for MaxiCode hexagon rendering]'
+        ];
+        return lines.join('\n');
+      }
+
+      const width = res.width || res.size;
+      const height = res.height || res.size;
+      const border = (options.border !== undefined) ? parseInt(options.border, 10) : 1;
+      const mode = options.mode || 'half';
+      const invert = Boolean(options.invert);
+
+      if (mode === 'full') {
+        const darkBlock = invert ? '  ' : '██';
+        const lightBlock = invert ? '██' : '  ';
+        const lines = [];
+        for (let y = -border; y < height + border; y++) {
+          let line = '';
+          for (let x = -border; x < width + border; x++) {
+            line += res.isDark(x, y) ? darkBlock : lightBlock;
+          }
+          lines.push(line);
+        }
+        return lines.join('\n');
+      }
+
+      // Half-block unicode mode (▀, ▄, █, ' ')
+      const fullWidth = width + border * 2;
+      const fullHeight = height + border * 2;
+      const lines = [];
+      for (let y = 0; y < fullHeight; y += 2) {
+        let line = '';
+        for (let x = 0; x < fullWidth; x++) {
+          const modX = x - border;
+          const topDark = res.isDark(modX, y - border);
+          const botDark = (y + 1 < fullHeight) ? res.isDark(modX, y + 1 - border) : false;
+          const top = invert ? !topDark : topDark;
+          const bottom = invert ? !botDark : botDark;
+          if (top && bottom) line += '█';
+          else if (top && !bottom) line += '▀';
+          else if (!top && bottom) line += '▄';
+          else line += ' ';
+        }
+        lines.push(line);
+      }
+      return lines.join('\n');
+    },
+
+    generate2DCodeSvg(text, type = 'qr', options = {}) {
+      const normType = this.normalize2DType(type);
+      if (normType === 'qr') {
+        const res = this.generateQr(text, options);
+        if (res.error) return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${res.error}</text></svg>`;
+        return this.generateQrSvg(res, options);
+      }
+
+      const bwip = this.getBwipLib();
+      if (!bwip) return `<svg xmlns="http://www.w3.org/2000/svg"><text>bwip-js not loaded</text></svg>`;
+
+      try {
+        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        const bwipOpts = {
+          scale: options.scale || 3,
+          padding: options.border != null ? options.border : 2,
+          backgroundcolor: (options.lightColor || options.background || 'ffffff').replace(/^#/, ''),
+          barcolor: (options.darkColor || options.color || '000000').replace(/^#/, '')
+        };
+        if (normType === 'datamatrix') {
+          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
+          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'aztec') {
+          if (options.format) bwipOpts.format = options.format;
+          if (options.layers) bwipOpts.layers = parseInt(options.layers, 10);
+          if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
+        } else if (normType === 'maxicode') {
+          if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        }
+        return bwip.toSVG({ bcid, text: String(text || ' '), ...bwipOpts });
+      } catch (e) {
+        return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${e.message || e}</text></svg>`;
+      }
+    },
+
+    generate2DCodeCanvas(text, type = 'qr', options = {}, targetCanvas = null) {
+      const normType = this.normalize2DType(type);
+      if (normType === 'qr') {
+        const res = this.generateQr(text, options);
+        if (res.error) return null;
+        return this.generateQrCanvas(res, options, targetCanvas);
+      }
+
+      const bwip = this.getBwipLib();
+      if (!bwip) return null;
+      let canvas = targetCanvas;
+      if (!canvas && typeof document !== 'undefined' && document.createElement) {
+        canvas = document.createElement('canvas');
+      }
+      if (!canvas) return null;
+
+      try {
+        const bcid = normType === 'aztec' ? 'azteccode' : normType;
+        const bwipOpts = {
+          scale: options.scale || 3,
+          padding: options.border != null ? options.border : 2,
+          backgroundcolor: (options.lightColor || options.background || 'ffffff').replace(/^#/, ''),
+          barcolor: (options.darkColor || options.color || '000000').replace(/^#/, '')
+        };
+        if (normType === 'datamatrix') {
+          if (options.shape === 'rect' || options.shape === 'rectangular') bwipOpts.rectangular = true;
+          if (options.shape === 'square') bwipOpts.square = true;
+          if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'aztec') {
+          if (options.format) bwipOpts.format = options.format;
+          if (options.layers) bwipOpts.layers = parseInt(options.layers, 10);
+          if (options.eclevel) bwipOpts.eclevel = parseInt(options.eclevel, 10);
+        } else if (normType === 'maxicode') {
+          if (options.mode) bwipOpts.mode = parseInt(options.mode, 10);
+        }
+        bwip.toCanvas(canvas, { bcid, text: String(text || ' '), ...bwipOpts });
+        return canvas;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    generate2DCodeDataUrl(text, type = 'qr', options = {}) {
+      const canvas = this.generate2DCodeCanvas(text, type, options);
+      if (!canvas || !canvas.toDataURL) return '';
+      return canvas.toDataURL('image/png');
+    },
+
+    getBarcodeLib() {
+      if (typeof window !== 'undefined' && window.JsBarcode) return window.JsBarcode;
+      if (typeof globalThis !== 'undefined' && globalThis.JsBarcode) return globalThis.JsBarcode;
+      try {
+        return require('./jsbarcode.min.js');
+      } catch (e) {
+        return null;
+      }
+    },
+
+    normalizeBarcodeFormat(format) {
+      if (!format) return 'CODE128';
+      const clean = String(format).toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (clean === 'UPCA' || clean === 'UPC') return 'UPC';
+      if (clean === 'UPCE') return 'UPCE';
+      if (clean === 'EAN13' || clean === 'EAN') return 'EAN13';
+      if (clean === 'EAN8') return 'EAN8';
+      if (clean === 'EAN5') return 'EAN5';
+      if (clean === 'EAN2') return 'EAN2';
+      if (clean === 'CODE39') return 'CODE39';
+      if (clean === 'CODE128') return 'CODE128';
+      if (clean === 'CODE128A') return 'CODE128A';
+      if (clean === 'CODE128B') return 'CODE128B';
+      if (clean === 'CODE128C') return 'CODE128C';
+      if (clean === 'ITF14') return 'ITF14';
+      if (clean === 'ITF') return 'ITF';
+      if (clean === 'MSI10') return 'MSI10';
+      if (clean === 'MSI11') return 'MSI11';
+      if (clean === 'MSI1010') return 'MSI1010';
+      if (clean === 'MSI1110') return 'MSI1110';
+      if (clean === 'MSI') return 'MSI';
+      if (clean === 'PHARMACODE') return 'pharmacode';
+      if (clean === 'CODABAR') return 'codabar';
+      if (clean === 'CODE93' || clean === 'CODE93FULLASCII') return 'CODE93';
+      if (clean === 'PDF417' || clean === 'COMPACTPDF417' || clean === 'PDF417TRUNC') return 'pdf417';
+      if (clean === 'MICROPDF417') return 'micropdf417';
+      return format;
+    },
+
+    generateBarcode(text, options = {}) {
+      const format = this.normalizeBarcodeFormat(options.format || 'CODE128');
+
+      if (typeof text !== 'string') text = String(text != null ? text : '');
+      if (!text.trim()) {
+        return { error: 'Barcode input cannot be empty' };
+      }
+
+      if (format === 'pdf417' || format === 'micropdf417') {
+        const bwip = this.getBwipLib();
+        if (!bwip) return { error: 'bwip-js library not loaded' };
+        try {
+          const bcid = format;
+          const bwipOpts = {};
+          if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+          if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+          if (options.eclevel !== undefined && options.eclevel !== null && options.eclevel !== '') bwipOpts.eclevel = parseInt(options.eclevel, 10);
+          if (options.compact) bwipOpts.compact = true;
+          const rawList = bwip.raw(bcid, text, bwipOpts);
+          if (!rawList || !rawList[0]) return { error: `Failed to generate ${format}` };
+          const raw = rawList[0];
+          const width = raw.pixx;
+          const height = raw.pixy;
+          const pixs = raw.pixs;
+          let totalBinary = '';
+          for (let i = 0; i < pixs.length; i++) {
+            totalBinary += pixs[i] ? '1' : '0';
+          }
+          return {
+            text,
+            format: format.toUpperCase(),
+            is2dBarcode: true,
+            width,
+            height,
+            pixs,
+            raw,
+            options: Object.assign({}, options, { format: format.toUpperCase() }),
+            binary: totalBinary,
+            totalModules: pixs.length,
+            isDark: (x, y) => {
+              if (x < 0 || x >= width || y < 0 || y >= height) return false;
+              return pixs[y * width + x] === 1;
+            }
+          };
+        } catch (e) {
+          return { error: e.message || String(e) };
+        }
+      }
+
+      const lib = this.getBarcodeLib();
+      if (!lib) {
+        return { error: 'JsBarcode library not loaded' };
+      }
+
+      const dataObj = {};
+      const opts = Object.assign({
+        format: format,
+        width: options.width != null ? Number(options.width) : 2,
+        height: options.height != null ? Number(options.height) : 100,
+        displayValue: options.displayValue !== false,
+        text: options.text,
+        fontOptions: options.fontOptions || '',
+        font: options.font || 'monospace',
+        textAlign: options.textAlign || 'center',
+        textPosition: options.textPosition || 'bottom',
+        textMargin: options.textMargin != null ? Number(options.textMargin) : 2,
+        fontSize: options.fontSize != null ? Number(options.fontSize) : 20,
+        background: options.background || '#ffffff',
+        lineColor: options.lineColor || '#000000',
+        margin: options.margin != null ? Number(options.margin) : 10,
+        flat: !!options.flat,
+        ean128: !!options.ean128,
+        mod43: !!options.mod43
+      }, options);
+      opts.format = format;
+
+      try {
+        lib(dataObj, text, opts);
+        if (!dataObj.encodings || dataObj.encodings.length === 0) {
+          return { error: `Failed to generate encodings for format ${format}` };
+        }
+
+        let totalBinary = '';
+        for (const enc of dataObj.encodings) {
+          if (enc && enc.data) totalBinary += enc.data;
+        }
+
+        return {
+          text,
+          format,
+          options: opts,
+          encodings: dataObj.encodings,
+          binary: totalBinary,
+          totalModules: totalBinary.length
+        };
+      } catch (err) {
+        return { error: err && err.message ? err.message : String(err) };
+      }
+    },
+
+    generateBarcodeAscii(barcodeResult, options = {}) {
+      let res = barcodeResult;
+      if (typeof barcodeResult === 'string') {
+        res = this.generateBarcode(barcodeResult, options);
+      }
+      if (!res || res.error) {
+        return `[Barcode Error: ${res ? res.error : 'Invalid barcode'}]`;
+      }
+
+      if (res.is2dBarcode) {
+        const width = res.width;
+        const height = res.height;
+        const border = (options.margin !== undefined) ? Math.min(parseInt(options.margin, 10), 4) : 1;
+        const fullWidth = width + border * 2;
+        const fullHeight = height + border * 2;
+        const lines = [];
+        for (let y = 0; y < fullHeight; y += 2) {
+          let line = '';
+          for (let x = 0; x < fullWidth; x++) {
+            const modX = x - border;
+            const top = res.isDark(modX, y - border);
+            const bot = (y + 1 < fullHeight) ? res.isDark(modX, y + 1 - border) : false;
+            if (top && bot) line += '█';
+            else if (top && !bot) line += '▀';
+            else if (!top && bot) line += '▄';
+            else line += ' ';
+          }
+          lines.push(line);
+        }
+        if (res.options.displayValue !== false && options.displayValue !== false) {
+          lines.push('');
+          lines.push('  ' + res.text);
+        }
+        return lines.join('\n');
+      }
+
+      const height = Math.max(2, Math.min(20, Number(options.height || 6)));
+      const quietZone = Math.max(0, options.margin != null ? Number(options.margin) : 2);
+      const quietSpaces = ' '.repeat(quietZone);
+      const binary = res.binary;
+      const barChar = options.barChar || '█';
+      const spaceChar = ' ';
+
+      let barLine = '';
+      for (let i = 0; i < binary.length; i++) {
+        barLine += binary[i] === '1' ? barChar : spaceChar;
+      }
+
+      const lines = [];
+      for (let h = 0; h < height; h++) {
+        lines.push(quietSpaces + barLine + quietSpaces);
+      }
+
+      if (res.options.displayValue !== false && options.displayValue !== false) {
+        const rawText = res.options.text || res.text;
+        const textStr = String(rawText);
+        const totalWidth = barLine.length + (quietZone * 2);
+        let paddedText = textStr;
+        if (textStr.length < totalWidth) {
+          const leftPad = Math.floor((totalWidth - textStr.length) / 2);
+          paddedText = ' '.repeat(leftPad) + textStr;
+        }
+        if (res.options.textPosition === 'top') {
+          lines.unshift(paddedText);
+          lines.unshift('');
+        } else {
+          lines.push('');
+          lines.push(paddedText);
+        }
+      }
+
+      return lines.join('\n');
+    },
+
+    generateBarcodeSvg(text, options = {}) {
+      const format = this.normalizeBarcodeFormat(options.format || 'CODE128');
+
+      if (format === 'pdf417' || format === 'micropdf417') {
+        const bwip = this.getBwipLib();
+        if (bwip) {
+          try {
+            const bwipOpts = {
+              scale: options.width || 2,
+              height: options.height ? Math.round(options.height / 8) : 10,
+              padding: options.margin != null ? options.margin : 10,
+              backgroundcolor: (options.background || 'ffffff').replace(/^#/, ''),
+              barcolor: (options.lineColor || '000000').replace(/^#/, '')
+            };
+            if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+            if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+            if (options.eclevel !== undefined && options.eclevel !== null && options.eclevel !== '') bwipOpts.eclevel = parseInt(options.eclevel, 10);
+            if (options.compact) bwipOpts.compact = true;
+            return bwip.toSVG({
+              bcid: format,
+              text: String(text || ' '),
+              ...bwipOpts
+            });
+          } catch (e) {
+            return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${e.message || e}</text></svg>`;
+          }
+        }
+      }
+
+      const lib = this.getBarcodeLib();
+      if (!lib) return `<svg xmlns="http://www.w3.org/2000/svg"><text>JsBarcode not loaded</text></svg>`;
+
+      if (typeof document !== 'undefined' && document.createElementNS) {
+        try {
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          const opts = Object.assign({}, options, { format });
+          lib(svg, text, opts);
+          return svg.outerHTML || new XMLSerializer().serializeToString(svg);
+        } catch (e) {
+          // Fall through to pure data fallback
+        }
+      }
+
+      const res = this.generateBarcode(text, options);
+      if (res.error) return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${res.error}</text></svg>`;
+
+      const width = options.width || 2;
+      const height = options.height || 100;
+      const margin = options.margin != null ? options.margin : 10;
+      const background = options.background || '#ffffff';
+      const lineColor = options.lineColor || '#000000';
+      const binary = res.binary;
+      const svgWidth = (binary.length * width) + (margin * 2);
+      const svgHeight = height + (margin * 2) + (options.displayValue !== false ? 25 : 0);
+
+      let rects = '';
+      for (let i = 0; i < binary.length; i++) {
+        if (binary[i] === '1') {
+          const x = margin + (i * width);
+          rects += `<rect x="${x}" y="${margin}" width="${width}" height="${height}" fill="${lineColor}" />`;
+        }
+      }
+
+      let textTag = '';
+      if (options.displayValue !== false) {
+        const textY = margin + height + 18;
+        const textX = svgWidth / 2;
+        textTag = `<text x="${textX}" y="${textY}" font-family="monospace" font-size="16" text-anchor="middle" fill="${lineColor}">${res.text}</text>`;
+      }
+
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}"><rect width="${svgWidth}" height="${svgHeight}" fill="${background}" /><g>${rects}</g>${textTag}</svg>`;
+    },
+
+    generateBarcodeCanvas(text, options = {}, targetCanvas = null) {
+      const format = this.normalizeBarcodeFormat(options.format || 'CODE128');
+
+      let canvas = targetCanvas;
+      if (!canvas && typeof document !== 'undefined' && document.createElement) {
+        canvas = document.createElement('canvas');
+      }
+      if (!canvas) return null;
+
+      if (format === 'pdf417' || format === 'micropdf417') {
+        const bwip = this.getBwipLib();
+        if (bwip) {
+          try {
+            const bwipOpts = {
+              scale: options.width || 2,
+              height: options.height ? Math.round(options.height / 8) : 10,
+              padding: options.margin != null ? options.margin : 10,
+              backgroundcolor: (options.background || 'ffffff').replace(/^#/, ''),
+              barcolor: (options.lineColor || '000000').replace(/^#/, '')
+            };
+            if (options.columns) bwipOpts.columns = parseInt(options.columns, 10);
+            if (options.rows) bwipOpts.rows = parseInt(options.rows, 10);
+            if (options.eclevel !== undefined && options.eclevel !== null && options.eclevel !== '') bwipOpts.eclevel = parseInt(options.eclevel, 10);
+            if (options.compact) bwipOpts.compact = true;
+            bwip.toCanvas(canvas, {
+              bcid: format,
+              text: String(text || ' '),
+              ...bwipOpts
+            });
+            return canvas;
+          } catch (e) {
+            return null;
+          }
+        }
+      }
+
+      const lib = this.getBarcodeLib();
+      if (!lib) return null;
+
+      try {
+        const opts = Object.assign({}, options, { format });
+        lib(canvas, text, opts);
+        return canvas;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    generateBarcodeDataUrl(text, options = {}) {
+      const canvas = this.generateBarcodeCanvas(text, options);
+      if (!canvas || !canvas.toDataURL) return '';
+      return canvas.toDataURL('image/png');
+    },
+
     toolsCatalog: [
       { id: "count", name: "count characters words sentences lines", category: "basic tools", desc: "analyze character, word, sentence, line and byte statistics with word frequency.", cli: "count [-c|-w|-s|-l|--freq] [file/text]" },
       { id: "replace", name: "find and replace", category: "basic tools", desc: "find and replace text using literal strings or regular expressions.", cli: "replace [-i|-g|-r] <search> <replace> [file/text]" },
@@ -1705,9 +2464,12 @@
       { id: "base64", name: "base64 encoder & decoder", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
       { id: "iconv", name: "character encoding converter & detector", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
-      { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" }
+      { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
+      { id: "qrcode", name: "2D matrix generator", category: "encoding & web", desc: "generate 2D matrix codes (QR code, data matrix, aztec code, maxicode) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|datamatrix|aztec|maxicode] [-f ascii|svg|png] [file/text]" },
+      { id: "barcode", name: "1D & stacked barcode generator", category: "encoding & web", desc: "generate 1D and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
     ]
   };
 
   return TextEngine;
 });
+
