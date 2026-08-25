@@ -2469,7 +2469,7 @@
 
       CODE128: {
         id: 'CODE128',
-        name: 'Code 128 (Auto-switching A/B/C)',
+        name: 'Code 128 (auto-switching A/B/C)',
         type: '1D Linear',
         allowedChars: 'full 128 standard ASCII character set (ASCII 0-127: letters, numbers, symbols, control chars)',
         lengthLimit: 'variable',
@@ -2534,7 +2534,7 @@
         id: 'UPCE',
         name: 'UPC-E (Zero-Suppressed UPC)',
         type: '1D Linear',
-        allowedChars: 'numeric digits only (0-9). 6, 7, or 8 digits (or compressible 11/12-digit UPC-A)',
+        allowedChars: 'numeric digits only (0-9). 6, 7, or 8 digits (must start with 0 or 1) or compressible 11/12-digit UPC-A',
         lengthLimit: '6, 7, or 8 digits',
         notes: 'zero-compressed version of UPC-A for small packages in US retail.',
         example: '01234565'
