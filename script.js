@@ -7411,6 +7411,10 @@ __(@)(@)--------------------------------------(@)(@)__`;
     }
 
     if (e.ctrlKey && e.key.toLowerCase() === 'c') {
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) {
+        return;
+      }
       e.preventDefault();
       printCommandLine(currentInputBuffer + '^C');
       currentInputBuffer = '';
@@ -7492,6 +7496,8 @@ __(@)(@)--------------------------------------(@)(@)__`;
 
   terminalContainer.addEventListener('click', (e) => {
     if (activeInteractiveMode) return;
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) return;
     if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
       focusInput();
     }
