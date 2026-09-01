@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="rsh">
+  <title>rsh</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-matrix font-tx02">
+  <div id="terminal-container">
+    <div id="terminal">
+      <div class="banner-output" id="banner">type 'help' for commands.<br>quick: 'cv', 'experience', 'works',
+        'languages', 'projects', 'skills'</div>
+      <div id="terminal-history"></div>
+      <div class="line" id="input-line">
+        <span class="live-prompt" id="prompt">[connecting...]</span>
+        <div id="cli-input-wrapper">
+          <span id="cli-text"></span>
+          <span id="cli-cursor" class="cursor-block"></span>
+          <input type="text" id="cli-hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off"
+            spellcheck="false" aria-label="Terminal input">
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-bar">
+      <button type="button" class="mob-btn" data-key="Tab">TAB</button>
+      <button type="button" class="mob-btn" data-key="ArrowUp">↑</button>
+      <button type="button" class="mob-btn" data-key="ArrowDown">↓</button>
+      <button type="button" class="mob-btn" data-cmd="about">about</button>
+      <button type="button" class="mob-btn" data-cmd="experience">exp</button>
+      <button type="button" class="mob-btn" data-cmd="works">works</button>
+      <button type="button" class="mob-btn" data-cmd="languages">lang</button>
+      <button type="button" class="mob-btn" data-cmd="projects">projects</button>
+      <button type="button" class="mob-btn" data-cmd="skills">skills</button>
+      <button type="button" class="mob-btn" data-cmd="neofetch">neofetch</button>
+      <button type="button" class="mob-btn" data-cmd="help">help</button>
+      <button type="button" class="mob-btn" data-cmd="clear">clear</button>
+    </div>
+  </div>
+
+  <canvas id="matrix-canvas"></canvas>
+
+  <audio id="terminal-audio" preload="none"></audio>
+
+  <div id="textmanip-workbench" class="tm-modal" style="display: none;" aria-hidden="true"></div>
+
+  <script src="js/encoding.min.js"></script>
+  <script src="js/punycode.min.js"></script>
+  <script src="js/qrcodegen.js"></script>
+  <script src="js/jsbarcode.min.js"></script>
+  <script src="js/bwipjs.min.js"></script>
+  <script src="js/long-s/germanlists.js"></script>
+  <script src="js/long-s/splitstring.js"></script>
+  <script src="js/long-s/simpleconversions.js"></script>
+  <script src="js/long-s/germanconversion.js"></script>
+  <script src="js/long-s/long-s.js"></script>
+  <script src="js/text-engine.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
