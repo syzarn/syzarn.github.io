@@ -7548,15 +7548,22 @@ __(@)(@)--------------------------------------(@)(@)__`;
       return;
     }
 
-    if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+    // Ignore standalone modifier keys so they don't trigger focusInput() or disrupt text selection
+    if (['Control', 'Shift', 'Alt', 'Meta', 'CapsLock', 'AltGraph', 'NumLock', 'ScrollLock'].includes(e.key)) {
+      return;
+    }
+
+    const selection = window.getSelection();
+    const hasSelection = selection && selection.toString().length > 0;
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'l') {
       e.preventDefault();
       commands.clear.exec();
       return;
     }
 
-    if (e.ctrlKey && e.key.toLowerCase() === 'c') {
-      const selection = window.getSelection();
-      if (selection && selection.toString().length > 0) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
+      if (hasSelection) {
         return;
       }
       e.preventDefault();
@@ -7567,10 +7574,25 @@ __(@)(@)--------------------------------------(@)(@)__`;
       return;
     }
 
-    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'u') {
       e.preventDefault();
       currentInputBuffer = '';
       updateInputDisplay();
+      return;
+    }
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
+      focusInput();
+      return;
+    }
+
+    if (e.ctrlKey && e.key === 'Insert') {
+      if (hasSelection) {
+        return;
+      }
+    }
+
+    if (e.ctrlKey || e.metaKey || e.altKey) {
       return;
     }
 
