@@ -3184,6 +3184,173 @@
       };
     },
 
+    // ==========================================
+    // DECAYFMT ENGINE (.idcy / .tdcy / decayer)
+    // ==========================================
+    decayfmt: {
+      MAGIC: [0x44, 0x43, 0x59, 0x46], // "DCYF"
+      VERSION: 0x01,
+      FILE_TYPE_IMAGE: 0x01,
+      FILE_TYPE_TEXT: 0x02,
+      HEADER_SIZE: 16,
+      DECAY_SCALE: 10.0,
+      RGBA_BYTES_PER_PIXEL: 4,
+      ALPHA_INDEX: 3,
+      PRINTABLE_ASCII_LOW: 0x20, // ' '
+      PRINTABLE_ASCII_HIGH: 0x7E, // '~'
+
+      calculateProbability(x) {
+        const val = Math.max(0, parseFloat(x) || 0);
+        return 1.0 - Math.exp(-val / this.DECAY_SCALE);
+      },
+
+      parseFilename(filename) {
+        if (!filename) return null;
+        const name = String(filename).trim();
+        const extMatch = name.match(/\.([it]dcy)(\d+(\.\d+)?)$/i);
+        if (extMatch) {
+          const prefix = extMatch[1].toLowerCase();
+          const x = parseFloat(extMatch[2]);
+          return {
+            valid: true,
+            type: prefix === 'idcy' ? 'image' : 'text',
+            prefix,
+            x: isNaN(x) ? 3 : x
+          };
+        }
+        return null;
+      },
+
+      buildHeader(fileType, width = 0, height = 0) {
+        const buffer = new ArrayBuffer(this.HEADER_SIZE);
+        const view = new DataView(buffer);
+        const bytes = new Uint8Array(buffer);
+
+        // Magic "DCYF"
+        bytes[0] = this.MAGIC[0];
+        bytes[1] = this.MAGIC[1];
+        bytes[2] = this.MAGIC[2];
+        bytes[3] = this.MAGIC[3];
+        // Version 0x01
+        bytes[4] = this.VERSION;
+        // File Type
+        const typeByte = (fileType === 'image' || fileType === 1) ? this.FILE_TYPE_IMAGE : this.FILE_TYPE_TEXT;
+        bytes[5] = typeByte;
+        // Width (LE u32)
+        view.setUint32(6, (typeByte === this.FILE_TYPE_IMAGE ? (width >>> 0) : 0), true);
+        // Height (LE u32)
+        view.setUint32(10, (typeByte === this.FILE_TYPE_IMAGE ? (height >>> 0) : 0), true);
+        // Reserved (2 bytes zero)
+        bytes[14] = 0;
+        bytes[15] = 0;
+
+        return bytes;
+      },
+
+      parseHeader(bytes) {
+        if (!bytes || bytes.length < this.HEADER_SIZE) {
+          return { error: `file too small to contain decayfmt header (needed at least 16 bytes, got ${bytes ? bytes.length : 0})` };
+        }
+        const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+        if (u8[0] !== this.MAGIC[0] || u8[1] !== this.MAGIC[1] || u8[2] !== this.MAGIC[2] || u8[3] !== this.MAGIC[3]) {
+          return { error: 'invalid magic bytes (not a valid DCYF file)' };
+        }
+        if (u8[4] !== this.VERSION) {
+          return { error: `unsupported decayfmt version 0x${u8[4].toString(16)} (expected 0x01)` };
+        }
+        const typeByte = u8[5];
+        let fileType = null;
+        if (typeByte === this.FILE_TYPE_IMAGE) fileType = 'image';
+        else if (typeByte === this.FILE_TYPE_TEXT) fileType = 'text';
+        else return { error: `unsupported file type byte 0x${typeByte.toString(16)}` };
+
+        const view = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+        const width = view.getUint32(6, true);
+        const height = view.getUint32(10, true);
+
+        return {
+          valid: true,
+          fileType,
+          width,
+          height,
+          payloadOffset: this.HEADER_SIZE,
+          payload: u8.subarray(this.HEADER_SIZE)
+        };
+      },
+
+      corruptPayload(payload, fileType, x, iterations = 1) {
+        const u8 = payload instanceof Uint8Array ? payload : new Uint8Array(payload);
+        const prob = this.calculateProbability(x);
+        const iters = Math.max(1, parseInt(iterations, 10) || 1);
+        let mutatedCount = 0;
+
+        for (let iter = 0; iter < iters; iter++) {
+          if (fileType === 'image') {
+            const totalPixels = Math.floor(u8.length / this.RGBA_BYTES_PER_PIXEL);
+            for (let i = 0; i < totalPixels; i++) {
+              const offset = i * this.RGBA_BYTES_PER_PIXEL;
+              for (let ch = 0; ch < 3; ch++) { // R, G, B channels
+                if (Math.random() < prob) {
+                  u8[offset + ch] = Math.floor(Math.random() * 256);
+                  mutatedCount++;
+                }
+              }
+              // Alpha at offset + 3 is left untouched!
+            }
+          } else if (fileType === 'text') {
+            for (let i = 0; i < u8.length; i++) {
+              if (Math.random() < prob) {
+                // Replace with uniform printable ASCII byte: 0x20 (32) to 0x7E (126)
+                u8[i] = this.PRINTABLE_ASCII_LOW + Math.floor(Math.random() * (this.PRINTABLE_ASCII_HIGH - this.PRINTABLE_ASCII_LOW + 1));
+                mutatedCount++;
+              }
+            }
+          } else {
+            // Generic binary
+            for (let i = 0; i < u8.length; i++) {
+              if (Math.random() < prob) {
+                u8[i] = Math.floor(Math.random() * 256);
+                mutatedCount++;
+              }
+            }
+          }
+        }
+
+        return { payload: u8, mutatedCount, iterations: iters, probability: prob };
+      },
+
+      encodeImage(width, height, rgbaBytes) {
+        const header = this.buildHeader('image', width, height);
+        const full = new Uint8Array(header.length + rgbaBytes.length);
+        full.set(header, 0);
+        full.set(rgbaBytes, header.length);
+        return full;
+      },
+
+      encodeText(text) {
+        const encoder = new TextEncoder();
+        const textBytes = encoder.encode(String(text));
+        const header = this.buildHeader('text');
+        const full = new Uint8Array(header.length + textBytes.length);
+        full.set(header, 0);
+        full.set(textBytes, header.length);
+        return full;
+      },
+
+      decodeLossyText(bytes) {
+        const decoder = new TextDecoder('utf-8', { fatal: false });
+        return decoder.decode(bytes);
+      },
+
+      corruptTextString(text, x, iterations = 1) {
+        const encoder = new TextEncoder();
+        const bytes = encoder.encode(String(text));
+        const copy = new Uint8Array(bytes);
+        this.corruptPayload(copy, 'text', x, iterations);
+        return this.decodeLossyText(copy);
+      }
+    },
+
     toolsCatalog: [
       { id: "count", name: "count characters words sentences lines", category: "basic tools", desc: "analyze character, word, sentence, line and byte statistics with word frequency.", cli: "count [-c|-w|-s|-l|--freq] [file/text]" },
       { id: "replace", name: "find and replace", category: "basic tools", desc: "find and replace text using literal strings or regular expressions.", cli: "replace [-i|-g|-r] <search> <replace> [file/text]" },
@@ -3205,6 +3372,7 @@
       { id: "rev", name: "reverse flip upsidedown", category: "obfuscation", desc: "reverse full text, reverse words, reverse letters within words, flip mirror, or flip upside down.", cli: "rev [--words|--letters|--flip|--upsidedown] [file/text]" },
       { id: "rot13", name: "ROT13 caesar cipher", category: "obfuscation", desc: "apply rot13 or arbitrary shift caesar cipher to text.", cli: "rot13 [-n shift] [file/text]" },
       { id: "scramble", name: "scramble / descramble words", category: "obfuscation", desc: "scramble internal letters of each word or descramble using english dictionary.", cli: "scramble [file/text] / descramble [file/text]" },
+      { id: "decayfmt", name: "decayfmt", category: "obfuscation", desc: "ephemeral file format (.idcy/.tdcy) that corrupts itself every time it is opened, plus multi-iteration file corrupter.", cli: "decayfmt [--ui] [encode|open|corrupt] [-x instability] [-n iterations] [file/text]" },
       { id: "comb", name: "combination generator", category: "permutation", desc: "generate mathematical combinations of objects of size K with or without repetition.", cli: "comb -k <size> [--repeat] [-d delim] [items...]" },
       { id: "perm", name: "permutation generator", category: "permutation", desc: "generate all mathematical permutations of input items.", cli: "perm [-d delim] [items...]" },
       { id: "rng", name: "random number generator", category: "randomization", desc: "generate n random integers in a specified min-max range with padding and custom delimiters.", cli: "rng [-n count] [-min low] [-max high] [--pad]" },
@@ -3215,7 +3383,7 @@
       { id: "diff", name: "text difference checker (diff)", category: "developer & data", desc: "compare two texts, code snippets, or files line-by-line or word-by-word with unified diff output.", cli: "diff [-w|-i|-W|--word|--char] <file1/text1> <file2/text2>" },
       { id: "mapdiff", name: "json map difference checker", category: "developer & data", desc: "compare two JSON objects or key-value maps to find missing, extra, and mismatched keys/values.", cli: "mapdiff <file1/json1> <file2/json2>" },
       { id: "bijoy", name: "bijoy (ANSI)", category: "linguistics & encoding", desc: "convert Bengali text between Bijoy (ANSI) encoding and standard Unicode (mjcdi engine).", cli: "bijoy [-a|-u] [file/text] or ansi2uni / uni2ansi" },
-      { id: "longs", name: "long s (ſ) converter", category: "linguistics & encoding", desc: "insert historical long s (ſ) into English, French, German, Spanish, and Italian text based on classical orthographic rules.", cli: "longs [-l en|fr|de|es|it] [-x] [file/text...]" },
+      { id: "longs", name: "long s (ſ)", category: "linguistics & encoding", desc: "insert historical long s (ſ) into English, French, German, Spanish, and Italian text based on classical orthographic rules.", cli: "longs [-l en|fr|de|es|it] [-x] [file/text...]" },
       { id: "url", name: "URL (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
       { id: "base64", name: "base64", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
       { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },

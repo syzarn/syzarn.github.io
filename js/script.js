@@ -467,6 +467,16 @@ Quick Commands:
           date: 'Oct 30 17:50',
           content: `type 'help' for commands. quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`
         },
+        'manifesto.tdcy3': {
+          type: 'file',
+          date: 'Jul 15 12:00',
+          content: 'This sentence is dying, and every time you read it you kill it a little more.'
+        },
+        'warning.tdcy8': {
+          type: 'file',
+          date: 'Jul 15 12:00',
+          content: 'Digital media was never meant to be eternal. With x=8, this message will dissolve rapidly into noise.'
+        },
         '‎': {
           type: 'file',
           date: 'Jul 17 19:25',
@@ -2099,6 +2109,86 @@ Volume  : ${vol}%`;
             </div>
           `;
           break;
+        case 'decayfmt':
+          html = `
+            <div class="tm-decay-wrap">
+              <div class="tm-decay-tabs">
+                <button type="button" class="tm-decay-tab-btn active" id="tm-decay-tab-sim">authentic .idcy/.tdcy simulator</button>
+                <button type="button" class="tm-decay-tab-btn" id="tm-decay-tab-glitch">direct file corrupter & glitcher</button>
+              </div>
+
+              <div class="tm-control-row" style="align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 290px; display: flex; flex-direction: column; gap: 8px;">
+
+                  <!-- File Upload Dropzone -->
+                  <div class="tm-decay-dropzone" id="tm-decay-dropzone" title="Drop file here or click to browse">
+                    <div><span class="c-accent">drag & drop</span> an image (PNG/JPG), text file, or .idcy/.tdcy, or <span class="c-accent">browse</span></div>
+                    <div class="c-dim" style="font-size:0.7rem; margin-top:2px;" id="tm-decay-dropzone-info">or type/paste text in the main editor above</div>
+                    <input type="file" id="tm-decay-file-input" style="display:none;" accept="image/*,text/*,.txt,.md,.json,.csv,.idcy*,.tdcy*,*/*">
+                  </div>
+
+                  <!-- Parameters Row -->
+                  <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <span>instability (x):</span>
+                    <input type="range" id="tm-decay-x-range" min="0.5" max="20" step="0.5" value="3.0" style="width: 110px;">
+                    <input type="number" class="tm-input" id="tm-decay-x-num" value="3.0" min="0.1" max="50" step="0.1" style="width: 55px;">
+                    <span class="tm-decay-stat-badge" id="tm-decay-prob-badge" title="Per-byte corruption probability p = 1 - e^(-x/10)">p ≈ 25.9% / open</span>
+                  </div>
+
+                  <!-- Specific controls for Simulator Mode -->
+                  <div id="tm-decay-sim-controls" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="tm-control-row" style="margin: 0; gap: 8px; flex-wrap: wrap; align-items: center;">
+                      <span class="tm-decay-stat-badge" id="tm-decay-sim-format-badge">format: .tdcy3 (text)</span>
+                      <span class="tm-decay-stat-badge" id="tm-decay-sim-opens-badge" style="color:var(--accent-color);">opens: 0 (pristine)</span>
+                      <button type="button" class="tm-btn tm-btn-primary" id="tm-decay-sim-open-btn" style="padding: 4px 12px; font-weight: bold;" title="simulates opening the file on disk: permanently corrupts payload in-place before displaying">open / read file (+1 decay)</button>
+                    </div>
+                    <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap; align-items: center;">
+                      <button type="button" class="tm-btn" id="tm-decay-sim-dl-idcy" title="download authentic binary decayfmt file with DCYF header">download .idcy / .tdcy</button>
+                      <button type="button" class="tm-btn" id="tm-decay-sim-export-clean" title="export as viewable standard file (PNG / TXT)">export viewable (PNG/TXT)</button>
+                      <button type="button" class="tm-btn" id="tm-decay-sim-reset-btn" title="reset back to 0 opens">reset pristine</button>
+                    </div>
+                  </div>
+
+                  <!-- Specific controls for Direct Corrupter Mode -->
+                  <div id="tm-decay-glitch-controls" style="display: none; flex-direction: column; gap: 8px;">
+                    <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; align-items: center;">
+                      <span>iterations (opens):</span>
+                      <input type="number" class="tm-input" id="tm-decay-iters-num" value="1" min="1" max="100" style="width: 55px;">
+                      <button type="button" class="tm-btn tm-btn-primary" id="tm-decay-glitch-run-btn" style="padding: 4px 12px; font-weight: bold;">corrupt now</button>
+                      <button type="button" class="tm-btn" id="tm-decay-glitch-step-btn">+1 Step</button>
+                      <button type="button" class="tm-btn" id="tm-decay-glitch-reset-btn">reset</button>
+                    </div>
+                    <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap; align-items: center;">
+                      <button type="button" class="tm-btn" id="tm-decay-glitch-dl-btn" style="font-weight: 600;">download corrupted file</button>
+                      <button type="button" class="tm-btn" id="tm-decay-glitch-dl-idcy">save as .idcy / .tdcy</button>
+                    </div>
+                  </div>
+
+                  <!-- Decay Entropy Meter -->
+                  <div class="tm-decay-meter-wrap">
+                    <span style="font-size:0.72rem; color:#888;">entropy:</span>
+                    <div class="tm-decay-meter"><div class="tm-decay-meter-fill" id="tm-decay-meter-fill"></div></div>
+                    <span id="tm-decay-meter-text" style="font-size:0.72rem; color:var(--accent-color); min-width:40px;">0%</span>
+                  </div>
+
+                </div>
+
+                <!-- Preview Box (Canvas for images / payload status) -->
+                <div class="tm-decay-preview-container">
+                  <div class="tm-decay-canvas-wrap" id="tm-decay-canvas-wrap">
+                    <canvas id="tm-decay-canvas" class="tm-decay-canvas" width="128" height="128"></canvas>
+                  </div>
+                  <div class="tm-control-row" style="margin: 0; gap: 4px; justify-content: center;">
+                    <button type="button" class="tm-btn" id="tm-decay-toggle-view" style="font-size:0.7rem; padding:2px 6px;">view: decayed</button>
+                    <span class="tm-decay-stat-badge" id="tm-decay-res-badge">text mode</span>
+                  </div>
+                  <div class="c-dim" style="font-size:0.68rem; text-align:center;" id="tm-decay-status-info">ready to decay</div>
+                </div>
+
+              </div>
+            </div>
+          `;
+          break;
       }
 
       pane.innerHTML = html;
@@ -2961,6 +3051,435 @@ Volume  : ${vol}%`;
         }
 
         updateLiveBarcode();
+      } else if (toolId === 'decayfmt') {
+        const engine = window.TextEngine && window.TextEngine.decayfmt;
+        if (!engine) return;
+
+        // Elements
+        const tabSim = document.getElementById('tm-decay-tab-sim');
+        const tabGlitch = document.getElementById('tm-decay-tab-glitch');
+        const simControls = document.getElementById('tm-decay-sim-controls');
+        const glitchControls = document.getElementById('tm-decay-glitch-controls');
+
+        const dropzone = document.getElementById('tm-decay-dropzone');
+        const fileInput = document.getElementById('tm-decay-file-input');
+        const dropInfo = document.getElementById('tm-decay-dropzone-info');
+
+        const xRange = document.getElementById('tm-decay-x-range');
+        const xNum = document.getElementById('tm-decay-x-num');
+        const probBadge = document.getElementById('tm-decay-prob-badge');
+        const formatBadge = document.getElementById('tm-decay-sim-format-badge');
+        const opensBadge = document.getElementById('tm-decay-sim-opens-badge');
+        const statusInfo = document.getElementById('tm-decay-status-info');
+        const resBadge = document.getElementById('tm-decay-res-badge');
+
+        const meterFill = document.getElementById('tm-decay-meter-fill');
+        const meterText = document.getElementById('tm-decay-meter-text');
+
+        const canvas = document.getElementById('tm-decay-canvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        const toggleViewBtn = document.getElementById('tm-decay-toggle-view');
+
+        const simOpenBtn = document.getElementById('tm-decay-sim-open-btn');
+        const simDlIdcyBtn = document.getElementById('tm-decay-sim-dl-idcy');
+        const simExportCleanBtn = document.getElementById('tm-decay-sim-export-clean');
+        const simResetBtn = document.getElementById('tm-decay-sim-reset-btn');
+
+        const itersNum = document.getElementById('tm-decay-iters-num');
+        const glitchRunBtn = document.getElementById('tm-decay-glitch-run-btn');
+        const glitchStepBtn = document.getElementById('tm-decay-glitch-step-btn');
+        const glitchResetBtn = document.getElementById('tm-decay-glitch-reset-btn');
+        const glitchDlBtn = document.getElementById('tm-decay-glitch-dl-btn');
+        const glitchDlIdcyBtn = document.getElementById('tm-decay-glitch-dl-idcy');
+
+        const textarea = document.getElementById('tm-textarea');
+
+        // State for this session
+        const state = {
+          mode: 'simulator', // 'simulator' | 'glitcher'
+          fileType: 'text', // 'image' | 'text' | 'binary'
+          fileName: 'note.txt',
+          width: 0,
+          height: 0,
+          originalBytes: null,
+          currentBytes: null,
+          openCount: 0,
+          viewingOriginal: false,
+          x: 3.0
+        };
+
+        const updateProbabilityDisplay = () => {
+          state.x = Math.max(0.1, parseFloat(xNum ? xNum.value : 3.0) || 3.0);
+          const prob = engine.calculateProbability(state.x);
+          const probPct = (prob * 100).toFixed(1);
+          if (probBadge) probBadge.textContent = `p ≈ ${probPct}% / open`;
+          if (formatBadge) {
+            const ext = state.fileType === 'image' ? 'idcy' : 'tdcy';
+            formatBadge.textContent = `format: .${ext}${Math.round(state.x)} (${state.fileType})`;
+          }
+        };
+
+        const updateEntropyMeter = () => {
+          if (!meterFill || !meterText) return;
+          if (state.openCount === 0 || !state.currentBytes) {
+            meterFill.style.width = '0%';
+            meterText.textContent = '0%';
+            return;
+          }
+          const p = engine.calculateProbability(state.x);
+          const cumEntropy = Math.min(100, Math.round((1.0 - Math.pow(1.0 - p, state.openCount)) * 100));
+          meterFill.style.width = `${cumEntropy}%`;
+          meterText.textContent = `${cumEntropy}%`;
+        };
+
+        const renderCanvas = (bytesToRender) => {
+          if (!ctx || !canvas || state.fileType !== 'image' || !bytesToRender) return;
+          const w = state.width || 128;
+          const h = state.height || 128;
+          canvas.width = w;
+          canvas.height = h;
+
+          try {
+            const imgData = ctx.createImageData(w, h);
+            imgData.data.set(bytesToRender);
+            ctx.putImageData(imgData, 0, 0);
+          } catch (e) {
+            console.error('error rendering decay canvas:', e);
+          }
+        };
+
+        const downloadBlob = (blob, filename) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          this.setStatus(`downloaded: ${filename}`);
+        };
+
+        // Tab Switching
+        if (tabSim && tabGlitch && simControls && glitchControls) {
+          tabSim.addEventListener('click', () => {
+            state.mode = 'simulator';
+            tabSim.classList.add('active');
+            tabGlitch.classList.remove('active');
+            simControls.style.display = 'flex';
+            glitchControls.style.display = 'none';
+          });
+          tabGlitch.addEventListener('click', () => {
+            state.mode = 'glitcher';
+            tabGlitch.classList.add('active');
+            tabSim.classList.remove('active');
+            simControls.style.display = 'none';
+            glitchControls.style.display = 'flex';
+          });
+        }
+
+        // Instability Inputs
+        if (xRange && xNum) {
+          xRange.addEventListener('input', () => {
+            xNum.value = xRange.value;
+            updateProbabilityDisplay();
+          });
+          xNum.addEventListener('input', () => {
+            xRange.value = xNum.value;
+            updateProbabilityDisplay();
+          });
+        }
+
+        // View toggle (decayed vs original)
+        if (toggleViewBtn) {
+          toggleViewBtn.addEventListener('click', () => {
+            if (state.fileType === 'image') {
+              state.viewingOriginal = !state.viewingOriginal;
+              toggleViewBtn.textContent = state.viewingOriginal ? 'view: original' : 'view: decayed';
+              renderCanvas(state.viewingOriginal ? state.originalBytes : state.currentBytes);
+            }
+          });
+        }
+
+        // File loader function
+        const loadFileObject = (file) => {
+          if (!file) return;
+          state.fileName = file.name;
+          state.openCount = 0;
+          state.viewingOriginal = false;
+          if (opensBadge) opensBadge.textContent = 'opens: 0';
+          if (dropInfo) dropInfo.textContent = `loaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+
+          const lowerName = file.name.toLowerCase();
+          const parsed = engine.parseFilename(file.name);
+
+          // Check if file is native .idcy or .tdcy
+          if (parsed && (parsed.prefix === 'idcy' || parsed.prefix === 'tdcy')) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              const u8 = new Uint8Array(ev.target.result);
+              const headerRes = engine.parseHeader(u8);
+              if (headerRes.error) {
+                alert('decayfmt: ' + headerRes.error);
+                return;
+              }
+              state.fileType = headerRes.fileType;
+              state.x = parsed.x || 3.0;
+              if (xNum) xNum.value = state.x;
+              if (xRange) xRange.value = state.x;
+              updateProbabilityDisplay();
+
+              state.originalBytes = new Uint8Array(headerRes.payload);
+              state.currentBytes = new Uint8Array(headerRes.payload);
+
+              if (state.fileType === 'image') {
+                state.width = headerRes.width;
+                state.height = headerRes.height;
+                if (resBadge) resBadge.textContent = `${state.width}×${state.height} px`;
+                renderCanvas(state.currentBytes);
+                if (textarea) textarea.value = `[decayfmt native image: ${file.name}]\nDimensions: ${state.width} x ${state.height}\nPayload: ${state.currentBytes.length} raw RGBA bytes\nInstability: x=${state.x}\n\nClick "open / read file" to trigger decay!`;
+              } else {
+                if (resBadge) resBadge.textContent = 'text mode';
+                const decoded = engine.decodeLossyText(state.currentBytes);
+                if (textarea) textarea.value = decoded;
+              }
+              if (statusInfo) statusInfo.textContent = `Native .${parsed.prefix} loaded (pristine)`;
+              this.setStatus(`loaded native decayfmt file: ${file.name}`);
+              updateEntropyMeter();
+            };
+            reader.readAsArrayBuffer(file);
+            return;
+          }
+
+          // Check if file is an image
+          if (file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp|gif)$/i.test(lowerName)) {
+            state.fileType = 'image';
+            if (resBadge) resBadge.textContent = 'image mode';
+            updateProbabilityDisplay();
+
+            const img = new Image();
+            const url = URL.createObjectURL(file);
+            img.onload = () => {
+              URL.revokeObjectURL(url);
+              const offCanvas = document.createElement('canvas');
+              offCanvas.width = img.naturalWidth;
+              offCanvas.height = img.naturalHeight;
+              const offCtx = offCanvas.getContext('2d');
+              offCtx.drawImage(img, 0, 0);
+
+              const imgData = offCtx.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
+              state.width = img.naturalWidth;
+              state.height = img.naturalHeight;
+              state.originalBytes = new Uint8Array(imgData.data.buffer);
+              state.currentBytes = new Uint8Array(state.originalBytes);
+
+              if (resBadge) resBadge.textContent = `${state.width}×${state.height} px`;
+              renderCanvas(state.currentBytes);
+              if (textarea) textarea.value = `[image loaded: ${file.name}]\nResolution: ${state.width} x ${state.height} px\nRaw RGBA payload: ${state.currentBytes.length} bytes\n\nReady to simulate decay or glitch.`;
+              if (statusInfo) statusInfo.textContent = `Image ready: ${state.width}×${state.height}`;
+              this.setStatus(`Loaded image: ${file.name}`);
+              updateEntropyMeter();
+            };
+            img.src = url;
+            return;
+          }
+
+          // Text file fallback
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            state.fileType = 'text';
+            if (resBadge) resBadge.textContent = 'text mode';
+            updateProbabilityDisplay();
+
+            const text = ev.target.result;
+            if (textarea) textarea.value = text;
+            state.originalBytes = new TextEncoder().encode(text);
+            state.currentBytes = new Uint8Array(state.originalBytes);
+            if (statusInfo) statusInfo.textContent = `Text loaded (${state.originalBytes.length} bytes)`;
+            this.setStatus(`Loaded text file: ${file.name}`);
+            updateEntropyMeter();
+          };
+          reader.readAsText(file);
+        };
+
+        // File dropzone clicks & drag-drop
+        if (dropzone && fileInput) {
+          dropzone.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+              loadFileObject(e.target.files[0]);
+            }
+          });
+          dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+          });
+          dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+          dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+              loadFileObject(e.dataTransfer.files[0]);
+            }
+          });
+        }
+
+        // Ensure state has payload if user typed in textarea directly
+        const syncFromTextareaIfNeeded = () => {
+          if (state.fileType === 'image' && state.currentBytes) return;
+          const text = textarea ? textarea.value : '';
+          state.fileType = 'text';
+          state.originalBytes = new TextEncoder().encode(text);
+          if (!state.currentBytes || state.openCount === 0) {
+            state.currentBytes = new Uint8Array(state.originalBytes);
+          }
+        };
+
+        // Action: Open / Read File (+1 Decay)
+        if (simOpenBtn) {
+          simOpenBtn.addEventListener('click', () => {
+            syncFromTextareaIfNeeded();
+            if (!state.currentBytes || state.currentBytes.length === 0) {
+              alert('decayfmt: please enter text in editor or upload a file first.');
+              return;
+            }
+
+            state.openCount++;
+            engine.corruptPayload(state.currentBytes, state.fileType, state.x, 1);
+
+            if (opensBadge) opensBadge.textContent = `opens: ${state.openCount}`;
+            if (statusInfo) statusInfo.textContent = `contract paid: decayed in-place on open #${state.openCount}`;
+
+            if (state.fileType === 'image') {
+              renderCanvas(state.currentBytes);
+              this.setStatus(`Open #${state.openCount}: color channels mutated`);
+            } else {
+              const decayedText = engine.decodeLossyText(state.currentBytes);
+              if (textarea) textarea.value = decayedText;
+              this.setStatus(`Open #${state.openCount}: printable ASCII substitutions written`);
+            }
+
+            updateEntropyMeter();
+            this.updateLineCounter();
+            this.updateStats();
+          });
+        }
+
+        // Action: Reset Pristine (Simulator)
+        if (simResetBtn) {
+          simResetBtn.addEventListener('click', () => {
+            if (state.originalBytes) {
+              state.currentBytes = new Uint8Array(state.originalBytes);
+              state.openCount = 0;
+              if (opensBadge) opensBadge.textContent = 'opens: 0';
+              if (statusInfo) statusInfo.textContent = 'reset to 0 opens';
+              if (state.fileType === 'image') {
+                renderCanvas(state.currentBytes);
+              } else {
+                if (textarea) textarea.value = engine.decodeLossyText(state.currentBytes);
+              }
+              updateEntropyMeter();
+              this.setStatus('Reset to pristine state');
+            }
+          });
+        }
+
+        // Action: Download .idcy / .tdcy (Simulator)
+        const triggerIdcyDownload = () => {
+          syncFromTextareaIfNeeded();
+          if (!state.currentBytes) return;
+          const xInt = Math.round(state.x) || 3;
+          let blob = null;
+          let filename = '';
+
+          const base = state.fileName ? state.fileName.replace(/\.[^/.]+$/, "") : 'file';
+
+          if (state.fileType === 'image') {
+            const encoded = engine.encodeImage(state.width, state.height, state.currentBytes);
+            blob = new Blob([encoded], { type: 'application/octet-stream' });
+            filename = `${base}.idcy${xInt}`;
+          } else {
+            const header = engine.buildHeader('text');
+            const full = new Uint8Array(header.length + state.currentBytes.length);
+            full.set(header, 0);
+            full.set(state.currentBytes, header.length);
+            blob = new Blob([full], { type: 'application/octet-stream' });
+            filename = `${base}.tdcy${xInt}`;
+          }
+
+          downloadBlob(blob, filename);
+        };
+
+        if (simDlIdcyBtn) simDlIdcyBtn.addEventListener('click', triggerIdcyDownload);
+        if (glitchDlIdcyBtn) glitchDlIdcyBtn.addEventListener('click', triggerIdcyDownload);
+
+        // Action: Export viewable PNG / TXT
+        if (simExportCleanBtn) {
+          simExportCleanBtn.addEventListener('click', () => {
+            syncFromTextareaIfNeeded();
+            const base = state.fileName ? state.fileName.replace(/\.[^/.]+$/, "") : 'decayed';
+            if (state.fileType === 'image') {
+              if (canvas) {
+                canvas.toBlob((blob) => {
+                  if (blob) downloadBlob(blob, `${base}_decayed_open${state.openCount}.png`);
+                }, 'image/png');
+              }
+            } else {
+              const text = engine.decodeLossyText(state.currentBytes || new Uint8Array());
+              const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+              downloadBlob(blob, `${base}_decayed_open${state.openCount}.txt`);
+            }
+          });
+        }
+
+        // Action: Corrupt Now (Direct Glitcher)
+        if (glitchRunBtn) {
+          glitchRunBtn.addEventListener('click', () => {
+            syncFromTextareaIfNeeded();
+            if (!state.currentBytes) return;
+            const n = Math.max(1, parseInt(itersNum ? itersNum.value : 1, 10) || 1);
+            state.openCount += n;
+
+            engine.corruptPayload(state.currentBytes, state.fileType, state.x, n);
+            if (statusInfo) statusInfo.textContent = `applied ${n} compound decay iteration(s)`;
+
+            if (state.fileType === 'image') {
+              renderCanvas(state.currentBytes);
+            } else {
+              if (textarea) textarea.value = engine.decodeLossyText(state.currentBytes);
+            }
+
+            updateEntropyMeter();
+            this.setStatus(`corrupted with ${n} iterations at x=${state.x}`);
+            this.updateLineCounter();
+            this.updateStats();
+          });
+        }
+
+        // Action: +1 Step (Glitcher)
+        if (glitchStepBtn) {
+          glitchStepBtn.addEventListener('click', () => {
+            if (simOpenBtn) simOpenBtn.click();
+          });
+        }
+
+        // Action: Reset (Glitcher)
+        if (glitchResetBtn) {
+          glitchResetBtn.addEventListener('click', () => {
+            if (simResetBtn) simResetBtn.click();
+          });
+        }
+
+        // Action: Download Corrupted File (Glitcher)
+        if (glitchDlBtn) {
+          glitchDlBtn.addEventListener('click', () => {
+            if (simExportCleanBtn) simExportCleanBtn.click();
+          });
+        }
+
+        // Initial setup
+        updateProbabilityDisplay();
+        updateEntropyMeter();
       }
     },
 
@@ -3481,6 +4000,17 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             }
             break;
           }
+          case 'decayfmt': {
+            const simOpenBtn = document.getElementById('tm-decay-sim-open-btn');
+            const glitchRunBtn = document.getElementById('tm-decay-glitch-run-btn');
+            const glitchControls = document.getElementById('tm-decay-glitch-controls');
+            if (glitchControls && glitchControls.style.display !== 'none' && glitchRunBtn) {
+              glitchRunBtn.click();
+            } else if (simOpenBtn) {
+              simOpenBtn.click();
+            }
+            break;
+          }
         }
 
         this.updateLineCounter();
@@ -3560,6 +4090,176 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'tools [ui | <tool>]',
       exec(args, stdin) {
         return commands['text-tools'].exec(args, stdin);
+      }
+    },
+
+    decayfmt: {
+      desc: 'ephemeral file format (.idcy/.tdcy) simulator and multi-iteration file decayer',
+      usage: 'decayfmt [--ui] [encode|open|corrupt] [-i input] [-o output] [-x instability] [-n iterations] [file/text...]',
+      exec(args, stdin) {
+        if (!window.TextEngine) return 'decayfmt: text engine not loaded';
+        const engine = window.TextEngine.decayfmt;
+        if (!engine) return 'decayfmt: decayfmt engine not available';
+
+        if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+          let out = '<div class="tool-result-box">';
+          out += '<div class="tool-result-header">decayfmt — entropy as a file format</div>';
+          out += '<div class="c-dim" style="margin-bottom:8px;">a file format where opening a file permanently corrupts it. every read destroys a little more.<br>two file types: <span class="c-accent">.idcy&lt;x&gt;</span> (images) and <span class="c-accent">.tdcy&lt;x&gt;</span> (text), where x is the instability parameter.<br>formula: <span class="c-accent">p = 1 - e^(-x/10)</span> per byte per open.</div>';
+          out += '<div class="c-user ansi-bold" style="margin-top:6px;">usage:</div>';
+          out += '<div>  <span class="c-accent">decayfmt --ui</span>                           : launch interactive workbench (simulator + file decayer)</div>';
+          out += '<div>  <span class="c-accent">decayfmt open &lt;file.tdcyX&gt; [-n N]</span>       : open & corrupt decayfmt file in-place on disk</div>';
+          out += '<div>  <span class="c-accent">decayfmt encode -i &lt;in&gt; -o &lt;out.tdcyX&gt;</span> : encode pristine source file into decayfmt</div>';
+          out += '<div>  <span class="c-accent">decayfmt corrupt [text] [-x X] [-n N]</span>       : compound-decay text via terminal or pipeline (|)</div>';
+          out += '<div class="c-user ansi-bold" style="margin-top:6px;">examples:</div>';
+          out += '<div>  <span class="c-dim">decayfmt open manifesto.tdcy3</span></div>';
+          out += '<div>  <span class="c-dim">decayfmt open warning.tdcy8</span></div>';
+          out += '<div>  <span class="c-dim">echo "entropy in action" | decayfmt -x 5 -n 2</span></div>';
+          out += '<div>  <span class="c-dim">decayfmt encode -i README.md -o readme.tdcy7</span></div>';
+          out += '</div>';
+          return out;
+        }
+
+        if (args.includes('--ui') || args.includes('--gui') || args.includes('-u')) {
+          const nonUiArgs = args.filter(a => a !== '--ui' && a !== '--gui' && a !== '-u');
+          const input = extractTextInput(nonUiArgs, stdin);
+          textManipWorkbench.open('decayfmt', input.text || '');
+          return '<span class="c-accent">opened decayfmt simulator & decayer in workbench.</span>';
+        }
+
+        const subCmd = args[0].toLowerCase();
+
+        // Subcommand: open
+        if (subCmd === 'open') {
+          let targetFile = null;
+          let iterations = 1;
+          for (let i = 1; i < args.length; i++) {
+            if ((args[i] === '-n' || args[i] === '--iterations') && args[i + 1]) {
+              iterations = Math.max(1, parseInt(args[++i], 10) || 1);
+            } else if (!args[i].startsWith('-')) {
+              targetFile = args[i];
+            }
+          }
+
+          if (!targetFile) return 'decayfmt open: no file specified. usage: decayfmt open <file.tdcyX>';
+
+          const parsedName = engine.parseFilename(targetFile);
+          if (!parsedName) {
+            return `decayfmt open: '${escapeHTML(targetFile)}' does not match decayfmt naming convention (.idcy<x> or .tdcy<x>).`;
+          }
+
+          const resolved = resolvePath(pathStack, targetFile);
+          if (!resolved || resolved.node.type !== 'file') {
+            return `decayfmt open: cannot open '${escapeHTML(targetFile)}': no such file.`;
+          }
+
+          const x = parsedName.x;
+          let content = resolved.node.content;
+
+          if (parsedName.type === 'text') {
+            const decayedText = engine.corruptTextString(content, x, iterations);
+            resolved.node.content = decayedText;
+            const probPct = (engine.calculateProbability(x) * 100).toFixed(1);
+            let out = `<div class="c-dim" style="margin-bottom:4px;">[decayfmt open: permanently corrupted '${escapeHTML(targetFile)}' in place (${iterations} open(s) @ x=${x}, p=${probPct}%)]</div>`;
+            out += `<div>${escapeHTML(decayedText)}</div>`;
+            return out;
+          } else {
+            textManipWorkbench.open('decayfmt', '');
+            return `<span class="c-accent">opened image file '${escapeHTML(targetFile)}' in decayfmt visual workbench.</span>`;
+          }
+        }
+
+        // Subcommand: encode
+        if (subCmd === 'encode') {
+          let inputFile = null;
+          let outputFile = null;
+          for (let i = 1; i < args.length; i++) {
+            if ((args[i] === '-i' || args[i] === '--input') && args[i + 1]) {
+              inputFile = args[++i];
+            } else if ((args[i] === '-o' || args[i] === '--output') && args[i + 1]) {
+              outputFile = args[++i];
+            }
+          }
+
+          if (!inputFile || !outputFile) {
+            return 'decayfmt encode: missing arguments. usage: decayfmt encode -i <input> -o <output.idcyX|output.tdcyX>';
+          }
+
+          const parsedOut = engine.parseFilename(outputFile);
+          if (!parsedOut) {
+            return `decayfmt encode: output name '${escapeHTML(outputFile)}' must end in .idcy<x> (image) or .tdcy<x> (text) where x is positive.`;
+          }
+
+          let srcContent = '';
+          const resolvedSrc = resolvePath(pathStack, inputFile);
+          if (resolvedSrc && resolvedSrc.node.type === 'file') {
+            srcContent = resolvedSrc.node.content;
+          } else {
+            srcContent = inputFile;
+          }
+
+          const currentDir = resolvePath(pathStack, '.');
+          if (currentDir && currentDir.node.type === 'folder') {
+            currentDir.node.contents[outputFile] = {
+              type: 'file',
+              date: 'Just now',
+              content: srcContent
+            };
+            return `<span class="c-accent">encoded pristine decayfmt file '${escapeHTML(outputFile)}' (x=${parsedOut.x}, type=${parsedOut.type}). pristine on disk; opening it will permanently decay it.</span>`;
+          }
+          return `decayfmt encode: failed to write '${escapeHTML(outputFile)}'.`;
+        }
+
+        // Subcommand: corrupt (or direct pipeline/text decay)
+        let x = 3.0;
+        let iterations = 1;
+        const textTokens = [];
+        const startIdx = (subCmd === 'corrupt') ? 1 : 0;
+
+        for (let i = startIdx; i < args.length; i++) {
+          const a = args[i];
+          if ((a === '-x' || a === '--instability') && args[i + 1]) {
+            x = Math.max(0.1, parseFloat(args[++i]) || 3.0);
+          } else if ((a === '-n' || a === '--iterations') && args[i + 1]) {
+            iterations = Math.max(1, parseInt(args[++i], 10) || 1);
+          } else {
+            textTokens.push(a);
+          }
+        }
+
+        let rawText = '';
+        if (stdin !== undefined && stdin !== null && stdin !== '') {
+          rawText = String(stdin);
+        } else if (textTokens.length > 0) {
+          const resolved = resolvePath(pathStack, textTokens[0]);
+          if (resolved && resolved.node.type === 'file' && textTokens.length === 1) {
+            rawText = resolved.node.content;
+          } else {
+            rawText = textTokens.join(' ');
+          }
+        }
+
+        if (!rawText) {
+          return 'decayfmt: no input provided. provide text, a file, pipe (|), or run decayfmt --ui.';
+        }
+
+        const corrupted = engine.corruptTextString(rawText, x, iterations);
+        return corrupted;
+      }
+    },
+
+    idcy: {
+      desc: 'alias for decayfmt',
+      usage: 'idcy [args...]',
+      exec(args, stdin) {
+        return commands.decayfmt.exec(args, stdin);
+      }
+    },
+
+    tdcy: {
+      desc: 'alias for decayfmt',
+      usage: 'tdcy [args...]',
+      exec(args, stdin) {
+        return commands.decayfmt.exec(args, stdin);
       }
     },
 
@@ -5865,7 +6565,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'longs', 'long-s', 'archaic-s', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'decayfmt', 'idcy', 'tdcy', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'longs', 'long-s', 'archaic-s', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -6936,6 +7636,11 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
         if (target === 'longs' || target === 'long-s' || target === 'archaic-s') {
           textManipWorkbench.open('longs');
           return `<span class="c-accent">opened long s (ſ) converter in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'decayfmt' || target === 'idcy' || target === 'tdcy') {
+          textManipWorkbench.open('decayfmt');
+          return `<span class="c-accent">opened decayfmt simulator & decayer in text manipulation workbench.</span>`;
         }
 
         const resolved = resolvePath(pathStack, target);
