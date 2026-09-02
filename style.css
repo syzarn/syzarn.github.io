@@ -54,6 +54,20 @@
   font-weight: normal;
   font-style: italic;
 }
+
+@font-face {
+  font-family: 'Unifont';
+  src: url('./font/unifont/unifont-17.0.05.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Unifont Upper';
+  src: url('./font/unifont/unifont_upper-17.0.05.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg-color: #000000;
   --text-color: #ffffff;
@@ -1345,4 +1359,276 @@ a.term-link:hover {
   font-size: 0.72rem;
   color: #ccc;
 }
+
+/* ==========================================
+   UNICODEMAP (UNIMAP) WORKBENCH STYLES
+   ========================================== */
+.tm-window.tm-tool-unicodemap .tm-editor-area {
+  flex: 0 0 76px;
+  min-height: 76px;
+}
+
+.tm-window.tm-tool-unicodemap .tm-controls-pane {
+  max-height: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+}
+
+.tm-unimap-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.tm-unimap-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.tm-unimap-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tm-unimap-layout {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  min-height: 310px;
+}
+
+.tm-unimap-grid-pane {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tm-unimap-grid-container {
+  overflow: auto;
+  max-height: 320px;
+  border: 1px solid #282828;
+  border-radius: 4px;
+  background: #080808;
+}
+
+.tm-unimap-grid {
+  display: grid;
+  grid-template-columns: 66px repeat(16, minmax(28px, 1fr));
+  user-select: none;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.tm-unimap-grid.font-unifont {
+  font-family: 'Unifont', 'Unifont Upper', 'Segoe UI Historic', 'Noto Sans Egyptian Hieroglyphs', monospace;
+}
+
+.tm-unimap-grid.font-native {
+  font-family: 'Segoe UI Historic', 'Noto Sans Egyptian Hieroglyphs', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.tm-unimap-col-hdr {
+  background: #141414;
+  color: var(--accent-color);
+  font-family: monospace;
+  font-size: 0.74rem;
+  font-weight: bold;
+  padding: 5px 0;
+  border-bottom: 1px solid #282828;
+  border-right: 1px solid #1c1c1c;
+  user-select: none;
+}
+
+.tm-unimap-row-hdr {
+  background: #121212;
+  color: #888;
+  font-family: monospace;
+  font-size: 0.72rem;
+  padding: 3px 6px;
+  text-align: right;
+  border-right: 1px solid #282828;
+  border-bottom: 1px solid #1a1a1a;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.tm-unimap-cell {
+  min-height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #161616;
+  border-bottom: 1px solid #161616;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-color);
+  transition: background-color 0.1s, color 0.1s, transform 0.05s;
+}
+
+.tm-unimap-cell:hover {
+  background: rgba(0, 255, 102, 0.22);
+  color: #ffffff;
+}
+
+.tm-unimap-cell.active {
+  background: var(--accent-color);
+  color: #000000 !important;
+  font-weight: bold;
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+}
+
+.tm-unimap-cell.empty {
+  color: #262626;
+  background: #050505;
+  cursor: default;
+}
+
+.tm-unimap-cell.control {
+  font-size: 0.6rem;
+  color: #666;
+  font-family: monospace;
+}
+
+.tm-unimap-inspector {
+  width: 320px;
+  max-width: 340px;
+  flex-shrink: 0;
+  background: #0d0d0d;
+  border: 1px solid #282828;
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.8rem;
+  max-height: 540px;
+  overflow-y: auto;
+}
+
+.tm-unimap-preview-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.tm-unimap-preview-box {
+  width: 64px;
+  height: 64px;
+  background: #000;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
+}
+
+.tm-unimap-preview-box.font-unifont {
+  font-family: 'Unifont', 'Unifont Upper', 'Segoe UI Historic', 'Noto Sans Egyptian Hieroglyphs', monospace;
+}
+
+.tm-unimap-preview-box.font-native {
+  font-family: 'Segoe UI Historic', 'Noto Sans Egyptian Hieroglyphs', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.tm-unimap-char-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tm-unimap-cp-badge {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.tm-unimap-name-badge {
+  font-size: 0.76rem;
+  color: #bbb;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.tm-unimap-props-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.tm-unimap-props-table td {
+  padding: 3px 4px;
+  border-bottom: 1px solid #1c1c1c;
+}
+
+.tm-unimap-props-table td.prop-lbl {
+  color: #777;
+  width: 78px;
+  white-space: nowrap;
+}
+
+.tm-unimap-props-table td.prop-val {
+  color: #e0e0e0;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.tm-unimap-copyable {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  transition: all 0.1s;
+}
+
+.tm-unimap-copyable:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.tm-unimap-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .tm-unimap-layout {
+    flex-direction: column;
+  }
+  .tm-unimap-inspector {
+    width: 100%;
+  }
+  .tm-unimap-grid {
+    grid-template-columns: 56px repeat(16, minmax(22px, 1fr));
+    font-size: 0.95rem;
+  }
+}
+
 

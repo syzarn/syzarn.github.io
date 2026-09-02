@@ -1200,6 +1200,10 @@ Volume  : ${vol}%`;
       });
 
       this.renderToolControls(toolId);
+      if (this.modalEl) {
+        const win = this.modalEl.querySelector('.tm-window');
+        if (win) win.classList.toggle('tm-tool-unicodemap', toolId === 'unicodemap');
+      }
     },
 
     updateLineCounter() {
@@ -2185,6 +2189,96 @@ Volume  : ${vol}%`;
                   <div class="c-dim" style="font-size:0.68rem; text-align:center;" id="tm-decay-status-info">ready to decay</div>
                 </div>
 
+              </div>
+            </div>
+          `;
+          break;
+        case 'unicodemap':
+          html = `
+            <div class="tm-unimap-wrap">
+              <div class="tm-unimap-toolbar">
+                <div class="tm-unimap-nav-group">
+                  <span class="c-accent ansi-bold">plane:</span>
+                  <select class="tm-select" id="tm-unimap-plane-select" style="max-width: 190px;"></select>
+
+                  <span class="c-accent ansi-bold" style="margin-left:4px;">block:</span>
+                  <select class="tm-select" id="tm-unimap-block-select" style="max-width: 250px;"></select>
+
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-blk" title="Previous Block: Jump to previous Unicode block">◀ blk</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-blk" title="Next Block: Jump to next Unicode block">blk ▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-page" title="Previous Page: Step back 256 code points">◀ page</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-page" title="Next Page: Step forward 256 code points">page ▶</button>
+                </div>
+
+                <div class="tm-unimap-nav-group">
+                  <span>font:</span>
+                  <select class="tm-select" id="tm-unimap-font-select" style="width: 155px;" title="Select font for Unicode character grid only">
+                    <option value="unifont" selected>Unifont (Default)</option>
+                    <option value="native">Native / System Font</option>
+                  </select>
+
+                  <span>go to:</span>
+                  <input type="text" class="tm-input" id="tm-unimap-goto-input" placeholder="U+XXXX" style="width: 75px;">
+                  <button type="button" class="tm-btn" id="tm-unimap-goto-btn">go</button>
+
+                  <span>search:</span>
+                  <input type="text" class="tm-input" id="tm-unimap-search-input" placeholder="name or keyword..." style="width: 135px;">
+                </div>
+              </div>
+
+              <div id="tm-unimap-search-results" style="display:none; max-height: 85px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:4px; padding:4px 8px; font-size:0.75rem;"></div>
+
+              <div class="tm-unimap-layout">
+                <div class="tm-unimap-grid-pane">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
+                    <div>range: <span id="tm-unimap-range-lbl" class="c-accent" style="font-family:monospace; font-weight:bold;">U+0000-U+00FF</span> (<span id="tm-unimap-block-lbl">Basic Latin</span>)</div>
+                    <div><span class="c-dim">click cell to inspect · double-click to insert into editor</span></div>
+                  </div>
+
+                  <div class="tm-unimap-grid-container" id="tm-unimap-grid-container">
+                    <div class="tm-unimap-grid font-unifont" id="tm-unimap-grid"></div>
+                  </div>
+                </div>
+
+                <div class="tm-unimap-inspector" id="tm-unimap-inspector">
+                  <div class="tm-unimap-preview-header">
+                    <div class="tm-unimap-preview-box font-unifont" id="tm-unimap-preview-glyph">A</div>
+                    <div class="tm-unimap-char-title">
+                      <div class="tm-unimap-cp-badge" id="tm-unimap-cp-badge">U+0041</div>
+                      <div class="tm-unimap-name-badge" id="tm-unimap-name-badge">LATIN CAPITAL LETTER A</div>
+                    </div>
+                  </div>
+
+                  <table class="tm-unimap-props-table">
+                    <tbody>
+                      <tr><td class="prop-lbl">decimal:</td><td class="prop-val" id="tm-unimap-p-dec">65</td></tr>
+                      <tr><td class="prop-lbl">block:</td><td class="prop-val" id="tm-unimap-p-block">Basic Latin</td></tr>
+                      <tr><td class="prop-lbl">plane:</td><td class="prop-val" id="tm-unimap-p-plane">Plane 0 (BMP)</td></tr>
+                      <tr><td class="prop-lbl">category:</td><td class="prop-val" id="tm-unimap-p-cat">Lu (Letter, uppercase)</td></tr>
+                      <tr><td class="prop-lbl">bidi class:</td><td class="prop-val" id="tm-unimap-p-bidi">L (Left-to-Right)</td></tr>
+                      <tr><td class="prop-lbl">combining:</td><td class="prop-val" id="tm-unimap-p-ccc">0 (Spacing / Base)</td></tr>
+                      <tr><td class="prop-lbl">script:</td><td class="prop-val" id="tm-unimap-p-script">Latin</td></tr>
+                      <tr id="tm-unimap-row-decomp" style="display:none;"><td class="prop-lbl">decomp:</td><td class="prop-val" id="tm-unimap-p-decomp">-</td></tr>
+                      <tr id="tm-unimap-row-numeric" style="display:none;"><td class="prop-lbl">numeric:</td><td class="prop-val" id="tm-unimap-p-numeric">-</td></tr>
+                      <tr id="tm-unimap-row-cases" style="display:none;"><td class="prop-lbl">mappings:</td><td class="prop-val" id="tm-unimap-p-cases">-</td></tr>
+                      <tr id="tm-unimap-row-alias" style="display:none;"><td class="prop-lbl">alias:</td><td class="prop-val" id="tm-unimap-p-alias">-</td></tr>
+                      <tr><td class="prop-lbl">mirrored:</td><td class="prop-val" id="tm-unimap-p-mirrored">No</td></tr>
+                      <tr><td class="prop-lbl">UTF-8:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf8" title="click to copy">41</span></td></tr>
+                      <tr><td class="prop-lbl">UTF-16:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf16" title="click to copy">0041</span></td></tr>
+                      <tr><td class="prop-lbl">HTML dec:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmldec" title="click to copy">&#65;</span></td></tr>
+                      <tr><td class="prop-lbl">HTML hex:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlhex" title="click to copy">&#x0041;</span></td></tr>
+                      <tr><td class="prop-lbl">HTML entity:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlent" title="click to copy">-</span></td></tr>
+                      <tr><td class="prop-lbl">escape:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-escape" title="click to copy">\u0041</span></td></tr>
+                    </tbody>
+                  </table>
+
+                  <div class="tm-unimap-actions">
+                    <button type="button" class="tm-btn tm-btn-primary" id="tm-unimap-insert-btn" style="flex:1;">insert</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-copy-char-btn">copy char</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-copy-cp-btn">copy U+</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-inspect-sel-btn" title="inspect selected">inspect editor char</button>
+                  </div>
+                </div>
               </div>
             </div>
           `;
@@ -3480,6 +3574,512 @@ Volume  : ${vol}%`;
         // Initial setup
         updateProbabilityDisplay();
         updateEntropyMeter();
+      } else if (toolId === 'unicodemap') {
+        const engine = window.TextEngine && window.TextEngine.unicodemap;
+        if (!engine) return;
+
+        let currentCp = 0x0041;
+        let pageStart = 0x0000;
+        let currentFontMode = 'unifont';
+
+        const planeSelect = document.getElementById('tm-unimap-plane-select');
+        const blockSelect = document.getElementById('tm-unimap-block-select');
+        const fontSelect = document.getElementById('tm-unimap-font-select');
+        const gridEl = document.getElementById('tm-unimap-grid');
+        const rangeLbl = document.getElementById('tm-unimap-range-lbl');
+        const blockLbl = document.getElementById('tm-unimap-block-lbl');
+        const prevBlkBtn = document.getElementById('tm-unimap-prev-blk');
+        const nextBlkBtn = document.getElementById('tm-unimap-next-blk');
+        const prevPageBtn = document.getElementById('tm-unimap-prev-page');
+        const nextPageBtn = document.getElementById('tm-unimap-next-page');
+        const gotoInput = document.getElementById('tm-unimap-goto-input');
+        const gotoBtn = document.getElementById('tm-unimap-goto-btn');
+        const searchInput = document.getElementById('tm-unimap-search-input');
+        const searchResults = document.getElementById('tm-unimap-search-results');
+        const previewGlyph = document.getElementById('tm-unimap-preview-glyph');
+        const insertBtn = document.getElementById('tm-unimap-insert-btn');
+        const copyCharBtn = document.getElementById('tm-unimap-copy-char-btn');
+        const copyCpBtn = document.getElementById('tm-unimap-copy-cp-btn');
+        const inspectSelBtn = document.getElementById('tm-unimap-inspect-sel-btn');
+        const textarea = document.getElementById('tm-textarea');
+
+        if (planeSelect) {
+          planeSelect.innerHTML = `<option value="all">All Planes (346 Blocks)</option>` + engine.planes.map(p =>
+            `<option value="${p.id}">${escapeHTML(p.name)}</option>`
+          ).join('');
+        }
+
+        const formatBlockRange = (start, end) => {
+          const s = 'U+' + start.toString(16).toUpperCase().padStart(4, '0');
+          const e = 'U+' + end.toString(16).toUpperCase().padStart(4, '0');
+          return `${s}-${e}`;
+        };
+
+        const populateBlocks = (selectedPlane) => {
+          if (!blockSelect) return;
+          if (selectedPlane === 'all' || selectedPlane === undefined) {
+            let html = '';
+            engine.planes.forEach(p => {
+              const pBlocks = engine.blocks.filter(b => b.plane === p.id);
+              if (pBlocks.length > 0) {
+                html += `<optgroup label="${escapeHTML(p.name)}">`;
+                pBlocks.forEach(b => {
+                  html += `<option value="${b.start}">${escapeHTML(b.name)} [${formatBlockRange(b.start, b.end)}]</option>`;
+                });
+                html += `</optgroup>`;
+              }
+            });
+            blockSelect.innerHTML = html;
+          } else {
+            const planeNum = parseInt(selectedPlane, 10);
+            const planeBlocks = engine.blocks.filter(b => b.plane === planeNum);
+            blockSelect.innerHTML = planeBlocks.map(b =>
+              `<option value="${b.start}">${escapeHTML(b.name)} [${formatBlockRange(b.start, b.end)}]</option>`
+            ).join('');
+          }
+        };
+
+        const updateInspector = (cp) => {
+          currentCp = cp;
+          const info = engine.getUnicodeCharInfo(cp);
+
+          if (previewGlyph) {
+            previewGlyph.textContent = info.isControl ? (info.controlLabel || '·') : (info.char || ' ');
+            previewGlyph.style.fontSize = info.isControl ? '1.2rem' : '2.4rem';
+          }
+
+          const setTxt = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+          };
+
+          setTxt('tm-unimap-cp-badge', info.formattedHex);
+          setTxt('tm-unimap-name-badge', info.name);
+          setTxt('tm-unimap-p-dec', info.dec);
+          setTxt('tm-unimap-p-block', info.block.name);
+          setTxt('tm-unimap-p-plane', info.plane.name);
+          setTxt('tm-unimap-p-cat', `${info.category.code} (${info.category.name})`);
+          setTxt('tm-unimap-p-bidi', `${info.bidiClass ? `${info.bidiClass.code} (${info.bidiClass.name})` : 'L (Left-to-Right)'}`);
+          setTxt('tm-unimap-p-ccc', `${info.combiningClass ? `${info.combiningClass.value} (${info.combiningClass.name})` : '0 (Spacing / Base)'}`);
+          setTxt('tm-unimap-p-script', info.script);
+          setTxt('tm-unimap-p-mirrored', info.bidiMirrored ? 'Yes' : 'No');
+
+          const decompRow = document.getElementById('tm-unimap-row-decomp');
+          if (decompRow) {
+            if (info.decomposition) {
+              decompRow.style.display = '';
+              setTxt('tm-unimap-p-decomp', info.decomposition);
+            } else {
+              decompRow.style.display = 'none';
+            }
+          }
+
+          const numericRow = document.getElementById('tm-unimap-row-numeric');
+          if (numericRow) {
+            if (info.numericValue) {
+              numericRow.style.display = '';
+              setTxt('tm-unimap-p-numeric', info.numericValue);
+            } else {
+              numericRow.style.display = 'none';
+            }
+          }
+
+          const casesRow = document.getElementById('tm-unimap-row-cases');
+          if (casesRow) {
+            if (info.caseMappings && info.caseMappings.formatted) {
+              casesRow.style.display = '';
+              setTxt('tm-unimap-p-cases', info.caseMappings.formatted);
+            } else {
+              casesRow.style.display = 'none';
+            }
+          }
+
+          const aliasRow = document.getElementById('tm-unimap-row-alias');
+          if (aliasRow) {
+            if (info.oldName) {
+              aliasRow.style.display = '';
+              setTxt('tm-unimap-p-alias', info.oldName);
+            } else {
+              aliasRow.style.display = 'none';
+            }
+          }
+
+          setTxt('tm-unimap-p-utf8', info.utf8Hex || '-');
+          setTxt('tm-unimap-p-utf16', info.utf16Hex || '-');
+          setTxt('tm-unimap-p-htmldec', info.htmlDec);
+          setTxt('tm-unimap-p-htmlhex', info.htmlHex);
+          setTxt('tm-unimap-p-htmlent', info.htmlNamed || '-');
+          setTxt('tm-unimap-p-escape', info.escapeJs);
+
+          if (gridEl) {
+            const cells = gridEl.querySelectorAll('.tm-unimap-cell');
+            cells.forEach(c => {
+              if (parseInt(c.dataset.cp, 10) === cp) {
+                c.classList.add('active');
+              } else {
+                c.classList.remove('active');
+              }
+            });
+          }
+        };
+
+        const renderGrid = () => {
+          if (!gridEl) return;
+          const pageEnd = Math.min(pageStart + 0xFF, 0x10FFFF);
+          const startHex = 'U+' + pageStart.toString(16).toUpperCase().padStart(4, '0');
+          const endHex = 'U+' + pageEnd.toString(16).toUpperCase().padStart(4, '0');
+          if (rangeLbl) rangeLbl.textContent = `${startHex}-${endHex}`;
+
+          const blk = engine.getUnicodeBlock(currentCp);
+          if (blockLbl) blockLbl.textContent = blk.name;
+
+          const planeId = pageStart >> 16;
+          if (planeSelect && planeSelect.value !== 'all' && parseInt(planeSelect.value, 10) !== planeId) {
+            planeSelect.value = planeId;
+            populateBlocks(planeId);
+          }
+
+          if (blockSelect) {
+            const opt = Array.from(blockSelect.options).find(o => parseInt(o.value, 10) === blk.start);
+            if (opt) blockSelect.value = opt.value;
+          }
+
+          let gridHtml = '<div class="tm-unimap-col-hdr">U+</div>';
+          for (let col = 0; col < 16; col++) {
+            gridHtml += `<div class="tm-unimap-col-hdr">${col.toString(16).toUpperCase()}</div>`;
+          }
+
+          for (let row = 0; row < 16; row++) {
+            const rowStart = pageStart + (row * 16);
+            if (rowStart > 0x10FFFF) break;
+            const rowHex = rowStart.toString(16).toUpperCase().padStart(4, '0').slice(0, -1) + '_';
+            gridHtml += `<div class="tm-unimap-row-hdr">${rowHex}</div>`;
+
+            for (let col = 0; col < 16; col++) {
+              const cp = rowStart + col;
+              if (cp > 0x10FFFF) {
+                gridHtml += `<div class="tm-unimap-cell empty"></div>`;
+                continue;
+              }
+
+              const info = engine.getUnicodeCharInfo(cp);
+              const isActive = (cp === currentCp);
+              let cellClass = 'tm-unimap-cell';
+              if (isActive) cellClass += ' active';
+
+              let display = '';
+              if (info.isControl) {
+                cellClass += ' control';
+                display = info.controlLabel || '·';
+              } else if (!info.isAssigned) {
+                cellClass += ' empty';
+                display = '';
+              } else {
+                display = escapeHTML(info.char || '');
+              }
+
+              const title = `${info.formattedHex}: ${escapeHTML(info.name)}`;
+              gridHtml += `<div class="${cellClass}" data-cp="${cp}" title="${title}">${display}</div>`;
+            }
+          }
+
+          gridEl.innerHTML = gridHtml;
+          updateInspector(currentCp);
+        };
+
+        const jumpToCodePoint = (cp) => {
+          if (typeof cp !== 'number' || isNaN(cp) || cp < 0 || cp > 0x10FFFF) return;
+          currentCp = cp;
+          pageStart = cp & ~0xFF;
+          const planeId = pageStart >> 16;
+          if (planeSelect && planeSelect.value !== 'all' && parseInt(planeSelect.value, 10) !== planeId) {
+            planeSelect.value = planeId;
+            populateBlocks(planeId);
+          }
+          renderGrid();
+        };
+
+        if (gridEl) {
+          gridEl.addEventListener('click', (e) => {
+            const cell = e.target.closest('.tm-unimap-cell');
+            if (cell && cell.dataset.cp !== undefined) {
+              const cp = parseInt(cell.dataset.cp, 10);
+              updateInspector(cp);
+            }
+          });
+
+          gridEl.addEventListener('dblclick', (e) => {
+            const cell = e.target.closest('.tm-unimap-cell');
+            if (cell && cell.dataset.cp !== undefined) {
+              const cp = parseInt(cell.dataset.cp, 10);
+              updateInspector(cp);
+              if (insertBtn) insertBtn.click();
+            }
+          });
+        }
+
+        if (fontSelect) {
+          fontSelect.addEventListener('change', () => {
+            currentFontMode = fontSelect.value;
+            if (gridEl) gridEl.className = `tm-unimap-grid font-${currentFontMode}`;
+            if (previewGlyph) previewGlyph.className = `tm-unimap-preview-box font-${currentFontMode}`;
+            this.setStatus(`Font switched to ${currentFontMode === 'unifont' ? 'Unifont' : 'Native / System Font'}`);
+          });
+        }
+
+        if (planeSelect) {
+          planeSelect.addEventListener('change', () => {
+            const val = planeSelect.value;
+            populateBlocks(val);
+            if (val === 'all') {
+              jumpToCodePoint(0x0000);
+            } else {
+              const planeId = parseInt(val, 10);
+              const firstBlock = engine.blocks.find(b => b.plane === planeId);
+              if (firstBlock) {
+                jumpToCodePoint(firstBlock.start);
+              } else {
+                jumpToCodePoint(planeId * 0x10000);
+              }
+            }
+          });
+        }
+
+        if (blockSelect) {
+          blockSelect.addEventListener('change', () => {
+            const start = parseInt(blockSelect.value, 10);
+            const blk = engine.getUnicodeBlock(start);
+            if (planeSelect && planeSelect.value !== 'all') {
+              planeSelect.value = blk.plane;
+            }
+            jumpToCodePoint(start);
+          });
+        }
+
+        if (prevBlkBtn) {
+          prevBlkBtn.addEventListener('click', () => {
+            const curBlk = engine.getUnicodeBlock(currentCp);
+            let idx = engine.blocks.findIndex(b => b.start === curBlk.start);
+            if (idx > 0) {
+              const targetBlk = engine.blocks[idx - 1];
+              jumpToCodePoint(targetBlk.start);
+              this.setStatus(`Switched to block: ${targetBlk.name} [${formatBlockRange(targetBlk.start, targetBlk.end)}]`);
+            } else {
+              this.setStatus(`Already at first block (${curBlk.name})`);
+            }
+          });
+        }
+        if (nextBlkBtn) {
+          nextBlkBtn.addEventListener('click', () => {
+            const curBlk = engine.getUnicodeBlock(currentCp);
+            let idx = engine.blocks.findIndex(b => b.start === curBlk.start);
+            if (idx >= 0 && idx < engine.blocks.length - 1) {
+              const targetBlk = engine.blocks[idx + 1];
+              jumpToCodePoint(targetBlk.start);
+              this.setStatus(`Switched to block: ${targetBlk.name} [${formatBlockRange(targetBlk.start, targetBlk.end)}]`);
+            } else {
+              this.setStatus(`Already at last block (${curBlk.name})`);
+            }
+          });
+        }
+
+        if (prevPageBtn) {
+          prevPageBtn.addEventListener('click', () => {
+            if (pageStart >= 0x100) {
+              jumpToCodePoint(pageStart - 0x100);
+              const blk = engine.getUnicodeBlock(currentCp);
+              this.setStatus(`Page: U+${pageStart.toString(16).toUpperCase().padStart(4, '0')}-U+${Math.min(pageStart + 0xFF, 0x10FFFF).toString(16).toUpperCase().padStart(4, '0')} (${blk.name})`);
+            } else {
+              this.setStatus('Already at the first page (U+0000)');
+            }
+          });
+        }
+        if (nextPageBtn) {
+          nextPageBtn.addEventListener('click', () => {
+            if (pageStart + 0x100 <= 0x10FFFF) {
+              jumpToCodePoint(pageStart + 0x100);
+              const blk = engine.getUnicodeBlock(currentCp);
+              this.setStatus(`Page: U+${pageStart.toString(16).toUpperCase().padStart(4, '0')}-U+${Math.min(pageStart + 0xFF, 0x10FFFF).toString(16).toUpperCase().padStart(4, '0')} (${blk.name})`);
+            } else {
+              this.setStatus('Already at the last page (U+10FF00)');
+            }
+          });
+        }
+
+        const handleGoto = () => {
+          if (!gotoInput || !gotoInput.value) return;
+          const val = gotoInput.value.trim();
+          const hexMatch = val.match(/^(?:u\+|0x)?([0-9a-f]{1,6})$/i);
+          if (hexMatch) {
+            const cp = parseInt(hexMatch[1], 16);
+            if (cp >= 0 && cp <= 0x10FFFF) {
+              jumpToCodePoint(cp);
+              this.setStatus(`Jumped to U+${cp.toString(16).toUpperCase().padStart(4, '0')}`);
+              return;
+            }
+          }
+          if (val.length >= 1) {
+            const cp = val.codePointAt(0);
+            jumpToCodePoint(cp);
+            this.setStatus(`Jumped to '${val[0]}' (U+${cp.toString(16).toUpperCase().padStart(4, '0')})`);
+          }
+        };
+        if (gotoBtn) gotoBtn.addEventListener('click', handleGoto);
+        if (gotoInput) {
+          gotoInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleGoto();
+            }
+          });
+        }
+
+        if (searchInput && searchResults) {
+          searchInput.addEventListener('input', () => {
+            const q = searchInput.value.trim();
+            if (!q) {
+              searchResults.style.display = 'none';
+              searchResults.innerHTML = '';
+              return;
+            }
+
+            const results = engine.searchUnicode(q, 20);
+            if (results.length === 0) {
+              searchResults.style.display = 'block';
+              searchResults.innerHTML = '<span class="c-dim">no matches found</span>';
+              return;
+            }
+
+            searchResults.style.display = 'block';
+            searchResults.innerHTML = results.map(r => `
+              <div class="tm-unimap-search-item" data-cp="${r.cp}" style="display:flex; align-items:center; gap:8px; padding:2px 4px; cursor:pointer; border-bottom:1px solid #222;">
+                <span class="c-accent" style="font-family:monospace; min-width:65px;">${r.formattedHex}</span>
+                <span style="font-size:1.1rem; min-width:24px; text-align:center;">${escapeHTML(r.char || ' ')}</span>
+                <span style="color:#ddd; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(r.name)}</span>
+                <span class="c-dim" style="font-size:0.7rem;">${escapeHTML(r.block.name)}</span>
+              </div>
+            `).join('');
+          });
+
+          searchResults.addEventListener('click', (e) => {
+            const item = e.target.closest('.tm-unimap-search-item');
+            if (item && item.dataset.cp !== undefined) {
+              const cp = parseInt(item.dataset.cp, 10);
+              jumpToCodePoint(cp);
+              searchResults.style.display = 'none';
+            }
+          });
+        }
+
+        if (insertBtn && textarea) {
+          insertBtn.addEventListener('click', () => {
+            const info = engine.getUnicodeCharInfo(currentCp);
+            if (!info.char && info.isControl) {
+              this.setStatus(`Cannot insert control character (${info.formattedHex})`);
+              return;
+            }
+            const charToInsert = info.char;
+            this.saveHistory();
+
+            const startPos = textarea.selectionStart !== undefined ? textarea.selectionStart : textarea.value.length;
+            const endPos = textarea.selectionEnd !== undefined ? textarea.selectionEnd : startPos;
+            const before = textarea.value.substring(0, startPos);
+            const after = textarea.value.substring(endPos);
+            textarea.value = before + charToInsert + after;
+            textarea.selectionStart = textarea.selectionEnd = startPos + charToInsert.length;
+            this.updateLineCounter();
+            this.updateStats();
+            this.setStatus(`Inserted '${charToInsert}' (${info.formattedHex}) into editor`);
+            textarea.focus();
+          });
+        }
+
+        if (copyCharBtn) {
+          copyCharBtn.addEventListener('click', () => {
+            const info = engine.getUnicodeCharInfo(currentCp);
+            if (info.char) {
+              navigator.clipboard.writeText(info.char).then(() => {
+                this.setStatus(`Copied '${info.char}' to clipboard!`);
+              });
+            }
+          });
+        }
+
+        if (copyCpBtn) {
+          copyCpBtn.addEventListener('click', () => {
+            const info = engine.getUnicodeCharInfo(currentCp);
+            navigator.clipboard.writeText(info.formattedHex).then(() => {
+              this.setStatus(`Copied ${info.formattedHex} to clipboard!`);
+            });
+          });
+        }
+
+        if (inspectSelBtn && textarea) {
+          inspectSelBtn.addEventListener('click', () => {
+            let targetChar = '';
+            if (textarea.selectionStart !== undefined && textarea.selectionEnd > textarea.selectionStart) {
+              targetChar = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+            } else if (textarea.selectionStart !== undefined && textarea.selectionStart < textarea.value.length) {
+              targetChar = textarea.value.substring(textarea.selectionStart, textarea.selectionStart + 2);
+            } else if (textarea.value.length > 0) {
+              targetChar = textarea.value.substring(0, 2);
+            }
+
+            if (!targetChar) {
+              this.setStatus('Editor is empty. Type or paste text to inspect.');
+              return;
+            }
+
+            const cp = targetChar.codePointAt(0);
+            if (cp !== undefined) {
+              jumpToCodePoint(cp);
+              this.setStatus(`Inspecting '${String.fromCodePoint(cp)}' (U+${cp.toString(16).toUpperCase().padStart(4, '0')}) from editor`);
+            }
+          });
+        }
+
+        const copyableIds = [
+          'tm-unimap-p-utf8', 'tm-unimap-p-utf16', 'tm-unimap-p-htmldec',
+          'tm-unimap-p-htmlhex', 'tm-unimap-p-htmlent', 'tm-unimap-p-escape'
+        ];
+        copyableIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('click', () => {
+              const textToCopy = el.textContent.trim();
+              if (textToCopy && textToCopy !== '-') {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                  this.setStatus(`Copied ${textToCopy} to clipboard!`);
+                });
+              }
+            });
+          }
+        });
+
+        if (textarea && textarea.selectionStart !== undefined && textarea.selectionEnd > textarea.selectionStart) {
+          const selText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+          const cp = selText.codePointAt(0);
+          if (cp !== undefined) currentCp = cp;
+        }
+
+        populateBlocks('all');
+        if (planeSelect) planeSelect.value = 'all';
+        jumpToCodePoint(currentCp);
+
+        if (engine.loadUnicodeData && !engine.unicodeDataLoaded) {
+          engine.loadUnicodeData().then(() => {
+            if (this.activeToolId === 'unicodemap') {
+              updateInspector(currentCp);
+              this.setStatus(`UnicodeData.txt loaded (${engine.unicodeDatabase.size} characters indexed)`);
+            }
+          });
+        }
+
+        window.addEventListener('unicodedata-loaded', () => {
+          if (this.activeToolId === 'unicodemap') {
+            updateInspector(currentCp);
+          }
+        }, { once: true });
       }
     },
 
@@ -4009,6 +4609,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             } else if (simOpenBtn) {
               simOpenBtn.click();
             }
+            break;
+          }
+          case 'unicodemap': {
+            const insertBtn = document.getElementById('tm-unimap-insert-btn');
+            if (insertBtn) insertBtn.click();
             break;
           }
         }
@@ -5212,6 +5817,97 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'unicvr [file/text...]',
       exec(args, stdin) {
         return commands.unicode.exec(args, stdin);
+      }
+    },
+
+    unicodemap: {
+      desc: 'Unicode character map and inspector with Unifont glyph grid',
+      usage: 'unicodemap [--ui] [codepoint/character/search-query...]',
+      exec(args, stdin) {
+        if (!window.TextEngine || !window.TextEngine.unicodemap) {
+          return 'unicodemap: text engine not loaded';
+        }
+        if (args.length === 0 || args.includes('--ui') || args.includes('-u')) {
+          textManipWorkbench.open('unicodemap', stdin || '');
+          return '<span class="c-accent">opened Unicode character map (unimap) in workbench.</span>';
+        }
+
+        const query = args.filter(a => !a.startsWith('-')).join(' ');
+        if (!query) {
+          textManipWorkbench.open('unicodemap', stdin || '');
+          return '<span class="c-accent">opened Unicode character map (unimap) in workbench.</span>';
+        }
+
+        let info = null;
+        const hexMatch = query.match(/^(?:u\+|0x)?([0-9a-f]{1,6})$/i);
+        if (hexMatch) {
+          const cp = parseInt(hexMatch[1], 16);
+          if (cp >= 0 && cp <= 0x10FFFF) info = window.TextEngine.unicodemap.getUnicodeCharInfo(cp);
+        }
+
+        if (!info && query.length >= 1) {
+          const cp = query.codePointAt(0);
+          if (query.length <= 2 || query.startsWith('\\u')) {
+            info = window.TextEngine.unicodemap.getUnicodeCharInfo(cp);
+          }
+        }
+
+        if (info) {
+          let out = '<div class="c-accent ansi-bold" style="margin-bottom:4px;">┌─ Unicode Character Inspector ─────────────────────────────────────┐</div>';
+          out += `<div>│ <span class="c-dim">Character :</span> <span style="font-size:1.2rem; font-weight:bold; color:#fff;">${escapeHTML(info.char || ' ')}</span> <span class="c-dim">(${info.formattedHex})</span></div>`;
+          out += `<div>│ <span class="c-dim">Name      :</span> <span class="c-file">${escapeHTML(info.name)}</span></div>`;
+          if (info.oldName) {
+            out += `<div>│ <span class="c-dim">Alias     :</span> <span class="c-dim">${escapeHTML(info.oldName)}</span></div>`;
+          }
+          out += `<div>│ <span class="c-dim">Decimal   :</span> ${info.dec}</div>`;
+          out += `<div>│ <span class="c-dim">Block     :</span> ${escapeHTML(info.block.name)} (Plane ${info.plane.id})</div>`;
+          out += `<div>│ <span class="c-dim">Category  :</span> ${escapeHTML(info.category.code)} - ${escapeHTML(info.category.name)}</div>`;
+          out += `<div>│ <span class="c-dim">Bidi Class:</span> ${escapeHTML(info.bidiClass.code)} (${escapeHTML(info.bidiClass.name)})</div>`;
+          if (info.combiningClass && info.combiningClass.value !== '0') {
+            out += `<div>│ <span class="c-dim">Combining :</span> ${escapeHTML(info.combiningClass.value)} (${escapeHTML(info.combiningClass.name)})</div>`;
+          }
+          if (info.decomposition) {
+            out += `<div>│ <span class="c-dim">Decomp    :</span> <span class="c-file">${escapeHTML(info.decomposition)}</span></div>`;
+          }
+          if (info.numericValue) {
+            out += `<div>│ <span class="c-dim">Numeric   :</span> <span class="c-accent">${escapeHTML(info.numericValue)}</span></div>`;
+          }
+          if (info.caseMappings && info.caseMappings.formatted) {
+            out += `<div>│ <span class="c-dim">Mappings  :</span> ${escapeHTML(info.caseMappings.formatted)}</div>`;
+          }
+          out += `<div>│ <span class="c-dim">Script    :</span> ${escapeHTML(info.script)}</div>`;
+          out += `<div>│ <span class="c-dim">Mirrored  :</span> ${info.bidiMirrored ? 'Yes' : 'No'}</div>`;
+          out += `<div>│ <span class="c-dim">UTF-8     :</span> <span style="font-family:monospace;">${info.utf8Hex || '-'}</span></div>`;
+          out += `<div>│ <span class="c-dim">UTF-16    :</span> <span style="font-family:monospace;">${info.utf16Hex || '-'}</span></div>`;
+          out += `<div>│ <span class="c-dim">HTML      :</span> ${info.htmlNamed ? escapeHTML(info.htmlNamed) + ' / ' : ''}${escapeHTML(info.htmlHex)} / ${escapeHTML(info.htmlDec)}</div>`;
+          out += `<div>│ <span class="c-dim">Escape    :</span> <span style="font-family:monospace;">${escapeHTML(info.escapeJs)}</span></div>`;
+          out += '<div class="c-accent ansi-bold" style="margin-top:4px;">└───────────────────────────────────────────────────────────────────┘</div>';
+          return out;
+        }
+
+        const results = window.TextEngine.unicodemap.searchUnicode(query, 15);
+        if (results.length === 0) {
+          return `unicodemap: no matches found for '${escapeHTML(query)}'`;
+        }
+
+        let out = `<div class="c-accent ansi-bold">Unicode Map Search Results for '${escapeHTML(query)}':</div>`;
+        out += '<div class="c-dim" style="margin-bottom:6px;">CodePoint  Char  Category  Name</div>';
+        results.forEach(r => {
+          const cpCol = r.formattedHex.padEnd(10);
+          const chCol = (r.char || ' ').padEnd(4);
+          const catCol = r.category.code.padEnd(8);
+          out += `<div><span class="c-accent">${escapeHTML(cpCol)}</span> <span style="font-weight:bold;">${escapeHTML(chCol)}</span> <span class="c-dim">${escapeHTML(catCol)}</span> ${escapeHTML(r.name)}</div>`;
+        });
+        out += `<div class="c-dim" style="margin-top:6px;">Type 'unicodemap &lt;codepoint&gt;' for full properties or 'unicodemap --ui' for visual grid.</div>`;
+        return out;
+      }
+    },
+
+    unimap: {
+      desc: 'alias for unicodemap',
+      usage: 'unimap [--ui] [codepoint/character/search-query...]',
+      exec(args, stdin) {
+        return commands.unicodemap.exec(args, stdin);
       }
     },
     urlencode: {
@@ -6565,7 +7261,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'decayfmt', 'idcy', 'tdcy', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'longs', 'long-s', 'archaic-s', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
+          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'unicodemap', 'unimap', 'decayfmt', 'idcy', 'tdcy', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'longs', 'long-s', 'archaic-s', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -7541,6 +8237,11 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
         if (target === 'textmanip' || target === 'text-manipulation' || target === 'workbench' || target === 'text-tools' || target === 'tools') {
           textManipWorkbench.open('count');
           return `<span class="c-accent">opened text manipulation workbench.</span>`;
+        }
+
+        if (target === 'unicodemap' || target === 'unimap' || target === 'charmap') {
+          textManipWorkbench.open('unicodemap');
+          return `<span class="c-accent">opened Unicode character map (unimap) in text manipulation workbench.</span>`;
         }
 
         if (target === 'qr' || target === 'qrcode' || target === 'qrcodegen') {
