@@ -2213,8 +2213,8 @@ Volume  : ${vol}%`;
                 <div class="tm-unimap-nav-group">
                   <span>font:</span>
                   <select class="tm-select" id="tm-unimap-font-select" style="width: 155px;" title="Select font for Unicode character grid only">
-                    <option value="unifont" selected>Unifont (Default)</option>
-                    <option value="native">Native / System Font</option>
+                    <option value="unifont" selected>Unifont</option>
+                    <option value="native">native / system font</option>
                   </select>
 
                   <span>go to:</span>
@@ -2232,7 +2232,6 @@ Volume  : ${vol}%`;
                 <div class="tm-unimap-grid-pane">
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
                     <div>range: <span id="tm-unimap-range-lbl" class="c-accent" style="font-family:monospace; font-weight:bold;">U+0000-U+00FF</span> (<span id="tm-unimap-block-lbl">Basic Latin</span>)</div>
-                    <div><span class="c-dim">click cell to inspect · double-click to insert into editor</span></div>
                   </div>
 
                   <div class="tm-unimap-grid-container" id="tm-unimap-grid-container">
@@ -2276,7 +2275,7 @@ Volume  : ${vol}%`;
                     <button type="button" class="tm-btn tm-btn-primary" id="tm-unimap-insert-btn" style="flex:1;">insert</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-char-btn">copy char</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-cp-btn">copy U+</button>
-                    <button type="button" class="tm-btn" id="tm-unimap-inspect-sel-btn" title="inspect selected">inspect editor char</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-inspect-sel-btn" title="inspect selected">inspect selected</button>
                   </div>
                 </div>
               </div>

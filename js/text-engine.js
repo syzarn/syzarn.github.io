@@ -4464,7 +4464,6 @@
     },
 
     toolsCatalog: [
-      { id: "unicodemap", name: "unicode character map (unimap)", category: "linguistics & encoding", desc: "browse, search, and inspect the entire unicode character set with 16-col grid, unifont rendering, and property breakdown.", cli: "unicodemap [--ui] [codepoint/char...]" },
       { id: "count", name: "count characters words sentences lines", category: "basic tools", desc: "analyze character, word, sentence, line and byte statistics with word frequency.", cli: "count [-c|-w|-s|-l|--freq] [file/text]" },
       { id: "replace", name: "find and replace", category: "basic tools", desc: "find and replace text using literal strings or regular expressions.", cli: "replace [-i|-g|-r] <search> <replace> [file/text]" },
       { id: "case", name: "letter case converter", category: "basic tools", desc: "convert text to uppercase, lowercase, titlecase, sentence case, random, camelCase, snake_case, etc.", cli: "case <upper|lower|title|sentence|random|camel|snake|kebab> [file/text]" },
@@ -4495,6 +4494,7 @@
       { id: "unicode", name: "unicode inspector", category: "miscellaneous", desc: "convert text to HTML decimal, HTML hex, UTF-16, C-source escape or codepoints.", cli: "unicode [-f html_dec|html_hex|utf16_hex|c_source|codepoint] [file/text]" },
       { id: "diff", name: "text difference checker (diff)", category: "developer & data", desc: "compare two texts, code snippets, or files line-by-line or word-by-word with unified diff output.", cli: "diff [-w|-i|-W|--word|--char] <file1/text1> <file2/text2>" },
       { id: "mapdiff", name: "json map difference checker", category: "developer & data", desc: "compare two JSON objects or key-value maps to find missing, extra, and mismatched keys/values.", cli: "mapdiff <file1/json1> <file2/json2>" },
+      { id: "unicodemap", name: "unicode character map (unimap)", category: "linguistics & encoding", desc: "browse, search, and inspect the entire unicode character set with 16-col grid, unifont rendering, and property breakdown.", cli: "unicodemap [--ui] [codepoint/char...]" },
       { id: "bijoy", name: "bijoy (ANSI)", category: "linguistics & encoding", desc: "convert Bengali text between Bijoy (ANSI) encoding and standard Unicode (mjcdi engine).", cli: "bijoy [-a|-u] [file/text] or ansi2uni / uni2ansi" },
       { id: "longs", name: "long s (ſ)", category: "linguistics & encoding", desc: "insert historical long s (ſ) into English, French, German, Spanish, and Italian text based on classical orthographic rules.", cli: "longs [-l en|fr|de|es|it] [-x] [file/text...]" },
       { id: "url", name: "URL (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
