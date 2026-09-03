@@ -2024,6 +2024,8 @@ Volume  : ${vol}%`;
                     <option value="CODE39">CODE39</option>
                     <option value="ITF14">ITF-14</option>
                     <option value="ITF">ITF</option>
+                    <option value="postnet">POSTNET (USPS)</option>
+                    <option value="planet">PLANET (USPS)</option>
                     <option value="pdf417">PDF417 (stacked 2D)</option>
                     <option value="compactpdf417">Compact PDF417</option>
                     <option value="pharmacode">Pharmacode</option>
@@ -2863,6 +2865,27 @@ Volume  : ${vol}%`;
           if (pdfOptsRow) pdfOptsRow.style.display = isPdf ? 'flex' : 'none';
         };
 
+        const getBcContent = () => {
+          let content = (textarea && textarea.value) ? textarea.value.trim() : '';
+          if (!content) {
+            const fmt = formatSelect ? formatSelect.value : 'CODE128';
+            if (fmt === 'EAN13') content = '202604062336';
+            else if (fmt === 'EAN8') content = '2710199';
+            else if (fmt === 'UPC') content = '19971123021';
+            else if (fmt === 'CODE128A') content = 'NULL';
+            else if (fmt === 'UPCE') content = '17102005';
+            else if (fmt === 'pharmacode') content = '3010';
+            else if (fmt === 'ITF14') content = '2002120912009';
+            else if (fmt === 'codabar') content = 'B00B';
+            else if (fmt === 'postnet') content = '11372';
+            else if (fmt === 'planet') content = '1997112302177';
+            else if (fmt === 'MSI' || fmt === 'MSI10' || fmt === 'MSI11') content = '20040317';
+            else if (fmt === 'pdf417' || fmt === 'compactpdf417') content = 'KI KORIS?';
+            else content = 'RSVA-2711';
+          }
+          return content;
+        };
+
         const updateLiveBarcode = () => {
           if (!window.TextEngine) return;
           updateBcFormatVisibility();
@@ -2879,21 +2902,7 @@ Volume  : ${vol}%`;
             `;
           }
 
-          const rawContent = (textarea && textarea.value) ? textarea.value.trim() : '';
-          let content = rawContent;
-          if (!content) {
-            if (format === 'EAN13') content = '202604062336';
-            else if (format === 'EAN8') content = '2710199';
-            else if (format === 'UPC') content = '19971123021';
-            else if (format === 'CODE128A') content = 'NULL';
-            else if (format === 'UPCE') content = '17102005';
-            else if (format === 'pharmacode') content = '3010';
-            else if (format === 'ITF14') content = '2002120912009';
-            else if (format === 'codabar') content = 'B00B';
-            else if (format === 'MSI', 'MSI10', 'MSI11') content = '20040317';
-            else if (format === 'pdf417' || format === 'compactpdf417') content = 'KI KORIS?';
-            else content = 'RSVA-2711';
-          }
+          const content = getBcContent();
 
           const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
           const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -3006,7 +3015,7 @@ Volume  : ${vol}%`;
 
         if (dlPngBtn) {
           dlPngBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
+            const content = getBcContent();
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -3050,7 +3059,7 @@ Volume  : ${vol}%`;
 
         if (dlSvgBtn) {
           dlSvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
+            const content = getBcContent();
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -3088,7 +3097,7 @@ Volume  : ${vol}%`;
 
         if (copyAsciiBtn) {
           copyAsciiBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
+            const content = getBcContent();
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const displayValue = displayValCheck ? displayValCheck.checked : true;
             const textPosition = textPosSelect ? textPosSelect.value : 'bottom';
@@ -3112,7 +3121,7 @@ Volume  : ${vol}%`;
 
         if (copySvgBtn) {
           copySvgBtn.addEventListener('click', () => {
-            const content = (textarea && textarea.value) ? textarea.value.trim() : 'EIKHI-2002';
+            const content = getBcContent();
             const format = formatSelect ? formatSelect.value : 'CODE128';
             const width = parseInt(widthInput ? widthInput.value : 2, 10) || 2;
             const height = parseInt(heightInput ? heightInput.value : 80, 10) || 80;
@@ -7031,7 +7040,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     barcode: {
-      desc: 'generate customizable 1D and stacked 2D barcodes (CODE128, EAN, UPC, PDF417, CODE39, etc.)',
+      desc: 'generate customizable 1D, postal, and stacked 2D barcodes (CODE128, EAN, UPC, POSTNET, PLANET, PDF417, CODE39, etc.)',
       usage: 'barcode [-f format] [-w width] [-h height] [-m margin] [--columns N] [--rows N] [--compact] [--no-text] [--color hex] [--bg hex] [--ascii|--svg|--dataurl] [--ui] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'barcode: text engine not loaded';
@@ -7118,10 +7127,12 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         const input = extractTextInput(textArgs, stdin);
         if (!input.text && input.isEmpty) {
           return `<div class="tool-result-box">
-<div class="tool-result-header">Barcode Generator (1D & Stacked PDF417 Barcodes)</div>
+<div class="tool-result-header">Barcode Generator (1D, Postal & Stacked PDF417 Barcodes)</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [--size 4000] [file/text...]</div>
+<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|POSTNET|PLANET|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [--size 4000] [file/text...]</div>
 <div class="c-dim">  echo "123456789012" | barcode -f EAN13</div>
+<div class="c-dim">  echo "90210" | barcode -f postnet</div>
+<div class="c-dim">  echo "12345678901" | barcode -f planet</div>
 <div class="c-dim">  echo "SECURE-PAYLOAD" | barcode -f pdf417 --columns 4 --eclevel 3</div>
 <div class="c-dim">  barcode --ui "HELLO-128"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">formats & input restrictions:</span></div>
@@ -7133,6 +7144,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  EAN-8          : Exactly 7 or 8 numeric digits (0-9)</div>
 <div class="c-dim">  UPC (UPC-A)    : Exactly 11 or 12 numeric digits (0-9)</div>
 <div class="c-dim">  UPC-E          : 6, 7, or 8 numeric digits (0-9)</div>
+<div class="c-dim">  POSTNET        : USPS Postal 5 (ZIP), 9 (ZIP+4), or 11 (Delivery Point) numeric digits</div>
+<div class="c-dim">  PLANET         : USPS Postal tracking 11 or 13 numeric digits</div>
 <div class="c-dim">  CODE39         : Uppercase A-Z, digits 0-9, space, symbols (- . $ / + %)</div>
 <div class="c-dim">  CODE93         : Uppercase A-Z, digits 0-9, symbols (full ASCII via escapes)</div>
 <div class="c-dim">  ITF-14         : Exactly 13 or 14 numeric digits (0-9)</div>

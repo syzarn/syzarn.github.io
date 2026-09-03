@@ -2491,6 +2491,8 @@
       if (clean === 'CODE93' || clean === 'CODE93FULLASCII') return 'CODE93';
       if (clean === 'PDF417' || clean === 'COMPACTPDF417' || clean === 'PDF417TRUNC') return 'pdf417';
       if (clean === 'MICROPDF417') return 'micropdf417';
+      if (clean === 'POSTNET' || clean === 'USPSPOSTNET') return 'postnet';
+      if (clean === 'PLANET' || clean === 'USPSPLANET') return 'planet';
       return format;
     },
 
@@ -2541,6 +2543,113 @@
         } catch (e) {
           return { error: e.message || String(e) };
         }
+      }
+
+      if (format === 'postnet' || format === 'planet') {
+        const rawText = text.trim();
+        const digits = rawText.replace(/[\s-]/g, '');
+        if (!/^\d+$/.test(digits)) {
+          return { error: `${format.toUpperCase()} input must contain digits (0-9) only` };
+        }
+
+        let payloadDigits = digits;
+        if (format === 'postnet') {
+          if (digits.length === 6 || digits.length === 10 || digits.length === 12) {
+            let sum = 0;
+            for (let i = 0; i < digits.length - 1; i++) sum += parseInt(digits[i], 10);
+            const expectedCheck = (10 - (sum % 10)) % 10;
+            if (parseInt(digits[digits.length - 1], 10) === expectedCheck) {
+              payloadDigits = digits.slice(0, -1);
+            } else {
+              return { error: `POSTNET must be 5, 9, or 11 digits (got ${digits.length} with invalid check digit)` };
+            }
+          } else if (digits.length !== 5 && digits.length !== 9 && digits.length !== 11) {
+            return { error: `POSTNET requires 5 (ZIP), 9 (ZIP+4), or 11 (Delivery Point) numeric digits (got ${digits.length})` };
+          }
+        } else {
+          // planet
+          if (digits.length === 12 || digits.length === 14) {
+            let sum = 0;
+            for (let i = 0; i < digits.length - 1; i++) sum += parseInt(digits[i], 10);
+            const expectedCheck = (10 - (sum % 10)) % 10;
+            if (parseInt(digits[digits.length - 1], 10) === expectedCheck) {
+              payloadDigits = digits.slice(0, -1);
+            } else {
+              return { error: `PLANET must be 11 or 13 digits (got ${digits.length} with invalid check digit)` };
+            }
+          } else if (digits.length !== 11 && digits.length !== 13) {
+            return { error: `PLANET requires 11 or 13 numeric digits (got ${digits.length})` };
+          }
+        }
+
+        let sum = 0;
+        for (let i = 0; i < payloadDigits.length; i++) {
+          sum += parseInt(payloadDigits[i], 10);
+        }
+        const check = (10 - (sum % 10)) % 10;
+        const allDigits = payloadDigits + check;
+
+        const POSTNET_PATTERNS = {
+          '0': [1, 1, 0, 0, 0],
+          '1': [0, 0, 0, 1, 1],
+          '2': [0, 0, 1, 0, 1],
+          '3': [0, 0, 1, 1, 0],
+          '4': [0, 1, 0, 0, 1],
+          '5': [0, 1, 0, 1, 0],
+          '6': [0, 1, 1, 0, 0],
+          '7': [1, 0, 0, 0, 1],
+          '8': [1, 0, 0, 1, 0],
+          '9': [1, 0, 1, 0, 0]
+        };
+
+        const PLANET_PATTERNS = {
+          '0': [0, 0, 1, 1, 1],
+          '1': [1, 1, 1, 0, 0],
+          '2': [1, 1, 0, 1, 0],
+          '3': [1, 1, 0, 0, 1],
+          '4': [1, 0, 1, 1, 0],
+          '5': [1, 0, 1, 0, 1],
+          '6': [1, 0, 0, 1, 1],
+          '7': [0, 1, 1, 1, 0],
+          '8': [0, 1, 1, 0, 1],
+          '9': [0, 1, 0, 1, 1]
+        };
+
+        const patterns = format === 'postnet' ? POSTNET_PATTERNS : PLANET_PATTERNS;
+        const bars = [1];
+        for (let i = 0; i < allDigits.length; i++) {
+          bars.push(...patterns[allDigits[i]]);
+        }
+        bars.push(1);
+
+        const totalBinary = bars.join('');
+        const opts = Object.assign({
+          format: format.toUpperCase(),
+          width: options.width != null ? Number(options.width) : 2,
+          height: options.height != null ? Number(options.height) : 80,
+          displayValue: options.displayValue !== false,
+          text: options.text,
+          textAlign: options.textAlign || 'center',
+          textPosition: options.textPosition || 'bottom',
+          fontSize: options.fontSize != null ? Number(options.fontSize) : 16,
+          background: options.background || '#ffffff',
+          lineColor: options.lineColor || '#000000',
+          margin: options.margin != null ? Number(options.margin) : 10
+        }, options);
+
+        return {
+          text: rawText,
+          format: format.toUpperCase(),
+          isPostal: true,
+          isHeightModulated: true,
+          bars,
+          payloadDigits,
+          allDigits,
+          checkDigit: check,
+          options: opts,
+          binary: totalBinary,
+          totalModules: bars.length
+        };
       }
 
       const lib = this.getBarcodeLib();
@@ -2630,6 +2739,46 @@
         return lines.join('\n');
       }
 
+      if (res.isPostal || res.isHeightModulated) {
+        const height = Math.max(2, Math.min(20, Number(options.height || 6)));
+        const quietZone = Math.max(0, options.margin != null ? Number(options.margin) : 2);
+        const quietSpaces = ' '.repeat(quietZone);
+        const bars = res.bars || [];
+        const barChar = options.barChar || '█';
+        const spaceChar = ' ';
+        const shortHeight = Math.max(1, Math.round(height * 0.4));
+        const lines = [];
+
+        for (let y = 0; y < height; y++) {
+          let line = '';
+          for (let i = 0; i < bars.length; i++) {
+            const isTall = bars[i] === 1;
+            const isVisible = isTall || (y >= height - shortHeight);
+            line += (isVisible ? barChar : spaceChar) + spaceChar;
+          }
+          lines.push(quietSpaces + line.trimEnd() + quietSpaces);
+        }
+
+        if (res.options.displayValue !== false && options.displayValue !== false) {
+          const rawText = res.options.text || res.text;
+          const labelText = String(rawText);
+          const totalWidth = (bars.length * 2 - 1) + (quietZone * 2);
+          let paddedText = labelText;
+          if (labelText.length < totalWidth) {
+            const leftPad = Math.floor((totalWidth - labelText.length) / 2);
+            paddedText = ' '.repeat(leftPad) + labelText;
+          }
+          if (res.options.textPosition === 'top') {
+            lines.unshift(paddedText);
+            lines.unshift('');
+          } else {
+            lines.push('');
+            lines.push(paddedText);
+          }
+        }
+        return lines.join('\n');
+      }
+
       const height = Math.max(2, Math.min(20, Number(options.height || 6)));
       const quietZone = Math.max(0, options.margin != null ? Number(options.margin) : 2);
       const quietSpaces = ' '.repeat(quietZone);
@@ -2695,6 +2844,59 @@
             return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${e.message || e}</text></svg>`;
           }
         }
+      }
+
+      if (format === 'postnet' || format === 'planet') {
+        const res = this.generateBarcode(text, options);
+        if (res.error) return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${res.error}</text></svg>`;
+
+        const barWidth = Math.max(1, options.width != null ? Number(options.width) : 2);
+        const barSpacing = Math.max(1, Math.round(barWidth * 1.5));
+        const height = Math.max(10, options.height != null ? Number(options.height) : 60);
+        const shortHeight = Math.max(4, Math.round(height * 0.4));
+        const margin = options.margin != null ? Number(options.margin) : 10;
+        const background = options.background || '#ffffff';
+        const lineColor = options.lineColor || '#000000';
+        const displayValue = options.displayValue !== false;
+        const fontSize = Math.max(8, options.fontSize != null ? Number(options.fontSize) : 16);
+        const textPosition = options.textPosition || 'bottom';
+        const textAlign = options.textAlign || 'center';
+
+        const bars = res.bars;
+        const totalBars = bars.length;
+        const barAreaWidth = (totalBars - 1) * (barWidth + barSpacing) + barWidth;
+        const textPadding = displayValue ? (fontSize + 10) : 0;
+        const svgWidth = barAreaWidth + (margin * 2);
+        const svgHeight = height + (margin * 2) + textPadding;
+
+        const barTop = (displayValue && textPosition === 'top') ? margin + fontSize + 6 : margin;
+        const baseline = barTop + height;
+
+        let rects = '';
+        for (let i = 0; i < totalBars; i++) {
+          const isTall = bars[i] === 1;
+          const bh = isTall ? height : shortHeight;
+          const bx = margin + i * (barWidth + barSpacing);
+          const by = baseline - bh;
+          rects += `<rect x="${bx}" y="${by}" width="${barWidth}" height="${bh}" fill="${lineColor}" />`;
+        }
+
+        let textTag = '';
+        if (displayValue) {
+          let textX = svgWidth / 2;
+          let textAnchor = 'middle';
+          if (textAlign === 'left') {
+            textX = margin;
+            textAnchor = 'start';
+          } else if (textAlign === 'right') {
+            textX = svgWidth - margin;
+            textAnchor = 'end';
+          }
+          const textY = (textPosition === 'top') ? margin + fontSize : baseline + fontSize + 4;
+          textTag = `<text x="${textX}" y="${textY}" font-family="monospace" font-size="${fontSize}" font-weight="bold" text-anchor="${textAnchor}" fill="${lineColor}">${res.text}</text>`;
+        }
+
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}"><rect width="${svgWidth}" height="${svgHeight}" fill="${background}" /><g>${rects}</g>${textTag}</svg>`;
       }
 
       const lib = this.getBarcodeLib();
@@ -2829,6 +3031,82 @@
         }
       }
 
+      if (format === 'postnet' || format === 'planet') {
+        const res = this.generateBarcode(text, options);
+        if (!res || res.error) return null;
+
+        const baseBarWidth = Math.max(1, options.width != null ? Number(options.width) : 2);
+        const baseBarSpacing = Math.max(1, Math.round(baseBarWidth * 1.5));
+        const baseHeight = Math.max(10, options.height != null ? Number(options.height) : 60);
+        const baseShortHeight = Math.max(4, Math.round(baseHeight * 0.4));
+        const baseMargin = options.margin != null ? Number(options.margin) : 10;
+        const displayValue = options.displayValue !== false;
+        const textPosition = options.textPosition || 'bottom';
+        const textAlign = options.textAlign || 'center';
+        const baseFontSize = Math.max(8, options.fontSize != null ? Number(options.fontSize) : 16);
+        const lineColor = options.lineColor || options.color || '#000000';
+        const background = options.background || options.bg || '#ffffff';
+
+        const textHeight = displayValue ? baseFontSize + 8 : 0;
+        const totalBars = res.bars.length;
+        const barAreaBaseWidth = (totalBars - 1) * (baseBarWidth + baseBarSpacing) + baseBarWidth;
+        const W_base = barAreaBaseWidth + (baseMargin * 2);
+        const H_base = baseHeight + (baseMargin * 2) + textHeight;
+
+        let S = 1;
+        if (targetSize && targetSize !== 'auto') {
+          const T = Math.min(4000, Math.max(50, parseInt(targetSize, 10) || 4000));
+          S = Math.min(T / W_base, T / H_base);
+        }
+
+        const canvasWidth = Math.min(4000, Math.max(10, Math.round(W_base * S)));
+        const canvasHeight = Math.min(4000, Math.max(10, Math.round(H_base * S)));
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return null;
+
+        ctx.imageSmoothingEnabled = false;
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        const marginX = Math.round(baseMargin * S);
+        const marginY = Math.round(baseMargin * S);
+        const barHeight = Math.round(baseHeight * S);
+        const shortBarHeight = Math.round(baseShortHeight * S);
+        const fontSize = Math.round(baseFontSize * S);
+
+        const barTop = (displayValue && textPosition === 'top') ? marginY + fontSize + Math.round(4 * S) : marginY;
+        const baseline = barTop + barHeight;
+        const totalDrawWidth = canvasWidth - (marginX * 2);
+        const pitch = totalDrawWidth / totalBars;
+        const barW = Math.max(1, Math.round(pitch * 0.4));
+
+        ctx.fillStyle = lineColor;
+        for (let i = 0; i < totalBars; i++) {
+          const isTall = res.bars[i] === 1;
+          const bh = isTall ? barHeight : shortBarHeight;
+          const bx = marginX + Math.round(i * pitch);
+          const by = baseline - bh;
+          ctx.fillRect(bx, by, barW, bh);
+        }
+
+        if (displayValue) {
+          ctx.fillStyle = lineColor;
+          ctx.font = `bold ${fontSize}px monospace, sans-serif`;
+          ctx.textAlign = textAlign;
+          let textX = canvasWidth / 2;
+          if (textAlign === 'left') textX = marginX;
+          else if (textAlign === 'right') textX = canvasWidth - marginX;
+
+          const textY = (textPosition === 'top') ? marginY + fontSize : baseline + fontSize + Math.round(2 * S);
+          ctx.fillText(res.text, textX, textY);
+        }
+
+        return canvas;
+      }
+
       if (targetSize && targetSize !== 'auto') {
         const res = this.generateBarcode(text, options);
         if (res && res.binary) {
@@ -2915,7 +3193,7 @@
       qr: {
         id: 'qr',
         name: 'QR Code (Quick Response Matrix)',
-        type: '2D Matrix',
+        type: '2D matrix',
         allowedChars: 'all characters (UTF-8, Latin-1, binary bytes, numeric 0-9, alphanumeric A-Z 0-9 space $%*+-./:, kanji)',
         lengthLimit: 'up to 7,089 numeric, 4,296 alphanumeric, or 2,953 binary bytes (versions 1 to 40)',
         notes: 'supports 4 error correction levels (low ~7%, medium ~15%, quartile ~25%, high ~30%) and 8 mask patterns.',
@@ -2924,7 +3202,7 @@
       microqr: {
         id: 'microqr',
         name: 'Micro QR Code (ISO/IEC 18004)',
-        type: '2D Matrix (Single Corner Finder)',
+        type: '2D matrix (single corner finder)',
         allowedChars: 'numeric digits (0-9), alphanumeric (A-Z, 0-9, space, $%*+-./:), 8-bit binary / UTF-8, and kanji',
         lengthLimit: 'up to 35 numeric, 21 alphanumeric, 15 binary bytes, or 9 kanji',
         notes: 'compact single-finder QR code designed for small electronic components, direct part marking (DPM), and tight printed spaces. M1 (detection only), M2/M3 (L/M), M4 (L/M/Q).',
@@ -2933,7 +3211,7 @@
       rmqr: {
         id: 'rmqr',
         name: 'rMQR Code (Rectangular Micro QR / ISO/IEC 23943:2022)',
-        type: '2D Rectangular Matrix',
+        type: '2D rectangular matrix',
         allowedChars: 'numeric digits (0-9), alphanumeric, 8-bit binary / UTF-8, and kanji',
         lengthLimit: 'up to 361 numeric, 219 alphanumeric, 150 binary bytes, or 92 kanji',
         notes: 'rectangular 2D matrix symbology designed for narrow elongated strips (test tubes, PCB margins, blister packs). features finder and sub-finder patterns with M (~15%) and H (~30%) error correction.',
@@ -2942,7 +3220,7 @@
       datamatrix: {
         id: 'datamatrix',
         name: 'Data Matrix (ISO/IEC 16022)',
-        type: '2D Matrix',
+        type: '2D matrix',
         allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes',
         lengthLimit: 'up to 3,116 numeric, 2,335 alphanumeric, or 1,555 binary bytes (10x10 to 144x144)',
         notes: 'supports square and rectangular shapes. supports GS1/FNC1 parsing with --parsefnc.',
@@ -2951,7 +3229,7 @@
       aztec: {
         id: 'aztec',
         name: 'Aztec Code (ISO/IEC 24778)',
-        type: '2D Matrix',
+        type: '2D matrix',
         allowedChars: 'full 8-bit ASCII / binary data (all 256 byte values) and UTF-8',
         lengthLimit: 'compact: 1-4 layers (up to 89 numeric / 53 bytes); full-range: 1-32 layers (up to 3,832 numeric / 1,914 bytes)',
         notes: 'central square bullseye finder. adjustable Reed-Solomon ECC. does not require a quiet zone.',
@@ -2960,7 +3238,7 @@
       maxicode: {
         id: 'maxicode',
         name: 'MaxiCode (UPS / ISO/IEC 16023)',
-        type: '2D Matrix',
+        type: '2D matrix',
         allowedChars: 'Mode 4 (standard) & Mode 5 (secure): full ASCII text/data. Mode 2 (US SCM) & Mode 3 (Intl SCM): structured carrier message (postal code, 3-digit country, 3-digit class of service)',
         lengthLimit: 'Mode 4: max 93 alphanumeric chars. Mode 5: max 77 alphanumeric chars (enhanced ECC)',
         notes: 'fixed-size honeycomb matrix of 884 hexagons in 33 rows with central concentric bullseye finder.',
@@ -2969,7 +3247,7 @@
       dotcode: {
         id: 'dotcode',
         name: 'DotCode (AIM ISS / ISO/IEC 21471)',
-        type: '2D Matrix (Discontinuous Dots)',
+        type: '2D matrix (discontinuous dots)',
         allowedChars: 'full ASCII (0-127), extended ASCII (128-255), UTF-8, and raw binary bytes. GS1 application identifiers supported via FNC1',
         lengthLimit: 'up to ~1,500+ characters (flexible width and height aspect ratio; sum of width and height must be odd)',
         notes: 'checkerboard dot matrix optimized for ultra-high-speed industrial inkjet & laser on-the-fly printing (tobacco track & trace, pharmaceuticals, liquor packaging). uses Reed-Solomon ECC.',
@@ -2978,7 +3256,7 @@
       hanxin: {
         id: 'hanxin',
         name: 'Han Xin Code (汉信码 / Chinese Sensible Code / ISO/IEC 20830)',
-        type: '2D Matrix (4 Corner Finders)',
+        type: '2D matrix (4 corner finders)',
         allowedChars: 'chinese characters (GB18030 / GB2312), full ASCII (0-127), latin, numeric digits, and raw 8-bit binary bytes',
         lengthLimit: 'up to 7,827 digits, 4,350 alphanumeric, 2,174 chinese chars, or 3,261 bytes)',
         notes: 'specifically optimized for 2-byte and 4-byte chinese ideographs with 4 distinct corner finder patterns. features Reed-Solomon ECC and 4 mask evaluation patterns.',
@@ -2988,7 +3266,7 @@
       CODE128: {
         id: 'CODE128',
         name: 'Code 128 (auto-switching A/B/C)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'full 128 standard ASCII character set (ASCII 0-127: letters, numbers, symbols, control chars)',
         lengthLimit: 'variable',
         notes: 'automatically switches between subsets A, B, and C for optimal density. includes modulo-103 checksum.',
@@ -2997,7 +3275,7 @@
       CODE128A: {
         id: 'CODE128A',
         name: 'Code 128 Subset A',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'uppercase letters (A-Z), digits (0-9), punctuation (ASCII 32-95), and control characters (0-31, NUL to US). no lowercase letters',
         lengthLimit: 'variable',
         notes: 'used when control codes (e.g. CR, LF, TAB) or uppercase alphanumeric characters are needed.',
@@ -3006,7 +3284,7 @@
       CODE128B: {
         id: 'CODE128B',
         name: 'Code 128 Subset B',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'standard printable ASCII characters (ASCII 32-127): uppercase (A-Z), lowercase (a-z), digits (0-9), and punctuation',
         lengthLimit: 'variable',
         notes: 'standard format for general-purpose mixed-case alphanumeric text and barcodes.',
@@ -3015,7 +3293,7 @@
       CODE128C: {
         id: 'CODE128C',
         name: 'Code 128 Subset C',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9).',
         lengthLimit: 'variable even number of digits [2n] (encoded in pairs 00-99)',
         notes: 'encodes 2 numeric digits per symbol character for ultra-high density.',
@@ -3024,7 +3302,7 @@
       EAN13: {
         id: 'EAN13',
         name: 'EAN-13 (International Article Number)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9). must be exactly 12 or 13 digits',
         lengthLimit: 'exactly 12 digits (auto-appends 13th checksum) or 13 digits (with valid mod-10 checksum)',
         notes: 'worldwide retail standard barcode.',
@@ -3033,7 +3311,7 @@
       EAN8: {
         id: 'EAN8',
         name: 'EAN-8 (Compact European Article Number)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9). must be exactly 7 or 8 digits',
         lengthLimit: 'exactly 7 digits (auto-appends 8th checksum) or 8 digits (with valid mod-10 checksum)',
         notes: 'compact retail barcode for small product packages.',
@@ -3042,7 +3320,7 @@
       UPC: {
         id: 'UPC',
         name: 'UPC-A (Universal Product Code)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9). must be exactly 11 or 12 digits',
         lengthLimit: 'exactly 11 digits (auto-appends 12th checksum) or 12 digits (with valid mod-10 checksum)',
         notes: 'standard retail product barcode widely used in north america.',
@@ -3051,7 +3329,7 @@
       UPCE: {
         id: 'UPCE',
         name: 'UPC-E (Zero-Suppressed UPC)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9). 6, 7, or 8 digits (must start with 0 or 1) or compressible 11/12-digit UPC-A',
         lengthLimit: '6, 7, or 8 digits',
         notes: 'zero-compressed version of UPC-A for small packages in US retail.',
@@ -3060,7 +3338,7 @@
       CODE39: {
         id: 'CODE39',
         name: 'Code 39 (Alpha39 / USD-2)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'uppercase letters (A-Z), numeric digits (0-9), space, and symbols: - . $ / + %',
         lengthLimit: 'variable (recommended <30 chars for scan reliability)',
         notes: 'lowercase letters are automatically capitalized. start/stop asterisk (*) delimiters are handled automatically.',
@@ -3069,7 +3347,7 @@
       CODE93: {
         id: 'CODE93',
         name: 'Code 93 (High-Density Alpha)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'uppercase letters (A-Z), numeric digits (0-9), space, and symbols: - . $ / + % (Full ASCII via escapes)',
         lengthLimit: 'variable',
         notes: 'higher density than Code 39 with dual-check characters (C & K) for enhanced data security.',
@@ -3078,7 +3356,7 @@
       ITF14: {
         id: 'ITF14',
         name: 'ITF-14 (Packaging / Master Carton)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9). must be exactly 13 or 14 digits',
         lengthLimit: 'exactly 13 digits (auto-appends 14th checksum) or 14 digits',
         notes: 'used on outer shipping cartons and corrugated cardboard boxes for Master/Carton packaging.',
@@ -3087,7 +3365,7 @@
       ITF: {
         id: 'ITF',
         name: 'Interleaved 2 of 5 (ITF / I25)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9).',
         lengthLimit: 'variable even number of digits [2n]',
         notes: 'encodes pairs of digits simultaneously (bars encode one, spaces encode the other). odd count requires a leading zero.',
@@ -3096,7 +3374,7 @@
       pharmacode: {
         id: 'pharmacode',
         name: 'Pharmacode (Pharmaceutical Binary Code)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric integer digits (0-9)',
         lengthLimit: 'single integer value from 3 to 131070',
         notes: 'single-track binary barcode used in pharmaceutical packaging inspection.',
@@ -3105,7 +3383,7 @@
       codabar: {
         id: 'codabar',
         name: 'Codabar (NW-7 / Ames Code)',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits (0-9), symbols (- $ : / . +), with start and stop characters (A, B, C, D, T, N, *, or E)',
         lengthLimit: 'variable',
         notes: 'commonly used in blood banks, libraries, photo labs, and airbills. must start and end with valid delimiters.',
@@ -3114,7 +3392,7 @@
       MSI: {
         id: 'MSI',
         name: 'MSI Plessey',
-        type: '1D Linear',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9)',
         lengthLimit: 'variable',
         notes: 'continuous symbology primarily used for supermarket warehouse shelves and retail inventory.',
@@ -3122,8 +3400,8 @@
       },
       MSI10: {
         id: 'MSI10',
-        name: 'MSI Plessey (Mod 10 Check Digit)',
-        type: '1D Linear',
+        name: 'MSI Plessey (Mod-10 Check Digit)',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9)',
         lengthLimit: 'variable',
         notes: 'MSI Plessey barcode with automatically computed mod-10 check digit.',
@@ -3131,8 +3409,8 @@
       },
       MSI11: {
         id: 'MSI11',
-        name: 'MSI Plessey (Mod 11 Check Digit)',
-        type: '1D Linear',
+        name: 'MSI Plessey (Mod-11 Check Digit)',
+        type: '1D linear',
         allowedChars: 'numeric digits only (0-9)',
         lengthLimit: 'variable',
         notes: 'MSI Plessey barcode with automatically computed mod-11 check digit.',
@@ -3141,7 +3419,7 @@
       pdf417: {
         id: 'pdf417',
         name: 'PDF417 (Portable Data File 417)',
-        type: 'Stacked 2D Barcode',
+        type: 'stacked 2D barcode',
         allowedChars: 'full ASCII (0-127), text, numbers, and raw binary bytes (0-255)',
         lengthLimit: 'up to ~1,850 text characters, 2,710 numeric digits, or 1,108 binary bytes (1-30 columns, 3-90 rows)',
         notes: 'stacked linear 2D barcode widely used on ID cards, driver licenses, boarding passes, and shipping labels.',
@@ -3150,11 +3428,29 @@
       compactpdf417: {
         id: 'compactpdf417',
         name: 'Compact PDF417 (Truncated PDF417)',
-        type: 'Stacked 2D Barcode',
+        type: 'stacked 2D barcode',
         allowedChars: 'full ASCII, text, numbers, and raw binary bytes (same as PDF417)',
         lengthLimit: 'up to ~1,850 text characters or 1,108 binary bytes (1-30 columns, 3-90 rows)',
         notes: 'truncated right-side stop pattern to conserve horizontal space in clean scanning environments.',
         example: 'COMPACT-PDF417-DATA'
+      },
+      postnet: {
+        id: 'postnet',
+        name: 'POSTNET (USPS Postal Numeric Encoding Technique)',
+        type: '1D postal (height-modulated)',
+        allowedChars: 'numeric digits only (0-9). hyphens and spaces permitted and stripped automatically',
+        lengthLimit: '5 digits (ZIP Code), 9 digits (ZIP+4), or 11 digits (Delivery Point)',
+        notes: 'USPS height-modulated barcode used for automated mail sorting. each digit is encoded with two tall bars and three short bars, framed by start/stop bars. includes auto-computed mod-10 check digit.',
+        example: '90210'
+      },
+      planet: {
+        id: 'planet',
+        name: 'PLANET (USPS Postal Alpha Numeric Encoding Technique)',
+        type: '1D postal (height-modulated)',
+        allowedChars: 'numeric digits only (0-9). hyphens and spaces permitted and stripped automatically',
+        lengthLimit: '11 or 13 numeric digits',
+        notes: 'USPS height-modulated tracking barcode used for CONFIRM service. inverse of POSTNET: each digit is encoded with three tall bars and two short bars, framed by start/stop bars. includes auto-computed mod-10 check digit.',
+        example: '12345678901'
       }
     },
 
@@ -3171,6 +3467,8 @@
       if (key === 'hanxin' || key === 'hanxincode' || key === 'han-xin' || key === 'hx') return this.symbologyRestrictions.hanxin;
       if (key === 'pdf417') return this.symbologyRestrictions.pdf417;
       if (key === 'compactpdf417' || key === 'micropdf417') return this.symbologyRestrictions.compactpdf417;
+      if (key === 'postnet' || key === 'uspspostnet' || key === 'usps-postnet') return this.symbologyRestrictions.postnet;
+      if (key === 'planet' || key === 'uspsplanet' || key === 'usps-planet') return this.symbologyRestrictions.planet;
 
       const norm = this.normalizeBarcodeFormat(formatOrType);
       return this.symbologyRestrictions[norm] || this.symbologyRestrictions[formatOrType] || {
@@ -3902,7 +4200,7 @@
                 return Promise.resolve(true);
               }
             }
-          } catch (e) {}
+          } catch (e) { }
         }
 
         if (typeof fetch === 'function') {
@@ -3968,7 +4266,7 @@
         if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
           try {
             window.dispatchEvent(new CustomEvent('unicodedata-loaded', { detail: { count: this.unicodeDatabase.size } }));
-          } catch (e) {}
+          } catch (e) { }
         }
       },
 
@@ -4096,23 +4394,23 @@
 
         // Greek Letters
         if (cp >= 0x391 && cp <= 0x3A9 && cp !== 0x3A2) {
-          const names = ["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA","LAMBDA","MU","NU","XI","OMICRON","PI","RHO","","SIGMA","TAU","UPSILON","PHI","CHI","PSI","OMEGA"];
+          const names = ["ALPHA", "BETA", "GAMMA", "DELTA", "EPSILON", "ZETA", "ETA", "THETA", "IOTA", "KAPPA", "LAMBDA", "MU", "NU", "XI", "OMICRON", "PI", "RHO", "", "SIGMA", "TAU", "UPSILON", "PHI", "CHI", "PSI", "OMEGA"];
           const idx = cp - 0x391;
           if (names[idx]) return `GREEK CAPITAL LETTER ${names[idx]}`;
         }
         if (cp >= 0x3B1 && cp <= 0x3C9) {
-          const names = ["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA","LAMBDA","MU","NU","XI","OMICRON","PI","RHO","FINAL SIGMA","SIGMA","TAU","UPSILON","PHI","CHI","PSI","OMEGA"];
+          const names = ["ALPHA", "BETA", "GAMMA", "DELTA", "EPSILON", "ZETA", "ETA", "THETA", "IOTA", "KAPPA", "LAMBDA", "MU", "NU", "XI", "OMICRON", "PI", "RHO", "FINAL SIGMA", "SIGMA", "TAU", "UPSILON", "PHI", "CHI", "PSI", "OMEGA"];
           const idx = cp - 0x3B1;
           if (names[idx]) return `GREEK SMALL LETTER ${names[idx]}`;
         }
 
         // Cyrillic Letters
         if (cp >= 0x410 && cp <= 0x42F) {
-          const cyr = ["A","BE","VE","GHE","DE","IE","ZHE","ZE","I","SHORT I","KA","EL","EM","EN","O","PE","ER","ES","TE","U","EF","KHA","TSE","CHE","SHA","SHCHA","HARD SIGN","YERU","SOFT SIGN","E","YU","YA"];
+          const cyr = ["A", "BE", "VE", "GHE", "DE", "IE", "ZHE", "ZE", "I", "SHORT I", "KA", "EL", "EM", "EN", "O", "PE", "ER", "ES", "TE", "U", "EF", "KHA", "TSE", "CHE", "SHA", "SHCHA", "HARD SIGN", "YERU", "SOFT SIGN", "E", "YU", "YA"];
           return `CYRILLIC CAPITAL LETTER ${cyr[cp - 0x410]}`;
         }
         if (cp >= 0x430 && cp <= 0x44F) {
-          const cyr = ["A","BE","VE","GHE","DE","IE","ZHE","ZE","I","SHORT I","KA","EL","EM","EN","O","PE","ER","ES","TE","U","EF","KHA","TSE","CHE","SHA","SHCHA","HARD SIGN","YERU","SOFT SIGN","E","YU","YA"];
+          const cyr = ["A", "BE", "VE", "GHE", "DE", "IE", "ZHE", "ZE", "I", "SHORT I", "KA", "EL", "EM", "EN", "O", "PE", "ER", "ES", "TE", "U", "EF", "KHA", "TSE", "CHE", "SHA", "SHCHA", "HARD SIGN", "YERU", "SOFT SIGN", "E", "YU", "YA"];
           return `CYRILLIC SMALL LETTER ${cyr[cp - 0x430]}`;
         }
 
@@ -4250,7 +4548,7 @@
             if (/^[0-9A-Fa-f]{4,6}$/.test(token)) {
               const dCp = parseInt(token, 16);
               let dCh = '';
-              try { dCh = String.fromCodePoint(dCp); } catch (e) {}
+              try { dCh = String.fromCodePoint(dCp); } catch (e) { }
               return `U+${token.toUpperCase()}${dCh ? ` (${dCh})` : ''}`;
             }
             return token;
@@ -4262,19 +4560,19 @@
         if (upperMapping) {
           const uCp = parseInt(upperMapping.replace('U+', ''), 16);
           let uCh = '';
-          try { uCh = String.fromCodePoint(uCp); } catch (e) {}
+          try { uCh = String.fromCodePoint(uCp); } catch (e) { }
           mappings.push(`upper: ${upperMapping}${uCh ? ` (${uCh})` : ''}`);
         }
         if (lowerMapping) {
           const lCp = parseInt(lowerMapping.replace('U+', ''), 16);
           let lCh = '';
-          try { lCh = String.fromCodePoint(lCp); } catch (e) {}
+          try { lCh = String.fromCodePoint(lCp); } catch (e) { }
           mappings.push(`lower: ${lowerMapping}${lCh ? ` (${lCh})` : ''}`);
         }
         if (titleMapping && titleMapping !== upperMapping) {
           const tCp = parseInt(titleMapping.replace('U+', ''), 16);
           let tCh = '';
-          try { tCh = String.fromCodePoint(tCp); } catch (e) {}
+          try { tCh = String.fromCodePoint(tCp); } catch (e) { }
           mappings.push(`title: ${titleMapping}${tCh ? ` (${tCh})` : ''}`);
         }
         const mappingsStr = mappings.join(', ');
@@ -4285,7 +4583,7 @@
           const encoder = new TextEncoder();
           utf8Bytes = Array.from(encoder.encode(char));
           utf8Hex = utf8Bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
-        } catch (e) {}
+        } catch (e) { }
 
         let utf16Hex = '';
         if (cp <= 0xFFFF) {
@@ -4309,7 +4607,7 @@
           nfd = char.normalize('NFD');
           nfkc = char.normalize('NFKC');
           nfkd = char.normalize('NFKD');
-        } catch (e) {}
+        } catch (e) { }
 
         const isControl = (cp >= 0x00 && cp <= 0x1F) || (cp >= 0x7F && cp <= 0x9F);
         const controlNames = {
@@ -4503,7 +4801,7 @@
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
       { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
       { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, Micro QR, rMQR, data matrix, aztec code, maxicode, dotcode, han xin) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|png] [file/text]" },
-      { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
+      { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D, postal, and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, POSTNET, PLANET, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
     ]
   };
 
