@@ -83,6 +83,281 @@
     return s;
   }
 
+  /*---- Royal Mail Mailmark 4-State Tables & Encoder ----*/
+  const MM_SET_A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const MM_SET_L = "ABDEFGHJLNPQRSTUWXYZ";
+  const MM_SET_N = "0123456789";
+
+  const MM_POSTCODE_FORMAT = [
+    ['A','N','A','N','L','L','N','L',' '],
+    ['A','A','N','N','L','L','N','L',' '],
+    ['A','A','N','N','N','L','L','N','L'],
+    ['A','A','N','A','N','L','L','N','L'],
+    ['A','N','N','L','L','N','L',' ',' '],
+    ['A','N','N','N','L','L','N','L',' ']
+  ];
+
+  const MM_DATA_SYMBOL_ODD = [
+    0x01, 0x02, 0x04, 0x07, 0x08, 0x0B, 0x0D, 0x0E, 0x10, 0x13, 0x15, 0x16,
+    0x19, 0x1A, 0x1C, 0x1F, 0x20, 0x23, 0x25, 0x26, 0x29, 0x2A, 0x2C, 0x2F,
+    0x31, 0x32, 0x34, 0x37, 0x38, 0x3B, 0x3D, 0x3E
+  ];
+
+  const MM_DATA_SYMBOL_EVEN = [
+    0x03, 0x05, 0x06, 0x09, 0x0A, 0x0C, 0x0F, 0x11, 0x12, 0x14, 0x17, 0x18,
+    0x1B, 0x1D, 0x1E, 0x21, 0x22, 0x24, 0x27, 0x28, 0x2B, 0x2D, 0x2E, 0x30,
+    0x33, 0x35, 0x36, 0x39, 0x3A, 0x3C
+  ];
+
+  const MM_EXTENDER_GROUP_C = [
+    3, 5, 7, 11, 13, 14, 16, 17, 19, 0, 1, 2, 4, 6, 8, 9, 10, 12, 15, 18, 20, 21
+  ];
+
+  const MM_EXTENDER_GROUP_L = [
+    2, 5, 7, 8, 13, 14, 15, 16, 21, 22, 23, 0, 1, 3, 4, 6, 9, 10, 11, 12, 17, 18, 19, 20, 24, 25
+  ];
+
+  const MM_GF_ALOG = new Array(31);
+  const MM_GF_LOG = new Array(32);
+  let mm_p = 1;
+  for (let i = 0; i < 31; i++) {
+    MM_GF_ALOG[i] = mm_p;
+    MM_GF_LOG[mm_p] = i;
+    mm_p <<= 1;
+    if (mm_p & 32) mm_p ^= 0x25;
+  }
+
+  function mm_rs_init_code(nsym, index = 1) {
+    const rspoly = new Array(nsym + 1).fill(0);
+    rspoly[0] = 1;
+    for (let i = 1; i <= nsym; i++) {
+      rspoly[i] = 1;
+      for (let k = i - 1; k > 0; k--) {
+        if (rspoly[k]) {
+          rspoly[k] = MM_GF_ALOG[(MM_GF_LOG[rspoly[k]] + index) % 31];
+        }
+        rspoly[k] ^= rspoly[k - 1];
+      }
+      rspoly[0] = MM_GF_ALOG[(MM_GF_LOG[rspoly[0]] + index) % 31];
+      index++;
+    }
+    return rspoly;
+  }
+
+  function mm_rs_encode(data, nsym, rspoly) {
+    const res = new Array(nsym).fill(0);
+    for (let i = 0; i < data.length; i++) {
+      const m = res[nsym - 1] ^ data[i];
+      if (m) {
+        const log_m = MM_GF_LOG[m];
+        for (let k = nsym - 1; k > 0; k--) {
+          if (rspoly[k]) {
+            res[k] = res[k - 1] ^ MM_GF_ALOG[(log_m + MM_GF_LOG[rspoly[k]]) % 31];
+          } else {
+            res[k] = res[k - 1];
+          }
+        }
+        res[0] = MM_GF_ALOG[(log_m + MM_GF_LOG[rspoly[0]]) % 31];
+      } else {
+        for (let k = nsym - 1; k > 0; k--) {
+          res[k] = res[k - 1];
+        }
+        res[0] = 0;
+      }
+    }
+    return res;
+  }
+
+  function verifyMailmarkPostcode(postcode) {
+    if (postcode === 'XY11     ') return { type: 7, valid: true };
+    let type;
+    if (postcode[7] === ' ') {
+      type = 5;
+    } else if (postcode[8] === ' ') {
+      if (/\d/.test(postcode[1])) {
+        type = /\d/.test(postcode[2]) ? 6 : 1;
+      } else {
+        type = 2;
+      }
+    } else {
+      type = /\d/.test(postcode[3]) ? 3 : 4;
+    }
+
+    const pattern = MM_POSTCODE_FORMAT[type - 1];
+    for (let i = 0; i < 9; i++) {
+      const ch = postcode[i];
+      const pat = pattern[i];
+      if (pat === 'A' && !MM_SET_A.includes(ch)) return { valid: false };
+      if (pat === 'L' && !MM_SET_L.includes(ch)) return { valid: false };
+      if (pat === 'N' && !MM_SET_N.includes(ch)) return { valid: false };
+      if (pat === ' ' && ch !== ' ') return { valid: false };
+    }
+    return { type, valid: true };
+  }
+
+  function encodeMailmark4State(input) {
+    let raw = String(input != null ? input : '').trim();
+    if (!raw) return { error: 'Royal Mail Mailmark 4-state input cannot be empty' };
+
+    // Check if input is a direct 66-character or 78-character DAFT string
+    if ((raw.length === 66 || raw.length === 78) && /^[FADTfadt]+$/.test(raw)) {
+      const bars = raw.toUpperCase();
+      return {
+        bars,
+        totalBars: bars.length,
+        variant: bars.length === 66 ? 'C' : 'L',
+        text: bars
+      };
+    }
+
+    let text = raw.toUpperCase();
+    if (text.length === 13) {
+      text = text + 'XY11     ';
+    } else if (text.length === 17 && /^\d{6}\d{8}/.test(text.substring(3, 17))) {
+      text = text + 'XY11     ';
+    }
+
+    let isC = false;
+    if (text.length <= 22) {
+      text = text.padEnd(22, ' ');
+      isC = true;
+    } else if (text.length <= 26) {
+      text = text.padEnd(26, ' ');
+      isC = false;
+    } else {
+      return { error: `Royal Mail Mailmark 4-state input too long (expected 22 chars for Barcode C or 26 chars for Barcode L, got ${text.length})` };
+    }
+
+    const formatVal = parseInt(text[0], 10);
+    if (isNaN(formatVal) || formatVal < 0 || formatVal > 4) {
+      return { error: `Invalid Format character "${text[0]}" (must be 0-4)` };
+    }
+
+    const version_id = parseInt(text[1], 10) - 1;
+    if (isNaN(version_id) || version_id < 0 || version_id > 3) {
+      return { error: `Invalid Version ID "${text[1]}" (must be 1-4)` };
+    }
+
+    const mail_class = text[2];
+    let classVal;
+    if (mail_class >= '0' && mail_class <= '9') {
+      classVal = parseInt(mail_class, 10);
+    } else if (mail_class >= 'A' && mail_class <= 'E') {
+      classVal = mail_class.charCodeAt(0) - 55;
+    } else {
+      return { error: `Invalid Class "${mail_class}" (must be 0-9 or A-E)` };
+    }
+
+    const scidLen = isC ? 2 : 6;
+    const scidStr = text.substring(3, 3 + scidLen);
+    if (!/^\d+$/.test(scidStr)) {
+      return { error: `Supply Chain ID must be ${scidLen} numeric digits (got "${scidStr}")` };
+    }
+    const supply_chain_id = BigInt(scidStr);
+
+    const itemIdStr = text.substring(3 + scidLen, 3 + scidLen + 8);
+    if (!/^\d+$/.test(itemIdStr)) {
+      return { error: `Item ID must be 8 numeric digits (got "${itemIdStr}")` };
+    }
+    const item_id = BigInt(itemIdStr);
+
+    const postcode = text.substring(text.length - 9);
+    const pcCheck = verifyMailmarkPostcode(postcode);
+    if (!pcCheck.valid) {
+      return { error: `Invalid UK Postcode / DPS "${postcode.trimEnd()}" for Mailmark 4-state` };
+    }
+
+    let dest_postcode = 0n;
+    if (pcCheck.type !== 7) {
+      const pattern = MM_POSTCODE_FORMAT[pcCheck.type - 1];
+      let b = 0n;
+      for (let i = 0; i < 9; i++) {
+        const ch = postcode[i];
+        const p = pattern[i];
+        if (p === 'A') b = b * 26n + BigInt(MM_SET_A.indexOf(ch));
+        else if (p === 'L') b = b * 20n + BigInt(MM_SET_L.indexOf(ch));
+        else if (p === 'N') b = b * 10n + BigInt(MM_SET_N.indexOf(ch));
+      }
+      dest_postcode = b;
+      if (pcCheck.type === 1) dest_postcode += 1n;
+      else if (pcCheck.type === 2) dest_postcode += 1n + 5408000000n;
+      else if (pcCheck.type === 3) dest_postcode += 1n + 5408000000n + 5408000000n;
+      else if (pcCheck.type === 4) dest_postcode += 1n + 5408000000n + 5408000000n + 54080000000n;
+      else if (pcCheck.type === 5) dest_postcode += 1n + 5408000000n + 5408000000n + 54080000000n + 140608000000n;
+      else if (pcCheck.type === 6) dest_postcode += 1n + 5408000000n + 5408000000n + 54080000000n + 140608000000n + 208000000n;
+    }
+
+    let cdv = dest_postcode;
+    cdv = cdv * 100000000n + item_id;
+    cdv = isC ? (cdv * 100n + supply_chain_id) : (cdv * 1000000n + supply_chain_id);
+    cdv = cdv * 15n + BigInt(classVal);
+    cdv = cdv * 5n + BigInt(formatVal);
+    cdv = cdv * 4n + BigInt(version_id);
+
+    const length = isC ? 22 : 26;
+    const data_top = isC ? 15 : 18;
+    const data_step = isC ? 8 : 10;
+    const check_count = isC ? 6 : 7;
+
+    const data = new Array(length).fill(0);
+    for (let j = data_top; j >= data_step + 1; j--) {
+      data[j] = Number(cdv % 32n);
+      cdv /= 32n;
+    }
+    for (let j = data_step; j >= 0; j--) {
+      data[j] = Number(cdv % 30n);
+      cdv /= 30n;
+    }
+
+    const rspoly = mm_rs_init_code(check_count, 1);
+    const check = mm_rs_encode(data.slice(0, data_top + 1), check_count, rspoly);
+    for (let i = 0; i < check_count; i++) {
+      data[data_top + 1 + i] = check[i];
+    }
+
+    for (let i = 0; i <= data_step; i++) {
+      data[i] = MM_DATA_SYMBOL_EVEN[data[i]];
+    }
+    for (let i = data_step + 1; i < data_top + 1 + check_count; i++) {
+      data[i] = MM_DATA_SYMBOL_ODD[data[i]];
+    }
+
+    const extender = new Array(length).fill(0);
+    const extender_group = isC ? MM_EXTENDER_GROUP_C : MM_EXTENDER_GROUP_L;
+    for (let i = 0; i < length; i++) {
+      extender[extender_group[i]] = data[i];
+    }
+
+    let bars = '';
+    for (let i = 0; i < length; i++) {
+      let ext = extender[i];
+      for (let j = 0; j < 3; j++) {
+        switch (ext & 0x24) {
+          case 0x24:
+            bars += 'F';
+            break;
+          case 0x20:
+            bars += (i % 2) ? 'D' : 'A';
+            break;
+          case 0x04:
+            bars += (i % 2) ? 'A' : 'D';
+            break;
+          default:
+            bars += 'T';
+            break;
+        }
+        ext = (ext << 1) & 0xff;
+      }
+    }
+
+    return {
+      bars,
+      totalBars: bars.length,
+      variant: isC ? 'C' : 'L',
+      text
+    };
+  }
+
   const TextEngine = {
     count(text, options = {}) {
       const raw = String(text || "").replace(/\r/g, "");
@@ -1933,6 +2208,7 @@
       if (clean === 'maxicode' || clean === 'maxi') return 'maxicode';
       if (clean === 'dotcode' || clean === 'dot' || clean === 'dot-code' || clean === 'dots') return 'dotcode';
       if (clean === 'hanxin' || clean === 'hanxincode' || clean === 'han-xin' || clean === 'hx') return 'hanxin';
+      if (clean === 'mailmark' || clean === 'mailmark2d' || clean === 'cmdm' || clean === 'royalmailmark' || clean === 'royalmailmark2d') return 'mailmark';
       return clean;
     },
 
@@ -1951,7 +2227,7 @@
         return { error: 'bwip-js library not loaded' };
       }
 
-      const textStr = (text === undefined || text === null) ? '' : String(text);
+      let textStr = (text === undefined || text === null) ? '' : String(text);
       if (!textStr.trim()) {
         return { error: 'Payload text cannot be empty' };
       }
@@ -2050,6 +2326,26 @@
             bwipOpts.mask = parseInt(options.mask, 10);
           }
           if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'mailmark') {
+          bcid = 'mailmark';
+          let mType = String(options.type || options.mailmarkType || 'auto').toLowerCase();
+          if (mType === 'type7' || mType === '7') mType = '7';
+          else if (mType === 'type9' || mType === '9') mType = '9';
+          else if (mType === 'type29' || mType === '29') mType = '29';
+          else {
+            // Auto-select type based on input length
+            if (textStr.length > 70) mType = '9';
+            else if (textStr.length > 51) mType = '29';
+            else mType = '7';
+          }
+          bwipOpts.type = mType;
+
+          if (!textStr.startsWith('JGB ')) {
+            return { error: 'Royal Mail 2D Mailmark must begin with "JGB " identifier' };
+          }
+          if (textStr.length < 45) {
+            textStr = textStr.padEnd(45, ' ');
+          }
         }
 
         if (normType === 'maxicode') {
@@ -2078,7 +2374,8 @@
           datamatrix: 'Data Matrix',
           aztec: 'Aztec Code',
           dotcode: 'DotCode',
-          hanxin: 'Han Xin Code'
+          hanxin: 'Han Xin Code',
+          mailmark: 'Royal Mail 2D Mailmark'
         };
 
         return {
@@ -2262,6 +2559,13 @@
             bwipOpts.mask = parseInt(options.mask, 10);
           }
           if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'mailmark') {
+          bcid = 'mailmark';
+          let mType = String(options.type || options.mailmarkType || '29');
+          if (mType === 'type7' || mType === '7') mType = '7';
+          else if (mType === 'type9' || mType === '9') mType = '9';
+          else mType = '29';
+          bwipOpts.type = mType;
         }
         return bwip.toSVG({ bcid, text: String(text || ' '), ...bwipOpts });
       } catch (e) {
@@ -2382,6 +2686,13 @@
             bwipOpts.mask = parseInt(options.mask, 10);
           }
           if (options.parsefnc) bwipOpts.parsefnc = true;
+        } else if (normType === 'mailmark') {
+          bcid = 'mailmark';
+          let mType = String(options.type || options.mailmarkType || '29');
+          if (mType === 'type7' || mType === '7') mType = '7';
+          else if (mType === 'type9' || mType === '9') mType = '9';
+          else mType = '29';
+          bwipOpts.type = mType;
         }
 
         const targetSize = options.targetSize || options.sizePx || options.maxDim || options.targetWidth || options.targetHeight;
@@ -2465,6 +2776,10 @@
       }
     },
 
+    encodeMailmark4S(input) {
+      return encodeMailmark4State(input);
+    },
+
     normalizeBarcodeFormat(format) {
       if (!format) return 'CODE128';
       const clean = String(format).toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -2493,6 +2808,12 @@
       if (clean === 'MICROPDF417') return 'micropdf417';
       if (clean === 'POSTNET' || clean === 'USPSPOSTNET') return 'postnet';
       if (clean === 'PLANET' || clean === 'USPSPLANET') return 'planet';
+      if (clean === 'ONECODE' || clean === 'INTELLIGENTMAIL' || clean === 'IMB' || clean === 'USPS4CB' || clean === 'USPSIMB' || clean === 'USPSONECODE') return 'onecode';
+      if (clean === 'RM4SCC' || clean === 'ROYALMAIL' || clean === 'ROYALMAIL4STATE') return 'rm4scc';
+      if (clean === 'KIX' || clean === 'KIXCODE' || clean === 'DUTCHPOST' || clean === 'POSTNL') return 'kix';
+      if (clean === 'MAILMARK4S' || clean === 'MAILMARK4STATE' || clean === 'MAILMARKC' || clean === 'MAILMARKL' || clean === 'ROYALMAILMARK4S') return 'mailmark4s';
+      if (clean === 'MAILMARK2D' || clean === 'ROYALMAILMARK2D' || clean === 'CMDM') return 'mailmark2d';
+      if (clean === 'MAILMARK' || clean === 'ROYALMAILMARK') return 'mailmark4s';
       return format;
     },
 
@@ -2652,6 +2973,171 @@
         };
       }
 
+      if (format === 'onecode' || format === 'rm4scc' || format === 'kix') {
+        const bwip = this.getBwipLib();
+        if (!bwip) return { error: 'bwip-js library not loaded' };
+
+        let cleanText = '';
+        let bcid = format;
+        let displayName = format.toUpperCase();
+
+        if (format === 'onecode') {
+          bcid = 'onecode';
+          displayName = 'INTELLIGENT_MAIL';
+          cleanText = text.replace(/[\s\-\.]/g, '');
+          if (!/^\d+$/.test(cleanText)) {
+            return { error: 'Intelligent Mail input must contain digits (0-9) only' };
+          }
+          if (cleanText.length !== 20 && cleanText.length !== 25 && cleanText.length !== 29 && cleanText.length !== 31) {
+            return { error: `Intelligent Mail requires 20, 25, 29, or 31 numeric digits (got ${cleanText.length})` };
+          }
+        } else if (format === 'rm4scc') {
+          bcid = 'royalmail';
+          displayName = 'RM4SCC';
+          cleanText = text.replace(/[\s\-\(\)]/g, '').toUpperCase();
+          if (!cleanText) {
+            return { error: 'RM4SCC input cannot be empty' };
+          }
+          if (!/^[A-Z0-9]+$/.test(cleanText)) {
+            return { error: 'RM4SCC must contain uppercase letters and digits (A-Z, 0-9) only' };
+          }
+        } else if (format === 'kix') {
+          bcid = 'kix';
+          displayName = 'KIX';
+          cleanText = text.replace(/[\s\-]/g, '').toUpperCase();
+          if (!cleanText) {
+            return { error: 'KIX Code input cannot be empty' };
+          }
+          if (!/^[A-Z0-9]+$/.test(cleanText)) {
+            return { error: 'KIX Code must contain uppercase letters and digits (A-Z, 0-9) only' };
+          }
+        }
+
+        try {
+          const rawList = bwip.raw(bcid, cleanText, {});
+          if (!rawList || !rawList[0] || !rawList[0].bhs) {
+            return { error: `Failed to encode ${displayName}` };
+          }
+
+          const raw = rawList[0];
+          const maxH = Math.max(...raw.bhs);
+          const bars = [];
+          const states = [];
+
+          for (let i = 0; i < raw.bhs.length; i++) {
+            const h = raw.bhs[i];
+            const b = raw.bbs[i];
+            const hasAsc = (b + h) >= maxH * 0.95;
+            const hasDesc = b < 0.01;
+            let state = 'T';
+            if (hasAsc && hasDesc) state = 'F';
+            else if (hasAsc) state = 'A';
+            else if (hasDesc) state = 'D';
+
+            states.push(state);
+            bars.push({ state, hasAsc, hasDesc, h, b });
+          }
+
+          const opts = Object.assign({
+            format: displayName,
+            width: options.width != null ? Number(options.width) : 2,
+            height: options.height != null ? Number(options.height) : 60,
+            displayValue: options.displayValue !== false,
+            text: options.text,
+            textAlign: options.textAlign || 'center',
+            textPosition: options.textPosition || 'bottom',
+            fontSize: options.fontSize != null ? Number(options.fontSize) : 16,
+            background: options.background || '#ffffff',
+            lineColor: options.lineColor || '#000000',
+            margin: options.margin != null ? Number(options.margin) : 10
+          }, options);
+
+          return {
+            text: text.trim(),
+            cleanText,
+            format: displayName,
+            isPostal: true,
+            is4State: true,
+            states,
+            bars,
+            raw,
+            options: opts,
+            binary: states.join(''),
+            totalModules: states.length
+          };
+        } catch (e) {
+          return { error: e.message || String(e) };
+        }
+      }
+
+      if (format === 'mailmark2d') {
+        const res2d = this.generate2DCode(text, 'mailmark', options);
+        if (res2d && !res2d.error) {
+          res2d.is2dBarcode = true;
+          res2d.format = 'MAILMARK2D';
+        }
+        return res2d;
+      }
+
+      if (format === 'mailmark4s') {
+        const textStr = String(text != null ? text : '');
+        if (textStr.trim().startsWith('JGB ')) {
+          const res2d = this.generate2DCode(textStr, 'mailmark', options);
+          if (res2d && !res2d.error) {
+            res2d.is2dBarcode = true;
+            res2d.format = 'MAILMARK2D';
+          }
+          return res2d;
+        }
+
+        const rawInput = textStr.trim();
+        if (!rawInput) {
+          return { error: 'Royal Mail Mailmark 4-state input cannot be empty' };
+        }
+
+        const encoded = encodeMailmark4State(rawInput);
+        if (encoded.error) {
+          return { error: encoded.error };
+        }
+
+        const states = encoded.bars.split('');
+        const bars = [];
+        for (let i = 0; i < states.length; i++) {
+          const s = states[i];
+          const hasAsc = (s === 'A' || s === 'F');
+          const hasDesc = (s === 'D' || s === 'F');
+          bars.push({ state: s, hasAsc, hasDesc });
+        }
+
+        const opts = Object.assign({
+          format: 'MAILMARK4S',
+          width: options.width != null ? Number(options.width) : 2,
+          height: options.height != null ? Number(options.height) : 60,
+          displayValue: options.displayValue !== false,
+          text: options.text,
+          textAlign: options.textAlign || 'center',
+          textPosition: options.textPosition || 'bottom',
+          fontSize: options.fontSize != null ? Number(options.fontSize) : 16,
+          background: options.background || '#ffffff',
+          lineColor: options.lineColor || '#000000',
+          margin: options.margin != null ? Number(options.margin) : 10
+        }, options);
+
+        return {
+          text: rawInput,
+          cleanText: encoded.text,
+          format: 'MAILMARK4S',
+          variant: encoded.variant,
+          isPostal: true,
+          is4State: true,
+          states,
+          bars,
+          options: opts,
+          binary: states.join(''),
+          totalModules: states.length
+        };
+      }
+
       const lib = this.getBarcodeLib();
       if (!lib) {
         return { error: 'JsBarcode library not loaded' };
@@ -2739,6 +3225,54 @@
         return lines.join('\n');
       }
 
+      if (res.is4State) {
+        const height = Math.max(3, Math.min(20, Number(options.height || 6)));
+        const quietZone = Math.max(0, options.margin != null ? Number(options.margin) : 2);
+        const quietSpaces = ' '.repeat(quietZone);
+        const states = res.states || (res.bars ? res.bars.map(b => b.state) : []);
+        const barChar = options.barChar || '█';
+        const spaceChar = ' ';
+        const hTrack = Math.max(1, Math.round(height / 3));
+        const hAsc = Math.floor((height - hTrack) / 2);
+        const lines = [];
+
+        for (let y = 0; y < height; y++) {
+          let line = '';
+          for (let i = 0; i < states.length; i++) {
+            const s = states[i];
+            let isDark = false;
+            if (y < hAsc) {
+              isDark = (s === 'A' || s === 'F');
+            } else if (y < hAsc + hTrack) {
+              isDark = true;
+            } else {
+              isDark = (s === 'D' || s === 'F');
+            }
+            line += (isDark ? barChar : spaceChar) + spaceChar;
+          }
+          lines.push(quietSpaces + line.trimEnd() + quietSpaces);
+        }
+
+        if (res.options.displayValue !== false && options.displayValue !== false) {
+          const rawText = res.options.text || res.text;
+          const labelText = String(rawText);
+          const totalWidth = (states.length * 2 - 1) + (quietZone * 2);
+          let paddedText = labelText;
+          if (labelText.length < totalWidth) {
+            const leftPad = Math.floor((totalWidth - labelText.length) / 2);
+            paddedText = ' '.repeat(leftPad) + labelText;
+          }
+          if (res.options.textPosition === 'top') {
+            lines.unshift(paddedText);
+            lines.unshift('');
+          } else {
+            lines.push('');
+            lines.push(paddedText);
+          }
+        }
+        return lines.join('\n');
+      }
+
       if (res.isPostal || res.isHeightModulated) {
         const height = Math.max(2, Math.min(20, Number(options.height || 6)));
         const quietZone = Math.max(0, options.margin != null ? Number(options.margin) : 2);
@@ -2820,6 +3354,10 @@
     generateBarcodeSvg(text, options = {}) {
       const format = this.normalizeBarcodeFormat(options.format || 'CODE128');
 
+      if (format === 'mailmark2d') {
+        return this.generate2DCodeSvg(text, 'mailmark', options);
+      }
+
       if (format === 'pdf417' || format === 'micropdf417') {
         const bwip = this.getBwipLib();
         if (bwip) {
@@ -2899,6 +3437,67 @@
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}"><rect width="${svgWidth}" height="${svgHeight}" fill="${background}" /><g>${rects}</g>${textTag}</svg>`;
       }
 
+      if (format === 'onecode' || format === 'rm4scc' || format === 'kix' || format === 'mailmark4s') {
+        const res = this.generateBarcode(text, options);
+        if (res.error) return `<svg xmlns="http://www.w3.org/2000/svg"><text fill="red">${res.error}</text></svg>`;
+        if (res.is2dBarcode) {
+          return this.generate2DCodeSvg(text, 'mailmark', options);
+        }
+
+        const barWidth = Math.max(1, options.width != null ? Number(options.width) : 2);
+        const barSpacing = Math.max(1, Math.round(barWidth * 1.3));
+        const height = Math.max(12, options.height != null ? Number(options.height) : 60);
+        const margin = options.margin != null ? Number(options.margin) : 10;
+        const background = options.background || '#ffffff';
+        const lineColor = options.lineColor || '#000000';
+        const displayValue = options.displayValue !== false;
+        const fontSize = Math.max(8, options.fontSize != null ? Number(options.fontSize) : 16);
+        const textPosition = options.textPosition || 'bottom';
+        const textAlign = options.textAlign || 'center';
+
+        const hAsc = Math.round(height * 0.36);
+        const hTrack = Math.round(height * 0.28);
+        const hDesc = height - hAsc - hTrack;
+
+        const states = res.states || (res.bars ? res.bars.map(b => b.state) : []);
+        const totalBars = states.length;
+        const barAreaWidth = (totalBars - 1) * (barWidth + barSpacing) + barWidth;
+        const textPadding = displayValue ? (fontSize + 10) : 0;
+        const svgWidth = barAreaWidth + (margin * 2);
+        const svgHeight = height + (margin * 2) + textPadding;
+
+        const barTop = (displayValue && textPosition === 'top') ? margin + fontSize + 6 : margin;
+
+        let rects = '';
+        for (let i = 0; i < totalBars; i++) {
+          const s = states[i];
+          const hasAsc = (s === 'A' || s === 'F');
+          const hasDesc = (s === 'D' || s === 'F');
+          const yRel = hasAsc ? 0 : hAsc;
+          const barH = (hasAsc && hasDesc) ? height : (hasAsc ? (hAsc + hTrack) : (hasDesc ? (hTrack + hDesc) : hTrack));
+          const bx = margin + i * (barWidth + barSpacing);
+          const by = barTop + yRel;
+          rects += `<rect x="${bx}" y="${by}" width="${barWidth}" height="${barH}" fill="${lineColor}" />`;
+        }
+
+        let textTag = '';
+        if (displayValue) {
+          let textX = svgWidth / 2;
+          let textAnchor = 'middle';
+          if (textAlign === 'left') {
+            textX = margin;
+            textAnchor = 'start';
+          } else if (textAlign === 'right') {
+            textX = svgWidth - margin;
+            textAnchor = 'end';
+          }
+          const textY = (textPosition === 'top') ? margin + fontSize : barTop + height + fontSize + 4;
+          textTag = `<text x="${textX}" y="${textY}" font-family="monospace" font-size="${fontSize}" font-weight="bold" text-anchor="${textAnchor}" fill="${lineColor}">${res.text}</text>`;
+        }
+
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}"><rect width="${svgWidth}" height="${svgHeight}" fill="${background}" /><g>${rects}</g>${textTag}</svg>`;
+      }
+
       const lib = this.getBarcodeLib();
       if (!lib) return `<svg xmlns="http://www.w3.org/2000/svg"><text>JsBarcode not loaded</text></svg>`;
 
@@ -2945,6 +3544,10 @@
 
     generateBarcodeCanvas(text, options = {}, targetCanvas = null) {
       const format = this.normalizeBarcodeFormat(options.format || 'CODE128');
+
+      if (format === 'mailmark2d') {
+        return this.generate2DCodeCanvas(text, 'mailmark', options, targetCanvas);
+      }
 
       let canvas = targetCanvas;
       if (!canvas && typeof document !== 'undefined' && document.createElement) {
@@ -3101,6 +3704,90 @@
           else if (textAlign === 'right') textX = canvasWidth - marginX;
 
           const textY = (textPosition === 'top') ? marginY + fontSize : baseline + fontSize + Math.round(2 * S);
+          ctx.fillText(res.text, textX, textY);
+        }
+
+        return canvas;
+      }
+
+      if (format === 'onecode' || format === 'rm4scc' || format === 'kix' || format === 'mailmark4s') {
+        const res = this.generateBarcode(text, options);
+        if (!res || res.error) return null;
+        if (res.is2dBarcode) {
+          return this.generate2DCodeCanvas(text, 'mailmark', options, targetCanvas);
+        }
+
+        const baseBarWidth = Math.max(1, options.width != null ? Number(options.width) : 2);
+        const baseBarSpacing = Math.max(1, Math.round(baseBarWidth * 1.3));
+        const baseHeight = Math.max(12, options.height != null ? Number(options.height) : 60);
+        const baseMargin = options.margin != null ? Number(options.margin) : 10;
+        const displayValue = options.displayValue !== false;
+        const textPosition = options.textPosition || 'bottom';
+        const textAlign = options.textAlign || 'center';
+        const baseFontSize = Math.max(8, options.fontSize != null ? Number(options.fontSize) : 16);
+        const lineColor = options.lineColor || options.color || '#000000';
+        const background = options.background || options.bg || '#ffffff';
+
+        const textHeight = displayValue ? baseFontSize + 8 : 0;
+        const states = res.states || (res.bars ? res.bars.map(b => b.state) : []);
+        const totalBars = states.length;
+        const barAreaBaseWidth = (totalBars - 1) * (baseBarWidth + baseBarSpacing) + baseBarWidth;
+        const W_base = barAreaBaseWidth + (baseMargin * 2);
+        const H_base = baseHeight + (baseMargin * 2) + textHeight;
+
+        let S = 1;
+        if (targetSize && targetSize !== 'auto') {
+          const T = Math.min(4000, Math.max(50, parseInt(targetSize, 10) || 4000));
+          S = Math.min(T / W_base, T / H_base);
+        }
+
+        const canvasWidth = Math.min(4000, Math.max(10, Math.round(W_base * S)));
+        const canvasHeight = Math.min(4000, Math.max(10, Math.round(H_base * S)));
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return null;
+
+        ctx.imageSmoothingEnabled = false;
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        const marginX = Math.round(baseMargin * S);
+        const marginY = Math.round(baseMargin * S);
+        const barHeight = Math.round(baseHeight * S);
+        const fontSize = Math.round(baseFontSize * S);
+
+        const hAsc = Math.round(barHeight * 0.36);
+        const hTrack = Math.round(barHeight * 0.28);
+        const hDesc = barHeight - hAsc - hTrack;
+
+        const barTop = (displayValue && textPosition === 'top') ? marginY + fontSize + Math.round(4 * S) : marginY;
+        const totalDrawWidth = canvasWidth - (marginX * 2);
+        const pitch = totalDrawWidth / totalBars;
+        const barW = Math.max(1, Math.round(pitch * 0.45));
+
+        ctx.fillStyle = lineColor;
+        for (let i = 0; i < totalBars; i++) {
+          const s = states[i];
+          const hasAsc = (s === 'A' || s === 'F');
+          const hasDesc = (s === 'D' || s === 'F');
+          const yRel = hasAsc ? 0 : hAsc;
+          const bH = (hasAsc && hasDesc) ? barHeight : (hasAsc ? (hAsc + hTrack) : (hasDesc ? (hTrack + hDesc) : hTrack));
+          const bx = marginX + Math.round(i * pitch);
+          const by = barTop + yRel;
+          ctx.fillRect(bx, by, barW, bH);
+        }
+
+        if (displayValue) {
+          ctx.fillStyle = lineColor;
+          ctx.font = `bold ${fontSize}px monospace, sans-serif`;
+          ctx.textAlign = textAlign;
+          let textX = canvasWidth / 2;
+          if (textAlign === 'left') textX = marginX;
+          else if (textAlign === 'right') textX = canvasWidth - marginX;
+
+          const textY = (textPosition === 'top') ? marginY + fontSize : barTop + barHeight + fontSize + Math.round(2 * S);
           ctx.fillText(res.text, textX, textY);
         }
 
@@ -3451,6 +4138,51 @@
         lengthLimit: '11 or 13 numeric digits',
         notes: 'USPS height-modulated tracking barcode used for CONFIRM service. inverse of POSTNET: each digit is encoded with three tall bars and two short bars, framed by start/stop bars. includes auto-computed mod-10 check digit.',
         example: '12345678901'
+      },
+      onecode: {
+        id: 'onecode',
+        name: 'USPS Intelligent Mail (OneCode / IMb / USPS4CB)',
+        type: '4-state postal barcode',
+        allowedChars: 'numeric digits (0-9) only. spaces, dots, and hyphens stripped automatically',
+        lengthLimit: '20, 25, 29, or 31 numeric digits (encodes 65 4-state bars)',
+        notes: 'USPS 4-state barcode combining tracking code (Barcode ID, Service Type ID, Mailer ID, Serial Number) with delivery routing ZIP code (none, 5-digit, 9-digit ZIP+4, or 11-digit Delivery Point).',
+        example: '0123456709498765432101234567891'
+      },
+      rm4scc: {
+        id: 'rm4scc',
+        name: 'RM4SCC (Royal Mail 4-State Customer Code)',
+        type: '4-state postal barcode',
+        allowedChars: 'uppercase letters and digits (A-Z, 0-9). spaces, hyphens, and parentheses stripped automatically',
+        lengthLimit: 'variable (typically UK Postcode + Delivery Point Suffix, e.g. 6 to 9 characters)',
+        notes: 'Royal Mail 4-state postal barcode used for automated Cleanmail sortation. Includes framing start/stop bars and dual-sum modulo-6 check character.',
+        example: 'LE28HS9Z'
+      },
+      kix: {
+        id: 'kix',
+        name: 'KIX Code (Royal Dutch TPG Post / PostNL Klantindex)',
+        type: '4-state postal barcode',
+        allowedChars: 'uppercase letters and digits (A-Z, 0-9). spaces and hyphens stripped automatically',
+        lengthLimit: 'variable (typically 8 to 11 characters: Dutch 4-digit postcode + 2 letters + house number)',
+        notes: 'Dutch postal 4-state barcode variant of RM4SCC used by PostNL. Encodes alphanumeric payload without start/stop bars or check digit.',
+        example: '1231FZ13XHS'
+      },
+      mailmark4s: {
+        id: 'mailmark4s',
+        name: 'Royal Mail Mailmark 4-State (Barcode C & L)',
+        type: '4-state postal barcode',
+        allowedChars: 'alphanumeric format + version + class + SCID + Item ID + UK Postcode/DPS (or 66/78 DAFT string)',
+        lengthLimit: 'Barcode C (22 chars / 66 bars), Barcode L (26 chars / 78 bars), or raw 66/78 DAFT string',
+        notes: 'Royal Mail 4-state barcode with GF(32) Reed-Solomon error correction. Barcode C encodes 2-digit SCID; Barcode L encodes 6-digit SCID. Pre-encoded 66 or 78 char DAFT strings are also supported.',
+        example: '11100010112345678AB19XY1A '
+      },
+      mailmark2d: {
+        id: 'mailmark2d',
+        name: 'Royal Mail Mailmark 2D (CMDM)',
+        type: '2D Matrix (Data Matrix ECC 200)',
+        allowedChars: 'ASCII string formatted per Royal Mail CMDM specification starting with "JGB "',
+        lengthLimit: 'Type 7 (24x24, 45-51 chars), Type 9 (32x32, 90 chars), Type 29 (16x48, 70 chars)',
+        notes: 'Royal Mail 2D Complex Mail Data Mark encoded as Data Matrix ECC 200. Requires "JGB " header prefix followed by Information Type, Version, Class, SCID, Item ID, and Postcode.',
+        example: 'JGB 012100123412345678AB19XY1A 0             '
       }
     },
 
@@ -3469,6 +4201,12 @@
       if (key === 'compactpdf417' || key === 'micropdf417') return this.symbologyRestrictions.compactpdf417;
       if (key === 'postnet' || key === 'uspspostnet' || key === 'usps-postnet') return this.symbologyRestrictions.postnet;
       if (key === 'planet' || key === 'uspsplanet' || key === 'usps-planet') return this.symbologyRestrictions.planet;
+      if (key === 'onecode' || key === 'intelligentmail' || key === 'imb' || key === 'usps4cb' || key === 'usps-imb' || key === 'uspsonecode') return this.symbologyRestrictions.onecode;
+      if (key === 'rm4scc' || key === 'royalmail' || key === 'royal-mail' || key === 'royalmail4state') return this.symbologyRestrictions.rm4scc;
+      if (key === 'kix' || key === 'kixcode' || key === 'postnl' || key === 'dutchpost') return this.symbologyRestrictions.kix;
+      if (key === 'mailmark4s' || key === 'mailmark-4state' || key === 'mailmark4state' || key === 'mailmark-c' || key === 'mailmark-l' || key === 'royalmailmark4s') return this.symbologyRestrictions.mailmark4s;
+      if (key === 'mailmark2d' || key === 'royalmailmark2d' || key === 'cmdm') return this.symbologyRestrictions.mailmark2d;
+      if (key === 'mailmark' || key === 'royalmailmark') return this.symbologyRestrictions.mailmark4s;
 
       const norm = this.normalizeBarcodeFormat(formatOrType);
       return this.symbologyRestrictions[norm] || this.symbologyRestrictions[formatOrType] || {
@@ -4800,8 +5538,8 @@
       { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
       { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
-      { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, Micro QR, rMQR, data matrix, aztec code, maxicode, dotcode, han xin) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|png] [file/text]" },
-      { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D, postal, and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, POSTNET, PLANET, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
+      { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, Micro QR, rMQR, data matrix, aztec code, maxicode, dotcode, han xin, royal mail 2d mailmark) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin|mailmark] [-f ascii|svg|png] [file/text]" },
+      { id: "barcode", name: "1D & stacked barcode", category: "encoding & web", desc: "generate 1D, postal, and stacked 2D barcodes (CODE128, EAN-13, UPC, CODE39, ITF, POSTNET, PLANET, Intelligent Mail, RM4SCC, KIX, Mailmark 4-state, PDF417, codabar, pharmacode, MSI, CODE93) with ASCII, SVG, and PNG export.", cli: "barcode [-f format] [-w width] [-h height] [--no-text] [--color hex] [file/text]" }
     ]
   };
 

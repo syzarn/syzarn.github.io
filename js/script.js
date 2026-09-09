@@ -1789,6 +1789,7 @@ Volume  : ${vol}%`;
                     <option value="maxicode">MaxiCode</option>
                     <option value="dotcode">DotCode</option>
                     <option value="hanxin">Han Xin Code (汉信码)</option>
+                    <option value="mailmark">Royal Mail Mailmark 2D (CMDM)</option>
                   </select>
                   <span>format:</span>
                   <select class="tm-select" id="tm-qr-fmt" style="width: 140px;">
@@ -1962,6 +1963,15 @@ Volume  : ${vol}%`;
                   </select>
                   <label class="tm-checkbox-label"><input type="checkbox" id="tm-hx-parsefnc"> parse FNC</label>
                 </div>
+                <div id="tm-qr-opts-mailmark" class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap; display: none;">
+                  <span>CMDM type:</span>
+                  <select class="tm-select" id="tm-mailmark-type" style="width: 150px;">
+                    <option value="auto" selected>auto (by length)</option>
+                    <option value="7">Type 7 (24x24)</option>
+                    <option value="9">Type 9 (32x32)</option>
+                    <option value="29">Type 29 (16x48)</option>
+                  </select>
+                </div>
                 <div class="tm-control-row" style="margin: 0; gap: 10px; flex-wrap: wrap;">
                   <span>scale:</span>
                   <input type="number" class="tm-input" id="tm-qr-scale" value="8" min="1" max="40" style="width: 50px;">
@@ -2026,6 +2036,11 @@ Volume  : ${vol}%`;
                     <option value="ITF">ITF</option>
                     <option value="postnet">POSTNET (USPS)</option>
                     <option value="planet">PLANET (USPS)</option>
+                    <option value="onecode">Intelligent Mail (USPS)</option>
+                    <option value="rm4scc">RM4SCC (Royal Mail)</option>
+                    <option value="kix">KIX Code (PostNL)</option>
+                    <option value="mailmark4s">Mailmark 4-State (Royal Mail)</option>
+                    <option value="mailmark2d">Mailmark 2D (Royal Mail CMDM)</option>
                     <option value="pdf417">PDF417 (stacked 2D)</option>
                     <option value="compactpdf417">Compact PDF417</option>
                     <option value="pharmacode">Pharmacode</option>
@@ -2425,6 +2440,8 @@ Volume  : ${vol}%`;
         const hxVersionInput = document.getElementById('tm-hx-version');
         const hxMaskSelect = document.getElementById('tm-hx-mask');
         const hxParseCheck = document.getElementById('tm-hx-parsefnc');
+        const mailmarkOptsRow = document.getElementById('tm-qr-opts-mailmark');
+        const mailmarkTypeSelect = document.getElementById('tm-mailmark-type');
 
         const updateTypeVisibility = () => {
           const type = typeSelect ? typeSelect.value : 'qr';
@@ -2436,6 +2453,7 @@ Volume  : ${vol}%`;
           if (maxiOptsRow) maxiOptsRow.style.display = (type === 'maxicode') ? 'flex' : 'none';
           if (dotOptsRow) dotOptsRow.style.display = (type === 'dotcode') ? 'flex' : 'none';
           if (hxOptsRow) hxOptsRow.style.display = (type === 'hanxin') ? 'flex' : 'none';
+          if (mailmarkOptsRow) mailmarkOptsRow.style.display = (type === 'mailmark') ? 'flex' : 'none';
         };
 
         const updateLiveQr = () => {
@@ -2459,6 +2477,7 @@ Volume  : ${vol}%`;
             if (type === 'hanxin') textarea.placeholder = 'e.g. 述而不作、信而好古';
             else if (type === 'microqr') textarea.placeholder = 'e.g. 12345';
             else if (type === 'rmqr') textarea.placeholder = 'e.g. RMQR-2026';
+            else if (type === 'mailmark') textarea.placeholder = 'e.g. JGB 012100123412345678AB19XY1A 0             ';
             else textarea.placeholder = 'type or paste payload text to generate 2D code...';
           }
 
@@ -2471,6 +2490,7 @@ Volume  : ${vol}%`;
             else if (type === 'maxicode') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'dotcode') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'hanxin') content = '述而不作、信而好古';
+            else if (type === 'mailmark') content = 'JGB 012100123412345678AB19XY1A 0             ';
             else content = 'Il n\'y a pas de hors-texte.';
           }
 
@@ -2517,6 +2537,8 @@ Volume  : ${vol}%`;
             if (hxVersionInput && parseInt(hxVersionInput.value, 10) > 0) opts.version = parseInt(hxVersionInput.value, 10);
             if (hxMaskSelect && parseInt(hxMaskSelect.value, 10) > 0) opts.mask = parseInt(hxMaskSelect.value, 10);
             if (hxParseCheck && hxParseCheck.checked) opts.parsefnc = true;
+          } else if (type === 'mailmark') {
+            if (mailmarkTypeSelect && mailmarkTypeSelect.value !== 'auto') opts.type = mailmarkTypeSelect.value;
           }
 
           const res = window.TextEngine.generate2DCode(content, type, opts);
@@ -2550,6 +2572,8 @@ Volume  : ${vol}%`;
               metaEl.textContent = `DotCode (${res.width}x${res.height}) | ${content.length} chars`;
             } else if (type === 'hanxin') {
               metaEl.textContent = `Han Xin Code/汉信码 (${res.width}x${res.height}) | ${content.length} chars`;
+            } else if (type === 'mailmark') {
+              metaEl.textContent = `Royal Mail 2D Mailmark (${res.width}x${res.height}) | ${content.length} chars`;
             }
           }
         };
@@ -2584,7 +2608,7 @@ Volume  : ${vol}%`;
           });
         }
 
-        [eccSelect, boostCheck, maskSelect, mqrVersionSelect, mqrEccSelect, mqrMaskSelect, rmqrVersionSelect, rmqrEccSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, hxEccSelect, hxVersionInput, hxMaskSelect, hxParseCheck, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
+        [eccSelect, boostCheck, maskSelect, mqrVersionSelect, mqrEccSelect, mqrMaskSelect, rmqrVersionSelect, rmqrEccSelect, dmShapeSelect, dmParseCheck, aztecFmtSelect, aztecEccInput, aztecLayersInput, maxiModeSelect, dotColsInput, dotRowsInput, dotRatioInput, dotParseCheck, dotFastfindCheck, hxEccSelect, hxVersionInput, hxMaskSelect, hxParseCheck, mailmarkTypeSelect, scaleInput, borderInput, darkInput, lightInput].forEach(el => {
           if (el) {
             el.addEventListener('input', updateLiveQr);
             el.addEventListener('change', updateLiveQr);
@@ -2873,12 +2897,18 @@ Volume  : ${vol}%`;
             else if (fmt === 'EAN8') content = '2710199';
             else if (fmt === 'UPC') content = '19971123021';
             else if (fmt === 'CODE128A') content = 'NULL';
+            else if (fmt === 'CODE128C') content = '17102005';
             else if (fmt === 'UPCE') content = '17102005';
             else if (fmt === 'pharmacode') content = '3010';
             else if (fmt === 'ITF14') content = '2002120912009';
             else if (fmt === 'codabar') content = 'B00B';
             else if (fmt === 'postnet') content = '11372';
             else if (fmt === 'planet') content = '1997112302177';
+            else if (fmt === 'onecode') content = '0123456709498765432101234567891';
+            else if (fmt === 'rm4scc') content = 'LE28HS9Z';
+            else if (fmt === 'kix') content = '1231FZ13XHS';
+            else if (fmt === 'mailmark4s') content = '11100010112345678AB19XY1A ';
+            else if (fmt === 'mailmark2d') content = 'JGB 012100123412345678AB19XY1A 0             ';
             else if (fmt === 'MSI' || fmt === 'MSI10' || fmt === 'MSI11') content = '20040317';
             else if (fmt === 'pdf417' || fmt === 'compactpdf417') content = 'KI KORIS?';
             else content = 'RSVA-2711';
@@ -4495,6 +4525,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
               if (azLay && parseInt(azLay, 10) > 0) opts.layers = parseInt(azLay, 10);
             } else if (type === 'maxicode') {
               opts.mode = parseInt(document.getElementById('tm-maxi-mode')?.value || 4, 10);
+            } else if (type === 'mailmark') {
+              const mmType = document.getElementById('tm-mailmark-type')?.value;
+              if (mmType && mmType !== 'auto') opts.type = mmType;
             }
 
             const cleanText = text.trim() || ' ';
@@ -6573,12 +6606,16 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         let hxVersion = undefined;
         let mqrVersion = undefined;
         let rmqrSize = undefined;
+        let mailmarkType = undefined;
         let targetSize = undefined;
 
         for (let i = 0; i < args.length; i++) {
           const a = args[i];
           if ((a === '-t' || a === '--type' || a === '--symbology') && args[i + 1]) {
             type = window.TextEngine.normalize2DType(args[i + 1]);
+            i++;
+          } else if ((a === '--mailmark-type' || a === '--cmdm-type') && args[i + 1]) {
+            mailmarkType = args[i + 1];
             i++;
           } else if ((a === '-e' || a === '--ecc' || a === '--level') && args[i + 1]) {
             ecc = args[i + 1];
@@ -6678,12 +6715,13 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           return `<div class="tool-result-box">
 <div class="tool-result-header">2D matrix generator</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
+<div class="c-dim">  qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin|mailmark] [-f ascii|svg|dataurl] [flags] [file/text...]</div>
 <div class="c-dim">  echo "https://syzarn.github.io" | qrcode</div>
 <div class="c-dim">  qrcode -t microqr -v M3 "12345678"</div>
 <div class="c-dim">  qrcode -t rmqr --rmqr-size R11x43 "RMQR-SAMPLE"</div>
 <div class="c-dim">  qrcode -t dotcode --ratio 2 "EIKHI-2002"</div>
 <div class="c-dim">  qrcode -t hanxin -e L3 "述而不作、信而好古"</div>
+<div class="c-dim">  qrcode -t mailmark "JGB 012100123412345678AB19XY1A 0             "</div>
 <div class="c-dim">  qrcode --ui "custom payload"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">types & input restrictions:</span></div>
 <div class="c-dim">  qr          : UTF-8, Latin-1, binary, numeric, alphanumeric, Kanji (up to 7,089 digits / 2,953 bytes)</div>
@@ -6694,8 +6732,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  maxicode    : Mode 4 standard (93 chars), Mode 5 secure (77 chars), Mode 2/3 postal SCM</div>
 <div class="c-dim">  dotcode     : Full ASCII (0-127), extended (128-255), UTF-8, GS1 FNC1 (up to ~1,500+ chars/bytes)</div>
 <div class="c-dim">  hanxin      : Chinese (GB18030), full ASCII, Latin, digits, binary (84 versions up to 7,827 digits / 2,174 Chinese chars)</div>
+<div class="c-dim">  mailmark    : Royal Mail 2D Mailmark CMDM (Type 7 24x24, Type 9 32x32, Type 29 16x48, starting with 'JGB ')</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">common flags:</span></div>
-<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, microqr, rmqr, datamatrix, aztec, maxicode, dotcode, hanxin)</div>
+<div class="c-dim">  -t, --type &lt;type&gt;    : symbology type (qr, microqr, rmqr, datamatrix, aztec, maxicode, dotcode, hanxin, mailmark)</div>
 <div class="c-dim">  -f, --format &lt;fmt&gt;   : output format (ascii, full-ascii, svg, dataurl, raw)</div>
 <div class="c-dim">  -s, --scale &lt;N&gt;      : module pixel scale for image/canvas (default: 8)</div>
 <div class="c-dim">  --size &lt;N&gt;           : target PNG image size / max dimension (max: 4000)</div>
@@ -6712,6 +6751,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  MaxiCode    : --mode &lt;2|3|4|5|6&gt;</div>
 <div class="c-dim">  DotCode     : --columns &lt;N&gt;, --rows &lt;N&gt;, --ratio &lt;N&gt;, --parsefnc, --fastfind</div>
 <div class="c-dim">  Han Xin Code/汉信码: -e, --ecc &lt;L1|L2|L3|L4&gt;, -v, --version &lt;1-84&gt;, --mask &lt;1-4&gt;, --parsefnc</div>
+<div class="c-dim">  Mailmark 2D : --mailmark-type &lt;7|9|29|auto&gt;</div>
 </div>`;
         }
 
@@ -6758,6 +6798,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           if (hxVersion) opts.version = hxVersion;
           if (mask > 0) opts.mask = mask;
           if (dmParsefnc) opts.parsefnc = true;
+        } else if (type === 'mailmark') {
+          if (mailmarkType) opts.type = mailmarkType;
         }
 
         const codeRes = window.TextEngine.generate2DCode(input.text, type, opts);
@@ -7039,8 +7081,44 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
+    mailmark: {
+      desc: 'generate Royal Mail Mailmark 4-state barcode or 2D complex mail data mark (CMDM)',
+      usage: 'mailmark [-f mailmark4s|mailmark2d] [file/text...]',
+      exec(args, stdin) {
+        const raw = args.join(' ');
+        if (args.includes('mailmark2d') || args.includes('cmdm') || raw.includes('JGB ') || args.includes('--mailmark-type')) {
+          return commands.qrcode.exec(['-t', 'mailmark', ...args], stdin);
+        }
+        return commands.barcode.exec(['-f', 'mailmark4s', ...args], stdin);
+      }
+    },
+
+    mailmark4s: {
+      desc: 'generate Royal Mail Mailmark 4-State barcode (Barcode C & L, 66/78 bars)',
+      usage: 'mailmark4s [-w width] [-h height] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.barcode.exec(['-f', 'mailmark4s', ...args], stdin);
+      }
+    },
+
+    mailmark2d: {
+      desc: 'generate Royal Mail 2D Mailmark CMDM (Data Matrix ECC 200, Type 7/9/29)',
+      usage: 'mailmark2d [--mailmark-type 7|9|29] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
+      exec(args, stdin) {
+        return commands.qrcode.exec(['-t', 'mailmark', ...args], stdin);
+      }
+    },
+
+    cmdm: {
+      desc: 'alias for mailmark2d',
+      usage: 'cmdm [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.mailmark2d.exec(args, stdin);
+      }
+    },
+
     barcode: {
-      desc: 'generate customizable 1D, postal, and stacked 2D barcodes (CODE128, EAN, UPC, POSTNET, PLANET, PDF417, CODE39, etc.)',
+      desc: 'generate customizable 1D, postal, and stacked 2D barcodes (CODE128, EAN, UPC, POSTNET, PLANET, Intelligent Mail, RM4SCC, KIX, PDF417, CODE39, etc.)',
       usage: 'barcode [-f format] [-w width] [-h height] [-m margin] [--columns N] [--rows N] [--compact] [--no-text] [--color hex] [--bg hex] [--ascii|--svg|--dataurl] [--ui] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'barcode: text engine not loaded';
@@ -7129,10 +7207,15 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           return `<div class="tool-result-box">
 <div class="tool-result-header">Barcode Generator (1D, Postal & Stacked PDF417 Barcodes)</div>
 <div><span class="c-accent ansi-bold">usage:</span></div>
-<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|POSTNET|PLANET|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [--size 4000] [file/text...]</div>
+<div class="c-dim">  barcode [-f CODE128|EAN13|UPC|POSTNET|PLANET|onecode|rm4scc|kix|mailmark4s|mailmark2d|PDF417|CODE39|ITF14|pharmacode] [-w width] [-h height] [--size 4000] [file/text...]</div>
 <div class="c-dim">  echo "123456789012" | barcode -f EAN13</div>
 <div class="c-dim">  echo "90210" | barcode -f postnet</div>
 <div class="c-dim">  echo "12345678901" | barcode -f planet</div>
+<div class="c-dim">  echo "0123456709498765432101234567891" | barcode -f onecode</div>
+<div class="c-dim">  echo "LE28HS9Z" | barcode -f rm4scc</div>
+<div class="c-dim">  echo "1231FZ13XHS" | barcode -f kix</div>
+<div class="c-dim">  echo "11100010112345678AB19XY1A " | barcode -f mailmark4s</div>
+<div class="c-dim">  echo "JGB 012100123412345678AB19XY1A 0             " | barcode -f mailmark2d</div>
 <div class="c-dim">  echo "SECURE-PAYLOAD" | barcode -f pdf417 --columns 4 --eclevel 3</div>
 <div class="c-dim">  barcode --ui "HELLO-128"</div>
 <div style="margin-top:6px;"><span class="c-accent ansi-bold">formats & input restrictions:</span></div>
@@ -7146,6 +7229,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 <div class="c-dim">  UPC-E          : 6, 7, or 8 numeric digits (0-9)</div>
 <div class="c-dim">  POSTNET        : USPS Postal 5 (ZIP), 9 (ZIP+4), or 11 (Delivery Point) numeric digits</div>
 <div class="c-dim">  PLANET         : USPS Postal tracking 11 or 13 numeric digits</div>
+<div class="c-dim">  OneCode (IMb)  : USPS Intelligent Mail 4-state 20, 25, 29, or 31 numeric digits</div>
+<div class="c-dim">  RM4SCC         : Royal Mail 4-State Customer Code alphanumeric (A-Z, 0-9)</div>
+<div class="c-dim">  KIX Code       : Royal Dutch TPG Post / PostNL 4-state alphanumeric (A-Z, 0-9)</div>
+<div class="c-dim">  Mailmark 4-S   : Royal Mail Mailmark 4-State C (22 chars) or L (26 chars), or 66/78 DAFT string</div>
+<div class="c-dim">  Mailmark 2D    : Royal Mail 2D Mailmark CMDM (Type 7, 9, 29) formatted with 'JGB ' prefix</div>
 <div class="c-dim">  CODE39         : Uppercase A-Z, digits 0-9, space, symbols (- . $ / + %)</div>
 <div class="c-dim">  CODE93         : Uppercase A-Z, digits 0-9, symbols (full ASCII via escapes)</div>
 <div class="c-dim">  ITF-14         : Exactly 13 or 14 numeric digits (0-9)</div>
@@ -8329,6 +8417,26 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
             typeSel.dispatchEvent(new Event('change'));
           }
           return `<span class="c-accent">opened han xin code generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'mailmark' || target === 'mailmark2d' || target === 'cmdm') {
+          textManipWorkbench.open('qrcode');
+          const typeSel = document.getElementById('tm-qr-type');
+          if (typeSel) {
+            typeSel.value = 'mailmark';
+            typeSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened royal mail 2d mailmark generator in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'mailmark4s' || target === 'mailmark4state') {
+          textManipWorkbench.open('barcode');
+          const fmtSel = document.getElementById('tm-bc-format');
+          if (fmtSel) {
+            fmtSel.value = 'mailmark4s';
+            fmtSel.dispatchEvent(new Event('change'));
+          }
+          return `<span class="c-accent">opened royal mail mailmark 4-state generator in text manipulation workbench.</span>`;
         }
 
         if (target === 'barcode' || target === 'bc') {
