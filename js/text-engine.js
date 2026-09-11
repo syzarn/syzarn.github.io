@@ -358,6 +358,498 @@
     };
   }
 
+const SBCS_TABLES = {
+    "WINDOWS-1252": "\u20ac\ufffd\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\ufffd\u017d\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\ufffd\u017e\u0178\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u00d0\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u00dd\u00de\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u00f0\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u00fd\u00fe\u00ff",
+    "WINDOWS-1250": "\u20ac\ufffd\u201a\ufffd\u201e\u2026\u2020\u2021\ufffd\u2030\u0160\u2039\u015a\u0164\u017d\u0179\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\ufffd\u2122\u0161\u203a\u015b\u0165\u017e\u017a\u00a0\u02c7\u02d8\u0141\u00a4\u0104\u00a6\u00a7\u00a8\u00a9\u015e\u00ab\u00ac\u00ad\u00ae\u017b\u00b0\u00b1\u02db\u0142\u00b4\u00b5\u00b6\u00b7\u00b8\u0105\u015f\u00bb\u013d\u02dd\u013e\u017c\u0154\u00c1\u00c2\u0102\u00c4\u0139\u0106\u00c7\u010c\u00c9\u0118\u00cb\u011a\u00cd\u00ce\u010e\u0110\u0143\u0147\u00d3\u00d4\u0150\u00d6\u00d7\u0158\u016e\u00da\u0170\u00dc\u00dd\u0162\u00df\u0155\u00e1\u00e2\u0103\u00e4\u013a\u0107\u00e7\u010d\u00e9\u0119\u00eb\u011b\u00ed\u00ee\u010f\u0111\u0144\u0148\u00f3\u00f4\u0151\u00f6\u00f7\u0159\u016f\u00fa\u0171\u00fc\u00fd\u0163\u02d9",
+    "WINDOWS-1251": "\u0402\u0403\u201a\u0453\u201e\u2026\u2020\u2021\u20ac\u2030\u0409\u2039\u040a\u040c\u040b\u040f\u0452\u2018\u2019\u201c\u201d\u2022\u2013\u2014\ufffd\u2122\u0459\u203a\u045a\u045c\u045b\u045f\u00a0\u040e\u045e\u0408\u00a4\u0490\u00a6\u00a7\u0401\u00a9\u0404\u00ab\u00ac\u00ad\u00ae\u0407\u00b0\u00b1\u0406\u0456\u0491\u00b5\u00b6\u00b7\u0451\u2116\u0454\u00bb\u0458\u0405\u0455\u0457\u0410\u0411\u0412\u0413\u0414\u0415\u0416\u0417\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042a\u042b\u042c\u042d\u042e\u042f\u0430\u0431\u0432\u0433\u0434\u0435\u0436\u0437\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u0440\u0441\u0442\u0443\u0444\u0445\u0446\u0447\u0448\u0449\u044a\u044b\u044c\u044d\u044e\u044f",
+    "WINDOWS-1253": "\u20ac\ufffd\u201a\u0192\u201e\u2026\u2020\u2021\ufffd\u2030\ufffd\u2039\ufffd\ufffd\ufffd\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\ufffd\u2122\ufffd\u203a\ufffd\ufffd\ufffd\ufffd\u00a0\u0385\u0386\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\ufffd\u00ab\u00ac\u00ad\u00ae\u2015\u00b0\u00b1\u00b2\u00b3\u0384\u00b5\u00b6\u00b7\u0388\u0389\u038a\u00bb\u038c\u00bd\u038e\u038f\u0390\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039a\u039b\u039c\u039d\u039e\u039f\u03a0\u03a1\ufffd\u03a3\u03a4\u03a5\u03a6\u03a7\u03a8\u03a9\u03aa\u03ab\u03ac\u03ad\u03ae\u03af\u03b0\u03b1\u03b2\u03b3\u03b4\u03b5\u03b6\u03b7\u03b8\u03b9\u03ba\u03bb\u03bc\u03bd\u03be\u03bf\u03c0\u03c1\u03c2\u03c3\u03c4\u03c5\u03c6\u03c7\u03c8\u03c9\u03ca\u03cb\u03cc\u03cd\u03ce\ufffd",
+    "WINDOWS-1254": "\u20ac\ufffd\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0160\u2039\u0152\ufffd\ufffd\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u0161\u203a\u0153\ufffd\ufffd\u0178\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u011e\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u0130\u015e\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u011f\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u0131\u015f\u00ff",
+    "WINDOWS-1255": "\u20ac\ufffd\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\ufffd\u2039\ufffd\ufffd\ufffd\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\ufffd\u203a\ufffd\ufffd\ufffd\ufffd\u00a0\u00a1\u00a2\u00a3\u20aa\u00a5\u00a6\u00a7\u00a8\u00a9\u00d7\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00f7\u00bb\u00bc\u00bd\u00be\u00bf\u05b0\u05b1\u05b2\u05b3\u05b4\u05b5\u05b6\u05b7\u05b8\u05b9\ufffd\u05bb\u05bc\u05bd\u05be\u05bf\u05c0\u05c1\u05c2\u05c3\u05f0\u05f1\u05f2\u05f3\u05f4\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea\ufffd\ufffd\u200e\u200f\ufffd",
+    "WINDOWS-1256": "\u20ac\u067e\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0679\u2039\u0152\u0686\u0698\u0688\u06af\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u06a9\u2122\u0691\u203a\u0153\u200c\u200d\u06ba\u00a0\u060c\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u06be\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u061b\u00bb\u00bc\u00bd\u00be\u061f\u06c1\u0621\u0622\u0623\u0624\u0625\u0626\u0627\u0628\u0629\u062a\u062b\u062c\u062d\u062e\u062f\u0630\u0631\u0632\u0633\u0634\u0635\u0636\u00d7\u0637\u0638\u0639\u063a\u0640\u0641\u0642\u0643\u00e0\u0644\u00e2\u0645\u0646\u0647\u0648\u00e7\u00e8\u00e9\u00ea\u00eb\u0649\u064a\u00ee\u00ef\u064b\u064c\u064d\u064e\u00f4\u064f\u0650\u00f7\u0651\u00f9\u0652\u00fb\u00fc\u200e\u200f\u06d2",
+    "WINDOWS-1257": "\u20ac\ufffd\u201a\ufffd\u201e\u2026\u2020\u2021\ufffd\u2030\ufffd\u2039\ufffd\u00a8\u02c7\u00b8\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\ufffd\u2122\ufffd\u203a\ufffd\u00af\u02db\ufffd\u00a0\ufffd\u00a2\u00a3\u00a4\ufffd\u00a6\u00a7\u00d8\u00a9\u0156\u00ab\u00ac\u00ad\u00ae\u00c6\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00f8\u00b9\u0157\u00bb\u00bc\u00bd\u00be\u00e6\u0104\u012e\u0100\u0106\u00c4\u00c5\u0118\u0112\u010c\u00c9\u0179\u0116\u0122\u0136\u012a\u013b\u0160\u0143\u0145\u00d3\u014c\u00d5\u00d6\u00d7\u0172\u0141\u015a\u016a\u00dc\u017b\u017d\u00df\u0105\u012f\u0101\u0107\u00e4\u00e5\u0119\u0113\u010d\u00e9\u017a\u0117\u0123\u0137\u012b\u013c\u0161\u0144\u0146\u00f3\u014d\u00f5\u00f6\u00f7\u0173\u0142\u015b\u016b\u00fc\u017c\u017e\u02d9",
+    "WINDOWS-1258": "\u20ac\ufffd\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\ufffd\u2039\u0152\ufffd\ufffd\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\ufffd\u203a\u0153\ufffd\ufffd\u0178\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\u00c0\u00c1\u00c2\u0102\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u0300\u00cd\u00ce\u00cf\u0110\u00d1\u0309\u00d3\u00d4\u01a0\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u01af\u0303\u00df\u00e0\u00e1\u00e2\u0103\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u0301\u00ed\u00ee\u00ef\u0111\u00f1\u0323\u00f3\u00f4\u01a1\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u01b0\u20ab\u00ff",
+    "WINDOWS-874": "\u20ac\ufffd\ufffd\ufffd\ufffd\u2026\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u2018\u2019\u201c\u201d\u2022\u2013\u2014\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u00a0\u0e01\u0e02\u0e03\u0e04\u0e05\u0e06\u0e07\u0e08\u0e09\u0e0a\u0e0b\u0e0c\u0e0d\u0e0e\u0e0f\u0e10\u0e11\u0e12\u0e13\u0e14\u0e15\u0e16\u0e17\u0e18\u0e19\u0e1a\u0e1b\u0e1c\u0e1d\u0e1e\u0e1f\u0e20\u0e21\u0e22\u0e23\u0e24\u0e25\u0e26\u0e27\u0e28\u0e29\u0e2a\u0e2b\u0e2c\u0e2d\u0e2e\u0e2f\u0e30\u0e31\u0e32\u0e33\u0e34\u0e35\u0e36\u0e37\u0e38\u0e39\u0e3a\ufffd\ufffd\ufffd\ufffd\u0e3f\u0e40\u0e41\u0e42\u0e43\u0e44\u0e45\u0e46\u0e47\u0e48\u0e49\u0e4a\u0e4b\u0e4c\u0e4d\u0e4e\u0e4f\u0e50\u0e51\u0e52\u0e53\u0e54\u0e55\u0e56\u0e57\u0e58\u0e59\u0e5a\u0e5b\ufffd\ufffd\ufffd\ufffd",
+    "ISO-8859-1": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u00d0\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u00dd\u00de\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u00f0\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u00fd\u00fe\u00ff",
+    "ISO-8859-2": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0104\u02d8\u0141\u00a4\u013d\u015a\u00a7\u00a8\u0160\u015e\u0164\u0179\u00ad\u017d\u017b\u00b0\u0105\u02db\u0142\u00b4\u013e\u015b\u02c7\u00b8\u0161\u015f\u0165\u017a\u02dd\u017e\u017c\u0154\u00c1\u00c2\u0102\u00c4\u0139\u0106\u00c7\u010c\u00c9\u0118\u00cb\u011a\u00cd\u00ce\u010e\u0110\u0143\u0147\u00d3\u00d4\u0150\u00d6\u00d7\u0158\u016e\u00da\u0170\u00dc\u00dd\u0162\u00df\u0155\u00e1\u00e2\u0103\u00e4\u013a\u0107\u00e7\u010d\u00e9\u0119\u00eb\u011b\u00ed\u00ee\u010f\u0111\u0144\u0148\u00f3\u00f4\u0151\u00f6\u00f7\u0159\u016f\u00fa\u0171\u00fc\u00fd\u0163\u02d9",
+    "ISO-8859-3": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0126\u02d8\u00a3\u00a4\ufffd\u0124\u00a7\u00a8\u0130\u015e\u011e\u0134\u00ad\ufffd\u017b\u00b0\u0127\u00b2\u00b3\u00b4\u00b5\u0125\u00b7\u00b8\u0131\u015f\u011f\u0135\u00bd\ufffd\u017c\u00c0\u00c1\u00c2\ufffd\u00c4\u010a\u0108\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\ufffd\u00d1\u00d2\u00d3\u00d4\u0120\u00d6\u00d7\u011c\u00d9\u00da\u00db\u00dc\u016c\u015c\u00df\u00e0\u00e1\u00e2\ufffd\u00e4\u010b\u0109\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\ufffd\u00f1\u00f2\u00f3\u00f4\u0121\u00f6\u00f7\u011d\u00f9\u00fa\u00fb\u00fc\u016d\u015d\u02d9",
+    "ISO-8859-4": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0104\u0138\u0156\u00a4\u0128\u013b\u00a7\u00a8\u0160\u0112\u0122\u0166\u00ad\u017d\u00af\u00b0\u0105\u02db\u0157\u00b4\u0129\u013c\u02c7\u00b8\u0161\u0113\u0123\u0167\u014a\u017e\u014b\u0100\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u012e\u010c\u00c9\u0118\u00cb\u0116\u00cd\u00ce\u012a\u0110\u0145\u014c\u0136\u00d4\u00d5\u00d6\u00d7\u00d8\u0172\u00da\u00db\u00dc\u0168\u016a\u00df\u0101\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u012f\u010d\u00e9\u0119\u00eb\u0117\u00ed\u00ee\u012b\u0111\u0146\u014d\u0137\u00f4\u00f5\u00f6\u00f7\u00f8\u0173\u00fa\u00fb\u00fc\u0169\u016b\u02d9",
+    "ISO-8859-5": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0401\u0402\u0403\u0404\u0405\u0406\u0407\u0408\u0409\u040a\u040b\u040c\u00ad\u040e\u040f\u0410\u0411\u0412\u0413\u0414\u0415\u0416\u0417\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042a\u042b\u042c\u042d\u042e\u042f\u0430\u0431\u0432\u0433\u0434\u0435\u0436\u0437\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u0440\u0441\u0442\u0443\u0444\u0445\u0446\u0447\u0448\u0449\u044a\u044b\u044c\u044d\u044e\u044f\u2116\u0451\u0452\u0453\u0454\u0455\u0456\u0457\u0458\u0459\u045a\u045b\u045c\u00a7\u045e\u045f",
+    "ISO-8859-6": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\ufffd\ufffd\ufffd\u00a4\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u060c\u00ad\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u061b\ufffd\ufffd\ufffd\u061f\ufffd\u0621\u0622\u0623\u0624\u0625\u0626\u0627\u0628\u0629\u062a\u062b\u062c\u062d\u062e\u062f\u0630\u0631\u0632\u0633\u0634\u0635\u0636\u0637\u0638\u0639\u063a\ufffd\ufffd\ufffd\ufffd\ufffd\u0640\u0641\u0642\u0643\u0644\u0645\u0646\u0647\u0648\u0649\u064a\u064b\u064c\u064d\u064e\u064f\u0650\u0651\u0652\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd",
+    "ISO-8859-7": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u2018\u2019\u00a3\u20ac\u20af\u00a6\u00a7\u00a8\u00a9\u037a\u00ab\u00ac\u00ad\ufffd\u2015\u00b0\u00b1\u00b2\u00b3\u0384\u0385\u0386\u00b7\u0388\u0389\u038a\u00bb\u038c\u00bd\u038e\u038f\u0390\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039a\u039b\u039c\u039d\u039e\u039f\u03a0\u03a1\ufffd\u03a3\u03a4\u03a5\u03a6\u03a7\u03a8\u03a9\u03aa\u03ab\u03ac\u03ad\u03ae\u03af\u03b0\u03b1\u03b2\u03b3\u03b4\u03b5\u03b6\u03b7\u03b8\u03b9\u03ba\u03bb\u03bc\u03bd\u03be\u03bf\u03c0\u03c1\u03c2\u03c3\u03c4\u03c5\u03c6\u03c7\u03c8\u03c9\u03ca\u03cb\u03cc\u03cd\u03ce\ufffd",
+    "ISO-8859-8": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\ufffd\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00d7\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00f7\u00bb\u00bc\u00bd\u00be\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\u2017\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05da\u05db\u05dc\u05dd\u05de\u05df\u05e0\u05e1\u05e2\u05e3\u05e4\u05e5\u05e6\u05e7\u05e8\u05e9\u05ea\ufffd\ufffd\u200e\u200f\ufffd",
+    "ISO-8859-9": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u011e\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u0130\u015e\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u011f\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u0131\u015f\u00ff",
+    "ISO-8859-10": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0104\u0112\u0122\u012a\u0128\u0136\u00a7\u013b\u0110\u0160\u0166\u017d\u00ad\u016a\u014a\u00b0\u0105\u0113\u0123\u012b\u0129\u0137\u00b7\u013c\u0111\u0161\u0167\u017e\u2015\u016b\u014b\u0100\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u012e\u010c\u00c9\u0118\u00cb\u0116\u00cd\u00ce\u00cf\u00d0\u0145\u014c\u00d3\u00d4\u00d5\u00d6\u0168\u00d8\u0172\u00da\u00db\u00dc\u00dd\u00de\u00df\u0101\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u012f\u010d\u00e9\u0119\u00eb\u0117\u00ed\u00ee\u00ef\u00f0\u0146\u014d\u00f3\u00f4\u00f5\u00f6\u0169\u00f8\u0173\u00fa\u00fb\u00fc\u00fd\u00fe\u0138",
+    "ISO-8859-11": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0e01\u0e02\u0e03\u0e04\u0e05\u0e06\u0e07\u0e08\u0e09\u0e0a\u0e0b\u0e0c\u0e0d\u0e0e\u0e0f\u0e10\u0e11\u0e12\u0e13\u0e14\u0e15\u0e16\u0e17\u0e18\u0e19\u0e1a\u0e1b\u0e1c\u0e1d\u0e1e\u0e1f\u0e20\u0e21\u0e22\u0e23\u0e24\u0e25\u0e26\u0e27\u0e28\u0e29\u0e2a\u0e2b\u0e2c\u0e2d\u0e2e\u0e2f\u0e30\u0e31\u0e32\u0e33\u0e34\u0e35\u0e36\u0e37\u0e38\u0e39\u0e3a\ufffd\ufffd\ufffd\ufffd\u0e3f\u0e40\u0e41\u0e42\u0e43\u0e44\u0e45\u0e46\u0e47\u0e48\u0e49\u0e4a\u0e4b\u0e4c\u0e4d\u0e4e\u0e4f\u0e50\u0e51\u0e52\u0e53\u0e54\u0e55\u0e56\u0e57\u0e58\u0e59\u0e5a\u0e5b\ufffd\ufffd\ufffd\ufffd",
+    "ISO-8859-13": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u201d\u00a2\u00a3\u00a4\u201e\u00a6\u00a7\u00d8\u00a9\u0156\u00ab\u00ac\u00ad\u00ae\u00c6\u00b0\u00b1\u00b2\u00b3\u201c\u00b5\u00b6\u00b7\u00f8\u00b9\u0157\u00bb\u00bc\u00bd\u00be\u00e6\u0104\u012e\u0100\u0106\u00c4\u00c5\u0118\u0112\u010c\u00c9\u0179\u0116\u0122\u0136\u012a\u013b\u0160\u0143\u0145\u00d3\u014c\u00d5\u00d6\u00d7\u0172\u0141\u015a\u016a\u00dc\u017b\u017d\u00df\u0105\u012f\u0101\u0107\u00e4\u00e5\u0119\u0113\u010d\u00e9\u017a\u0117\u0123\u0137\u012b\u013c\u0161\u0144\u0146\u00f3\u014d\u00f5\u00f6\u00f7\u0173\u0142\u015b\u016b\u00fc\u017c\u017e\u2019",
+    "ISO-8859-14": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u1e02\u1e03\u00a3\u010a\u010b\u1e0a\u00a7\u1e80\u00a9\u1e82\u1e0b\u1ef2\u00ad\u00ae\u0178\u1e1e\u1e1f\u0120\u0121\u1e40\u1e41\u00b6\u1e56\u1e81\u1e57\u1e83\u1e60\u1ef3\u1e84\u1e85\u1e61\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u0174\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u1e6a\u00d8\u00d9\u00da\u00db\u00dc\u00dd\u0176\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u0175\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u1e6b\u00f8\u00f9\u00fa\u00fb\u00fc\u00fd\u0177\u00ff",
+    "ISO-8859-15": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u00a1\u00a2\u00a3\u20ac\u00a5\u0160\u00a7\u0161\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af\u00b0\u00b1\u00b2\u00b3\u017d\u00b5\u00b6\u00b7\u017e\u00b9\u00ba\u00bb\u0152\u0153\u0178\u00bf\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u00d0\u00d1\u00d2\u00d3\u00d4\u00d5\u00d6\u00d7\u00d8\u00d9\u00da\u00db\u00dc\u00dd\u00de\u00df\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u00f0\u00f1\u00f2\u00f3\u00f4\u00f5\u00f6\u00f7\u00f8\u00f9\u00fa\u00fb\u00fc\u00fd\u00fe\u00ff",
+    "ISO-8859-16": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0104\u0105\u0141\u20ac\u201e\u0160\u00a7\u0161\u00a9\u0218\u00ab\u0179\u00ad\u017a\u017b\u00b0\u00b1\u010c\u0142\u017d\u201d\u00b6\u00b7\u017e\u010d\u0219\u00bb\u0152\u0153\u0178\u017c\u00c0\u00c1\u00c2\u0102\u00c4\u0106\u00c6\u00c7\u00c8\u00c9\u00ca\u00cb\u00cc\u00cd\u00ce\u00cf\u0110\u0143\u00d2\u00d3\u00d4\u0150\u00d6\u015a\u0170\u00d9\u00da\u00db\u00dc\u0118\u021a\u00df\u00e0\u00e1\u00e2\u0103\u00e4\u0107\u00e6\u00e7\u00e8\u00e9\u00ea\u00eb\u00ec\u00ed\u00ee\u00ef\u0111\u0144\u00f2\u00f3\u00f4\u0151\u00f6\u015b\u0171\u00f9\u00fa\u00fb\u00fc\u0119\u021b\u00ff",
+    "CP437": "\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00a2\u00a3\u00a5\u20a7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u2310\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u00df\u0393\u03c0\u03a3\u03c3\u00b5\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u03c6\u03b5\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u00a0",
+    "CP850": "\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u00c1\u00c2\u00c0\u00a9\u2563\u2551\u2557\u255d\u00a2\u00a5\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u00e3\u00c3\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u00a4\u00f0\u00d0\u00ca\u00cb\u00c8\u0131\u00cd\u00ce\u00cf\u2518\u250c\u2588\u2584\u00a6\u00cc\u2580\u00d3\u00df\u00d4\u00d2\u00f5\u00d5\u00b5\u00fe\u00de\u00da\u00db\u00d9\u00fd\u00dd\u00af\u00b4\u00ad\u00b1\u2017\u00be\u00b6\u00a7\u00f7\u00b8\u00b0\u00a8\u00b7\u00b9\u00b3\u00b2\u25a0\u00a0",
+    "CP852": "\u00c7\u00fc\u00e9\u00e2\u00e4\u016f\u0107\u00e7\u0142\u00eb\u0150\u0151\u00ee\u0179\u00c4\u0106\u00c9\u0139\u013a\u00f4\u00f6\u013d\u013e\u015a\u015b\u00d6\u00dc\u0164\u0165\u0141\u00d7\u010d\u00e1\u00ed\u00f3\u00fa\u0104\u0105\u017d\u017e\u0118\u0119\u00ac\u017a\u010c\u015f\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u00c1\u00c2\u011a\u015e\u2563\u2551\u2557\u255d\u017b\u017c\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u0102\u0103\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u00a4\u0111\u0110\u010e\u00cb\u010f\u0147\u00cd\u00ce\u011b\u2518\u250c\u2588\u2584\u0162\u016e\u2580\u00d3\u00df\u00d4\u0143\u0144\u0148\u0160\u0161\u0154\u00da\u0155\u0170\u00fd\u00dd\u0163\u00b4\u00ad\u02dd\u02db\u02c7\u02d8\u00a7\u00f7\u00b8\u00b0\u00a8\u02d9\u0171\u0158\u0159\u25a0\u00a0",
+    "CP866": "\u0410\u0411\u0412\u0413\u0414\u0415\u0416\u0417\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042a\u042b\u042c\u042d\u042e\u042f\u0430\u0431\u0432\u0433\u0434\u0435\u0436\u0437\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u0440\u0441\u0442\u0443\u0444\u0445\u0446\u0447\u0448\u0449\u044a\u044b\u044c\u044d\u044e\u044f\u0401\u0451\u0404\u0454\u0407\u0457\u040e\u045e\u00b0\u2219\u00b7\u221a\u2116\u00a4\u25a0\u00a0",
+    "CP858": "\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u00c1\u00c2\u00c0\u00a9\u2563\u2551\u2557\u255d\u00a2\u00a5\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u00e3\u00c3\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u00a4\u00f0\u00d0\u00ca\u00cb\u00c8\u20ac\u00cd\u00ce\u00cf\u2518\u250c\u2588\u2584\u00a6\u00cc\u2580\u00d3\u00df\u00d4\u00d2\u00f5\u00d5\u00b5\u00fe\u00de\u00da\u00db\u00d9\u00fd\u00dd\u00af\u00b4\u00ad\u00b1\u2017\u00be\u00b6\u00a7\u00f7\u00b8\u00b0\u00a8\u00b7\u00b9\u00b3\u00b2\u25a0\u00a0",
+    "MACINTOSH": "\u00c4\u00c5\u00c7\u00c9\u00d1\u00d6\u00dc\u00e1\u00e0\u00e2\u00e4\u00e3\u00e5\u00e7\u00e9\u00e8\u00ea\u00eb\u00ed\u00ec\u00ee\u00ef\u00f1\u00f3\u00f2\u00f4\u00f6\u00f5\u00fa\u00f9\u00fb\u00fc\u2020\u00b0\u00a2\u00a3\u00a7\u2022\u00b6\u00df\u00ae\u00a9\u2122\u00b4\u00a8\u2260\u00c6\u00d8\u221e\u00b1\u2264\u2265\u00a5\u00b5\u2202\u2211\u220f\u03c0\u222b\u00aa\u00ba\u03a9\u00e6\u00f8\u00bf\u00a1\u00ac\u221a\u0192\u2248\u2206\u00ab\u00bb\u2026\u00a0\u00c0\u00c3\u00d5\u0152\u0153\u2013\u2014\u201c\u201d\u2018\u2019\u00f7\u25ca\u00ff\u0178\u2044\u20ac\u2039\u203a\ufb01\ufb02\u2021\u00b7\u201a\u201e\u2030\u00c2\u00ca\u00c1\u00cb\u00c8\u00cd\u00ce\u00cf\u00cc\u00d3\u00d4\uf8ff\u00d2\u00da\u00db\u00d9\u0131\u02c6\u02dc\u00af\u02d8\u02d9\u02da\u00b8\u02dd\u02db\u02c7",
+    "MAC-CYRILLIC": "\u0410\u0411\u0412\u0413\u0414\u0415\u0416\u0417\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042a\u042b\u042c\u042d\u042e\u042f\u2020\u00b0\u0490\u00a3\u00a7\u2022\u00b6\u0406\u00ae\u00a9\u2122\u0402\u0452\u2260\u0403\u0453\u221e\u00b1\u2264\u2265\u0456\u00b5\u0491\u0408\u0404\u0454\u0407\u0457\u0409\u0459\u040a\u045a\u0458\u0405\u00ac\u221a\u0192\u2248\u2206\u00ab\u00bb\u2026\u00a0\u040b\u045b\u040c\u045c\u0455\u2013\u2014\u201c\u201d\u2018\u2019\u00f7\u201e\u040e\u045e\u040f\u045f\u2116\u0401\u0451\u044f\u0430\u0431\u0432\u0433\u0434\u0435\u0436\u0437\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u0440\u0441\u0442\u0443\u0444\u0445\u0446\u0447\u0448\u0449\u044a\u044b\u044c\u044d\u044e\u20ac",
+    "MAC-CENTRALEUROPE": "\u00c4\u0100\u0101\u00c9\u0104\u00d6\u00dc\u00e1\u0105\u010c\u00e4\u010d\u0106\u0107\u00e9\u0179\u017a\u010e\u00ed\u010f\u0112\u0113\u0116\u00f3\u0117\u00f4\u00f6\u00f5\u00fa\u011a\u011b\u00fc\u2020\u00b0\u0118\u00a3\u00a7\u2022\u00b6\u00df\u00ae\u00a9\u2122\u0119\u00a8\u2260\u0123\u012e\u012f\u012a\u2264\u2265\u012b\u0136\u2202\u2211\u0142\u013b\u013c\u013d\u013e\u0139\u013a\u0145\u0146\u0143\u00ac\u221a\u0144\u0147\u2206\u00ab\u00bb\u2026\u00a0\u0148\u0150\u00d5\u0151\u014c\u2013\u2014\u201c\u201d\u2018\u2019\u00f7\u25ca\u014d\u0154\u0155\u0158\u2039\u203a\u0159\u0156\u0157\u0160\u201a\u201e\u0161\u015a\u015b\u00c1\u0164\u0165\u00cd\u017d\u017e\u016a\u00d3\u00d4\u016b\u016e\u00da\u016f\u0170\u0171\u0172\u0173\u00dd\u00fd\u0137\u017b\u0141\u017c\u0122\u02c7",
+    "KOI8-R": "\u2500\u2502\u250c\u2510\u2514\u2518\u251c\u2524\u252c\u2534\u253c\u2580\u2584\u2588\u258c\u2590\u2591\u2592\u2593\u2320\u25a0\u2219\u221a\u2248\u2264\u2265\u00a0\u2321\u00b0\u00b2\u00b7\u00f7\u2550\u2551\u2552\u0451\u2553\u2554\u2555\u2556\u2557\u2558\u2559\u255a\u255b\u255c\u255d\u255e\u255f\u2560\u2561\u0401\u2562\u2563\u2564\u2565\u2566\u2567\u2568\u2569\u256a\u256b\u256c\u00a9\u044e\u0430\u0431\u0446\u0434\u0435\u0444\u0433\u0445\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u044f\u0440\u0441\u0442\u0443\u0436\u0432\u044c\u044b\u0437\u0448\u044d\u0449\u0447\u044a\u042e\u0410\u0411\u0426\u0414\u0415\u0424\u0413\u0425\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u042f\u0420\u0421\u0422\u0423\u0416\u0412\u042c\u042b\u0417\u0428\u042d\u0429\u0427\u042a",
+    "KOI8-U": "\u2500\u2502\u250c\u2510\u2514\u2518\u251c\u2524\u252c\u2534\u253c\u2580\u2584\u2588\u258c\u2590\u2591\u2592\u2593\u2320\u25a0\u2219\u221a\u2248\u2264\u2265\u00a0\u2321\u00b0\u00b2\u00b7\u00f7\u2550\u2551\u2552\u0451\u0454\u2554\u0456\u0457\u2557\u2558\u2559\u255a\u255b\u0491\u255d\u255e\u255f\u2560\u2561\u0401\u0404\u2563\u0406\u0407\u2566\u2567\u2568\u2569\u256a\u0490\u256c\u00a9\u044e\u0430\u0431\u0446\u0434\u0435\u0444\u0433\u0445\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u044f\u0440\u0441\u0442\u0443\u0436\u0432\u044c\u044b\u0437\u0448\u044d\u0449\u0447\u044a\u042e\u0410\u0411\u0426\u0414\u0415\u0424\u0413\u0425\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u042f\u0420\u0421\u0422\u0423\u0416\u0412\u042c\u042b\u0417\u0428\u042d\u0429\u0427\u042a",
+  };
+
+
+  const ENCODING_ALIASES = {
+    'CP1252': 'WINDOWS-1252',
+    'WIN1252': 'WINDOWS-1252',
+    'WINDOWS1252': 'WINDOWS-1252',
+    'WIN-1252': 'WINDOWS-1252',
+    'CP1250': 'WINDOWS-1250',
+    'WIN1250': 'WINDOWS-1250',
+    'WINDOWS1250': 'WINDOWS-1250',
+    'WIN-1250': 'WINDOWS-1250',
+    'CP1251': 'WINDOWS-1251',
+    'WIN1251': 'WINDOWS-1251',
+    'WINDOWS1251': 'WINDOWS-1251',
+    'WIN-1251': 'WINDOWS-1251',
+    'CP1253': 'WINDOWS-1253',
+    'WIN1253': 'WINDOWS-1253',
+    'WINDOWS1253': 'WINDOWS-1253',
+    'WIN-1253': 'WINDOWS-1253',
+    'CP1254': 'WINDOWS-1254',
+    'WIN1254': 'WINDOWS-1254',
+    'WINDOWS1254': 'WINDOWS-1254',
+    'WIN-1254': 'WINDOWS-1254',
+    'CP1255': 'WINDOWS-1255',
+    'WIN1255': 'WINDOWS-1255',
+    'WINDOWS1255': 'WINDOWS-1255',
+    'WIN-1255': 'WINDOWS-1255',
+    'CP1256': 'WINDOWS-1256',
+    'WIN1256': 'WINDOWS-1256',
+    'WINDOWS1256': 'WINDOWS-1256',
+    'WIN-1256': 'WINDOWS-1256',
+    'CP1257': 'WINDOWS-1257',
+    'WIN1257': 'WINDOWS-1257',
+    'WINDOWS1257': 'WINDOWS-1257',
+    'WIN-1257': 'WINDOWS-1257',
+    'CP1258': 'WINDOWS-1258',
+    'WIN1258': 'WINDOWS-1258',
+    'WINDOWS1258': 'WINDOWS-1258',
+    'WIN-1258': 'WINDOWS-1258',
+    'CP874': 'WINDOWS-874',
+    'WIN874': 'WINDOWS-874',
+    'WINDOWS874': 'WINDOWS-874',
+    'TIS620': 'WINDOWS-874',
+    'TIS-620': 'WINDOWS-874',
+    'LATIN1': 'ISO-8859-1',
+    'LATIN-1': 'ISO-8859-1',
+    'ISO88591': 'ISO-8859-1',
+    'ISO8859-1': 'ISO-8859-1',
+    'LATIN2': 'ISO-8859-2',
+    'LATIN-2': 'ISO-8859-2',
+    'ISO88592': 'ISO-8859-2',
+    'LATIN3': 'ISO-8859-3',
+    'LATIN-3': 'ISO-8859-3',
+    'ISO88593': 'ISO-8859-3',
+    'LATIN4': 'ISO-8859-4',
+    'LATIN-4': 'ISO-8859-4',
+    'ISO88594': 'ISO-8859-4',
+    'LATIN5': 'ISO-8859-9',
+    'LATIN-5': 'ISO-8859-9',
+    'LATIN6': 'ISO-8859-10',
+    'LATIN-6': 'ISO-8859-10',
+    'LATIN7': 'ISO-8859-13',
+    'LATIN-7': 'ISO-8859-13',
+    'LATIN8': 'ISO-8859-14',
+    'LATIN-8': 'ISO-8859-14',
+    'LATIN9': 'ISO-8859-15',
+    'LATIN-9': 'ISO-8859-15',
+    'LATIN10': 'ISO-8859-16',
+    'LATIN-10': 'ISO-8859-16',
+    'IBM437': 'CP437',
+    'OEM437': 'CP437',
+    'DOS437': 'CP437',
+    'IBM850': 'CP850',
+    'OEM850': 'CP850',
+    'DOS850': 'CP850',
+    'IBM852': 'CP852',
+    'OEM852': 'CP852',
+    'DOS852': 'CP852',
+    'IBM866': 'CP866',
+    'OEM866': 'CP866',
+    'DOS866': 'CP866',
+    'IBM858': 'CP858',
+    'OEM858': 'CP858',
+    'MAC': 'MACINTOSH',
+    'MACROMAN': 'MACINTOSH',
+    'MAC_ROMAN': 'MACINTOSH',
+    'MACCYRILLIC': 'MAC-CYRILLIC',
+    'MAC_CYRILLIC': 'MAC-CYRILLIC',
+    'MACCENTRALEUROPE': 'MAC-CENTRALEUROPE',
+    'MAC_CENTRALEUROPE': 'MAC-CENTRALEUROPE',
+    'MACLATIN2': 'MAC-CENTRALEUROPE',
+    'KOI8R': 'KOI8-R',
+    'KOI8U': 'KOI8-U',
+    'SJIS': 'SHIFT_JIS',
+    'SHIFTJIS': 'SHIFT_JIS',
+    'CP932': 'SHIFT_JIS',
+    'WINDOWS-31J': 'SHIFT_JIS',
+    'MSKANJI': 'SHIFT_JIS',
+    'EUCJP': 'EUC-JP',
+    'EUC_JP': 'EUC-JP',
+    'JIS': 'ISO-2022-JP',
+    'ISO2022JP': 'ISO-2022-JP',
+    'UTF8': 'UTF-8',
+    'UTF16': 'UTF-16',
+    'UTF16LE': 'UTF-16LE',
+    'UTF16BE': 'UTF-16BE',
+    'UTF32': 'UTF-32',
+    'UTF32LE': 'UTF-32LE',
+    'UTF32BE': 'UTF-32BE',
+    'GB2312': 'GBK',
+    'CP936': 'GBK',
+    'CP950': 'BIG5',
+    'CP949': 'EUC-KR'
+  };
+
+  function canonicalizeEncoding(name) {
+    if (!name) return 'UTF-8';
+    const clean = String(name).trim().toUpperCase().replace(/[\s_]/g, '-');
+    const noHyphen = clean.replace(/-/g, '');
+    if (ENCODING_ALIASES[clean]) return ENCODING_ALIASES[clean];
+    if (ENCODING_ALIASES[noHyphen]) return ENCODING_ALIASES[noHyphen];
+    if (SBCS_TABLES[clean]) return clean;
+    if (SBCS_TABLES[noHyphen]) return noHyphen;
+    return clean;
+  }
+
+  const SBCS_REV_CACHE = {};
+  function getSbcsReverseMap(encoding) {
+    const enc = canonicalizeEncoding(encoding);
+    if (SBCS_REV_CACHE[enc]) return SBCS_REV_CACHE[enc];
+    const table = SBCS_TABLES[enc];
+    if (!table) return null;
+    const rev = new Map();
+    for (let i = 0; i < 128; i++) {
+      const ch = table.charAt(i);
+      if (ch && ch !== '\uFFFD' && !rev.has(ch)) {
+        rev.set(ch, 128 + i);
+      }
+    }
+    SBCS_REV_CACHE[enc] = rev;
+    return rev;
+  }
+
+  function encodeUtf8(str) {
+    if (typeof TextEncoder !== 'undefined') {
+      return Array.from(new TextEncoder().encode(str));
+    }
+    const bytes = [];
+    for (let i = 0; i < str.length; i++) {
+      let code = str.charCodeAt(i);
+      if (code >= 0xD800 && code <= 0xDBFF && i + 1 < str.length) {
+        const next = str.charCodeAt(i + 1);
+        if (next >= 0xDC00 && next <= 0xDFFF) {
+          code = 0x10000 + ((code - 0xD800) << 10) + (next - 0xDC00);
+          i++;
+        }
+      }
+      if (code < 0x80) {
+        bytes.push(code);
+      } else if (code < 0x800) {
+        bytes.push(0xC0 | (code >> 6), 0x80 | (code & 0x3F));
+      } else if (code < 0x10000) {
+        bytes.push(0xE0 | (code >> 12), 0x80 | ((code >> 6) & 0x3F), 0x80 | (code & 0x3F));
+      } else {
+        bytes.push(0xF0 | (code >> 18), 0x80 | ((code >> 12) & 0x3F), 0x80 | ((code >> 6) & 0x3F), 0x80 | (code & 0x3F));
+      }
+    }
+    return bytes;
+  }
+
+  function decodeUtf8(bytes) {
+    if (typeof TextDecoder !== 'undefined') {
+      return new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(bytes));
+    }
+    let res = '';
+    for (let i = 0; i < bytes.length; ) {
+      const b1 = bytes[i++];
+      if (b1 < 0x80) {
+        res += String.fromCharCode(b1);
+      } else if (b1 >= 0xC0 && b1 <= 0xDF && i < bytes.length) {
+        const b2 = bytes[i++];
+        res += String.fromCharCode(((b1 & 0x1F) << 6) | (b2 & 0x3F));
+      } else if (b1 >= 0xE0 && b1 <= 0xEF && i + 1 < bytes.length) {
+        const b2 = bytes[i++];
+        const b3 = bytes[i++];
+        res += String.fromCharCode(((b1 & 0x0F) << 12) | ((b2 & 0x3F) << 6) | (b3 & 0x3F));
+      } else if (b1 >= 0xF0 && b1 <= 0xF7 && i + 2 < bytes.length) {
+        const b2 = bytes[i++];
+        const b3 = bytes[i++];
+        const b4 = bytes[i++];
+        const cp = ((b1 & 0x07) << 18) | ((b2 & 0x3F) << 12) | ((b3 & 0x3F) << 6) | (b4 & 0x3F);
+        res += String.fromCodePoint(cp);
+      } else {
+        res += '\uFFFD';
+      }
+    }
+    return res;
+  }
+
+  function parseInputToBytes(input, options = {}) {
+    if (input instanceof Uint8Array || Array.isArray(input)) {
+      return Array.from(input);
+    }
+    const str = String(input != null ? input : '').trim();
+    if (!str) return [];
+
+    const hexTokens = str.split(/[\s,]+/);
+    if (options && (options.format === 'hex' || options.fromFormat === 'hex' || options.hex)) {
+      if (hexTokens.every(t => /^(0x)?[0-9a-f]{1,2}$/i.test(t))) {
+        return hexTokens.map(t => parseInt(t.replace(/^0x/i, ''), 16));
+      }
+    }
+    if (
+      (hexTokens.length > 1 && hexTokens.every(t => /^(0x)?[0-9a-f]{1,2}$/i.test(t))) ||
+      (hexTokens.length === 1 && (/^0x[0-9a-f]{1,2}$/i.test(hexTokens[0]) || /^[89a-f][0-9a-f]$/i.test(hexTokens[0])))
+    ) {
+      return hexTokens.map(t => parseInt(t.replace(/^0x/i, ''), 16));
+    }
+
+    if (/%[0-9a-f]{2}/i.test(str) && !str.includes(' ')) {
+      const bytes = [];
+      for (let i = 0; i < str.length; ) {
+        if (str[i] === '%' && i + 2 < str.length && /^[0-9a-f]{2}$/i.test(str.substr(i + 1, 2))) {
+          bytes.push(parseInt(str.substr(i + 1, 2), 16));
+          i += 3;
+        } else {
+          bytes.push(str.charCodeAt(i) & 0xFF);
+          i++;
+        }
+      }
+      return bytes;
+    }
+
+    let hasOver255 = false;
+    for (let i = 0; i < str.length; i++) {
+      if (str.charCodeAt(i) > 255) {
+        hasOver255 = true;
+        break;
+      }
+    }
+    if (hasOver255) {
+      return encodeUtf8(str);
+    }
+    const bytes = [];
+    for (let i = 0; i < str.length; i++) {
+      bytes.push(str.charCodeAt(i) & 0xFF);
+    }
+    return bytes;
+  }
+
+  function encodeStringToBytes(text, encoding, options = {}) {
+    const enc = canonicalizeEncoding(encoding);
+    const raw = String(text != null ? text : '');
+    const fallback = options.fallback || 'html-entity';
+
+    if (enc === 'UTF-8') {
+      const bytes = encodeUtf8(raw);
+      if (options.bom) return [0xEF, 0xBB, 0xBF, ...bytes];
+      return bytes;
+    }
+    if (enc === 'ASCII') {
+      const bytes = [];
+      for (let i = 0; i < raw.length; i++) {
+        const c = raw.charCodeAt(i);
+        if (c < 128) bytes.push(c);
+        else if (fallback === 'question') bytes.push(63);
+        else if (fallback === 'error') throw new Error(`Character '${raw[i]}' cannot be represented in ASCII`);
+        else {
+          const ent = `&#${c};`;
+          for (let j = 0; j < ent.length; j++) bytes.push(ent.charCodeAt(j));
+        }
+      }
+      return bytes;
+    }
+    if (enc === 'UTF-16LE' || enc === 'UTF-16BE' || enc === 'UTF-16') {
+      const isLE = enc === 'UTF-16LE' || enc === 'UTF-16';
+      const bytes = [];
+      if (options.bom) {
+        if (isLE) bytes.push(0xFF, 0xFE);
+        else bytes.push(0xFE, 0xFF);
+      }
+      for (let i = 0; i < raw.length; i++) {
+        const c = raw.charCodeAt(i);
+        if (isLE) bytes.push(c & 0xFF, (c >> 8) & 0xFF);
+        else bytes.push((c >> 8) & 0xFF, c & 0xFF);
+      }
+      return bytes;
+    }
+
+    if (SBCS_TABLES[enc]) {
+      const revMap = getSbcsReverseMap(enc);
+      const bytes = [];
+      for (let i = 0; i < raw.length; i++) {
+        const ch = raw[i];
+        const code = ch.charCodeAt(0);
+        if (code < 128) {
+          bytes.push(code);
+        } else if (revMap && revMap.has(ch)) {
+          bytes.push(revMap.get(ch));
+        } else if (fallback === 'question') {
+          bytes.push(63);
+        } else if (fallback === 'error') {
+          throw new Error(`Character '${ch}' cannot be encoded in ${enc}`);
+        } else {
+          const cp = raw.codePointAt(i);
+          if (cp > 0xFFFF) i++;
+          const ent = `&#${cp};`;
+          for (let j = 0; j < ent.length; j++) {
+            bytes.push(ent.charCodeAt(j));
+          }
+        }
+      }
+      return bytes;
+    }
+
+    if (enc === 'SHIFT_JIS' || enc === 'EUC-JP' || enc === 'ISO-2022-JP') {
+      const encObj = typeof Encoding !== 'undefined' ? Encoding : (typeof root !== 'undefined' && root.Encoding ? root.Encoding : null);
+      if (encObj) {
+        const jTarget = enc === 'SHIFT_JIS' ? 'SJIS' : (enc === 'EUC-JP' ? 'EUCJP' : 'JIS');
+        return encObj.convert(encObj.stringToCode(raw), {
+          to: jTarget,
+          from: 'UNICODE',
+          fallback: fallback === 'question' ? '?' : 'html-entity'
+        });
+      }
+    }
+
+    return encodeUtf8(raw);
+  }
+
+  function decodeBytesToString(bytesInput, encoding, options = {}) {
+    const enc = canonicalizeEncoding(encoding);
+    const bytes = parseInputToBytes(bytesInput, options);
+    if (!bytes || bytes.length === 0) return '';
+
+    let startIdx = 0;
+    if (enc === 'UTF-8' && bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) {
+      startIdx = 3;
+    } else if ((enc === 'UTF-16LE' || enc === 'UTF-16') && bytes[0] === 0xFF && bytes[1] === 0xFE) {
+      startIdx = 2;
+    } else if (enc === 'UTF-16BE' && bytes[0] === 0xFE && bytes[1] === 0xFF) {
+      startIdx = 2;
+    }
+    const cleanBytes = startIdx > 0 ? bytes.slice(startIdx) : bytes;
+
+    if (enc === 'UTF-8') {
+      return decodeUtf8(cleanBytes);
+    }
+    if (enc === 'ASCII') {
+      return cleanBytes.map(b => (b < 128 ? String.fromCharCode(b) : '\uFFFD')).join('');
+    }
+    if (enc === 'UTF-16LE' || enc === 'UTF-16') {
+      let res = '';
+      for (let i = 0; i + 1 < cleanBytes.length; i += 2) {
+        res += String.fromCharCode(cleanBytes[i] | (cleanBytes[i + 1] << 8));
+      }
+      return res;
+    }
+    if (enc === 'UTF-16BE') {
+      let res = '';
+      for (let i = 0; i + 1 < cleanBytes.length; i += 2) {
+        res += String.fromCharCode((cleanBytes[i] << 8) | cleanBytes[i + 1]);
+      }
+      return res;
+    }
+
+    if (SBCS_TABLES[enc]) {
+      const table = SBCS_TABLES[enc];
+      let res = '';
+      for (let i = 0; i < cleanBytes.length; i++) {
+        const b = cleanBytes[i] & 0xFF;
+        if (b < 128) {
+          res += String.fromCharCode(b);
+        } else {
+          res += table.charAt(b - 128);
+        }
+      }
+      return res;
+    }
+
+    if (enc === 'SHIFT_JIS' || enc === 'EUC-JP' || enc === 'ISO-2022-JP') {
+      const encObj = typeof Encoding !== 'undefined' ? Encoding : (typeof root !== 'undefined' && root.Encoding ? root.Encoding : null);
+      if (encObj) {
+        const jFrom = enc === 'SHIFT_JIS' ? 'SJIS' : (enc === 'EUC-JP' ? 'EUCJP' : 'JIS');
+        const unicodeArray = encObj.convert(cleanBytes, {
+          to: 'UNICODE',
+          from: jFrom
+        });
+        return encObj.codeToString(unicodeArray);
+      }
+    }
+
+    if (typeof TextDecoder !== 'undefined') {
+      try {
+        const d = new TextDecoder(enc.toLowerCase(), { fatal: false });
+        return d.decode(new Uint8Array(cleanBytes));
+      } catch (e) {}
+    }
+
+    return decodeUtf8(cleanBytes);
+  }
+
+  function detectEncoding(input, options = {}) {
+    const bytes = parseInputToBytes(input, options);
+    if (!bytes || bytes.length === 0) return 'UTF-8';
+
+    if (bytes.length >= 3 && bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) return 'UTF-8';
+    if (bytes.length >= 2 && bytes[0] === 0xFE && bytes[1] === 0xFF) return 'UTF-16BE';
+    if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xFE) return 'UTF-16LE';
+
+    let hasHigh = false;
+    for (let i = 0; i < bytes.length; i++) {
+      if (bytes[i] >= 128) {
+        hasHigh = true;
+        break;
+      }
+    }
+    if (!hasHigh) return 'ASCII';
+
+    let isValidUtf8 = true;
+    let hasMultiByte = false;
+    for (let i = 0; i < bytes.length; ) {
+      const b = bytes[i++];
+      if (b < 0x80) continue;
+      if (b >= 0xC2 && b <= 0xDF) {
+        if (i >= bytes.length || (bytes[i] & 0xC0) !== 0x80) { isValidUtf8 = false; break; }
+        i++; hasMultiByte = true;
+      } else if (b >= 0xE0 && b <= 0xEF) {
+        if (i + 1 >= bytes.length || (bytes[i] & 0xC0) !== 0x80 || (bytes[i + 1] & 0xC0) !== 0x80) { isValidUtf8 = false; break; }
+        i += 2; hasMultiByte = true;
+      } else if (b >= 0xF0 && b <= 0xF4) {
+        if (i + 2 >= bytes.length || (bytes[i] & 0xC0) !== 0x80 || (bytes[i + 1] & 0xC0) !== 0x80 || (bytes[i + 2] & 0xC0) !== 0x80) { isValidUtf8 = false; break; }
+        i += 3; hasMultiByte = true;
+      } else {
+        isValidUtf8 = false; break;
+      }
+    }
+    if (isValidUtf8 && hasMultiByte) return 'UTF-8';
+
+    const win1252Specific = new Set([0x80, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8E, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9E, 0x9F]);
+    let win1252Hits = 0;
+    for (let i = 0; i < bytes.length; i++) {
+      if (win1252Specific.has(bytes[i])) win1252Hits++;
+    }
+    if (win1252Hits > 0) return 'WINDOWS-1252';
+
+    let boxHits = 0;
+    for (let i = 0; i < bytes.length; i++) {
+      if (bytes[i] >= 0xB0 && bytes[i] <= 0xDF) boxHits++;
+    }
+    if (boxHits >= 3 || (boxHits > 0 && boxHits >= bytes.length * 0.2)) return 'CP437';
+
+    return 'WINDOWS-1252';
+  }
+
   const TextEngine = {
     count(text, options = {}) {
       const raw = String(text || "").replace(/\r/g, "");
@@ -1220,139 +1712,294 @@
       return convertedLines.join("\n");
     },
 
+    encodeStringToBytes(text, encoding, options = {}) {
+      return encodeStringToBytes(text, encoding, options);
+    },
+
+    decodeBytesToString(bytes, encoding, options = {}) {
+      return decodeBytesToString(bytes, encoding, options);
+    },
+
+    canonicalizeEncoding(name) {
+      return canonicalizeEncoding(name);
+    },
+
     urlEncode(text, options = {}) {
-      const raw = String(text || "");
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (encObj && options.encoding && options.encoding.toUpperCase() !== "UTF8" && options.encoding.toUpperCase() !== "UNICODE") {
-        const codeArray = encObj.convert(encObj.stringToCode(raw), {
-          to: options.encoding.toUpperCase(),
-          from: "UNICODE"
-        });
-        return encObj.urlEncode(codeArray);
+      const raw = String(text != null ? text : "");
+      const enc = options.encoding ? canonicalizeEncoding(options.encoding) : "UTF-8";
+      if (enc === "UTF-8" || enc === "UNICODE") {
+        if (options.component === false) {
+          return encodeURI(raw);
+        }
+        return encodeURIComponent(raw);
       }
-      if (options.component === false) {
-        return encodeURI(raw);
+      const bytes = encodeStringToBytes(raw, enc, options);
+      let out = "";
+      for (let i = 0; i < bytes.length; i++) {
+        const b = bytes[i];
+        if (
+          (b >= 0x30 && b <= 0x39) ||
+          (b >= 0x41 && b <= 0x5A) ||
+          (b >= 0x61 && b <= 0x7A) ||
+          b === 0x2D || b === 0x2E || b === 0x5F || b === 0x7E
+        ) {
+          out += String.fromCharCode(b);
+        } else {
+          out += "%" + (b < 16 ? "0" : "") + b.toString(16).toUpperCase();
+        }
       }
-      return encodeURIComponent(raw);
+      return out;
     },
 
     urlDecode(text, options = {}) {
-      const raw = String(text || "");
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (encObj && options.encoding && options.encoding.toUpperCase() !== "UTF8" && options.encoding.toUpperCase() !== "UNICODE") {
-        const decodedCodes = encObj.urlDecode(raw);
-        const unicodeArray = encObj.convert(decodedCodes, {
-          to: "UNICODE",
-          from: options.encoding.toUpperCase()
-        });
-        return encObj.codeToString(unicodeArray);
+      const raw = String(text != null ? text : "");
+      const enc = options.encoding ? canonicalizeEncoding(options.encoding) : null;
+      if (!enc || enc === "UTF-8" || enc === "UNICODE") {
+        try {
+          return decodeURIComponent(raw.replace(/\+/g, " "));
+        } catch (e) {}
       }
-      try {
-        return decodeURIComponent(raw.replace(/\+/g, " "));
-      } catch (e) {
-        if (encObj) {
-          const decodedCodes = encObj.urlDecode(raw);
-          const detected = encObj.detect(decodedCodes);
-          const unicodeArray = encObj.convert(decodedCodes, {
-            to: "UNICODE",
-            from: detected || "SJIS"
-          });
-          return encObj.codeToString(unicodeArray);
-        }
-        return unescape(raw);
-      }
+      const targetEnc = enc || detectEncoding(raw);
+      return decodeBytesToString(raw.replace(/\+/g, "%20"), targetEnc, options);
     },
 
     base64Encode(text, options = {}) {
-      const raw = String(text || "");
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (encObj && options.encoding && options.encoding.toUpperCase() !== "UTF8" && options.encoding.toUpperCase() !== "UNICODE") {
-        const codeArray = encObj.convert(encObj.stringToCode(raw), {
-          to: options.encoding.toUpperCase(),
-          from: "UNICODE"
-        });
-        return encObj.base64Encode(codeArray);
+      const raw = String(text != null ? text : "");
+      const enc = options.encoding ? canonicalizeEncoding(options.encoding) : "UTF-8";
+      if (enc === "UTF-8" || enc === "UNICODE") {
+        if (typeof btoa !== "undefined") {
+          return btoa(unescape(encodeURIComponent(raw)));
+        }
+        if (typeof Buffer !== "undefined") {
+          return Buffer.from(raw, "utf8").toString("base64");
+        }
+      }
+      const bytes = encodeStringToBytes(raw, enc, options);
+      let bin = "";
+      for (let i = 0; i < bytes.length; i++) {
+        bin += String.fromCharCode(bytes[i]);
       }
       if (typeof btoa !== "undefined") {
-        return btoa(unescape(encodeURIComponent(raw)));
+        return btoa(bin);
       }
       if (typeof Buffer !== "undefined") {
-        return Buffer.from(raw, "utf8").toString("base64");
+        return Buffer.from(bin, "binary").toString("base64");
       }
       return "";
     },
 
     base64Decode(text, options = {}) {
-      const raw = String(text || "").trim();
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (encObj && options.encoding && options.encoding.toUpperCase() !== "UTF8" && options.encoding.toUpperCase() !== "UNICODE") {
-        const decodedCodes = encObj.base64Decode(raw);
-        const unicodeArray = encObj.convert(decodedCodes, {
-          to: "UNICODE",
-          from: options.encoding.toUpperCase()
-        });
-        return encObj.codeToString(unicodeArray);
-      }
+      const raw = String(text != null ? text : "").trim();
+      const enc = options.encoding ? canonicalizeEncoding(options.encoding) : null;
+      let bin = "";
       if (typeof atob !== "undefined") {
         try {
-          return decodeURIComponent(escape(atob(raw)));
+          bin = atob(raw);
         } catch (e) {
-          if (encObj) {
-            const decodedCodes = encObj.base64Decode(raw);
-            const detected = encObj.detect(decodedCodes);
-            const unicodeArray = encObj.convert(decodedCodes, {
-              to: "UNICODE",
-              from: detected || "AUTO"
-            });
-            return encObj.codeToString(unicodeArray);
-          }
-          throw e;
+          bin = "";
+        }
+      } else if (typeof Buffer !== "undefined") {
+        try {
+          bin = Buffer.from(raw, "base64").toString("binary");
+        } catch (e) {
+          bin = "";
         }
       }
-      if (typeof Buffer !== "undefined") {
-        return Buffer.from(raw, "base64").toString("utf8");
+      if (!bin) return "";
+
+      if (!enc || enc === "UTF-8" || enc === "UNICODE") {
+        try {
+          return decodeURIComponent(escape(bin));
+        } catch (e) {}
       }
-      return "";
+      const targetEnc = enc || detectEncoding(bin);
+      return decodeBytesToString(bin, targetEnc, options);
     },
 
     detectEncoding(text) {
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (encObj) {
-        let codeArray;
-        if (typeof text === "string") {
-          codeArray = encObj.stringToCode(text);
-        } else {
-          codeArray = text;
-        }
-        return encObj.detect(codeArray) || "UNKNOWN";
-      }
-      return "UTF-8";
+      return detectEncoding(text);
     },
 
     convertEncoding(text, to = "UTF8", from = "AUTO", options = {}) {
-      const encObj = typeof Encoding !== "undefined" ? Encoding : (typeof root !== "undefined" && root.Encoding ? root.Encoding : null);
-      if (!encObj) return text;
-      const raw = String(text || "");
-      const codeArray = encObj.stringToCode(raw);
-      const converted = encObj.convert(codeArray, {
-        to: to.toUpperCase(),
-        from: from ? from.toUpperCase() : "AUTO",
-        fallback: options.fallback || "html-entity",
-        bom: options.bom
-      });
-      if (to.toUpperCase() === "UNICODE") {
-        return encObj.codeToString(converted);
+      let srcEnc = from ? canonicalizeEncoding(from) : "AUTO";
+      if (srcEnc === "AUTO") {
+        if (typeof text === "string") {
+          let hasOver255 = false;
+          for (let i = 0; i < text.length; i++) {
+            if (text.charCodeAt(i) > 255) {
+              hasOver255 = true;
+              break;
+            }
+          }
+          if (hasOver255) {
+            srcEnc = "UNICODE";
+          } else {
+            srcEnc = detectEncoding(text);
+          }
+        } else {
+          srcEnc = detectEncoding(text);
+        }
       }
-      if (options.format === "url") {
-        return encObj.urlEncode(converted);
+      const dstEnc = to ? canonicalizeEncoding(to) : "UTF-8";
+      const format = options.format || "string";
+
+      let unicodeStr = "";
+      if (srcEnc === "UNICODE" || srcEnc === "UTF-8") {
+        unicodeStr = typeof text === "string" ? text : decodeBytesToString(text, "UTF-8");
+      } else {
+        unicodeStr = decodeBytesToString(text, srcEnc, options);
       }
-      if (options.format === "hex") {
-        return converted.map(c => (c < 16 ? "0" : "") + c.toString(16).toUpperCase()).join(" ");
+
+      if (dstEnc === "UNICODE" || dstEnc === "UTF-8") {
+        if (format === "string") {
+          return unicodeStr;
+        }
+        const encodedBytes = encodeStringToBytes(unicodeStr, "UTF-8", options);
+        if (format === "hex") {
+          return encodedBytes.map(b => (b < 16 ? "0" : "") + b.toString(16).toUpperCase()).join(" ");
+        }
+        if (format === "url") {
+          return encodeURIComponent(unicodeStr);
+        }
+        if (format === "base64") {
+          if (typeof Buffer !== "undefined") {
+            return Buffer.from(unicodeStr, "utf8").toString("base64");
+          }
+          if (typeof btoa !== "undefined") {
+            return btoa(unescape(encodeURIComponent(unicodeStr)));
+          }
+        }
+        if (format === "bytes") {
+          return encodedBytes;
+        }
+        return unicodeStr;
       }
-      if (options.format === "base64") {
-        return encObj.base64Encode(converted);
+
+      const encodedBytes = encodeStringToBytes(unicodeStr, dstEnc, options);
+
+      if (format === "hex") {
+        return encodedBytes.map(b => (b < 16 ? "0" : "") + b.toString(16).toUpperCase()).join(" ");
       }
-      return encObj.codeToString(converted);
+      if (format === "url") {
+        return encodedBytes.map(b => {
+          if (
+            (b >= 0x30 && b <= 0x39) ||
+            (b >= 0x41 && b <= 0x5A) ||
+            (b >= 0x61 && b <= 0x7A) ||
+            b === 0x2D || b === 0x2E || b === 0x5F || b === 0x7E
+          ) {
+            return String.fromCharCode(b);
+          }
+          return "%" + (b < 16 ? "0" : "") + b.toString(16).toUpperCase();
+        }).join("");
+      }
+      if (format === "base64") {
+        let bin = "";
+        for (let i = 0; i < encodedBytes.length; i++) bin += String.fromCharCode(encodedBytes[i]);
+        if (typeof Buffer !== "undefined") {
+          return Buffer.from(bin, "binary").toString("base64");
+        }
+        if (typeof btoa !== "undefined") {
+          return btoa(bin);
+        }
+      }
+      if (format === "bytes") {
+        return encodedBytes;
+      }
+
+      return encodedBytes.map(b => String.fromCharCode(b)).join("");
+    },
+
+    getSupportedEncodings() {
+      return [
+        {
+          category: "Unicode",
+          encodings: [
+            { id: "UTF-8", name: "UTF-8", aliases: ["UTF8", "UNICODE"] },
+            { id: "UTF-16LE", name: "UTF-16 Little Endian", aliases: ["UTF-16", "UTF16LE"] },
+            { id: "UTF-16BE", name: "UTF-16 Big Endian", aliases: ["UTF16BE"] },
+            { id: "UTF-32LE", name: "UTF-32 Little Endian", aliases: ["UTF-32", "UTF32LE"] },
+            { id: "UTF-32BE", name: "UTF-32 Big Endian", aliases: ["UTF32BE"] }
+          ]
+        },
+        {
+          category: "Windows Code Pages",
+          encodings: [
+            { id: "WINDOWS-1252", name: "Windows-1252 (Western European / Latin-1)", aliases: ["CP1252", "WIN1252", "WIN-1252"] },
+            { id: "WINDOWS-1250", name: "Windows-1250 (Central / Eastern European)", aliases: ["CP1250", "WIN1250", "WIN-1250"] },
+            { id: "WINDOWS-1251", name: "Windows-1251 (Cyrillic)", aliases: ["CP1251", "WIN1251", "WIN-1251"] },
+            { id: "WINDOWS-1253", name: "Windows-1253 (Greek)", aliases: ["CP1253", "WIN1253", "WIN-1253"] },
+            { id: "WINDOWS-1254", name: "Windows-1254 (Turkish)", aliases: ["CP1254", "WIN1254", "WIN-1254"] },
+            { id: "WINDOWS-1255", name: "Windows-1255 (Hebrew)", aliases: ["CP1255", "WIN1255", "WIN-1255"] },
+            { id: "WINDOWS-1256", name: "Windows-1256 (Arabic)", aliases: ["CP1256", "WIN1256", "WIN-1256"] },
+            { id: "WINDOWS-1257", name: "Windows-1257 (Baltic Rim)", aliases: ["CP1257", "WIN1257", "WIN-1257"] },
+            { id: "WINDOWS-1258", name: "Windows-1258 (Vietnamese)", aliases: ["CP1258", "WIN1258", "WIN-1258"] },
+            { id: "WINDOWS-874", name: "Windows-874 / CP874 (Thai / TIS-620)", aliases: ["CP874", "WIN874", "TIS-620", "TIS620"] }
+          ]
+        },
+        {
+          category: "ISO-8859 Standards",
+          encodings: [
+            { id: "ISO-8859-1", name: "ISO-8859-1 (Latin-1 Western European)", aliases: ["LATIN1", "LATIN-1", "ISO8859-1"] },
+            { id: "ISO-8859-2", name: "ISO-8859-2 (Latin-2 Central European)", aliases: ["LATIN2", "LATIN-2", "ISO8859-2"] },
+            { id: "ISO-8859-3", name: "ISO-8859-3 (Latin-3 South European / Maltese)", aliases: ["LATIN3", "LATIN-3", "ISO8859-3"] },
+            { id: "ISO-8859-4", name: "ISO-8859-4 (Latin-4 North European)", aliases: ["LATIN4", "LATIN-4", "ISO8859-4"] },
+            { id: "ISO-8859-5", name: "ISO-8859-5 (Latin/Cyrillic)", aliases: ["ISO8859-5"] },
+            { id: "ISO-8859-6", name: "ISO-8859-6 (Latin/Arabic)", aliases: ["ISO8859-6"] },
+            { id: "ISO-8859-7", name: "ISO-8859-7 (Latin/Greek)", aliases: ["ISO8859-7"] },
+            { id: "ISO-8859-8", name: "ISO-8859-8 (Latin/Hebrew)", aliases: ["ISO8859-8"] },
+            { id: "ISO-8859-9", name: "ISO-8859-9 (Latin-5 Turkish)", aliases: ["LATIN5", "LATIN-5", "ISO8859-9"] },
+            { id: "ISO-8859-10", name: "ISO-8859-10 (Latin-6 Nordic)", aliases: ["LATIN6", "LATIN-6", "ISO8859-10"] },
+            { id: "ISO-8859-11", name: "ISO-8859-11 (Latin/Thai)", aliases: ["ISO8859-11"] },
+            { id: "ISO-8859-13", name: "ISO-8859-13 (Latin-7 Baltic Rim)", aliases: ["LATIN7", "LATIN-7", "ISO8859-13"] },
+            { id: "ISO-8859-14", name: "ISO-8859-14 (Latin-8 Celtic)", aliases: ["LATIN8", "LATIN-8", "ISO8859-14"] },
+            { id: "ISO-8859-15", name: "ISO-8859-15 (Latin-9 Western European with Euro)", aliases: ["LATIN9", "LATIN-9", "ISO8859-15"] },
+            { id: "ISO-8859-16", name: "ISO-8859-16 (Latin-10 South-Eastern European)", aliases: ["LATIN10", "LATIN-10", "ISO8859-16"] }
+          ]
+        },
+        {
+          category: "OEM / DOS Code Pages",
+          encodings: [
+            { id: "CP437", name: "CP437 (IBM PC / MS-DOS US / Box Drawing)", aliases: ["IBM437", "OEM437", "DOS437"] },
+            { id: "CP850", name: "CP850 (MS-DOS Latin-1 Western European)", aliases: ["IBM850", "OEM850", "DOS850"] },
+            { id: "CP852", name: "CP852 (MS-DOS Latin-2 Central European)", aliases: ["IBM852", "OEM852", "DOS852"] },
+            { id: "CP866", name: "CP866 (MS-DOS Cyrillic)", aliases: ["IBM866", "OEM866", "DOS866"] },
+            { id: "CP858", name: "CP858 (MS-DOS Latin-1 with Euro)", aliases: ["IBM858", "OEM858"] }
+          ]
+        },
+        {
+          category: "Apple Macintosh",
+          encodings: [
+            { id: "MACINTOSH", name: "Macintosh Roman (Classic Apple Western)", aliases: ["MAC", "MACROMAN", "MAC_ROMAN"] },
+            { id: "MAC-CYRILLIC", name: "Macintosh Cyrillic", aliases: ["MACCYRILLIC", "MAC_CYRILLIC"] },
+            { id: "MAC-CENTRALEUROPE", name: "Macintosh Central European", aliases: ["MACCENTRALEUROPE", "MAC_CENTRALEUROPE", "MACLATIN2"] }
+          ]
+        },
+        {
+          category: "Cyrillic",
+          encodings: [
+            { id: "KOI8-R", name: "KOI8-R (Russian Internet / RFC 1489)", aliases: ["KOI8R"] },
+            { id: "KOI8-U", name: "KOI8-U (Ukrainian Internet / RFC 2319)", aliases: ["KOI8U"] }
+          ]
+        },
+        {
+          category: "East Asian (CJK)",
+          encodings: [
+            { id: "SHIFT_JIS", name: "Shift_JIS / CP932 / Windows-31J (Japanese)", aliases: ["SJIS", "CP932", "WINDOWS-31J"] },
+            { id: "EUC-JP", name: "EUC-JP (Japanese Unix)", aliases: ["EUCJP", "EUC_JP"] },
+            { id: "ISO-2022-JP", name: "ISO-2022-JP / JIS (Japanese Mail/Internet)", aliases: ["JIS", "ISO2022JP"] },
+            { id: "GBK", name: "GBK / CP936 / GB2312 (Simplified Chinese)", aliases: ["CP936", "GB2312"] },
+            { id: "BIG5", name: "Big5 / CP950 (Traditional Chinese)", aliases: ["CP950"] },
+            { id: "EUC-KR", name: "EUC-KR / CP949 (Korean)", aliases: ["CP949"] }
+          ]
+        },
+        {
+          category: "ASCII",
+          encodings: [
+            { id: "ASCII", name: "US-ASCII (7-bit ANSI X3.4-1986)", aliases: ["US-ASCII", "ISO646"] }
+          ]
+        }
+      ];
     },
 
     zenkakuHankaku(text, mode = "hankaku") {
@@ -5535,7 +6182,7 @@
       { id: "longs", name: "long s (ſ)", category: "linguistics & encoding", desc: "insert historical long s (ſ) into English, French, German, Spanish, and Italian text based on classical orthographic rules.", cli: "longs [-l en|fr|de|es|it] [-x] [file/text...]" },
       { id: "url", name: "URL (percent-encoding)", category: "encoding & web", desc: "encode text into percent-encoded URL component (%xx format) or decode back.", cli: "urlencode [text] / urldecode [text]" },
       { id: "base64", name: "base64", category: "encoding & web", desc: "encode text into standard base64 string format or decode base64 strings.", cli: "base64 [-d] [file/text]" },
-      { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16.", cli: "iconv -t <to_enc> [-f <from_enc>] [file/text] / detect-encoding [file/text]" },
+      { id: "iconv", name: "character encoding", category: "encoding & web", desc: "detect and convert character encodings across 40+ encodings including Windows-1252, Windows-1250-1258, ISO-8859 (1-16), CP437, DOS, Mac, KOI8, Shift_JIS, EUC-JP, CJK, etc.", cli: "iconv -t <to_enc> [-f <from_enc>] [--hex|--url|--base64] [file/text] / detect-encoding [file/text]" },
       { id: "zenkaku", name: "japanese zenkaku / hankaku & kana", category: "encoding & web", desc: "convert full-width (zenkaku) / half-width (hankaku) and Hiragana / Katakana.", cli: "zenkaku [text] / hankaku [text] / kana <hiragana|katakana|hankana|zenkana> [text]" },
       { id: "punycode", name: "punycode & IDN", category: "encoding & web", desc: "encode or decode unicode domain names and strings to ASCII punycode (RFC 3492/5891) and back.", cli: "punycode <encode|decode|to-ascii|to-unicode> [file/text] / idn <encode|decode> [domain]" },
       { id: "qrcode", name: "2d matrix", category: "encoding & web", desc: "generate 2D matrix codes (QR code, Micro QR, rMQR, data matrix, aztec code, maxicode, dotcode, han xin, royal mail 2d mailmark) with ASCII art, SVG, and PNG canvas.", cli: "qrcode [-t qr|microqr|rmqr|datamatrix|aztec|maxicode|dotcode|hanxin|mailmark] [-f ascii|svg|png] [file/text]" },

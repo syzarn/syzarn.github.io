@@ -932,6 +932,59 @@ Volume  : ${vol}%`;
     return { text: '', isEmpty: true };
   }
 
+  function buildEncodingSelectOptions(selectedVal = 'UTF-8', includeAuto = false, includeUnicode = false) {
+    let out = '';
+    if (includeAuto) {
+      const isAuto = String(selectedVal).toUpperCase() === 'AUTO';
+      out += `<option value="AUTO"${isAuto ? ' selected' : ''}>auto detect</option>`;
+    }
+    if (window.TextEngine && typeof window.TextEngine.getSupportedEncodings === 'function') {
+      const groups = window.TextEngine.getSupportedEncodings();
+      for (const grp of groups) {
+        out += `<optgroup label="${escapeHTML(grp.category)}">`;
+        if (grp.category === 'Unicode' && includeUnicode) {
+          out += `<option value="UNICODE"${String(selectedVal).toUpperCase() === 'UNICODE' ? ' selected' : ''}>Unicode String (JavaScript text)</option>`;
+        }
+        for (const enc of grp.encodings) {
+          const isSel = (enc.id === selectedVal || (enc.aliases && enc.aliases.includes(selectedVal)));
+          out += `<option value="${escapeHTML(enc.id)}"${isSel ? ' selected' : ''}>${escapeHTML(enc.name || enc.id)}</option>`;
+        }
+        out += `</optgroup>`;
+      }
+    } else {
+      out += `
+        <optgroup label="Unicode">
+          <option value="UTF-8">UTF-8</option>
+          <option value="UTF-16LE">UTF-16LE</option>
+          <option value="UTF-16BE">UTF-16BE</option>
+        </optgroup>
+        <optgroup label="Windows Code Pages">
+          <option value="WINDOWS-1252">Windows-1252 (Western European)</option>
+          <option value="WINDOWS-1250">Windows-1250 (Central European)</option>
+          <option value="WINDOWS-1251">Windows-1251 (Cyrillic)</option>
+        </optgroup>
+        <optgroup label="ISO-8859 Standards">
+          <option value="ISO-8859-1">ISO-8859-1 (Latin-1)</option>
+          <option value="ISO-8859-15">ISO-8859-15 (Latin-9 with Euro)</option>
+        </optgroup>
+        <optgroup label="OEM / DOS">
+          <option value="CP437">CP437 (IBM PC / MS-DOS US)</option>
+        </optgroup>
+        <optgroup label="East Asian (CJK)">
+          <option value="SHIFT_JIS">Shift_JIS (Japanese)</option>
+          <option value="EUC-JP">EUC-JP</option>
+          <option value="GBK">GBK (Simplified Chinese)</option>
+          <option value="BIG5">Big5 (Traditional Chinese)</option>
+          <option value="EUC-KR">EUC-KR (Korean)</option>
+        </optgroup>
+        <optgroup label="ASCII">
+          <option value="ASCII">US-ASCII</option>
+        </optgroup>
+      `;
+    }
+    return out;
+  }
+
   const textManipWorkbench = {
     modalEl: null,
     activeToolId: 'count',
@@ -1605,10 +1658,7 @@ Volume  : ${vol}%`;
               <label class="tm-radio-label"><input type="radio" name="tm-url-mode" value="decode"> URL decode</label>
               <span>charset:</span>
               <select class="tm-select" id="tm-url-charset">
-                <option value="UTF8">UTF-8</option>
-                <option value="SJIS">Shift_JIS</option>
-                <option value="EUCJP">EUC-JP</option>
-                <option value="JIS">ISO-2022-JP</option>
+                ${buildEncodingSelectOptions('UTF-8')}
               </select>
             </div>
           `;
@@ -1621,9 +1671,7 @@ Volume  : ${vol}%`;
               <label class="tm-radio-label"><input type="radio" name="tm-b64-mode" value="decode"> base64 decode</label>
               <span>charset:</span>
               <select class="tm-select" id="tm-b64-charset">
-                <option value="UTF8">UTF-8</option>
-                <option value="SJIS">Shift_JIS</option>
-                <option value="EUCJP">EUC-JP</option>
+                ${buildEncodingSelectOptions('UTF-8')}
               </select>
             </div>
           `;
@@ -1635,24 +1683,14 @@ Volume  : ${vol}%`;
               <label class="tm-radio-label"><input type="radio" name="tm-iconv-act" value="detect" checked> detect character encoding</label>
               <label class="tm-radio-label"><input type="radio" name="tm-iconv-act" value="convert"> convert character encoding</label>
             </div>
-            <div class="tm-control-row" id="tm-iconv-convert-row">
+            <div class="tm-control-row" id="tm-iconv-convert-row" style="display: none;">
               <span>convert to:</span>
               <select class="tm-select" id="tm-iconv-to">
-                <option value="UTF8">UTF-8</option>
-                <option value="SJIS">Shift_JIS</option>
-                <option value="EUCJP">EUC-JP</option>
-                <option value="JIS">ISO-2022-JP</option>
-                <option value="UTF16">UTF-16</option>
-                <option value="UNICODE">Unicode String</option>
+                ${buildEncodingSelectOptions('UTF-8', false, true)}
               </select>
               <span>from:</span>
               <select class="tm-select" id="tm-iconv-from">
-                <option value="AUTO">auto detect</option>
-                <option value="UTF8">UTF-8</option>
-                <option value="SJIS">Shift_JIS</option>
-                <option value="EUCJP">EUC-JP</option>
-                <option value="JIS">ISO-2022-JP</option>
-                <option value="UTF16">UTF-16</option>
+                ${buildEncodingSelectOptions('AUTO', true, false)}
               </select>
               <span>format:</span>
               <select class="tm-select" id="tm-iconv-fmt">
@@ -2398,6 +2436,17 @@ Volume  : ${vol}%`;
           });
           if (unkLabel) unkLabel.style.display = langSel.value === 'de' ? 'inline-flex' : 'none';
         }
+      } else if (toolId === 'iconv') {
+        const actRadios = document.querySelectorAll('input[name="tm-iconv-act"]');
+        const convertRow = document.getElementById('tm-iconv-convert-row');
+        const updateConvertVisibility = () => {
+          const act = document.querySelector('input[name="tm-iconv-act"]:checked')?.value || 'detect';
+          if (convertRow) {
+            convertRow.style.display = act === 'convert' ? 'flex' : 'none';
+          }
+        };
+        actRadios.forEach(r => r.addEventListener('change', updateConvertVisibility));
+        updateConvertVisibility();
       } else if (toolId === 'qrcode' || toolId === 'qr') {
         const textarea = document.getElementById('tm-textarea');
         const typeSelect = document.getElementById('tm-qr-type');
@@ -4373,40 +4422,56 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           }
           case 'url': {
             const mode = document.querySelector('input[name="tm-url-mode"]:checked')?.value || 'encode';
-            const charset = document.getElementById('tm-url-charset')?.value || 'UTF8';
-            if (mode === 'encode') {
-              textarea.value = window.TextEngine.urlEncode(text, { encoding: charset });
-              this.setStatus(`URL encoded (${charset})`);
-            } else {
-              textarea.value = window.TextEngine.urlDecode(text, { encoding: charset });
-              this.setStatus(`URL decoded (${charset})`);
+            const charset = document.getElementById('tm-url-charset')?.value || 'UTF-8';
+            try {
+              if (mode === 'encode') {
+                textarea.value = window.TextEngine.urlEncode(text, { encoding: charset });
+                this.setStatus(`URL encoded (${charset})`);
+              } else {
+                textarea.value = window.TextEngine.urlDecode(text, { encoding: charset });
+                this.setStatus(`URL decoded (${charset})`);
+              }
+            } catch (err) {
+              this.setStatus(`URL error: ${err.message}`);
             }
             break;
           }
           case 'base64': {
             const mode = document.querySelector('input[name="tm-b64-mode"]:checked')?.value || 'encode';
-            const charset = document.getElementById('tm-b64-charset')?.value || 'UTF8';
-            if (mode === 'encode') {
-              textarea.value = window.TextEngine.base64Encode(text, { encoding: charset });
-              this.setStatus(`base64 encoded (${charset})`);
-            } else {
-              textarea.value = window.TextEngine.base64Decode(text, { encoding: charset });
-              this.setStatus(`base64 decoded (${charset})`);
+            const charset = document.getElementById('tm-b64-charset')?.value || 'UTF-8';
+            try {
+              if (mode === 'encode') {
+                textarea.value = window.TextEngine.base64Encode(text, { encoding: charset });
+                this.setStatus(`base64 encoded (${charset})`);
+              } else {
+                textarea.value = window.TextEngine.base64Decode(text, { encoding: charset });
+                this.setStatus(`base64 decoded (${charset})`);
+              }
+            } catch (err) {
+              this.setStatus(`base64 error: ${err.message}`);
             }
             break;
           }
           case 'iconv': {
             const act = document.querySelector('input[name="tm-iconv-act"]:checked')?.value || 'detect';
             if (act === 'detect') {
-              const detected = window.TextEngine.detectEncoding(text);
-              this.setStatus(`detected encoding: ${detected}`);
-              textarea.value = `=== character encoding detection ===\ndetected encoding: ${detected}\n\n=== text content ===\n` + text;
+              try {
+                const detected = window.TextEngine.detectEncoding(text);
+                this.setStatus(`detected encoding: ${detected}`);
+                textarea.value = `=== character encoding detection ===\ndetected encoding: ${detected}\n\n=== text content ===\n` + text;
+              } catch (err) {
+                this.setStatus(`detection error: ${err.message}`);
+              }
             } else {
-              const to = document.getElementById('tm-iconv-to')?.value || 'UTF8';
+              const to = document.getElementById('tm-iconv-to')?.value || 'UTF-8';
               const from = document.getElementById('tm-iconv-from')?.value || 'AUTO';
               const format = document.getElementById('tm-iconv-fmt')?.value || 'string';
-              textarea.value = window.TextEngine.convertEncoding(text, to, from, { format });
-              this.setStatus(`converted encoding ${from} -> ${to}`);
+              try {
+                textarea.value = window.TextEngine.convertEncoding(text, to, from, { format });
+                this.setStatus(`converted encoding ${from} -> ${to} (${format})`);
+              } catch (err) {
+                this.setStatus(`conversion error: ${err.message}`);
+              }
             }
             break;
           }
@@ -5952,11 +6017,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
     urlencode: {
-      desc: 'encode text to percent-encoded URI component (%xx format)',
-      usage: 'urlencode [-e UTF8|SJIS|EUCJP|JIS] [file/text...]',
+      desc: 'encode text to percent-encoded URI component (%xx format) supporting 40+ charsets (UTF-8, Windows-1252, ISO-8859, Shift_JIS, etc.)',
+      usage: 'urlencode [-e <encoding>] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'urlencode: text engine not loaded';
-        let encoding = 'UTF8';
+        let encoding = 'UTF-8';
         const textArgs = [];
         for (let i = 0; i < args.length; i++) {
           if ((args[i] === '-e' || args[i] === '--encoding') && args[i + 1]) { encoding = args[i + 1]; i++; }
@@ -5964,16 +6029,20 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         }
         const input = extractTextInput(textArgs, stdin);
         if (!input.text && input.isEmpty) return 'urlencode: missing input text or file';
-        return window.TextEngine.urlEncode(input.text, { encoding });
+        try {
+          return window.TextEngine.urlEncode(input.text, { encoding });
+        } catch (err) {
+          return `urlencode: error: ${escapeHTML(err.message)}`;
+        }
       }
     },
 
     urldecode: {
-      desc: 'decode percent-encoded URI string (%xx format)',
-      usage: 'urldecode [-e UTF8|SJIS|EUCJP|JIS] [file/text...]',
+      desc: 'decode percent-encoded URI string (%xx format) with charset support (UTF-8, Windows-1252, Shift_JIS, etc.)',
+      usage: 'urldecode [-e <encoding>] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'urldecode: text engine not loaded';
-        let encoding = 'UTF8';
+        let encoding = 'UTF-8';
         const textArgs = [];
         for (let i = 0; i < args.length; i++) {
           if ((args[i] === '-e' || args[i] === '--encoding') && args[i + 1]) { encoding = args[i + 1]; i++; }
@@ -6000,12 +6069,12 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     base64: {
-      desc: 'encode or decode standard Base64 formatted string',
-      usage: 'base64 [-d|--decode] [-e UTF8|SJIS|EUCJP] [file/text...]',
+      desc: 'encode or decode standard Base64 formatted string with charset support (UTF-8, Windows-1252, ISO-8859, Shift_JIS, etc.)',
+      usage: 'base64 [-d|--decode] [-e <encoding>] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'base64: text engine not loaded';
         const isDecode = args.includes('-d') || args.includes('--decode');
-        let encoding = 'UTF8';
+        let encoding = 'UTF-8';
         const textArgs = [];
         for (let i = 0; i < args.length; i++) {
           if ((args[i] === '-e' || args[i] === '--encoding') && args[i + 1]) { encoding = args[i + 1]; i++; }
@@ -6050,14 +6119,18 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     'detect-encoding': {
-      desc: 'detect character encoding of text or file (UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16, ASCII)',
+      desc: 'detect character encoding of text or file (UTF-8, Windows-1252, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16, ASCII, etc.)',
       usage: 'detect-encoding [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'detect-encoding: text engine not loaded';
         const input = extractTextInput(args, stdin);
         if (!input.text && input.isEmpty) return 'detect-encoding: missing input text or file';
-        const enc = window.TextEngine.detectEncoding(input.text);
-        return `<span class="c-accent">Detected Encoding:</span> <span class="c-file ansi-bold">${escapeHTML(enc)}</span>`;
+        try {
+          const enc = window.TextEngine.detectEncoding(input.text);
+          return `<span class="c-accent">Detected Encoding:</span> <span class="c-file ansi-bold">${escapeHTML(enc)}</span>`;
+        } catch (err) {
+          return `detect-encoding: error: ${escapeHTML(err.message)}`;
+        }
       }
     },
 
@@ -6070,11 +6143,25 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     },
 
     iconv: {
-      desc: 'convert character encoding between UTF-8, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16, UNICODE',
-      usage: 'iconv -t <to_encoding> [-f <from_encoding>] [--hex|--url|--base64] [file/text...]',
+      desc: 'convert character encoding across 40+ encodings (Windows-1252, ISO-8859, CP437, Mac, KOI8, Shift_JIS, UTF-8, etc.)',
+      usage: 'iconv -t <to_encoding> [-f <from_encoding>] [--hex|--url|--base64] [-l|--list] [file/text...]',
       exec(args, stdin) {
         if (!window.TextEngine) return 'iconv: text engine not loaded';
-        let to = 'UTF8';
+        if (args.includes('-l') || args.includes('--list')) {
+          const catalog = window.TextEngine.getSupportedEncodings();
+          let out = '<span class="c-accent ansi-bold">Supported Encodings (40+ code pages & standards):</span>\n\n';
+          for (const cat of catalog) {
+            out += `<span class="c-user ansi-bold">${escapeHTML(cat.category)}:</span>\n`;
+            for (const enc of cat.encodings) {
+              const aliases = enc.aliases && enc.aliases.length ? ` <span class="c-dim">(${enc.aliases.join(', ')})</span>` : '';
+              out += `  <span class="c-file ansi-bold">${escapeHTML(enc.id.padEnd(20))}</span> ${escapeHTML(enc.name)}${aliases}\n`;
+            }
+            out += '\n';
+          }
+          return out.trimEnd();
+        }
+
+        let to = 'UTF-8';
         let from = 'AUTO';
         let format = 'string';
         const textArgs = [];
@@ -6089,7 +6176,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         }
 
         const input = extractTextInput(textArgs, stdin);
-        if (!input.text && input.isEmpty) return 'iconv: missing input text or file';
+        if (!input.text && input.isEmpty) return 'iconv: missing input text or file (use -l or --list to view supported encodings)';
         try {
           return window.TextEngine.convertEncoding(input.text, to, from, { format });
         } catch (err) {
@@ -6100,7 +6187,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
     reencode: {
       desc: 'alias for iconv',
-      usage: 'reencode -t <to_encoding> [file/text...]',
+      usage: 'reencode -t <to_encoding> [-f <from_encoding>] [--hex|--url|--base64] [-l] [file/text...]',
       exec(args, stdin) {
         return commands.iconv.exec(args, stdin);
       }
@@ -8462,6 +8549,21 @@ Mobile : <span class="c-file">+1 (309) 438-8145</span>`;
         if (target === 'decayfmt' || target === 'idcy' || target === 'tdcy') {
           textManipWorkbench.open('decayfmt');
           return `<span class="c-accent">opened decayfmt simulator & decayer in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'iconv' || target === 'charenc' || target === 'encoding' || target === 'charset') {
+          textManipWorkbench.open('iconv');
+          return `<span class="c-accent">opened character encoding converter in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'url' || target === 'urlencode' || target === 'urldecode') {
+          textManipWorkbench.open('url');
+          return `<span class="c-accent">opened URL percent-encoding tool in text manipulation workbench.</span>`;
+        }
+
+        if (target === 'base64' || target === 'b64') {
+          textManipWorkbench.open('base64');
+          return `<span class="c-accent">opened base64 tool in text manipulation workbench.</span>`;
         }
 
         const resolved = resolvePath(pathStack, target);
