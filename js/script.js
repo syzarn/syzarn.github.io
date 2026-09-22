@@ -699,7 +699,7 @@ Quick Commands:
       return `<div class="audio-player-box">
   <div class="audio-title">♫ audio player: now playing</div>
   <div class="c-link">Track: ${escapeHTML(this.currentTrack)}</div>
-  <div class="audio-progress">[▶] playing audio stream... use 'music pause' or 'music stop'</div>
+  <div class="audio-progress">playing audio stream... use 'music pause' or 'music stop'</div>
 </div>`;
     },
 
@@ -707,9 +707,9 @@ Quick Commands:
       if (!audioElement.paused) {
         audioElement.pause();
         this.isPlaying = false;
-        return `[⏸] audio paused. Type 'music play' to resume.`;
+        return `audio paused. Type 'music play' to resume.`;
       }
-      return `[ℹ] audio is not currently playing.`;
+      return `audio is not currently playing.`;
     },
 
     stop() {
@@ -2532,8 +2532,8 @@ Volume  : ${vol}%`;
 
           let content = rawContent;
           if (!content) {
-            if (type === 'microqr') content = '12345';
-            else if (type === 'rmqr') content = 'RMQR-2026';
+            if (type === 'microqr') content = '19971123';
+            else if (type === 'rmqr') content = 'EIKHI-2002';
             else if (type === 'datamatrix') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'aztec') content = 'Il n\'y a pas de hors-texte.';
             else if (type === 'maxicode') content = 'Il n\'y a pas de hors-texte.';
@@ -2686,8 +2686,8 @@ Volume  : ${vol}%`;
           const val = (textarea && textarea.value) ? textarea.value.trim() : '';
           if (val) return val;
           if (t === 'hanxin') return '述而不作、信而好古';
-          if (t === 'microqr') return '12345';
-          if (t === 'rmqr') return 'RMQR-2026';
+          if (t === 'microqr') return '19972311';
+          if (t === 'rmqr') return 'EIKHI-2002';
           return 'Il n\'y a pas de hors-texte.';
         };
 
@@ -2951,7 +2951,7 @@ Volume  : ${vol}%`;
             else if (fmt === 'pharmacode') content = '3010';
             else if (fmt === 'ITF14') content = '2002120912009';
             else if (fmt === 'codabar') content = 'B00B';
-            else if (fmt === 'postnet') content = '11372';
+            else if (fmt === 'postnet') content = '11372631461';
             else if (fmt === 'planet') content = '1997112302177';
             else if (fmt === 'onecode') content = '0123456709498765432101234567891';
             else if (fmt === 'rm4scc') content = 'LE28HS9Z';
@@ -2960,7 +2960,7 @@ Volume  : ${vol}%`;
             else if (fmt === 'mailmark2d') content = 'JGB 012100123412345678AB19XY1A 0             ';
             else if (fmt === 'MSI' || fmt === 'MSI10' || fmt === 'MSI11') content = '20040317';
             else if (fmt === 'pdf417' || fmt === 'compactpdf417') content = 'KI KORIS?';
-            else content = 'RSVA-2711';
+            else content = 'EIKHI-2002';
           }
           return content;
         };
