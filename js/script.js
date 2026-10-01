@@ -1255,7 +1255,10 @@ Volume  : ${vol}%`;
       this.renderToolControls(toolId);
       if (this.modalEl) {
         const win = this.modalEl.querySelector('.tm-window');
-        if (win) win.classList.toggle('tm-tool-unicodemap', toolId === 'unicodemap');
+        if (win) {
+          win.classList.toggle('tm-tool-unicodemap', toolId === 'unicodemap');
+          win.classList.toggle('tm-tool-invoice', toolId === 'invoice' || toolId === 'receipt' || toolId === 'inv');
+        }
       }
     },
 
@@ -2337,9 +2340,24 @@ Volume  : ${vol}%`;
             </div>
           `;
           break;
+        case 'invoice':
+        case 'receipt':
+        case 'inv':
+          html = `<div id="inv-host-container"></div>`;
+          break;
       }
 
       pane.innerHTML = html;
+
+      if (toolId === 'invoice' || toolId === 'receipt' || toolId === 'inv') {
+        if (window.InvoiceGenerator) {
+          if (toolId === 'receipt') {
+            window.InvoiceGenerator.setDocType('receipt');
+          }
+          window.InvoiceGenerator.mount(pane, this);
+        }
+        return;
+      }
 
       if (toolId === 'encrypt') {
         const genBtn = document.getElementById('tm-enc-genpass');
@@ -4178,6 +4196,15 @@ Volume  : ${vol}%`;
 
       try {
         switch (this.activeToolId) {
+          case 'invoice':
+          case 'receipt':
+          case 'inv': {
+            if (window.InvoiceGenerator) {
+              window.InvoiceGenerator.downloadPdf();
+              this.setStatus('generating vector PDF');
+            }
+            break;
+          }
           case 'count': {
             const noSpaces = document.getElementById('tm-cnt-no-space')?.checked;
             const skipHtml = document.getElementById('tm-cnt-skip-html')?.checked;
@@ -4801,6 +4828,36 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       usage: 'tools [ui | <tool>]',
       exec(args, stdin) {
         return commands['text-tools'].exec(args, stdin);
+      }
+    },
+
+    invoice: {
+      desc: 'client-side vector invoice & receipt generator with multiple templates and barcode support',
+      usage: 'invoice [--ui] [modern | thermal | classic | vintage] [doc_number]',
+      exec(args, stdin) {
+        textManipWorkbench.open('invoice', '');
+        if (args && args.length > 0 && window.InvoiceGenerator) {
+          const sub = args[0].toLowerCase();
+          if (sub === 'thermal') window.InvoiceGenerator.setTemplate('thermal-pos');
+          else if (sub === 'vintage') window.InvoiceGenerator.setTemplate('bn-vintage-ledger');
+          else if (sub === 'classic') window.InvoiceGenerator.setTemplate('minimal-classic');
+          else if (sub === 'modern') window.InvoiceGenerator.setTemplate('stripe-modern');
+          else if (sub === 'receipt') window.InvoiceGenerator.setDocType('receipt');
+          if (args[1]) window.InvoiceGenerator.setDocNumber(args[1]);
+        }
+        return '<span class="c-accent">opened invoice & receipt generator in workbench.</span>';
+      }
+    },
+
+    receipt: {
+      desc: 'launch invoice & receipt generator in receipt mode',
+      usage: 'receipt [--ui]',
+      exec(args, stdin) {
+        textManipWorkbench.open('invoice', '');
+        if (window.InvoiceGenerator) {
+          window.InvoiceGenerator.setDocType('receipt');
+        }
+        return '<span class="c-accent">opened invoice & receipt generator (receipt mode).</span>';
       }
     },
 
