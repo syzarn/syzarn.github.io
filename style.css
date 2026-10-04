@@ -102,6 +102,27 @@
 }
 
 @font-face {
+  font-family: 'bitArray-A2';
+  src: url('./font/bitArray-A2.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'bitArray-A2';
+  src: url('./font/bitArray-A2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'bitArray-A2';
+  src: url('./font/bitArray-A2.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'VKP80II-CP437';
   src: url('./font/VKP80II-CP437/VKP80II-CP437-14x24-regular.ttf') format('truetype');
   font-weight: normal;
@@ -3735,6 +3756,302 @@ a.term-link:hover {
 .erp-barcode svg {
   max-height: 44px;
   width: auto;
+}
+
+/* ============================================================
+   TEMPLATE 7: ENTERPRISE SUPERMARKET / NBR CHALLAN (MUSHAK-6.3)
+   ============================================================ */
+.inv-paper.inv-tpl-thermal-retail-mushak {
+  width: 80mm;
+  min-height: auto;
+  padding: 12px 10px;
+  font-family: 'bitArray-A2', monospace;
+  font-size: 11.5px;
+  font-weight: normal;
+  line-height: 1.35;
+  background: #ffffff;
+  color: #000000;
+  margin: 0 auto;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  letter-spacing: -0.2px;
+}
+
+.inv-paper.inv-tpl-thermal-retail-mushak,
+.inv-paper.inv-tpl-thermal-retail-mushak * {
+  font-family: 'bitArray-A2', monospace !important;
+  font-weight: normal !important;
+}
+
+.inv-paper.inv-tpl-thermal-retail-mushak.thermal-58mm {
+  width: 58mm;
+  padding: 8px 6px;
+  font-size: 10px;
+}
+
+.inv-mushak-top-auth {
+  position: relative;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.inv-mushak-chln-tag {
+  text-align: right;
+  font-weight: normal;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.inv-mushak-header-center {
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.inv-mushak-gov-line,
+.inv-mushak-nbr-line {
+  font-size: 10.5px;
+}
+
+.inv-mushak-brand-name {
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  margin: 2px 0 1px 0;
+}
+
+.inv-mushak-company-name {
+  font-size: 11.5px;
+  font-weight: normal;
+}
+
+.inv-mushak-reg-addr,
+.inv-mushak-vat-no,
+.inv-mushak-outlet-name,
+.inv-mushak-outlet-addr {
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.inv-mushak-retail-banner {
+  font-size: 10.5px;
+  font-weight: normal;
+  text-align: center;
+  margin: 3px 0 2px 0;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.inv-mushak-meta-block {
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.inv-mushak-meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.inv-mushak-cust-row {
+  font-size: 10.5px;
+}
+
+.inv-mushak-divider {
+  overflow: hidden;
+  white-space: nowrap;
+  letter-spacing: -1.5px;
+  text-align: center;
+  line-height: 1.1;
+  color: #000000;
+  user-select: none;
+  font-size: 11px;
+}
+
+.inv-mushak-promo-note {
+  font-size: 9.5px;
+  text-align: center;
+  line-height: 1.25;
+  padding: 1px 0;
+}
+
+/* 5-Column Line Items Table */
+.inv-mushak-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+  line-height: 1.3;
+}
+
+.inv-mushak-table thead tr {
+  font-weight: normal;
+}
+
+.inv-mushak-th,
+.inv-mushak-td {
+  padding: 1px 2px;
+  vertical-align: top;
+}
+
+.inv-mushak-th.th-sl,
+.inv-mushak-td.td-sl {
+  width: 18px;
+  text-align: left;
+}
+
+.inv-mushak-th.th-desc,
+.inv-mushak-td.td-desc {
+  text-align: left;
+  word-break: break-word;
+}
+
+.inv-mushak-th.th-price,
+.inv-mushak-td.td-price {
+  width: 52px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.inv-mushak-th.th-qty,
+.inv-mushak-td.td-qty {
+  width: 40px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.inv-mushak-th.th-total,
+.inv-mushak-td.td-total {
+  width: 54px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Financial Ledger */
+.inv-mushak-ledger {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.inv-mushak-ledg-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.inv-mushak-ledg-lbl {
+  text-align: right;
+  flex: 1;
+}
+
+.inv-mushak-ledg-val {
+  width: 66px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.inv-mushak-ledg-subdiv {
+  text-align: right;
+  letter-spacing: -1px;
+  line-height: 1;
+  font-size: 10px;
+  user-select: none;
+}
+
+.inv-mushak-net-row {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* Discount breakdown module */
+.inv-mushak-disc-module {
+  font-size: 10.5px;
+}
+
+.inv-mushak-disc-title {
+  text-align: center;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+.inv-mushak-disc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inv-mushak-disc-table td {
+  padding: 1px 2px;
+  vertical-align: top;
+}
+
+.td-disc-sl {
+  width: 18px;
+  text-align: left;
+}
+
+.td-disc-name {
+  text-align: left;
+  word-break: break-word;
+}
+
+.td-disc-amt {
+  width: 66px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.inv-mushak-savings-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: normal;
+  padding: 2px 2px 0 2px;
+}
+
+.savings-amt {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Loyalty Points Module */
+.inv-mushak-loyalty-module {
+  font-size: 10.5px;
+}
+
+.inv-mushak-loyalty-title {
+  font-size: 10.5px;
+}
+
+.inv-mushak-loy-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 2px;
+}
+
+/* Statutory Footer Notes */
+.inv-mushak-footer-notes {
+  text-align: center;
+  font-size: 9.5px;
+  line-height: 1.35;
+  margin: 6px 0;
+}
+
+.inv-mushak-foot-text strong {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.mushak-barcode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px auto 4px auto;
+}
+
+.mushak-barcode svg {
+  max-width: 90%;
+  height: 38px;
 }
 
 .inv-paper.inv-exporting-pdf {

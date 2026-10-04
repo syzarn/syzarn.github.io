@@ -344,7 +344,7 @@
     return out + ' মাত্র।';
   }
 
-  // --- MFS (Mobile Financial Services) providers list ---
+  // --- MFS (Mobile Financial Services) & PSP (Payment Service Providers) lists ---
   const MFS_PROVIDERS = [
     'bKash',
     'Nagad',
@@ -352,16 +352,30 @@
     'upay',
     'mCash',
     'tap',
-    'PathaoPay',
-    'Pocket',
     'MYCash',
     'MeghnaPay',
     'Islamic Wallet',
     'FirstCash',
     'OK Wallet',
     'TeleCash',
-    'RupaliCash'
+    'RupaliCash',
+    'Lenden'
   ];
+
+  const PSP_PROVIDERS = [
+    'Pathao Pay',
+    'Pocket',
+    'gpay',
+    'Mukto Pay',
+    'ST Pay',
+    'TallyKhata',
+    'Sheba Pay',
+    'iPay',
+    'Dmoney',
+    'Cashbaba'
+  ];
+
+  const ALL_MFS_PSP_PROVIDERS = [...MFS_PROVIDERS, ...PSP_PROVIDERS];
 
   // --- presets & sample data generator ---
   const SAMPLE_PRESETS = {
@@ -837,6 +851,105 @@
         bankDetails: 'BANK: WELLS FARGO BANK, N.A.\nROUTING: 121000248\nACCOUNT: 409-182903-12\nLOCKBOX: DEPT 901, SAN FRANCISCO, CA',
         terms: 'PAYMENT TERMS: NET 30 DAYS.\nACCOUNTS PAST DUE OVER 30 DAYS ARE SUBJECT TO A 1.5% PER MONTH LATE CHARGE.'
       }
+    },
+
+    'thermal-retail-mushak': {
+      meta: {
+        template: 'thermal-retail-mushak',
+        docType: 'receipt',
+        docNumber: 'D0062402020112',
+        issueDate: '2024-02-02 11:13',
+        dueDate: '2024-02-02',
+        currency: 'BDT',
+        barcodeSymbology: 'CODE128',
+        barcodeValue: 'D0062402020112',
+        showBarcode: true,
+        thermalWidth: '80mm'
+      },
+      seller: {
+        name: 'SHWAPNO',
+        companyName: 'ACI Logistics Limited',
+        registeredAddress: '270, Tejgaon I/A, Dhaka-1208',
+        outletName: 'D006-Dhaka Malibag Mor Outlet',
+        outletAddress: '260/6, Malibag, Dhaka',
+        address: 'Registered Address: 270, Tejgaon I/A, Dhaka-1208\nD006-Dhaka Malibag Mor Outlet\n260/6, Malibag, Dhaka',
+        taxId: '000005489-0203',
+        email: 'info@shwapno.com',
+        terminalId: 'D006POS3N',
+        cashier: 'ecomd006'
+      },
+      buyer: {
+        name: 'Loyalty Customer',
+        address: '',
+        taxId: '',
+        email: '',
+        poNumber: '',
+        phone: '01711666697'
+      },
+      loyalty: {
+        enabled: true,
+        previousPoints: 461,
+        earnedPoints: 8
+      },
+      items: [
+        {
+          id: 'item-1',
+          name: 'Farm Egg Brown Loose(Pcs)',
+          description: '',
+          qty: 12,
+          unitPrice: 1165,
+          taxRate: 0,
+          discount: 979,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-2',
+          name: 'Indian Spinach (Palong Shak)',
+          description: '',
+          qty: 2,
+          unitPrice: 1200,
+          taxRate: 0,
+          discount: 168,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-3',
+          name: 'New Alu Regular Loose',
+          description: '',
+          qty: 7,
+          unitPrice: 3700,
+          taxRate: 0,
+          discount: 1813,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-4',
+          name: 'Red Amaranth (Lal Shak) PC',
+          description: '',
+          qty: 1,
+          unitPrice: 1200,
+          taxRate: 0,
+          discount: 84,
+          discountType: 'fixed'
+        }
+      ],
+      financials: {
+        globalDiscount: 0,
+        shipping: 0
+      },
+      settlement: {
+        method: 'TRANSFER',
+        mfsProvider: '',
+        mfsNumber: '',
+        trxId: '',
+        amountPaid: 40400,
+        tendered: 40400,
+        change: 0,
+        authCode: '',
+        last4: '',
+        bankDetails: '',
+        terms: '**VAT against this challan is\npayable through central registration\nJoin the DREAM FACTORY at:\nFACEBOOK.COM/GROUPS/SHWAPNOHELP\nThank you for shopping with SHWAPNO\nPlease visit www.shwapno.com for home delivery.\nPurchase of defected item must be exchanged\nby 24 hours with invoice.\nFor any queries, suggestions or complaints,\nplease call 16469 (9:00 AM - 6:00 PM)\n\nPowered by MIS@ACI Limited'
+      }
     }
   };
 
@@ -846,7 +959,8 @@
 
   function computeDocumentTotals(state) {
     const curr = CURRENCIES[state.meta.currency] || CURRENCIES.USD || CURRENCIES.BDT;
-    let subtotal = 0;
+    let grossSubtotal = 0;
+    let itemDiscountsTotal = 0;
     const taxBuckets = {};
 
     state.items.forEach(item => {
@@ -863,7 +977,8 @@
       }
 
       const taxable = Math.max(0, lineBase - lineDisc);
-      subtotal += taxable;
+      grossSubtotal += lineBase;
+      itemDiscountsTotal += lineDisc;
 
       const rate = Number(item.taxRate) || 0;
       if (rate > 0) {
@@ -873,34 +988,47 @@
       }
     });
 
-    const globalDiscount = Math.min(subtotal, Math.round(Number(state.financials.globalDiscount) || 0));
+    const globalDiscount = Math.min(Math.max(0, grossSubtotal - itemDiscountsTotal), Math.round(Number(state.financials.globalDiscount) || 0));
+    const discountTotal = itemDiscountsTotal + globalDiscount;
+    const taxableBase = Math.max(0, grossSubtotal - discountTotal);
     const shipping = Math.max(0, Math.round(Number(state.financials.shipping) || 0));
 
     let totalTax = 0;
     Object.values(taxBuckets).forEach(t => { totalTax += t; });
 
-    const grandTotal = Math.max(0, subtotal - globalDiscount + totalTax + shipping);
+    const exactGrandTotal = Math.max(0, taxableBase + totalTax + shipping);
+    const netPayable = Math.round(exactGrandTotal / 100) * 100;
+    const rounding = netPayable - exactGrandTotal;
+
+    const targetTotal = (state.meta && state.meta.template === 'thermal-retail-mushak') ? netPayable : exactGrandTotal;
 
     let amountPaid = Math.round(Number(state.settlement.amountPaid) || 0);
     let balanceDue = 0;
 
     if (state.meta.docType === 'receipt') {
-      amountPaid = grandTotal;
+      amountPaid = targetTotal;
       balanceDue = 0;
     } else {
-      balanceDue = Math.max(0, grandTotal - amountPaid);
+      balanceDue = Math.max(0, targetTotal - amountPaid);
     }
 
     const tendered = Math.round(Number(state.settlement.tendered) || 0);
-    const change = tendered > grandTotal ? tendered - grandTotal : 0;
+    const change = tendered > targetTotal ? tendered - targetTotal : 0;
 
     return {
-      subtotal,
+      subtotal: grossSubtotal,
+      grossSubtotal,
+      itemDiscountsTotal,
+      discountTotal,
+      taxableBase,
       taxBuckets,
       totalTax,
+      taxTotal: totalTax,
       globalDiscount,
       shipping,
-      grandTotal,
+      grandTotal: exactGrandTotal,
+      netPayable,
+      rounding,
       amountPaid,
       balanceDue,
       tendered,
@@ -1087,6 +1215,13 @@
       '.inv-vbn-summary-grid',
       '.inv-vbn-divider-bottom',
       '.inv-vbn-bottom-authentic',
+      '.inv-mushak-top-auth',
+      '.inv-mushak-meta-block',
+      '.inv-mushak-table',
+      '.inv-mushak-ledger',
+      '.inv-mushak-disc-module',
+      '.inv-mushak-loyalty-module',
+      '.inv-mushak-footer-notes',
       '.receipt-barcode-target'
     ];
 
@@ -1212,7 +1347,7 @@
         if (typeof localStorage !== 'undefined' && localStorage.getItem) {
           try {
             localStorage.removeItem('syzarn_invoice_generator_state_v1');
-          } catch (_) {}
+          } catch (_) { }
 
           const raw = localStorage.getItem(this.storageKey);
           if (raw) {
@@ -1267,7 +1402,7 @@
         this.activeTab = 'setup';
       }
 
-      if (template === 'thermal-pos') {
+      if (template === 'thermal-pos' || template === 'thermal-retail-mushak') {
         this.state.meta.barcodeSymbology = this.state.meta.barcodeSymbology || 'CODE128';
       }
 
@@ -1352,8 +1487,8 @@
               <button type="button" class="tm-btn" id="inv-textbox-toggle-btn" title="toggle text box display">expand text box</button>
               <button type="button" class="tm-btn" id="inv-sample-btn" title="load template-tailored sample data">load sample</button>
               <button type="button" class="tm-btn" id="inv-reset-btn" title="reset form to clean template">reset form</button>
-              <button type="button" class="tm-btn" id="inv-print-btn" title="open browser print dialog">🖨 print</button>
-              <button type="button" class="tm-btn tm-btn-primary" id="inv-pdf-btn" title="download authentic vector PDF file directly">🗎 download PDF</button>
+              <button type="button" class="tm-btn" id="inv-print-btn" title="open browser print dialog">print</button>
+              <button type="button" class="tm-btn tm-btn-primary" id="inv-pdf-btn" title="download authentic vector PDF file directly">download PDF</button>
             </div>
           </div>
 
@@ -1525,7 +1660,7 @@
 
     getSetupTabHtml() {
       const m = this.state.meta;
-      const isThermal = m.template === 'thermal-pos';
+      const isThermal = m.template === 'thermal-pos' || m.template === 'thermal-retail-mushak';
 
       return `
         <div class="inv-form-section">
@@ -1540,6 +1675,7 @@
               <option value="bn-vintage-ledger" ${m.template === 'bn-vintage-ledger' ? 'selected' : ''}>vintage bengali ledger (হালখাতা / ক্যাশ মেমো)</option>
               <option value="mid-century-tractor" ${m.template === 'mid-century-tractor' ? 'selected' : ''}>continuous tractor-feed (dot-matrix 1970s/80s)</option>
               <option value="erp-classic-90s" ${m.template === 'erp-classic-90s' ? 'selected' : ''}>enterprise erp (late-90s corporate / quickbooks)</option>
+              <option value="thermal-retail-mushak" ${m.template === 'thermal-retail-mushak' ? 'selected' : ''}>supermarket challan (NBR Mushak-6.3 thermal)</option>
             </select>
           </div>
 
@@ -1628,104 +1764,185 @@
 
     getSellerTabHtml() {
       const s = this.state.seller;
-      const isThermal = this.state.meta.template === 'thermal-pos';
+      const isMushak = this.state.meta.template === 'thermal-retail-mushak';
+      const isThermal = this.state.meta.template === 'thermal-pos' || isMushak;
 
       return `
         <div class="inv-form-section">
           <div class="inv-section-title">seller / issuer details</div>
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="seller-name">business name:</label>
-            <input type="text" class="tm-input inv-control" id="seller-name" value="${escapeHTML(s.name)}" placeholder="e.g. Acme Corporation">
-          </div>
-
-          <!-- Logo Dropzone -->
-          <div class="inv-field-row" style="align-items: flex-start;">
-            <label class="inv-label">logo image:</label>
-            <div class="inv-logo-zone" id="inv-logo-zone">
-              ${s.logoUrl ? `
-                <div class="inv-logo-preview-wrap">
-                  <img src="${s.logoUrl}" class="inv-logo-preview-img" alt="logo preview">
-                  <button type="button" class="tm-btn tm-btn-xs" id="inv-remove-logo-btn">remove logo</button>
-                </div>
-              ` : `
-                <div class="inv-logo-drop-prompt">
-                  <span>drag & drop logo image, or <span class="c-accent">browse</span></span>
-                  <span class="c-dim" style="font-size:0.7rem;">PNG, JPEG, SVG, WebP (client-side base64)</span>
-                </div>
-              `}
-              <input type="file" id="inv-logo-file-input" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display:none;">
+          ${isMushak ? `
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-name">brand name:</label>
+              <input type="text" class="tm-input inv-control" id="seller-name" value="${escapeHTML(s.name || 'SHWAPNO')}" placeholder="e.g. SHWAPNO">
             </div>
-          </div>
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="seller-address">address:</label>
-            <textarea class="tm-input inv-control" id="seller-address" rows="3" placeholder="street, city, postal code">${escapeHTML(s.address)}</textarea>
-          </div>
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-company">corporate entity:</label>
+              <input type="text" class="tm-input inv-control" id="seller-company" value="${escapeHTML(s.companyName || 'ACI Logistics Limited')}" placeholder="e.g. ACI Logistics Limited">
+            </div>
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="seller-taxid">tax ID / VAT:</label>
-            <input type="text" class="tm-input inv-control" id="seller-taxid" value="${escapeHTML(s.taxId || '')}" placeholder="e.g. VAT: GB-123456789">
-          </div>
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-regaddress">registered HQ address:</label>
+              <textarea class="tm-input inv-control" id="seller-regaddress" rows="2" placeholder="e.g. 270, Tejgaon I/A, Dhaka-1208">${escapeHTML(s.registeredAddress || '270, Tejgaon I/A, Dhaka-1208')}</textarea>
+            </div>
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="seller-email">email / contact:</label>
-            <input type="text" class="tm-input inv-control" id="seller-email" value="${escapeHTML(s.email || '')}" placeholder="e.g. billing@company.com">
-          </div>
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-taxid">central VAT reg. no.:</label>
+              <input type="text" class="tm-input inv-control" id="seller-taxid" value="${escapeHTML(s.taxId || '000005489-0203')}" placeholder="e.g. 000005489-0203">
+            </div>
 
-          ${isThermal ? `
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-outletname">outlet name:</label>
+              <input type="text" class="tm-input inv-control" id="seller-outletname" value="${escapeHTML(s.outletName || 'D006-Dhaka Malibag Mor Outlet')}" placeholder="e.g. D006-Dhaka Malibag Mor Outlet">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-outletaddress">outlet address:</label>
+              <input type="text" class="tm-input inv-control" id="seller-outletaddress" value="${escapeHTML(s.outletAddress || '260/6, Malibag, Dhaka')}" placeholder="e.g. 260/6, Malibag, Dhaka">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-cashier">cashier ID:</label>
+              <input type="text" class="tm-input inv-control" id="seller-cashier" value="${escapeHTML(s.cashier || '18821')}" placeholder="e.g. 18821 or ecomd006">
+            </div>
+
             <div class="inv-field-row">
               <label class="inv-label" for="seller-terminal">terminal ID:</label>
-              <input type="text" class="tm-input inv-control" id="seller-terminal" value="${escapeHTML(s.terminalId || 'TERM: 01')}" placeholder="e.g. TERM: 01">
+              <input type="text" class="tm-input inv-control" id="seller-terminal" value="${escapeHTML(s.terminalId || 'D094POS1N')}" placeholder="e.g. D094POS1N">
             </div>
+          ` : `
             <div class="inv-field-row">
-              <label class="inv-label" for="seller-cashier">cashier name:</label>
-              <input type="text" class="tm-input inv-control" id="seller-cashier" value="${escapeHTML(s.cashier || 'Jane D.')}" placeholder="e.g. Jane D.">
+              <label class="inv-label" for="seller-name">business name:</label>
+              <input type="text" class="tm-input inv-control" id="seller-name" value="${escapeHTML(s.name)}" placeholder="e.g. Acme Corporation">
             </div>
-          ` : ''}
+
+            <!-- Logo Dropzone -->
+            <div class="inv-field-row" style="align-items: flex-start;">
+              <label class="inv-label">logo image:</label>
+              <div class="inv-logo-zone" id="inv-logo-zone">
+                ${s.logoUrl ? `
+                  <div class="inv-logo-preview-wrap">
+                    <img src="${s.logoUrl}" class="inv-logo-preview-img" alt="logo preview">
+                    <button type="button" class="tm-btn tm-btn-xs" id="inv-remove-logo-btn">remove logo</button>
+                  </div>
+                ` : `
+                  <div class="inv-logo-drop-prompt">
+                    <span>drag & drop logo image, or <span class="c-accent">browse</span></span>
+                    <span class="c-dim" style="font-size:0.7rem;">PNG, JPEG, SVG, WebP (client-side base64)</span>
+                  </div>
+                `}
+                <input type="file" id="inv-logo-file-input" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display:none;">
+              </div>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-address">address:</label>
+              <textarea class="tm-input inv-control" id="seller-address" rows="3" placeholder="street, city, postal code">${escapeHTML(s.address)}</textarea>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-taxid">tax ID / VAT:</label>
+              <input type="text" class="tm-input inv-control" id="seller-taxid" value="${escapeHTML(s.taxId || '')}" placeholder="e.g. VAT: GB-123456789">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-email">email / contact:</label>
+              <input type="text" class="tm-input inv-control" id="seller-email" value="${escapeHTML(s.email || '')}" placeholder="e.g. billing@company.com">
+            </div>
+
+            ${isThermal ? `
+              <div class="inv-field-row">
+                <label class="inv-label" for="seller-terminal">terminal ID:</label>
+                <input type="text" class="tm-input inv-control" id="seller-terminal" value="${escapeHTML(s.terminalId || 'TERM: 01')}" placeholder="e.g. TERM: 01">
+              </div>
+              <div class="inv-field-row">
+                <label class="inv-label" for="seller-cashier">cashier name:</label>
+                <input type="text" class="tm-input inv-control" id="seller-cashier" value="${escapeHTML(s.cashier || 'Jane D.')}" placeholder="e.g. Jane D.">
+              </div>
+            ` : ''}
+          `}
         </div>
       `;
     },
 
     getBuyerTabHtml() {
       const b = this.state.buyer;
-      const isThermal = this.state.meta.template === 'thermal-pos';
+      const isMushak = this.state.meta.template === 'thermal-retail-mushak';
+      const isThermal = this.state.meta.template === 'thermal-pos' || isMushak;
+      const loy = this.state.loyalty || { enabled: true, previousPoints: 0, earnedPoints: 0 };
 
       return `
         <div class="inv-form-section">
           <div class="inv-section-title">buyer / client details</div>
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="buyer-name">client name:</label>
-            <input type="text" class="tm-input inv-control" id="buyer-name" value="${escapeHTML(b.name)}" placeholder="e.g. Globex Corp">
-          </div>
-
-          <div class="inv-field-row">
-            <label class="inv-label" for="buyer-address">address:</label>
-            <textarea class="tm-input inv-control" id="buyer-address" rows="3" placeholder="client billing address">${escapeHTML(b.address || '')}</textarea>
-          </div>
-
-          <div class="inv-field-row">
-            <label class="inv-label" for="buyer-taxid">tax ID / VAT:</label>
-            <input type="text" class="tm-input inv-control" id="buyer-taxid" value="${escapeHTML(b.taxId || '')}" placeholder="client tax ID (optional)">
-          </div>
-
-          <div class="inv-field-row">
-            <label class="inv-label" for="buyer-email">email:</label>
-            <input type="text" class="tm-input inv-control" id="buyer-email" value="${escapeHTML(b.email || '')}" placeholder="ap@client.com">
-          </div>
-
-          ${!isThermal ? `
+          ${isMushak ? `
             <div class="inv-field-row">
-              <label class="inv-label" for="buyer-ponumber">PO number:</label>
-              <input type="text" class="tm-input inv-control" id="buyer-ponumber" value="${escapeHTML(b.poNumber || '')}" placeholder="e.g. PO-8921">
+              <label class="inv-label" for="buyer-phone">customer ID / mobile:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-phone" value="${escapeHTML(b.phone || '')}" placeholder="e.g. 01711666697">
             </div>
-          ` : ''}
 
-          <div class="inv-field-row">
-            <label class="inv-label" for="buyer-phone">contact / mobile:</label>
-            <input type="text" class="tm-input inv-control" id="buyer-phone" value="${escapeHTML(b.phone || '')}" placeholder="phone or mobile number">
-          </div>
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-name">customer category / name:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-name" value="${escapeHTML(b.name || 'Loyalty Customer')}" placeholder="e.g. Loyalty Customer">
+            </div>
+
+            <div class="inv-section-title" style="margin-top:14px;">loyalty points tracking</div>
+
+            <div class="inv-field-row">
+              <label class="tm-checkbox-label">
+                <input type="checkbox" id="loyalty-enabled" ${loy.enabled !== false ? 'checked' : ''}>
+                print loyalty points ledger on receipt
+              </label>
+            </div>
+
+            <div class="inv-field-grid-3">
+              <div>
+                <label class="inv-sublabel">previous points:</label>
+                <input type="number" step="1" min="0" class="tm-input inv-control" id="loyalty-prev" value="${loy.previousPoints || 0}">
+              </div>
+              <div>
+                <label class="inv-sublabel">this invoice points:</label>
+                <input type="number" step="1" min="0" class="tm-input inv-control" id="loyalty-earned" value="${loy.earnedPoints || 0}">
+              </div>
+              <div>
+                <label class="inv-sublabel">balance points:</label>
+                <input type="text" class="tm-input inv-control" disabled value="${(Number(loy.previousPoints) || 0) + (Number(loy.earnedPoints) || 0)}" style="opacity:0.8;">
+              </div>
+            </div>
+          ` : `
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-name">client name:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-name" value="${escapeHTML(b.name)}" placeholder="e.g. Globex Corp">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-address">address:</label>
+              <textarea class="tm-input inv-control" id="buyer-address" rows="3" placeholder="client billing address">${escapeHTML(b.address || '')}</textarea>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-taxid">tax ID / VAT:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-taxid" value="${escapeHTML(b.taxId || '')}" placeholder="client tax ID (optional)">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-email">email:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-email" value="${escapeHTML(b.email || '')}" placeholder="ap@client.com">
+            </div>
+
+            ${!isThermal ? `
+              <div class="inv-field-row">
+                <label class="inv-label" for="buyer-ponumber">PO number:</label>
+                <input type="text" class="tm-input inv-control" id="buyer-ponumber" value="${escapeHTML(b.poNumber || '')}" placeholder="e.g. PO-8921">
+              </div>
+            ` : ''}
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="buyer-phone">contact / mobile:</label>
+              <input type="text" class="tm-input inv-control" id="buyer-phone" value="${escapeHTML(b.phone || '')}" placeholder="phone or mobile number">
+            </div>
+          `}
         </div>
       `;
     },
@@ -1830,7 +2047,7 @@
     getSettlementTabHtml() {
       const s = this.state.settlement;
       const m = this.state.meta;
-      const isThermal = m.template === 'thermal-pos';
+      const isThermal = m.template === 'thermal-pos' || m.template === 'thermal-retail-mushak';
       const isReceipt = m.docType === 'receipt';
       const curr = CURRENCIES[m.currency] || CURRENCIES.USD;
       const decimals = curr.decimals;
@@ -1840,7 +2057,7 @@
 
       const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + (s.bankDetails || '') + (m.barcodeValue || ''));
       const isMfs = s.method === 'MFS';
-      const isCustomMfs = s.mfsProvider && !MFS_PROVIDERS.includes(s.mfsProvider);
+      const isCustomMfs = s.mfsProvider && !ALL_MFS_PSP_PROVIDERS.includes(s.mfsProvider);
 
       return `
         <div class="inv-form-section">
@@ -1851,22 +2068,31 @@
             <select class="tm-select inv-control" id="settle-method">
               <option value="CASH" ${s.method === 'CASH' ? 'selected' : ''}>cash</option>
               <option value="COD" ${s.method === 'COD' ? 'selected' : ''}>cash on delivery (COD)</option>
-              <option value="MFS" ${s.method === 'MFS' ? 'selected' : ''}>MFS (mobile financial services)</option>
+              <option value="MFS" ${s.method === 'MFS' ? 'selected' : ''}>MFS &amp; PSP (mobile banking / payment wallets)</option>
               <option value="CARD" ${s.method === 'CARD' ? 'selected' : ''}>card (credit / debit)</option>
-              <option value="TRANSFER" ${s.method === 'TRANSFER' ? 'selected' : ''}>bank transfer</option>
+              <option value="TRANSFER" ${s.method === 'TRANSFER' ? 'selected' : ''}>bank transfer / online</option>
               <option value="CHECK" ${s.method === 'CHECK' ? 'selected' : ''}>cheque / check</option>
             </select>
           </div>
 
-          <!-- MFS (Mobile Financial Services) Dynamic Fields -->
+          <!-- MFS & PSP Dynamic Fields -->
           <div id="inv-mfs-fields" style="${isMfs ? 'display:flex;' : 'display:none;'}">
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-mfsprovider">MFS provider:</label>
+              <label class="inv-label" for="settle-mfsprovider">provider:</label>
               <select class="tm-select inv-control" id="settle-mfsprovider">
-                ${MFS_PROVIDERS.map(p => `
-                  <option value="${p}" ${(s.mfsProvider || (m.template === 'bn-vintage-ledger' ? 'bKash' : '')) === p ? 'selected' : ''}>${p}</option>
-                `).join('')}
-                <option value="other" ${isCustomMfs ? 'selected' : ''}>other / custom...</option>
+                <optgroup label="Mobile Financial Services (MFS)">
+                  ${MFS_PROVIDERS.map(p => `
+                    <option value="${p}" ${(s.mfsProvider || (m.template === 'bn-vintage-ledger' ? 'bKash' : '')) === p ? 'selected' : ''}>${p}</option>
+                  `).join('')}
+                </optgroup>
+                <optgroup label="Payment Service Providers (PSP)">
+                  ${PSP_PROVIDERS.map(p => `
+                    <option value="${p}" ${s.mfsProvider === p ? 'selected' : ''}>${p}</option>
+                  `).join('')}
+                </optgroup>
+                <optgroup label="Others / Custom">
+                  <option value="other" ${isCustomMfs ? 'selected' : ''}>other / custom provider...</option>
+                </optgroup>
               </select>
             </div>
 
@@ -1876,7 +2102,7 @@
             </div>
 
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-mfsnumber">mobile number:</label>
+              <label class="inv-label" for="settle-mfsnumber">wallet / mobile number:</label>
               <input type="text" class="tm-input inv-control" id="settle-mfsnumber" value="${escapeHTML(s.mfsNumber || '')}" placeholder="e.g. 017XXXXXXXX">
             </div>
 
@@ -1893,8 +2119,8 @@
 
           ${isThermal ? `
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-tendered">cash tendered (${curr.symbol}):</label>
-              <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-tendered" value="${tenderedStr}" placeholder="cash received">
+              <label class="inv-label" for="settle-tendered">tendered / cash received (${curr.symbol}):</label>
+              <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-tendered" value="${tenderedStr}" placeholder="e.g. 1000.00">
             </div>
             <div class="inv-field-row">
               <label class="inv-label" for="settle-auth">card auth code:</label>
@@ -1914,8 +2140,8 @@
           ` : ''}
 
           <div class="inv-field-row">
-            <label class="inv-label" for="settle-terms">notes &amp; terms:</label>
-            <textarea class="tm-input inv-control" id="settle-terms" rows="3" placeholder="late fees, warranty notes, verification URL">${escapeHTML(s.terms || '')}</textarea>
+            <label class="inv-label" for="settle-terms">notes &amp; policy terms:</label>
+            <textarea class="tm-input inv-control" id="settle-terms" rows="4" placeholder="exchange policy, helpline, central VAT notes">${escapeHTML(s.terms || '')}</textarea>
           </div>
 
           <!-- Barcode / QR Code Quick Payload -->
@@ -1924,8 +2150,8 @@
           <div class="inv-field-row">
             <label class="inv-label" for="settle-symbology">symbology / format:</label>
             <select class="tm-select inv-control" id="settle-symbology">
-              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR Code (2D payment link &amp; URL)</option>
               <option value="CODE128" ${m.barcodeSymbology === 'CODE128' ? 'selected' : ''}>Code 128 (universal 1D barcode)</option>
+              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR Code (2D payment link &amp; URL)</option>
               <option value="DATAMATRIX" ${m.barcodeSymbology === 'DATAMATRIX' ? 'selected' : ''}>Data Matrix (compact 2D code)</option>
               <option value="EAN13" ${m.barcodeSymbology === 'EAN13' ? 'selected' : ''}>EAN-13 (retail 13-digit standard)</option>
             </select>
@@ -2045,6 +2271,10 @@
 
       // Seller inputs
       handleInput('seller-name', val => { this.state.seller.name = val; });
+      handleInput('seller-company', val => { this.state.seller.companyName = val; });
+      handleInput('seller-regaddress', val => { this.state.seller.registeredAddress = val; });
+      handleInput('seller-outletname', val => { this.state.seller.outletName = val; });
+      handleInput('seller-outletaddress', val => { this.state.seller.outletAddress = val; });
       handleInput('seller-address', val => { this.state.seller.address = val; });
       handleInput('seller-taxid', val => { this.state.seller.taxId = val; });
       handleInput('seller-email', val => { this.state.seller.email = val; });
@@ -2098,6 +2328,24 @@
       handleInput('buyer-email', val => { this.state.buyer.email = val; });
       handleInput('buyer-ponumber', val => { this.state.buyer.poNumber = val; });
       handleInput('buyer-phone', val => { this.state.buyer.phone = val; });
+
+      // Loyalty inputs
+      const loyaltyCheck = container.querySelector('#loyalty-enabled');
+      if (loyaltyCheck) {
+        loyaltyCheck.addEventListener('change', () => {
+          this.state.loyalty = this.state.loyalty || {};
+          this.state.loyalty.enabled = loyaltyCheck.checked;
+          this.schedulePreviewUpdate();
+        });
+      }
+      handleInput('loyalty-prev', val => {
+        this.state.loyalty = this.state.loyalty || {};
+        this.state.loyalty.previousPoints = parseInt(val, 10) || 0;
+      });
+      handleInput('loyalty-earned', val => {
+        this.state.loyalty = this.state.loyalty || {};
+        this.state.loyalty.earnedPoints = parseInt(val, 10) || 0;
+      });
 
       // Items list inputs
       const itemsList = container.querySelector('#inv-items-list');
@@ -2336,13 +2584,15 @@
 
       // Update paper class
       paperTarget.className = `inv-paper inv-tpl-${template}`;
-      if (template === 'thermal-pos') {
+      if (template === 'thermal-pos' || template === 'thermal-retail-mushak') {
         paperTarget.classList.toggle('thermal-58mm', this.state.meta.thermalWidth === '58mm');
       }
 
       if (geoLabel) {
         if (template === 'thermal-pos') {
           geoLabel.textContent = `thermal continuous roll (${this.state.meta.thermalWidth || '80mm'})`;
+        } else if (template === 'thermal-retail-mushak') {
+          geoLabel.textContent = `supermarket challan Mushak-6.3 (${this.state.meta.thermalWidth || '80mm'})`;
         } else if (template === 'bn-vintage-ledger') {
           geoLabel.textContent = 'vintage bengali ledger (A4 cream)';
         } else if (template === 'mid-century-tractor') {
@@ -2367,6 +2617,8 @@
         docHtml = this.generateMidCenturyTractorHtml(this.state, totals);
       } else if (template === 'erp-classic-90s') {
         docHtml = this.generateErpClassic90sHtml(this.state, totals);
+      } else if (template === 'thermal-retail-mushak') {
+        docHtml = this.generateThermalRetailMushakHtml(this.state, totals);
       } else {
         docHtml = this.generateStripeModernHtml(this.state, totals);
       }
@@ -2655,11 +2907,10 @@
           <div class="inv-thermal-tender">
             <div class="inv-thermal-tot-row">
               <span>METHOD:</span>
-              <span>${
-                state.settlement.method === 'COD' ? 'CASH ON DELIVERY'
-                : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'MFS').toUpperCase()}`
-                : escapeHTML(state.settlement.method || 'CASH')
-              }</span>
+              <span>${state.settlement.method === 'COD' ? 'CASH ON DELIVERY'
+          : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'MFS').toUpperCase()}`
+            : escapeHTML(state.settlement.method || 'CASH')
+        }</span>
             </div>
             ${state.settlement.method === 'MFS' ? `
               ${state.settlement.mfsNumber ? `
@@ -3291,8 +3542,8 @@
 
       const docTypeName = m.docType === 'receipt' ? 'RECEIPT'
         : m.docType === 'tax-invoice' ? 'TAX INVOICE'
-        : m.docType === 'pro-forma' ? 'PRO FORMA'
-        : 'INVOICE';
+          : m.docType === 'pro-forma' ? 'PRO FORMA'
+            : 'INVOICE';
 
       let itemsRows = state.items.map((item, idx) => {
         const qty = Number(item.qty) || 0;
@@ -3536,6 +3787,295 @@
       `;
     },
 
+    // --- TEMPLATE G: ENTERPRISE SUPERMARKET / NBR CHALLAN (MUSHAK-6.3) ---
+    generateThermalRetailMushakHtml(state, totals) {
+      const s = state.seller;
+      const m = state.meta;
+      const b = state.buyer;
+      const is58 = m.thermalWidth === '58mm';
+      const colWidth = is58 ? 32 : 56;
+      const divider = '-'.repeat(colWidth);
+
+      const fmtMoney = (cents) => {
+        const val = (Number(cents) || 0) / 100;
+        return val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      };
+
+      // Line items: 5-column tabular grid
+      let itemsRowsHtml = state.items.map((item, idx) => {
+        const qty = Number(item.qty) || 0;
+        const price = Math.round(Number(item.unitPrice) || 0);
+        const base = Math.round(qty * price);
+        const qtyStr = (qty % 1 === 0) ? qty.toFixed(2) : qty.toString();
+        const priceStr = fmtMoney(price);
+        const totalStr = fmtMoney(base);
+
+        return `
+          <tr class="inv-mushak-tr">
+            <td class="inv-mushak-td td-sl">${idx + 1}</td>
+            <td class="inv-mushak-td td-desc">${escapeHTML(item.name)}</td>
+            <td class="inv-mushak-td td-price">${priceStr}</td>
+            <td class="inv-mushak-td td-qty">${qtyStr}</td>
+            <td class="inv-mushak-td td-total">${totalStr}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Rounding string
+      let roundingStr = '0.00';
+      if (totals.rounding < 0) {
+        roundingStr = '-' + fmtMoney(Math.abs(totals.rounding));
+      } else if (totals.rounding > 0) {
+        roundingStr = '+' + fmtMoney(totals.rounding);
+      }
+
+      // Tax lines
+      let taxRowsHtml = '';
+      if (totals.totalTax > 0) {
+        taxRowsHtml = Object.keys(totals.taxBuckets).map(rate => {
+          const taxAmt = totals.taxBuckets[rate];
+          const rateNum = parseFloat(rate);
+          const baseStr = fmtMoney(totals.taxableBase);
+          const amtStr = fmtMoney(taxAmt);
+          const withTaxTotal = totals.taxableBase + taxAmt;
+          return `
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">${rateNum}% VAT on ${baseStr} :</span>
+              <span class="inv-mushak-ledg-val">${amtStr}</span>
+            </div>
+            <div class="inv-mushak-ledg-subdiv">---------------------</div>
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">&nbsp;</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(withTaxTotal)}</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Payment Tender Line
+      let tenderLabel = 'CASH PAID';
+      let tenderAmount = totals.tendered || totals.netPayable;
+      if (state.settlement.method === 'TRANSFER') {
+        tenderLabel = 'eCom Online';
+      } else if (state.settlement.method === 'MFS') {
+        const prov = state.settlement.mfsProvider || 'MFS';
+        tenderLabel = escapeHTML(prov);
+      } else if (state.settlement.method === 'CARD') {
+        tenderLabel = 'CARD PAID';
+      } else if (state.settlement.method === 'COD') {
+        tenderLabel = 'COD PAYABLE';
+      }
+
+      // Discount Breakdown Module
+      let discountBreakdownHtml = '';
+      const discountedItems = state.items
+        .map((item, idx) => {
+          const qty = Number(item.qty) || 0;
+          const price = Math.round(Number(item.unitPrice) || 0);
+          const base = Math.round(qty * price);
+          const disc = item.discountType === 'percent'
+            ? Math.round(base * ((Number(item.discount) || 0) / 100))
+            : Math.min(base, Math.round(Number(item.discount) || 0));
+          return { sl: idx + 1, name: item.name, disc };
+        })
+        .filter(it => it.disc > 0);
+
+      if (discountedItems.length > 0 || totals.discountTotal > 0) {
+        discountBreakdownHtml = `
+          <div class="inv-mushak-disc-module">
+            <div class="inv-mushak-disc-title">** DISCOUNT ITEMS **</div>
+            <div class="inv-mushak-divider">${divider}</div>
+            <table class="inv-mushak-disc-table">
+              <tbody>
+                ${discountedItems.map(it => `
+                  <tr>
+                    <td class="td-disc-sl">${it.sl}</td>
+                    <td class="td-disc-name">${escapeHTML(it.name)}</td>
+                    <td class="td-disc-amt">${fmtMoney(it.disc)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <div class="inv-mushak-divider">${divider}</div>
+            <div class="inv-mushak-savings-row">
+              <span>Your total savings today TK. :</span>
+              <span class="savings-amt">${fmtMoney(totals.discountTotal)}</span>
+            </div>
+          </div>
+          <div class="inv-mushak-divider">${divider}</div>
+        `;
+      }
+
+      // Loyalty Points Module
+      let loyaltyLedgerHtml = '';
+      const loy = state.loyalty;
+      if (loy && loy.enabled !== false && (loy.previousPoints !== undefined || loy.earnedPoints !== undefined)) {
+        const prev = Number(loy.previousPoints) || 0;
+        const earned = Number(loy.earnedPoints) || 0;
+        const balance = prev + earned;
+        loyaltyLedgerHtml = `
+          <div class="inv-mushak-loyalty-module">
+            <div class="inv-mushak-loyalty-title">Loyalty Points (as on ${escapeHTML(m.issueDate)})</div>
+            <div class="inv-mushak-divider">${divider}</div>
+            <div class="inv-mushak-loy-row">
+              <span>Previous Points :</span>
+              <span>${prev}</span>
+            </div>
+            <div class="inv-mushak-loy-row">
+              <span>This Invoice :</span>
+              <span>${earned}</span>
+            </div>
+            <div class="inv-mushak-loy-row">
+              <span>Balance Points :</span>
+              <span>${balance}</span>
+            </div>
+          </div>
+          <div class="inv-mushak-divider">${divider}</div>
+        `;
+      }
+
+      // Statutory Footer Notes
+      const defaultNotes = `**VAT against this challan is
+payable through central registration
+Join the DREAM FACTORY at:
+FACEBOOK.COM/GROUPS/SHWAPNOHELP
+Thank you for shopping with SHWAPNO
+Please visit www.shwapno.com for home delivery.
+Purchase of defected item must be exchanged
+by 24 hours with invoice.
+For any queries, suggestions or complaints,
+please call 16469 (9:00 AM - 6:00 PM)
+
+Powered by MIS@ACI Limited`;
+
+      const termsText = (state.settlement.terms && state.settlement.terms.trim()) ? state.settlement.terms : defaultNotes;
+
+      return `
+        <div class="inv-mushak-doc ${is58 ? 'mode-58mm' : 'mode-80mm'}">
+          <!-- 1. STATUTORY AUTHORITY HEADER -->
+          <div class="inv-mushak-top-auth">
+            <div class="inv-mushak-chln-tag">Mushak - 6.3</div>
+            <div class="inv-mushak-header-center">
+              <div class="inv-mushak-gov-line">Government of the People's Republic of Bangladesh</div>
+              <div class="inv-mushak-nbr-line">National Board of Revenue</div>
+              <div class="inv-mushak-brand-name">${escapeHTML(s.name || 'SHWAPNO')}</div>
+              <div class="inv-mushak-company-name">${escapeHTML(s.companyName || 'ACI Logistics Limited')}</div>
+              <div class="inv-mushak-reg-addr">Registered Address: ${escapeHTML(s.registeredAddress || '270, Tejgaon I/A, Dhaka-1208')}</div>
+              <div class="inv-mushak-vat-no">Central VAT Reg. No. : ${escapeHTML(s.taxId || '000005489-0203')}</div>
+              <div class="inv-mushak-outlet-name">${escapeHTML(s.outletName || 'D006-Dhaka Malibag Mor Outlet')}</div>
+              <div class="inv-mushak-outlet-addr">${escapeHTML(s.outletAddress || '260/6, Malibag, Dhaka')}</div>
+            </div>
+            <div class="inv-mushak-retail-banner">----------------------- RETAIL INVOICE ----------------------</div>
+          </div>
+
+          <!-- 2. METADATA GRID -->
+          <div class="inv-mushak-meta-block">
+            <div class="inv-mushak-meta-row">
+              <span>Cashier : ${escapeHTML(s.cashier || '18821')}</span>
+              <span>Terminal ID : ${escapeHTML(s.terminalId || 'D094POS1N')}</span>
+            </div>
+            <div class="inv-mushak-meta-row">
+              <span>Invoice Number : ${escapeHTML(m.docNumber)}</span>
+              <span>Date : ${escapeHTML(m.issueDate)}</span>
+            </div>
+            ${(b.phone || (b.name && b.name !== 'Cash Customer')) ? `
+              <div class="inv-mushak-cust-row">
+                <span>Customer ID : ${escapeHTML(b.phone || b.name)}</span>
+              </div>
+            ` : ''}
+            <div class="inv-mushak-divider">${divider}</div>
+            <div class="inv-mushak-promo-note">To Enjoy special Discounts Please register as a loyalty customer.</div>
+            <div class="inv-mushak-divider">${divider}</div>
+          </div>
+
+          <!-- 3. 5-COLUMN TABULAR LINE ITEMS -->
+          <table class="inv-mushak-table">
+            <thead>
+              <tr class="inv-mushak-th-row">
+                <th class="inv-mushak-th th-sl">SL</th>
+                <th class="inv-mushak-th th-desc">Item Description</th>
+                <th class="inv-mushak-th th-price">Unit Price</th>
+                <th class="inv-mushak-th th-qty">Qty</th>
+                <th class="inv-mushak-th th-total">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRowsHtml}
+            </tbody>
+          </table>
+
+          <div class="inv-mushak-divider">${divider}</div>
+
+          <!-- 4. FINANCIAL & SETTLEMENT LEDGER -->
+          <div class="inv-mushak-ledger">
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">Sub Total :</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(totals.grossSubtotal)}</span>
+            </div>
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">(-) Discount :</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(totals.discountTotal)}</span>
+            </div>
+
+            <div class="inv-mushak-ledg-subdiv">---------------------</div>
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">&nbsp;</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(totals.taxableBase)}</span>
+            </div>
+
+            ${taxRowsHtml}
+
+            ${totals.shipping > 0 ? `
+              <div class="inv-mushak-ledg-row">
+                <span class="inv-mushak-ledg-lbl">Delivery Fee :</span>
+                <span class="inv-mushak-ledg-val">${fmtMoney(totals.shipping)}</span>
+              </div>
+            ` : ''}
+
+            <div class="inv-mushak-ledg-subdiv">---------------------</div>
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">(+/-)Rounding :</span>
+              <span class="inv-mushak-ledg-val">${roundingStr}</span>
+            </div>
+
+            <div class="inv-mushak-ledg-subdiv">---------------------</div>
+            <div class="inv-mushak-ledg-row inv-mushak-net-row">
+              <span class="inv-mushak-ledg-lbl">Net Payable :</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(totals.netPayable)}</span>
+            </div>
+            <div class="inv-mushak-ledg-subdiv">---------------------</div>
+
+            <div class="inv-mushak-ledg-row">
+              <span class="inv-mushak-ledg-lbl">${tenderLabel} :</span>
+              <span class="inv-mushak-ledg-val">${fmtMoney(tenderAmount)}</span>
+            </div>
+            ${(totals.change > 0 || state.settlement.method === 'CASH') ? `
+              <div class="inv-mushak-ledg-row">
+                <span class="inv-mushak-ledg-lbl">CHANGE AMOUNT :</span>
+                <span class="inv-mushak-ledg-val">${fmtMoney(totals.change || 0)}</span>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="inv-mushak-divider">${divider}</div>
+
+          <!-- 5. DISCOUNT BREAKDOWN TABLE -->
+          ${discountBreakdownHtml}
+
+          <!-- 6. LOYALTY LEDGER -->
+          ${loyaltyLedgerHtml}
+
+          <!-- 7. STATUTORY FOOTER NOTES -->
+          <div class="inv-mushak-footer-notes">
+            <div class="inv-mushak-foot-text">${escapeHTML(termsText).replace(/\n/g, '<br>')}</div>
+          </div>
+
+          <!-- 8. BARCODE TARGET -->
+          <div id="receipt-barcode-target" class="receipt-barcode-target mushak-barcode"></div>
+        </div>
+      `;
+    },
+
     // --- VECTOR PRINT & PDF EXPORT PIPELINE ---
     async downloadPdf() {
       const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
@@ -3553,7 +4093,7 @@
       if (!paperTarget) return;
 
       const template = this.state.meta.template || 'stripe-modern';
-      const isThermal = template === 'thermal-pos';
+      const isThermal = template === 'thermal-pos' || template === 'thermal-retail-mushak';
       const is58 = isThermal && this.state.meta.thermalWidth === '58mm';
       const isVintage = template === 'bn-vintage-ledger';
       const isTractor = template === 'mid-century-tractor';
@@ -3728,14 +4268,14 @@
         paperTarget.classList.remove('inv-exporting-pdf');
         if (pdfBtn) {
           pdfBtn.disabled = false;
-          pdfBtn.innerHTML = origBtnText || '📄 download PDF';
+          pdfBtn.innerHTML = origBtnText || 'download PDF';
         }
       }
     },
 
     print() {
       const template = this.state.meta.template || 'stripe-modern';
-      const isThermal = template === 'thermal-pos';
+      const isThermal = template === 'thermal-pos' || template === 'thermal-retail-mushak';
       const is58 = isThermal && this.state.meta.thermalWidth === '58mm';
       const totals = computeDocumentTotals(this.state);
 
@@ -3747,6 +4287,7 @@
       else if (template === 'bn-vintage-ledger') docContent = this.generateBnVintageLedgerHtml(this.state, totals);
       else if (template === 'mid-century-tractor') docContent = this.generateMidCenturyTractorHtml(this.state, totals);
       else if (template === 'erp-classic-90s') docContent = this.generateErpClassic90sHtml(this.state, totals);
+      else if (template === 'thermal-retail-mushak') docContent = this.generateThermalRetailMushakHtml(this.state, totals);
 
       // Extract Barcode SVG
       let barcodeSvg = '';
@@ -3783,6 +4324,9 @@
       ).replace(
         '<div id="receipt-barcode-target" class="receipt-barcode-target thermal-barcode"></div>',
         `<div id="receipt-barcode-target" class="receipt-barcode-target thermal-barcode">${barcodeSvg}</div>`
+      ).replace(
+        '<div id="receipt-barcode-target" class="receipt-barcode-target mushak-barcode"></div>',
+        `<div id="receipt-barcode-target" class="receipt-barcode-target mushak-barcode">${barcodeSvg}</div>`
       ).replace(
         '<div id="receipt-barcode-target" class="receipt-barcode-target vbn-barcode"></div>',
         `<div id="receipt-barcode-target" class="receipt-barcode-target vbn-barcode">${barcodeSvg}</div>`
