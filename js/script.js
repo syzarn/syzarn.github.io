@@ -991,6 +991,7 @@ Volume  : ${vol}%`;
     history: [],
     historyIndex: -1,
     wrapMode: 'off',
+    isSidebarCollapsed: false,
 
     init() {
       this.modalEl = document.getElementById('textmanip-workbench');
@@ -1016,15 +1017,28 @@ Volume  : ${vol}%`;
       this.modalEl.innerHTML = `
         <div class="tm-window" role="dialog" aria-label="text manipulation workbench">
           <div class="tm-header">
-            <div class="tm-title">
-              <span>text manipulation workbench</span>
-              <span class="tm-badge" id="tm-active-tool-badge">count characters words sentences lines</span>
+            <div class="tm-header-left">
+              <button type="button" class="tm-sidebar-toggle-btn" id="tm-sidebar-toggle" title="Toggle tools sidebar" aria-label="Toggle tools sidebar" aria-expanded="true">
+                <span class="tm-sidebar-toggle-icon">◀</span>
+                <span class="tm-sidebar-toggle-label">tools</span>
+              </button>
+              <div class="tm-title">
+                <span class="tm-title-name">text manipulation workbench</span>
+                <span class="tm-badge" id="tm-active-tool-badge">count characters words sentences lines</span>
+              </div>
             </div>
             <button type="button" class="tm-close-btn" id="tm-close-btn" title="close workbench (esc)">✕ close [esc]</button>
           </div>
           <div class="tm-body">
+            <div class="tm-sidebar-backdrop" id="tm-sidebar-backdrop" title="Close sidebar"></div>
             <div class="tm-sidebar" id="tm-sidebar">
-              ${sidebarHtml}
+              <div class="tm-sidebar-header">
+                <span class="tm-sidebar-heading">ALL TOOLS</span>
+                <button type="button" class="tm-sidebar-collapse-btn" id="tm-sidebar-collapse-btn" title="Collapse sidebar" aria-label="Collapse sidebar">◀</button>
+              </div>
+              <div class="tm-sidebar-scroll">
+                ${sidebarHtml}
+              </div>
             </div>
             <div class="tm-main">
               <div class="tm-toolbar">
@@ -1068,12 +1082,35 @@ Volume  : ${vol}%`;
       const closeBtn = document.getElementById('tm-close-btn');
       if (closeBtn) closeBtn.addEventListener('click', () => this.close());
 
+      const toggleBtn = document.getElementById('tm-sidebar-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleSidebar();
+        });
+      }
+
+      const sidebarCollapseBtn = document.getElementById('tm-sidebar-collapse-btn');
+      if (sidebarCollapseBtn) {
+        sidebarCollapseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.collapseSidebar(true);
+        });
+      }
+
+      const backdrop = document.getElementById('tm-sidebar-backdrop');
+      if (backdrop) {
+        backdrop.addEventListener('click', () => {
+          this.collapseSidebar(true);
+        });
+      }
+
       const sidebar = document.getElementById('tm-sidebar');
       if (sidebar) {
         sidebar.addEventListener('click', (e) => {
           const item = e.target.closest('.tm-tool-item');
           if (item && item.dataset.toolId) {
-            this.selectTool(item.dataset.toolId);
+            this.selectTool(item.dataset.toolId, true);
           }
         });
       }
@@ -1173,7 +1210,43 @@ Volume  : ${vol}%`;
         });
       }
 
-      this.selectTool(this.activeToolId);
+      this.selectTool(this.activeToolId, false);
+      this.setSidebarCollapsed(false);
+    },
+
+    setSidebarCollapsed(collapsed) {
+      this.isSidebarCollapsed = !!collapsed;
+      if (!this.modalEl) return;
+      const win = this.modalEl.querySelector('.tm-window');
+      if (win) {
+        win.classList.toggle('tm-sidebar-collapsed', this.isSidebarCollapsed);
+      }
+      const toggleBtn = document.getElementById('tm-sidebar-toggle');
+      if (toggleBtn) {
+        const icon = toggleBtn.querySelector('.tm-sidebar-toggle-icon');
+        const label = toggleBtn.querySelector('.tm-sidebar-toggle-label');
+        if (this.isSidebarCollapsed) {
+          if (icon) icon.textContent = '▶';
+          if (label) label.textContent = 'tools';
+          toggleBtn.title = 'Expand tools sidebar';
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          toggleBtn.classList.add('collapsed');
+        } else {
+          if (icon) icon.textContent = '◀';
+          if (label) label.textContent = 'tools';
+          toggleBtn.title = 'Collapse tools sidebar';
+          toggleBtn.setAttribute('aria-expanded', 'true');
+          toggleBtn.classList.remove('collapsed');
+        }
+      }
+    },
+
+    toggleSidebar() {
+      this.setSidebarCollapsed(!this.isSidebarCollapsed);
+    },
+
+    collapseSidebar(collapsed = true) {
+      this.setSidebarCollapsed(collapsed);
     },
 
     open(toolId = 'count', initialText = '') {
@@ -1188,8 +1261,9 @@ Volume  : ${vol}%`;
         textarea.value = initialText;
       }
       if (toolId) {
-        this.selectTool(toolId);
+        this.selectTool(toolId, false);
       }
+      this.setSidebarCollapsed(false);
       this.updateLineCounter();
       this.updateStats();
       if (textarea) textarea.focus();
@@ -1239,7 +1313,7 @@ Volume  : ${vol}%`;
       }
     },
 
-    selectTool(toolId) {
+    selectTool(toolId, autoCollapse = true) {
       this.activeToolId = toolId;
       const items = document.querySelectorAll('.tm-tool-item');
       items.forEach(el => {
@@ -1258,7 +1332,12 @@ Volume  : ${vol}%`;
         if (win) {
           win.classList.toggle('tm-tool-unicodemap', toolId === 'unicodemap');
           win.classList.toggle('tm-tool-invoice', toolId === 'invoice' || toolId === 'receipt' || toolId === 'inv');
+          win.classList.toggle('tm-tool-prescription', toolId === 'prescription' || toolId === 'rx' || toolId === 'pad' || toolId === 'clinical');
         }
+      }
+
+      if (autoCollapse) {
+        this.collapseSidebar(true);
       }
     },
 
@@ -2345,6 +2424,12 @@ Volume  : ${vol}%`;
         case 'inv':
           html = `<div id="inv-host-container"></div>`;
           break;
+        case 'prescription':
+        case 'rx':
+        case 'pad':
+        case 'clinical':
+          html = `<div id="rx-host-container"></div>`;
+          break;
       }
 
       pane.innerHTML = html;
@@ -2355,6 +2440,13 @@ Volume  : ${vol}%`;
             window.InvoiceGenerator.setDocType('receipt');
           }
           window.InvoiceGenerator.mount(pane, this);
+        }
+        return;
+      }
+
+      if (toolId === 'prescription' || toolId === 'rx' || toolId === 'pad' || toolId === 'clinical') {
+        if (window.PrescriptionGenerator) {
+          window.PrescriptionGenerator.mount(pane, this);
         }
         return;
       }
@@ -4205,6 +4297,16 @@ Volume  : ${vol}%`;
             }
             break;
           }
+          case 'prescription':
+          case 'rx':
+          case 'pad':
+          case 'clinical': {
+            if (window.PrescriptionGenerator) {
+              window.PrescriptionGenerator.downloadPdf();
+              this.setStatus('generating vector PDF');
+            }
+            break;
+          }
           case 'count': {
             const noSpaces = document.getElementById('tm-cnt-no-space')?.checked;
             const skipHtml = document.getElementById('tm-cnt-skip-html')?.checked;
@@ -4758,6 +4860,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     }
   };
+  window.textManipWorkbench = textManipWorkbench;
 
   const commands = {
     textmanip: {
@@ -4861,6 +4964,38 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           window.InvoiceGenerator.setDocType('receipt');
         }
         return '<span class="c-accent">opened invoice & receipt generator (receipt mode).</span>';
+      }
+    },
+
+    prescription: {
+      desc: 'client-side medical prescription & clinical pad generator with Ibn Sina standard and vector PDF export',
+      usage: 'prescription [--ui] [ibn-sina | minimal | sample | new]',
+      exec(args, stdin) {
+        textManipWorkbench.open('prescription', '');
+        if (args && args.length > 0 && window.PrescriptionGenerator) {
+          const sub = args[0].toLowerCase();
+          if (sub === 'minimal' || sub === 'classic') window.PrescriptionGenerator.setTemplate('minimal-clinical');
+          else if (sub === 'ibn-sina' || sub === 'standard' || sub === 'hospital') window.PrescriptionGenerator.setTemplate('ibn-sina-standard');
+          else if (sub === 'sample') window.PrescriptionGenerator.loadSampleData();
+          else if (sub === 'new') window.PrescriptionGenerator.resetForNewPatient();
+        }
+        return '<span class="c-accent">opened medical prescription & clinical pad generator in workbench.</span>';
+      }
+    },
+
+    rx: {
+      desc: 'shortcut for medical prescription & clinical pad generator',
+      usage: 'rx [--ui] [ibn-sina | minimal | sample | new]',
+      exec(args, stdin) {
+        return commands.prescription.exec(args, stdin);
+      }
+    },
+
+    pad: {
+      desc: 'shortcut for medical prescription & clinical pad generator',
+      usage: 'pad [--ui] [ibn-sina | minimal | sample | new]',
+      exec(args, stdin) {
+        return commands.prescription.exec(args, stdin);
       }
     },
 
@@ -9226,6 +9361,12 @@ __(@)(@)--------------------------------------(@)(@)__`;
       if (e.key === 'Escape') {
         textManipWorkbench.close();
         e.preventDefault();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+        textManipWorkbench.toggleSidebar();
+        e.preventDefault();
+        return;
       }
       return;
     }

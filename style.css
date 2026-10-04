@@ -138,6 +138,68 @@
   unicode-range: U+0000-007F;
 }
 
+@font-face {
+  font-family: 'Purno';
+  src: url('font/purno/Purno%20Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  unicode-range: U+0980-09FF, U+200C, U+200D;
+}
+
+@font-face {
+  font-family: 'Purno';
+  src: url('font/purno/Purno%20Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  unicode-range: U+0980-09FF, U+200C, U+200D;
+}
+
+@font-face {
+  font-family: 'Purno';
+  src: url('font/purno/Purno%20Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  unicode-range: U+0980-09FF, U+200C, U+200D;
+}
+
+@font-face {
+  font-family: 'Purno';
+  src: url('font/purno/Purno%20Bold-Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  unicode-range: U+0980-09FF, U+200C, U+200D;
+}
+
+
+/* --- INSTITUTIONAL CLINICAL PAD FONTS (IBN SINA STANDARD) --- */
+@font-face {
+  font-family: 'Nirmala UI';
+  src: url('./font/NirmalaUI-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nirmala UI';
+  src: url('./font/NirmalaUI-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SolaimanLipi';
+  src: url('./font/SolaimanLipi.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SolaimanLipi';
+  src: url('./font/SolaimanLipi-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 :root {
   --bg-color: #000000;
   --text-color: #ffffff;
@@ -748,12 +810,67 @@ a.term-link:hover {
   font-weight: bold;
 }
 
+.tm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.tm-sidebar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #161a22;
+  color: var(--accent-color, #00ff66);
+  border: 1px solid #283244;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+  transition: all 0.15s ease;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.tm-sidebar-toggle-btn:hover {
+  background-color: #222938;
+  border-color: var(--accent-color, #00ff66);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+}
+
+.tm-sidebar-toggle-btn.collapsed {
+  background-color: #10131a;
+  color: #94a3b8;
+  border-color: #242c3d;
+}
+
+.tm-sidebar-toggle-btn.collapsed:hover {
+  color: var(--accent-color, #00ff66);
+  border-color: var(--accent-color, #00ff66);
+}
+
+.tm-sidebar-toggle-icon {
+  font-size: 0.68rem;
+  display: inline-block;
+}
+
+.tm-sidebar-toggle-label {
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+}
+
 .tm-title {
   color: var(--accent-color);
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.95rem;
+  min-width: 0;
 }
 
 .tm-title .tm-badge {
@@ -787,25 +904,94 @@ a.term-link:hover {
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
+}
+
+.tm-sidebar-backdrop {
+  display: none;
 }
 
 .tm-sidebar {
   width: 260px;
   background-color: #080808;
   border-right: 1px solid #222222;
-  overflow-y: auto;
-  padding: 8px 0;
+  overflow: hidden;
+  padding: 0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, border-color 0.18s ease;
 }
 
+.tm-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 7px 14px;
+  background: #0d0f14;
+  border-bottom: 1px solid #1c2028;
+  flex-shrink: 0;
+}
+
+.tm-sidebar-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--prompt-user, #38bdf8);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.tm-sidebar-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: #141720;
+  border: 1px solid #283040;
+  border-radius: 3px;
+  color: var(--dim-color, #888);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.tm-sidebar-collapse-btn:hover {
+  background: #202736;
+  color: var(--accent-color, #00ff66);
+  border-color: var(--accent-color, #00ff66);
+}
+
+.tm-sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+  min-height: 0;
+}
+
+.tm-sidebar-scroll::-webkit-scrollbar,
 .tm-sidebar::-webkit-scrollbar {
   width: 6px;
 }
+.tm-sidebar-scroll::-webkit-scrollbar-thumb,
 .tm-sidebar::-webkit-scrollbar-thumb {
   background-color: var(--scroll-thumb);
   border-radius: 3px;
+}
+
+/* Collapsed state for desktop */
+.tm-window.tm-sidebar-collapsed .tm-sidebar {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-right: none !important;
+  overflow: hidden !important;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .tm-cat-title {
@@ -1255,7 +1441,7 @@ a.term-link:hover {
     height: 96vh;
   }
   .tm-sidebar {
-    width: 190px;
+    width: 200px;
   }
   .tm-cat-title {
     font-size: 0.72rem;
@@ -1267,23 +1453,101 @@ a.term-link:hover {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .tm-modal {
-    padding: 4px;
+    padding: 0;
   }
   .tm-window {
     width: 100vw;
     height: 100vh;
+    max-height: 100vh;
     border-radius: 0;
+    border: none;
   }
   .tm-body {
-    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    flex-direction: row;
+  }
+  .tm-sidebar-backdrop {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(2px);
+    z-index: 140;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .tm-window:not(.tm-sidebar-collapsed) .tm-sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
   .tm-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(300px, 86vw);
+    height: 100%;
+    z-index: 150;
+    background-color: #0a0d13;
+    border-right: 1px solid #1f2736;
+    border-bottom: none;
+    box-shadow: 4px 0 28px rgba(0, 0, 0, 0.9);
+    transform: translateX(0);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    opacity: 1;
+    pointer-events: auto;
+    max-height: none;
+  }
+  .tm-window.tm-sidebar-collapsed .tm-sidebar {
+    transform: translateX(-105%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: min(300px, 86vw) !important;
+    max-width: min(300px, 86vw) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    visibility: hidden;
+  }
+  .tm-main {
     width: 100%;
-    max-height: 140px;
-    border-right: none;
-    border-bottom: 1px solid #222222;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .tm-header {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+  .tm-header-left {
+    gap: 6px;
+  }
+  .tm-title-name {
+    display: none;
+  }
+  .tm-title .tm-badge {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.72rem;
+  }
+  .tm-sidebar-toggle-btn {
+    padding: 4px 7px;
+    font-size: 0.74rem;
+  }
+  .tm-close-btn {
+    padding: 3px 8px;
+    font-size: 0.78rem;
+    white-space: nowrap;
   }
   .tm-toolbar {
     padding: 6px 8px;
@@ -1291,6 +1555,23 @@ a.term-link:hover {
   .tm-controls-pane {
     max-height: 180px;
     padding: 8px;
+  }
+  .rx-topbar {
+    padding: 6px 8px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .rx-topbar-left {
+    font-size: 11px;
+    gap: 6px;
+  }
+  .rx-topbar-right {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .rx-btn {
+    padding: 3px 6px;
+    font-size: 10px;
   }
 }
 
@@ -1705,17 +1986,22 @@ a.term-link:hover {
    INVOICE & RECEIPT GENERATOR WORKBENCH
    ========================================== */
 .tm-window.tm-tool-invoice .tm-toolbar,
-.tm-window.tm-tool-invoice .tm-editor-area {
+.tm-window.tm-tool-invoice .tm-editor-area,
+.tm-window.tm-tool-prescription .tm-toolbar,
+.tm-window.tm-tool-prescription .tm-editor-area {
   display: none !important;
 }
 
 .tm-window.tm-tool-invoice.tm-editor-forced-open .tm-toolbar,
-.tm-window.tm-tool-invoice.tm-editor-forced-open .tm-editor-area {
+.tm-window.tm-tool-invoice.tm-editor-forced-open .tm-editor-area,
+.tm-window.tm-tool-prescription.tm-editor-forced-open .tm-toolbar,
+.tm-window.tm-tool-prescription.tm-editor-forced-open .tm-editor-area {
   display: flex !important;
   flex: 0 0 120px !important;
 }
 
-.tm-window.tm-tool-invoice .tm-controls-pane {
+.tm-window.tm-tool-invoice .tm-controls-pane,
+.tm-window.tm-tool-prescription .tm-controls-pane {
   max-height: none !important;
   flex: 1 !important;
   height: 100% !important;
@@ -1726,7 +2012,8 @@ a.term-link:hover {
   border-top: none !important;
 }
 
-.tm-window.tm-tool-invoice #tm-controls-content {
+.tm-window.tm-tool-invoice #tm-controls-content,
+.tm-window.tm-tool-prescription #tm-controls-content {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -4078,6 +4365,1120 @@ a.term-link:hover {
     flex: 0 0 45%;
     border-right: none;
     border-bottom: 1px solid #202020;
+  }
+}
+
+/* ============================================================
+   MEDICAL PRESCRIPTION & CLINICAL PAD GENERATOR
+   ============================================================ */
+#rx-host-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rx-workspace {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #0a0c10;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+.rx-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: #11141c;
+  border-bottom: 1px solid #1f2533;
+  gap: 8px;
+  flex-shrink: 0;
+  font-family: monospace;
+}
+
+.rx-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.rx-tool-label {
+  font-weight: bold;
+  color: #00ff66;
+  letter-spacing: 0.5px;
+}
+
+.rx-badge {
+  background: #162032;
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  border: 1px solid #233554;
+}
+
+.rx-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rx-split-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+  height: calc(100% - 42px);
+}
+
+.rx-editor-pane {
+  width: 460px;
+  flex: 0 0 460px;
+  border-right: 1px solid #1f2533;
+  display: flex;
+  flex-direction: column;
+  background: #0d1017;
+  overflow: hidden;
+}
+
+.rx-nav-tabs {
+  display: flex;
+  overflow-x: auto;
+  background: #131722;
+  border-bottom: 1px solid #1f2533;
+  scrollbar-width: none;
+}
+
+.rx-nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.rx-tab-btn {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-family: monospace;
+  background: none;
+  border: none;
+  color: #7e8b9b;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.rx-tab-btn:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rx-tab-btn.active {
+  color: #38bdf8;
+  border-bottom-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  font-weight: bold;
+}
+
+.rx-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  font-size: 11.5px;
+  font-family: monospace;
+}
+
+.rx-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.rx-section-title {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #38bdf8;
+  border-bottom: 1px solid #222b3d;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.rx-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rx-field-row.inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rx-label {
+  font-size: 11px;
+  color: #94a3b8;
+  display: flex;
+  justify-content: space-between;
+}
+
+.rx-control {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rx-matrix-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.rx-matrix-btn {
+  background: #19202f;
+  color: #93c5fd;
+  border: 1px solid #2b3952;
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-size: 10.5px;
+  font-family: 'Purno', monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rx-matrix-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+.rx-item-card {
+  background: #131722;
+  border: 1px solid #202738;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rx-item-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: #93c5fd;
+  border-bottom: 1px dashed #202738;
+  padding-bottom: 4px;
+}
+
+.rx-preview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #08090d;
+  overflow: hidden;
+}
+
+.rx-canvas-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 12px;
+  background: #11141c;
+  border-bottom: 1px solid #1f2533;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+.rx-zoom-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rx-zoom-display {
+  display: inline-block;
+  min-width: 44px;
+  text-align: center;
+  color: #38bdf8;
+}
+
+.rx-canvas-viewport {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 16px;
+  background: #08090d;
+}
+
+.rx-canvas-scaler {
+  transform-origin: top center;
+  transition: transform 0.12s ease-out;
+}
+
+/* --- THE A4 PAPER DOCUMENT --- */
+.prescription-page,
+.rx-paper {
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+  padding: 8mm 12mm 6mm 12mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pins footer to true page bottom */
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  font-family: Arial, -apple-system, sans-serif;
+  position: relative;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 1. Tri-Partite Doctor Masthead */
+.rx-masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.rx-doc-col-en {
+  flex: 1 1 0%;
+  min-width: 0;
+  text-align: left;
+  font-family: Arial, -apple-system, sans-serif;
+}
+
+.rx-logo-col {
+  flex: 0 0 50px;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  overflow: visible;
+}
+
+.rx-doc-col-bn {
+  flex: 1 1 0%;
+  min-width: 0;
+  text-align: right;
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+}
+
+.rx-doc-name-en {
+  font-family: Arial, sans-serif;
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #164194;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.rx-doc-name-bn {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #164194;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.rx-doc-sub-en {
+  font-family: Arial, sans-serif;
+  font-size: 7.8pt;
+  line-height: 1.25;
+  color: #1f2937;
+  font-weight: 400;
+}
+
+.rx-doc-sub-bn {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 7.8pt;
+  line-height: 1.25;
+  color: #1f2937;
+  font-weight: 400;
+}
+
+.rx-doc-col-en .rx-doc-desig,
+.rx-doc-desig {
+  font-family: Arial, sans-serif;
+  font-size: 7.8pt;
+  font-weight: 700;
+  color: var(--rx-desig-color, #dc2626);
+}
+
+.rx-doc-col-bn .rx-doc-desig {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 7.8pt;
+  font-weight: 700;
+  color: var(--rx-desig-color, #dc2626);
+}
+
+.rx-doc-col-en .rx-doc-spec,
+.rx-doc-spec {
+  font-family: Arial, sans-serif;
+  font-size: 7.8pt;
+  font-weight: 700;
+  color: var(--rx-spec-color, #164194);
+  margin-top: 1px;
+  line-height: 1.2;
+}
+
+.rx-doc-col-bn .rx-doc-spec {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 7.8pt;
+  font-weight: 700;
+  color: var(--rx-spec-color, #164194);
+  margin-top: 1px;
+  line-height: 1.2;
+}
+
+.rx-emblem-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  overflow: visible;
+}
+
+.rx-emblem-img {
+  width: 44px;
+  height: 44px;
+  max-width: 44px;
+  max-height: 44px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.rx-emblem-svg {
+  display: block;
+  height: 44px;
+  width: 44px;
+  max-height: 44px;
+  max-width: 44px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.rx-custom-logo-img {
+  max-height: 44px;
+  max-width: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 2. Patient Demographics Strip */
+.patient-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #111827;
+  border-radius: 4px;
+  padding: 3px 10px;
+  margin: 4px 0 8px 0;
+  font-size: 8.5pt;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+.patient-field-label {
+  color: #111827;
+  font-weight: 400;
+  margin-right: 4px;
+}
+
+.patient-field-value {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* 3. Asymmetric Two-Column Grid & Hairline Divider */
+.rx-body-grid {
+  display: grid;
+  grid-template-columns: 28% 4% 68%;
+  min-height: 450px;
+  flex: 1;
+}
+
+.clinical-sidebar {
+  padding-right: 10px;
+  font-family: Arial, 'SolaimanLipi', 'Kalpurush', sans-serif;
+}
+
+.vertical-separator {
+  border-right: 1px solid #e5e7eb;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.treatment-column {
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.treatment-top {
+  flex: 1;
+}
+
+/* 4. Section Headers */
+.section-header {
+  font-family: Arial, sans-serif;
+  font-size: 8.5pt;
+  font-weight: 700;
+  margin-top: 8px;
+  margin-bottom: 2px;
+  color: #111827;
+}
+
+.clinical-sidebar .section-header:first-child,
+.treatment-column .section-header:first-child,
+.treatment-top > .section-header:first-child {
+  margin-top: 0;
+}
+
+.clinical-sub-header {
+  font-family: Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  font-style: italic;
+  color: #111827;
+  margin: 2px 0 1px 2px;
+}
+
+.clinical-section {
+  margin-bottom: 4px;
+}
+
+/* 5. List Formatting & Indentation */
+.bullet-list {
+  list-style-type: disc;
+  padding-left: 14px;
+  margin: 2px 0 4px 0;
+}
+
+.bullet-list li {
+  font-size: 8pt;
+  line-height: 1.25;
+  margin-bottom: 2px;
+  color: #111827;
+  font-family: Arial, 'SolaimanLipi', 'Kalpurush', sans-serif;
+}
+
+.advice-section {
+  margin-top: 5px;
+}
+
+.advice-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 3px;
+  font-size: 8pt;
+  line-height: 1.25;
+  color: #111827;
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+}
+
+.advice-num {
+  min-width: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #111827;
+  font-family: 'SolaimanLipi', Arial, serif;
+}
+
+.advice-text {
+  flex-grow: 1;
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+}
+
+/* 6. Rx Medication Hierarchy & Dosage Padding */
+.medications-container {
+  margin-bottom: 4px;
+}
+
+.medication-block {
+  margin-bottom: 6px;
+}
+
+.medication-header {
+  font-size: 8.8pt;
+  font-weight: 700;
+  color: #111827;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-family: Arial, 'SolaimanLipi', sans-serif;
+}
+
+.medication-header .med-index {
+  min-width: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: Arial, sans-serif;
+}
+
+.medication-header .med-name {
+  font-weight: 700;
+  font-family: Arial, 'SolaimanLipi', sans-serif;
+}
+
+.medication-header .generic-name {
+  font-weight: 400;
+  font-style: italic;
+  color: #4b5563;
+  margin-left: 4px;
+  font-family: Arial, sans-serif;
+  font-size: 8pt;
+}
+
+.dosage-subline {
+  margin-left: 16px;
+  margin-top: 1px;
+  font-size: 8pt;
+  line-height: 1.25;
+  color: #111827;
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+}
+
+/* 7. Bottom Sections */
+.followup-section {
+  margin-top: 5px;
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+}
+
+.followup-section .bullet-list li {
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+  font-size: 8pt;
+  line-height: 1.25;
+  margin-bottom: 2px;
+  color: #111827;
+}
+
+.special-note-container {
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px dashed #d1d5db;
+}
+
+.special-note-container .bullet-list li {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 8pt;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.doctor-signature-block {
+  font-size: 8.8pt;
+  font-weight: 700;
+  text-align: right;
+  margin-top: 12px;
+  padding-right: 15px;
+  color: #111827;
+  font-family: Arial, sans-serif;
+}
+
+/* 8. Institutional Hospital Footer */
+.rx-footer {
+  margin-top: auto;
+  padding-top: 4px;
+  text-align: center;
+  line-height: 1.28;
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+}
+
+.rx-foot-hosp-name {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #164194;
+  margin-bottom: 1px;
+}
+
+.rx-foot-addr {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 6.2pt;
+  color: #374151;
+  font-weight: 400;
+  margin-bottom: 1px;
+}
+
+.rx-foot-helplines {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 6.2pt;
+  color: #111827;
+  font-weight: 400;
+  margin-bottom: 1px;
+}
+
+.rx-foot-hotline {
+  color: #e30613;
+  font-weight: 700;
+}
+
+.rx-foot-contact {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 6.2pt;
+  color: #111827;
+  font-weight: 400;
+  margin-bottom: 1px;
+}
+
+.rx-foot-hours {
+  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-size: 6.2pt;
+  font-weight: 700;
+  color: #164194;
+}
+
+/* --- MINIMAL CLINICAL TEMPLATE VARIANT --- */
+.rx-paper.rx-tpl-minimal-clinical {
+  padding: 12mm 15mm 10mm 15mm;
+  font-family: Arial, sans-serif;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rx-tpl-minimal-clinical .minimal-masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 6px;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-info {
+  flex: 1 1 56%;
+  text-align: left;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #0f2942;
+  line-height: 1.2;
+  margin-bottom: 2px;
+  font-family: Arial, sans-serif;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-name-bn {
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #0f2942;
+  line-height: 1.25;
+  margin-bottom: 3px;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-degrees {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-spec {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--rx-spec-color, #0284c7);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-desig {
+  font-size: 8.2pt;
+  font-weight: 600;
+  color: var(--rx-desig-color, #dc2626);
+  line-height: 1.3;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-inst {
+  font-size: 8pt;
+  color: #475569;
+  line-height: 1.3;
+}
+
+.rx-tpl-minimal-clinical .minimal-doc-reg {
+  font-size: 7.8pt;
+  color: #64748b;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-info {
+  flex: 1 1 44%;
+  text-align: right;
+  font-size: 8pt;
+  line-height: 1.35;
+  color: #334155;
+  font-family: Arial, 'SolaimanLipi', sans-serif;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-name {
+  font-size: 10pt;
+  font-weight: 700;
+  color: #0f2942;
+  margin-bottom: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-addr {
+  font-size: 8pt;
+  color: #475569;
+  margin-bottom: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-time {
+  font-size: 8pt;
+  font-weight: 600;
+  color: #0d9488;
+  margin-bottom: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-contact {
+  font-size: 8pt;
+  color: #334155;
+}
+
+.rx-tpl-minimal-clinical .minimal-chamber-hotline {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #dc2626;
+  margin-top: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-header-divider {
+  height: 2px;
+  background: #0f2942;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.rx-tpl-minimal-clinical .minimal-header-divider::after {
+  content: '';
+  display: block;
+  height: 0.5px;
+  background: #94a3b8;
+  margin-top: 2px;
+}
+
+.rx-tpl-minimal-clinical .minimal-patient-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background-color: #f8fafc;
+  font-size: 9pt;
+  margin-bottom: 14px;
+  font-family: Arial, sans-serif;
+}
+
+.rx-tpl-minimal-clinical .min-pat-item {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.rx-tpl-minimal-clinical .min-pat-label {
+  color: #475569;
+  font-weight: 500;
+}
+
+.rx-tpl-minimal-clinical .min-pat-val {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.rx-tpl-minimal-clinical .minimal-rx-body {
+  display: grid;
+  grid-template-columns: 28% 4% 68%;
+  min-height: 640px;
+  flex: 1;
+}
+
+.rx-tpl-minimal-clinical .minimal-clinical-col {
+  padding-right: 10px;
+}
+
+.rx-tpl-minimal-clinical .min-sec-block {
+  margin-bottom: 12px;
+}
+
+.rx-tpl-minimal-clinical .min-sec-header {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0f2942;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 2px;
+  margin-bottom: 5px;
+  font-family: Arial, sans-serif;
+}
+
+.rx-tpl-minimal-clinical .min-sub-header {
+  font-size: 8pt;
+  font-weight: 700;
+  font-style: italic;
+  color: #475569;
+  margin: 3px 0 2px 0;
+  font-family: Arial, sans-serif;
+}
+
+.rx-tpl-minimal-clinical .min-bullet-list {
+  list-style-type: disc;
+  padding-left: 16px;
+  margin: 2px 0 6px 0;
+}
+
+.rx-tpl-minimal-clinical .min-bullet-list li {
+  font-size: 8.5pt;
+  line-height: 1.4;
+  color: #1e293b;
+  margin-bottom: 3px;
+  font-family: Arial, 'SolaimanLipi', sans-serif;
+}
+
+.rx-tpl-minimal-clinical .minimal-treatment-col {
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rx-tpl-minimal-clinical .minimal-treatment-top {
+  flex: 1;
+}
+
+.rx-tpl-minimal-clinical .min-rx-symbol {
+  font-family: 'Times New Roman', Garamond, serif;
+  font-size: 28pt;
+  font-weight: 700;
+  font-style: italic;
+  color: #0f2942;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.rx-tpl-minimal-clinical .min-meds-wrap {
+  margin-bottom: 12px;
+}
+
+.rx-tpl-minimal-clinical .min-med-block {
+  margin-bottom: 10px;
+}
+
+.rx-tpl-minimal-clinical .min-med-header {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: Arial, 'SolaimanLipi', sans-serif;
+}
+
+.rx-tpl-minimal-clinical .min-med-num {
+  min-width: 16px;
+  font-weight: 700;
+}
+
+.rx-tpl-minimal-clinical .min-med-name {
+  font-weight: 700;
+}
+
+.rx-tpl-minimal-clinical .min-med-generic {
+  font-size: 8.5pt;
+  font-weight: 400;
+  font-style: italic;
+  color: #475569;
+}
+
+.rx-tpl-minimal-clinical .min-dosage-line {
+  margin-left: 18px;
+  font-size: 9pt;
+  line-height: 1.4;
+  color: #1e293b;
+  font-family: 'SolaimanLipi', 'Kalpurush', sans-serif;
+}
+
+.rx-tpl-minimal-clinical .min-dosage-inst {
+  margin-left: 18px;
+  font-size: 8.5pt;
+  color: #475569;
+  font-style: italic;
+}
+
+.rx-tpl-minimal-clinical .min-advice-section {
+  margin-top: 12px;
+}
+
+.rx-tpl-minimal-clinical .min-advice-list {
+  padding-left: 18px;
+  margin: 4px 0 8px 0;
+}
+
+.rx-tpl-minimal-clinical .min-advice-list li {
+  font-size: 8.8pt;
+  line-height: 1.45;
+  color: #1e293b;
+  margin-bottom: 4px;
+  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+}
+
+.rx-tpl-minimal-clinical .min-followup-section {
+  margin-top: 10px;
+}
+
+.rx-tpl-minimal-clinical .min-special-note {
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: #fef2f2;
+  border-left: 3px solid #ef4444;
+  border-radius: 2px;
+}
+
+.rx-tpl-minimal-clinical .min-signature-wrap {
+  align-self: flex-end;
+  text-align: right;
+  margin-top: 24px;
+  padding-right: 10px;
+}
+
+.rx-tpl-minimal-clinical .min-signature-line {
+  width: 130px;
+  border-top: 1px dashed #64748b;
+  margin-left: auto;
+  margin-bottom: 4px;
+}
+
+.rx-tpl-minimal-clinical .min-signature-name {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.rx-tpl-minimal-clinical .min-signature-meta {
+  font-size: 8pt;
+  color: #64748b;
+}
+
+.rx-tpl-minimal-clinical .min-footer-notice {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #cbd5e1;
+  font-size: 7.5pt;
+  color: #64748b;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+.rx-paper.rx-exporting-pdf {
+  box-shadow: none !important;
+  border: none !important;
+  margin: 0 !important;
+}
+
+/* Print Overrides for Prescription Pad */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body.rx-print-body {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.rx-print-body #terminal-container,
+  body.rx-print-body #desktop,
+  body.rx-print-body #window-manager,
+  body.rx-print-body #taskbar,
+  body.rx-print-body .workbench-titlebar,
+  body.rx-print-body .workbench-statusbar,
+  body.rx-print-body .rx-topbar,
+  body.rx-print-body .rx-editor-pane,
+  body.rx-print-body .rx-canvas-toolbar {
+    display: none !important;
+  }
+
+  body.rx-print-body #workbench,
+  body.rx-print-body .workbench-window,
+  body.rx-print-body .workbench-content,
+  body.rx-print-body .rx-workspace,
+  body.rx-print-body .rx-split-body,
+  body.rx-print-body .rx-preview-pane,
+  body.rx-print-body .rx-canvas-viewport {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  body.rx-print-body .rx-canvas-scaler {
+    transform: none !important;
+  }
+
+  body.rx-print-body .prescription-page,
+  body.rx-print-body .rx-paper {
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    box-sizing: border-box !important;
+    padding: 12mm 15mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .rx-split-body {
+    flex-direction: column;
+  }
+  .rx-editor-pane {
+    width: 100%;
+    flex: 0 0 50%;
+    border-right: none;
+    border-bottom: 1px solid #1f2533;
   }
 }
 
