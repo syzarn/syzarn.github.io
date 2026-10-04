@@ -4833,7 +4833,7 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
     invoice: {
       desc: 'client-side vector invoice & receipt generator with multiple templates and barcode support',
-      usage: 'invoice [--ui] [modern | thermal | classic | vintage] [doc_number]',
+      usage: 'invoice [--ui] [modern | thermal | classic | vintage | tractor | erp] [doc_number]',
       exec(args, stdin) {
         textManipWorkbench.open('invoice', '');
         if (args && args.length > 0 && window.InvoiceGenerator) {
@@ -4842,6 +4842,8 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           else if (sub === 'vintage') window.InvoiceGenerator.setTemplate('bn-vintage-ledger');
           else if (sub === 'classic') window.InvoiceGenerator.setTemplate('minimal-classic');
           else if (sub === 'modern') window.InvoiceGenerator.setTemplate('stripe-modern');
+          else if (sub === 'tractor' || sub === 'dotmatrix') window.InvoiceGenerator.setTemplate('mid-century-tractor');
+          else if (sub === 'erp' || sub === '90s' || sub === 'corporate') window.InvoiceGenerator.setTemplate('erp-classic-90s');
           else if (sub === 'receipt') window.InvoiceGenerator.setDocType('receipt');
           if (args[1]) window.InvoiceGenerator.setDocNumber(args[1]);
         }

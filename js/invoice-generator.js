@@ -6,7 +6,7 @@
  * - arbitrary precision minor units (integer cents/poisha) financial math
  * - true vector output via native iframe @media print (no raster canvas)
  * - 4 core barcode symbologies: Code 128, QR Code, Data Matrix, EAN-13 / UPC-A
- * - 4 templates: stripe-modern, thermal-pos (80mm/58mm), minimal-classic, bn-vintage-ledger
+ * - 6 templates: stripe-modern, thermal-pos (80mm/58mm), minimal-classic, bn-vintage-ledger, mid-century-tractor, erp-classic-90s
  * - client-side logo upload & base64 encoding
  * - traditional bengali memo/ledger with Kobiguru, Biro Script Plus, Confidential Regular,
  *   bengali numerals, and number-to-words currency converter
@@ -372,7 +372,7 @@
         docNumber: 'INV-2026-0042',
         issueDate: '2026-10-01',
         dueDate: '2026-10-15',
-        currency: 'BDT',
+        currency: 'USD',
         barcodeSymbology: 'CODE128',
         barcodeValue: '',
         showBarcode: true,
@@ -433,7 +433,7 @@
       },
       settlement: {
         method: 'TRANSFER',
-        mfsProvider: 'bKash',
+        mfsProvider: '',
         mfsNumber: '',
         trxId: '',
         amountPaid: 0,
@@ -443,14 +443,6 @@
         last4: '',
         bankDetails: 'Bank: Silicon Valley Bank (First Citizens Bank)\nRouting (ABA): 121000358\nAccount: 4099-2810-4820\nSWIFT / BIC: SVBKUS6S\nIBAN: US42SVBK12100035840992810',
         terms: 'Payment is due within 14 days of invoice issue.\nOnline direct settlement link: https://pay.stripeflow.io/inv-2026-0042'
-      },
-      vintageBn: {
-        invocation: '॥ ৭ ॥',
-        showSeal: true,
-        sealText: 'পরিশোধিত',
-        showSignature: true,
-        signatureTitle: 'মালিক / কর্তৃপক্ষ',
-        showWordsAmount: true
       }
     },
 
@@ -522,7 +514,7 @@
       },
       settlement: {
         method: 'CASH',
-        mfsProvider: 'bKash',
+        mfsProvider: '',
         mfsNumber: '',
         trxId: '',
         amountPaid: 3450,
@@ -532,14 +524,6 @@
         last4: '9012',
         bankDetails: '',
         terms: 'Returns accepted within 7 days with original receipt.'
-      },
-      vintageBn: {
-        invocation: '॥ ৭ ॥',
-        showSeal: true,
-        sealText: 'পরিশোধিত',
-        showSignature: true,
-        signatureTitle: 'মালিক / কর্তৃপক্ষ',
-        showWordsAmount: true
       }
     },
 
@@ -601,7 +585,7 @@
       },
       settlement: {
         method: 'TRANSFER',
-        mfsProvider: 'bKash',
+        mfsProvider: '',
         mfsNumber: '',
         trxId: '',
         amountPaid: 0,
@@ -611,14 +595,6 @@
         last4: '',
         bankDetails: 'Bank: Deutsche Bank AG Berlin\nIBAN: DE89 1007 0000 0123 4567 89\nBIC: DEUTDEDBBER',
         terms: 'Zahlbar ohne Abzug innerhalb von 30 Tagen ab Rechnungsdatum.'
-      },
-      vintageBn: {
-        invocation: '॥ ৭ ॥',
-        showSeal: true,
-        sealText: 'পরিশোধিত',
-        showSignature: true,
-        signatureTitle: 'মালিক / কর্তৃপক্ষ',
-        showWordsAmount: true
       }
     },
 
@@ -626,39 +602,49 @@
       meta: {
         template: 'bn-vintage-ledger',
         docType: 'receipt',
-        docNumber: 'MC-MTPRJZ5B',
+        docNumber: 'MEMO-2026-104',
         issueDate: '2026-09-01',
         dueDate: '2026-09-01',
         currency: 'BDT',
         barcodeSymbology: 'QR',
-        barcodeValue: 'https://manzil.com.bd/order/MC-MTPRJZ5B',
+        barcodeValue: 'https://vintage-ledger.example/receipt/MEMO-2026-104',
         showBarcode: true,
         thermalWidth: '80mm'
       },
       seller: {
-        name: 'মঞ্জিল',
+        name: 'মেসার্স চৌধুরী ব্রাদার্স',
         logoUrl: '',
-        address: 'হস্তশিল্প, শৌখিন কারুশিল্প ও তাঁতবস্ত্রের মেলা\nঢাকা, বাংলাদেশ — জরুরি যোগাযোগ: ০১৯১০-০০২৭১১',
-        taxId: '',
-        email: '',
+        address: '১৬২ ইসলামপুর রোড, বাবুবাজার, ঢাকা-১১০০\nফোন: ০১৮১২-৩৪৫৬৭৮, ০১৭৯৮-৭৬৫৪৩২',
+        taxId: 'TIN: ১৯৪০২৮১০৪',
+        email: 'chowdhury.brothers@example.com',
         terminalId: '',
         cashier: 'কোষাধ্যক্ষ'
       },
       buyer: {
-        name: 'Soaib Islam Antar',
-        address: 'House #KA - 112/1/A-2 UTTARPARA, KHILKHET (ঢাকা মহানগর)',
+        name: 'আব্দুল করিম পাটোয়ারী',
+        address: '২৪/এ জিন্দাবাহার ১ম লেন, কোতোয়ালী, ঢাকা',
         taxId: '',
         email: '',
         poNumber: '',
-        phone: '০১৮৮৭৪১৫৪৯৫'
+        phone: '০১৭৫২-০১৯২৮৩'
       },
       items: [
         {
           id: 'item-1',
-          name: 'আতর অরিজিনাল কস্তুরি স্পেশাল (টিনস্টোন ১)',
-          description: '',
-          qty: 1,
-          unitPrice: 26000,
+          name: 'খাঁটি সুতি তাঁতের শাড়ি (টাঙ্গাইল স্পেশাল)',
+          description: 'হস্তচালিত তাঁতে তৈরি পার ডুরে ডিজাইন',
+          qty: 2,
+          unitPrice: 185000,
+          taxRate: 0,
+          discount: 10000,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-2',
+          name: 'রেশম সিল্ক পাঞ্জাবি থান কাপড়',
+          description: 'রাজশাহী খাঁটি সিল্ক সুতা',
+          qty: 5,
+          unitPrice: 42000,
           taxRate: 0,
           discount: 0,
           discountType: 'fixed'
@@ -666,20 +652,20 @@
       ],
       financials: {
         globalDiscount: 0,
-        shipping: 7000 // ডেলিভারি চার্জ: ৭০ টাকা
+        shipping: 0
       },
       settlement: {
-        method: 'COD', // ক্যাশ অন ডেলিভারি
+        method: 'CASH',
         mfsProvider: 'bKash',
         mfsNumber: '',
         trxId: '',
-        amountPaid: 33000,
-        tendered: 33000,
-        change: 0,
+        amountPaid: 570000,
+        tendered: 600000,
+        change: 30000,
         authCode: '',
         last4: '',
         bankDetails: '',
-        terms: '* পণ্য ডেলিভারি ম্যানের সামনে দেখে বুঝে নিন।\n"যাহা যায়, ফেরত যায় না!"'
+        terms: 'বিক্রিত মাল ফেরত বা পরিবর্তন হয় না।\nআমাদের সাথে ব্যবসা করার জন্য ধন্যবাদ।'
       },
       vintageBn: {
         invocation: '॥ ৭ ॥',
@@ -689,6 +675,168 @@
         signatureTitle: 'কোষাধ্যক্ষ',
         showWordsAmount: true
       }
+    },
+
+    'mid-century-tractor': {
+      meta: {
+        template: 'mid-century-tractor',
+        docType: 'invoice',
+        docNumber: 'INV-79-4081',
+        issueDate: '2026-10-01',
+        dueDate: '2026-10-31',
+        currency: 'USD',
+        barcodeSymbology: 'CODE128',
+        barcodeValue: '',
+        showBarcode: true,
+        thermalWidth: '80mm'
+      },
+      seller: {
+        name: 'APEX INDUSTRIAL SUPPLY CORP.',
+        logoUrl: '',
+        address: '7420 INDUSTRIAL PARKWAY, BLDG 4\nCLEVELAND, OH 44135\nTEL: (216) 555-0198',
+        taxId: 'FED ID: 34-1092847',
+        email: 'sales@apexindustrialsupply.com',
+        terminalId: 'CR-104',
+        cashier: 'DISPATCH #04'
+      },
+      buyer: {
+        name: 'MIDWEST MACHINE WORKS & TOOLING',
+        address: '1200 COMMERCE BLVD, DOCK 7\nDETROIT, MI 48226',
+        taxId: 'TAX EXEMPT: MI-883019',
+        email: 'accounts@midwestmachineworks.com',
+        poNumber: 'PO-84-9912',
+        phone: '(313) 555-3820'
+      },
+      items: [
+        {
+          id: 'item-1',
+          name: 'HEAVY-DUTY ROLLER BEARINGS #6208-2RS',
+          description: 'PRECISION CHROME STEEL, PRE-LUBRICATED',
+          qty: 24,
+          unitPrice: 3250,
+          taxRate: 6.0,
+          discount: 0,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-2',
+          name: 'HYDRAULIC PRESSURE SEALS 3/4" NPT',
+          description: 'VITON HIGH-TEMP INDUSTRIAL GRADE',
+          qty: 50,
+          unitPrice: 875,
+          taxRate: 6.0,
+          discount: 0,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-3',
+          name: 'TUNGSTEN CARBIDE END MILLS 1/2"',
+          description: '4-FLUTE TITANIUM NITRIDE COATED',
+          qty: 10,
+          unitPrice: 6500,
+          taxRate: 6.0,
+          discount: 2500,
+          discountType: 'fixed'
+        }
+      ],
+      financials: {
+        globalDiscount: 0,
+        shipping: 4500
+      },
+      settlement: {
+        method: 'TRANSFER',
+        mfsProvider: '',
+        mfsNumber: '',
+        trxId: '',
+        amountPaid: 0,
+        tendered: 0,
+        change: 0,
+        authCode: '',
+        last4: '',
+        bankDetails: 'REMIT PAYMENT TO: APEX INDUSTRIAL SUPPLY CORP.\nLOCKBOX 9820, CLEVELAND, OH 44101\nBANK: NATIONAL CITY BANK OF CLEVELAND',
+        terms: 'TERMS: NET 30 DAYS FROM INVOICE DATE.\n1.5% MONTHLY FINANCE CHARGE ON OVERDUE BALANCES.\nALL CLAIMS MUST BE MADE WITHIN 10 DAYS OF RECEIPT.'
+      }
+    },
+
+    'erp-classic-90s': {
+      meta: {
+        template: 'erp-classic-90s',
+        docType: 'invoice',
+        docNumber: 'INV-990421',
+        issueDate: '2026-10-01',
+        dueDate: '2026-10-31',
+        currency: 'USD',
+        barcodeSymbology: 'CODE128',
+        barcodeValue: '',
+        showBarcode: true,
+        thermalWidth: '80mm'
+      },
+      seller: {
+        name: 'GLOBAL TECH ENTERPRISES, INC.',
+        logoUrl: '',
+        address: '900 TECHNOLOGY DRIVE, SUITE 400\nSAN JOSE, CA 95110\nTEL: (408) 555-0100  FAX: (408) 555-0101',
+        taxId: 'EIN: 77-0941823',
+        email: 'ar@globaltechenterprises.com',
+        terminalId: 'CORP-01',
+        cashier: 'J. MILLER (REP: 402)'
+      },
+      buyer: {
+        name: 'DATANET NETWORKS & SYSTEMS CORP.',
+        address: '2500 EXECUTIVE PARKWAY, SUITE 150\nAUSTIN, TX 78738',
+        taxId: 'TX-890214-0',
+        email: 'accounting@datanetnetworks.com',
+        poNumber: 'PO-98-3301',
+        phone: '(512) 555-8800'
+      },
+      items: [
+        {
+          id: 'item-1',
+          name: 'FAST ETHERNET 24-PORT SWITCH (10/100)',
+          description: 'MANAGED RACKMOUNT NETWORK SWITCH WITH SNMP',
+          qty: 4,
+          unitPrice: 48900,
+          taxRate: 8.25,
+          discount: 0,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-2',
+          name: 'CAT5E UTP PATCH CABLES (50FT BLUE)',
+          description: 'MOLDED BOOT RJ-45 CATEGORY 5E BULK PACK',
+          qty: 20,
+          unitPrice: 1850,
+          taxRate: 8.25,
+          discount: 0,
+          discountType: 'fixed'
+        },
+        {
+          id: 'item-3',
+          name: 'ENTERPRISE ROUTER DUAL WAN MODULE',
+          description: 'ISDN / T1 FAILOVER INTERFACE CARD',
+          qty: 2,
+          unitPrice: 75000,
+          taxRate: 8.25,
+          discount: 5000,
+          discountType: 'fixed'
+        }
+      ],
+      financials: {
+        globalDiscount: 5000,
+        shipping: 8500
+      },
+      settlement: {
+        method: 'TRANSFER',
+        mfsProvider: '',
+        mfsNumber: '',
+        trxId: '',
+        amountPaid: 0,
+        tendered: 0,
+        change: 0,
+        authCode: '',
+        last4: '',
+        bankDetails: 'BANK: WELLS FARGO BANK, N.A.\nROUTING: 121000248\nACCOUNT: 409-182903-12\nLOCKBOX: DEPT 901, SAN FRANCISCO, CA',
+        terms: 'PAYMENT TERMS: NET 30 DAYS.\nACCOUNTS PAST DUE OVER 30 DAYS ARE SUBJECT TO A 1.5% PER MONTH LATE CHARGE.'
+      }
     }
   };
 
@@ -697,7 +845,7 @@
   }
 
   function computeDocumentTotals(state) {
-    const curr = CURRENCIES[state.meta.currency] || CURRENCIES.BDT || CURRENCIES.USD;
+    const curr = CURRENCIES[state.meta.currency] || CURRENCIES.USD || CURRENCIES.BDT;
     let subtotal = 0;
     const taxBuckets = {};
 
@@ -830,7 +978,7 @@
   }
 
   // --- vintage revenue postage stamp & cancellation seal vector SVG generator ---
-  function generateVintageRevenueStampSvg(sealText = 'পরিশোধিত', storeName = 'মঞ্জিল') {
+  function generateVintageRevenueStampSvg(sealText = 'পরিশোধিত', storeName = 'মেসার্স ট্রেডার্স') {
     const cleanSealText = escapeHTML(sealText || 'পরিশোধিত');
     const cleanStoreName = escapeHTML(storeName || 'মেমো');
 
@@ -1005,28 +1153,74 @@
 
   // --- invoice generator singleton ---
   const InvoiceGenerator = {
-    state: cloneObject(SAMPLE_PRESETS['bn-vintage-ledger']),
+    activeTemplate: 'stripe-modern',
+    templateStates: null,
+    state: null,
+    initialized: false,
     activeTab: 'setup',
     zoom: 0.95,
-    storageKey: 'syzarn_invoice_generator_state_v1',
+    storageKey: 'syzarn_invoice_generator_state_v2',
     saveTimer: null,
     previewTimer: null,
     mountEl: null,
     workbench: null,
     computeTotals: computeDocumentTotals,
+    presets: SAMPLE_PRESETS,
+    SAMPLE_PRESETS: SAMPLE_PRESETS,
 
     init() {
-      const saved = this.loadFromStorage();
-      if (saved && saved.meta && saved.items) {
-        this.state = saved;
+      if (this.initialized) return;
+      this.initialized = true;
+
+      if (!this.templateStates) {
+        this.templateStates = {};
       }
+      for (const key of Object.keys(SAMPLE_PRESETS)) {
+        if (!this.templateStates[key]) {
+          this.templateStates[key] = cloneObject(SAMPLE_PRESETS[key]);
+        }
+      }
+
+      this.activeTemplate = this.activeTemplate || 'stripe-modern';
+
+      const saved = this.loadFromStorage();
+      if (saved && saved.templateStates) {
+        for (const key of Object.keys(SAMPLE_PRESETS)) {
+          if (saved.templateStates[key] && saved.templateStates[key].meta && saved.templateStates[key].items) {
+            // Guard against Bengali cross-contamination in non-Bengali templates
+            if (key !== 'bn-vintage-ledger') {
+              const sellerName = (saved.templateStates[key].seller && saved.templateStates[key].seller.name) || '';
+              const hasBengali = /[\u0980-\u09FF]/.test(sellerName);
+              if (!hasBengali) {
+                this.templateStates[key] = saved.templateStates[key];
+              }
+            } else {
+              this.templateStates[key] = saved.templateStates[key];
+            }
+          }
+        }
+        if (saved.activeTemplate && SAMPLE_PRESETS[saved.activeTemplate]) {
+          this.activeTemplate = saved.activeTemplate;
+        }
+      }
+
+      this.state = this.templateStates[this.activeTemplate];
     },
 
     loadFromStorage() {
       try {
         if (typeof localStorage !== 'undefined' && localStorage.getItem) {
+          try {
+            localStorage.removeItem('syzarn_invoice_generator_state_v1');
+          } catch (_) {}
+
           const raw = localStorage.getItem(this.storageKey);
-          if (raw) return JSON.parse(raw);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') {
+              return parsed;
+            }
+          }
         }
       } catch (e) {
         console.warn('could not load invoice state from storage', e);
@@ -1039,7 +1233,14 @@
       this.saveTimer = setTimeout(() => {
         try {
           if (typeof localStorage !== 'undefined' && localStorage.setItem) {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+            if (this.state && this.activeTemplate) {
+              this.templateStates[this.activeTemplate] = cloneObject(this.state);
+            }
+            const payload = {
+              activeTemplate: this.activeTemplate,
+              templateStates: this.templateStates
+            };
+            localStorage.setItem(this.storageKey, JSON.stringify(payload));
           }
         } catch (e) {
           console.warn('localStorage quota exceeded while saving invoice state', e);
@@ -1049,39 +1250,74 @@
 
     setTemplate(template) {
       if (!SAMPLE_PRESETS[template]) return;
-      this.state.meta.template = template;
-      if (template === 'thermal-pos') {
-        this.state.meta.barcodeSymbology = 'CODE128';
+      this.init();
+
+      if (this.state && this.activeTemplate) {
+        this.templateStates[this.activeTemplate] = cloneObject(this.state);
       }
+
+      this.activeTemplate = template;
+      if (!this.templateStates[template]) {
+        this.templateStates[template] = cloneObject(SAMPLE_PRESETS[template]);
+      }
+      this.state = this.templateStates[template];
+      this.state.meta.template = template;
+
+      if (template !== 'bn-vintage-ledger' && this.activeTab === 'vintage') {
+        this.activeTab = 'setup';
+      }
+
+      if (template === 'thermal-pos') {
+        this.state.meta.barcodeSymbology = this.state.meta.barcodeSymbology || 'CODE128';
+      }
+
       this.saveToStorage();
       this.render();
     },
 
     setDocType(docType) {
-      this.state.meta.docType = docType;
+      this.init();
+      if (this.state && this.state.meta) {
+        this.state.meta.docType = docType;
+      }
+      if (this.activeTemplate && this.templateStates && this.templateStates[this.activeTemplate]) {
+        this.templateStates[this.activeTemplate].meta.docType = docType;
+      }
       this.saveToStorage();
       this.render();
     },
 
     setDocNumber(docNumber) {
-      this.state.meta.docNumber = docNumber;
+      this.init();
+      if (this.state && this.state.meta) {
+        this.state.meta.docNumber = docNumber;
+      }
+      if (this.activeTemplate && this.templateStates && this.templateStates[this.activeTemplate]) {
+        this.templateStates[this.activeTemplate].meta.docNumber = docNumber;
+      }
       this.saveToStorage();
       this.render();
     },
 
     loadSample(templateName) {
-      const t = templateName || this.state.meta.template || 'stripe-modern';
+      this.init();
+      const t = templateName || this.activeTemplate || (this.state && this.state.meta && this.state.meta.template) || 'stripe-modern';
       if (SAMPLE_PRESETS[t]) {
-        this.state = cloneObject(SAMPLE_PRESETS[t]);
+        this.templateStates[t] = cloneObject(SAMPLE_PRESETS[t]);
+        if (t === this.activeTemplate) {
+          this.state = this.templateStates[t];
+        }
         this.saveToStorage();
         this.render();
       }
     },
 
     reset() {
-      if (confirm('reset all invoice fields to defaults? this cannot be undone.')) {
-        const curTemplate = this.state.meta.template || 'stripe-modern';
-        this.state = cloneObject(SAMPLE_PRESETS[curTemplate]);
+      this.init();
+      const t = this.activeTemplate || 'stripe-modern';
+      if (confirm(`reset ${t} fields to sample defaults? this cannot be undone.`)) {
+        this.templateStates[t] = cloneObject(SAMPLE_PRESETS[t]);
+        this.state = this.templateStates[t];
         this.saveToStorage();
         this.render();
       }
@@ -1302,6 +1538,8 @@
               <option value="thermal-pos" ${m.template === 'thermal-pos' ? 'selected' : ''}>thermal pos (continuous roll)</option>
               <option value="minimal-classic" ${m.template === 'minimal-classic' ? 'selected' : ''}>minimal classic (freelancer / contractor)</option>
               <option value="bn-vintage-ledger" ${m.template === 'bn-vintage-ledger' ? 'selected' : ''}>vintage bengali ledger (হালখাতা / ক্যাশ মেমো)</option>
+              <option value="mid-century-tractor" ${m.template === 'mid-century-tractor' ? 'selected' : ''}>continuous tractor-feed (dot-matrix 1970s/80s)</option>
+              <option value="erp-classic-90s" ${m.template === 'erp-classic-90s' ? 'selected' : ''}>enterprise erp (late-90s corporate / quickbooks)</option>
             </select>
           </div>
 
@@ -1337,7 +1575,7 @@
             <select class="tm-select inv-control" id="meta-currency">
               <optgroup label="popular &amp; regional">
                 ${Object.keys(CURRENCIES).filter(code => CURRENCIES[code].group === 'popular').map(code => `
-                  <option value="${code}" ${(m.currency || 'BDT') === code ? 'selected' : ''}>${escapeHTML(CURRENCIES[code].name)}</option>
+                  <option value="${code}" ${(m.currency || 'USD') === code ? 'selected' : ''}>${escapeHTML(CURRENCIES[code].name)}</option>
                 `).join('')}
               </optgroup>
               <optgroup label="fiat currencies (a-z)">
@@ -1626,7 +1864,7 @@
               <label class="inv-label" for="settle-mfsprovider">MFS provider:</label>
               <select class="tm-select inv-control" id="settle-mfsprovider">
                 ${MFS_PROVIDERS.map(p => `
-                  <option value="${p}" ${(s.mfsProvider || 'bKash') === p ? 'selected' : ''}>${p}</option>
+                  <option value="${p}" ${(s.mfsProvider || (m.template === 'bn-vintage-ledger' ? 'bKash' : '')) === p ? 'selected' : ''}>${p}</option>
                 `).join('')}
                 <option value="other" ${isCustomMfs ? 'selected' : ''}>other / custom...</option>
               </select>
@@ -2107,6 +2345,10 @@
           geoLabel.textContent = `thermal continuous roll (${this.state.meta.thermalWidth || '80mm'})`;
         } else if (template === 'bn-vintage-ledger') {
           geoLabel.textContent = 'vintage bengali ledger (A4 cream)';
+        } else if (template === 'mid-century-tractor') {
+          geoLabel.textContent = 'continuous tractor-feed (dot-matrix green-bar)';
+        } else if (template === 'erp-classic-90s') {
+          geoLabel.textContent = 'enterprise ERP classic (boxed grid)';
         } else {
           geoLabel.textContent = 'A4 / letter standard (vector)';
         }
@@ -2121,6 +2363,10 @@
         docHtml = this.generateMinimalClassicHtml(this.state, totals);
       } else if (template === 'bn-vintage-ledger') {
         docHtml = this.generateBnVintageLedgerHtml(this.state, totals);
+      } else if (template === 'mid-century-tractor') {
+        docHtml = this.generateMidCenturyTractorHtml(this.state, totals);
+      } else if (template === 'erp-classic-90s') {
+        docHtml = this.generateErpClassic90sHtml(this.state, totals);
       } else {
         docHtml = this.generateStripeModernHtml(this.state, totals);
       }
@@ -2288,7 +2534,7 @@
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Method:</div>
                   <div class="inv-foot-body">
-                    <strong>Mobile Financial Service (${escapeHTML(state.settlement.mfsProvider || 'bKash')})</strong>
+                    <strong>Mobile Financial Service (${escapeHTML(state.settlement.mfsProvider || 'MFS')})</strong>
                     ${state.settlement.mfsNumber ? `<br>Account / Mobile: ${escapeHTML(state.settlement.mfsNumber)}` : ''}
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
                   </div>
@@ -2411,7 +2657,7 @@
               <span>METHOD:</span>
               <span>${
                 state.settlement.method === 'COD' ? 'CASH ON DELIVERY'
-                : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'bKash').toUpperCase()}`
+                : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'MFS').toUpperCase()}`
                 : escapeHTML(state.settlement.method || 'CASH')
               }</span>
             </div>
@@ -2544,7 +2790,7 @@
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Payment Information:</div>
                   <div class="inv-classic-body">
-                    Method: MFS (${escapeHTML(state.settlement.mfsProvider || 'bKash')})
+                    Method: MFS (${escapeHTML(state.settlement.mfsProvider || 'Mobile Wallet')})
                     ${state.settlement.mfsNumber ? `<br>Account / Mobile: ${escapeHTML(state.settlement.mfsNumber)}` : ''}
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
                   </div>
@@ -2800,7 +3046,7 @@
             <!-- Authenticity Elements: Stamp & Signature -->
             <div class="inv-vbn-bottom-authentic">
               <div class="inv-vbn-stamp-zone">
-                ${v.showSeal ? generateVintageRevenueStampSvg(v.sealText || 'পরিশোধিত', s.name || 'মঞ্জিল') : ''}
+                ${v.showSeal ? generateVintageRevenueStampSvg(v.sealText || 'পরিশোধিত', s.name || 'মেসার্স ট্রেডার্স') : ''}
                 <div id="receipt-barcode-target" class="receipt-barcode-target vbn-barcode"></div>
               </div>
 
@@ -2812,6 +3058,477 @@
                     <div class="inv-vbn-sig-label">${escapeHTML(v.signatureTitle || 'কোষাধ্যক্ষ')}</div>
                   </div>
                 ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    },
+
+    // --- TEMPLATE E: CONTINUOUS TRACTOR-FEED / DOT-MATRIX (1960s-1980s) ---
+    generateMidCenturyTractorHtml(state, totals) {
+      const m = state.meta;
+      const s = state.seller;
+      const b = state.buyer;
+      const curr = m.currency;
+
+      let itemsRows = state.items.map((item, idx) => {
+        const qty = Number(item.qty) || 0;
+        const price = Math.round(Number(item.unitPrice) || 0);
+        const base = Math.round(qty * price);
+        const disc = item.discountType === 'percent'
+          ? Math.round(base * ((Number(item.discount) || 0) / 100))
+          : Math.min(base, Math.round(Number(item.discount) || 0));
+        const lineTotal = base - disc;
+
+        return `
+          <tr class="inv-tractor-tr">
+            <td class="inv-tractor-td text-center" style="width:40px;">${String(idx + 1).padStart(2, '0')}</td>
+            <td class="inv-tractor-td">
+              <div class="inv-tractor-item-title">${escapeHTML(item.name).toUpperCase()}</div>
+              ${item.description ? `<div class="inv-tractor-item-desc">${escapeHTML(item.description).toUpperCase()}</div>` : ''}
+            </td>
+            <td class="inv-tractor-td text-center" style="width:60px;">${qty}</td>
+            <td class="inv-tractor-td text-right" style="width:95px;">${formatDisplayCurrency(price, curr)}</td>
+            <td class="inv-tractor-td text-right" style="width:65px;">${item.taxRate ? item.taxRate + '%' : '0%'}</td>
+            <td class="inv-tractor-td text-right font-bold" style="width:110px;">${formatDisplayCurrency(lineTotal, curr)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const termsFirstLine = state.settlement.terms ? state.settlement.terms.split('\n')[0] : 'NET 30 DAYS';
+
+      return `
+        <div class="inv-tractor-doc">
+          <!-- Continuous tractor-feed sprocket hole strips -->
+          <div class="inv-tractor-sprocket-col left">
+            <div class="inv-tractor-holes"></div>
+            <div class="inv-tractor-perf-line"></div>
+          </div>
+          <div class="inv-tractor-sprocket-col right">
+            <div class="inv-tractor-perf-line"></div>
+            <div class="inv-tractor-holes"></div>
+          </div>
+
+          <div class="inv-tractor-body">
+            <!-- Masthead / Top Area -->
+            <div class="inv-tractor-header">
+              <div class="inv-tractor-brand">
+                ${s.logoUrl ? `<img src="${s.logoUrl}" class="inv-tractor-logo" alt="logo">` : ''}
+                <div class="inv-tractor-store-name">${escapeHTML(s.name || 'INDUSTRIAL WHOLESALE SUPPLY').toUpperCase()}</div>
+                <div class="inv-tractor-address">${escapeHTML(s.address || '').toUpperCase().replace(/\n/g, '<br>')}</div>
+                ${s.taxId ? `<div class="inv-tractor-meta-field"><span class="inv-tractor-fld-lbl">FED TAX ID:</span> ${escapeHTML(s.taxId).toUpperCase()}</div>` : ''}
+                ${s.cashier ? `<div class="inv-tractor-meta-field"><span class="inv-tractor-fld-lbl">DISPATCH:</span> ${escapeHTML(s.cashier).toUpperCase()}</div>` : ''}
+              </div>
+
+              <div class="inv-tractor-top-right">
+                <!-- Mechanical red numbering stamp in top-right corner -->
+                <div class="inv-tractor-stamp">
+                  <span class="inv-tractor-stamp-prefix">NO.</span>
+                  <span class="inv-tractor-stamp-num">${escapeHTML(m.docNumber || '000000').toUpperCase()}</span>
+                </div>
+
+                <!-- Pre-printed checkbox block for multi-part copies -->
+                <div class="inv-tractor-multipart">
+                  <span class="inv-tractor-copy-item ${m.docType === 'invoice' || !m.docType ? 'is-active' : ''}">[${m.docType === 'invoice' || !m.docType ? 'X' : '&nbsp;'}] CUSTOMER INVOICE</span>
+                  <span class="inv-tractor-copy-item ${m.docType === 'receipt' ? 'is-active' : ''}">[${m.docType === 'receipt' ? 'X' : '&nbsp;'}] CASH RECEIPT</span>
+                  <span class="inv-tractor-copy-item">[&nbsp;] FILE COPY</span>
+                  <span class="inv-tractor-copy-item">[&nbsp;] ACCOUNTING COPY</span>
+                </div>
+
+                <!-- Date & Order Reference -->
+                <div class="inv-tractor-date-box">
+                  <div class="inv-tractor-date-row">
+                    <span class="inv-tractor-fld-lbl">DATE:</span>
+                    <span class="inv-tractor-fld-val">${escapeHTML(m.issueDate)}</span>
+                  </div>
+                  ${m.dueDate && m.docType !== 'receipt' ? `
+                    <div class="inv-tractor-date-row">
+                      <span class="inv-tractor-fld-lbl">PAY DUE:</span>
+                      <span class="inv-tractor-fld-val">${escapeHTML(m.dueDate)}</span>
+                    </div>
+                  ` : ''}
+                  ${b.poNumber ? `
+                    <div class="inv-tractor-date-row">
+                      <span class="inv-tractor-fld-lbl">P.O. NO.:</span>
+                      <span class="inv-tractor-fld-val">${escapeHTML(b.poNumber).toUpperCase()}</span>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+
+            <!-- Solid double-line divider -->
+            <div class="inv-tractor-divider-double"></div>
+
+            <!-- Billing & Shipping Parties (Uppercase field labels with fixed-pitch character spacing) -->
+            <div class="inv-tractor-parties">
+              <div class="inv-tractor-party-card">
+                <div class="inv-tractor-party-hdr">SOLD TO / BILLING:</div>
+                <div class="inv-tractor-party-name">${escapeHTML(b.name || 'CASH CUSTOMER').toUpperCase()}</div>
+                <div class="inv-tractor-party-addr">${escapeHTML(b.address || '').toUpperCase().replace(/\n/g, '<br>')}</div>
+                ${b.phone ? `<div class="inv-tractor-party-sub"><span class="inv-tractor-fld-lbl">PHONE:</span> ${escapeHTML(b.phone)}</div>` : ''}
+                ${b.taxId ? `<div class="inv-tractor-party-sub"><span class="inv-tractor-fld-lbl">TAX EXEMPT:</span> ${escapeHTML(b.taxId).toUpperCase()}</div>` : ''}
+              </div>
+              <div class="inv-tractor-party-card">
+                <div class="inv-tractor-party-hdr">SHIP TO / DESTINATION:</div>
+                <div class="inv-tractor-party-name">${escapeHTML(b.name || 'SAME AS BILLING').toUpperCase()}</div>
+                <div class="inv-tractor-party-addr">${escapeHTML(b.address || 'DELIVER TO DOCK / SITE LOCATION').toUpperCase().replace(/\n/g, '<br>')}</div>
+                <div class="inv-tractor-party-sub"><span class="inv-tractor-fld-lbl">METHOD:</span> ${escapeHTML(state.settlement.method || 'STANDARD TRUCK FREIGHT')}</div>
+              </div>
+            </div>
+
+            <!-- Order Routing Spec Strip -->
+            <div class="inv-tractor-order-strip">
+              <div class="inv-tractor-strip-col"><span class="inv-tractor-fld-lbl">CUSTOMER P.O.</span><span class="inv-tractor-strip-val">${escapeHTML(b.poNumber || 'N/A').toUpperCase()}</span></div>
+              <div class="inv-tractor-strip-col"><span class="inv-tractor-fld-lbl">ORDER DATE</span><span class="inv-tractor-strip-val">${escapeHTML(m.issueDate)}</span></div>
+              <div class="inv-tractor-strip-col"><span class="inv-tractor-fld-lbl">TERMS</span><span class="inv-tractor-strip-val">${escapeHTML(termsFirstLine).toUpperCase()}</span></div>
+              <div class="inv-tractor-strip-col"><span class="inv-tractor-fld-lbl">F.O.B. POINT</span><span class="inv-tractor-strip-val">ORIGIN / FACTORY</span></div>
+            </div>
+
+            <!-- Solid double-line divider -->
+            <div class="inv-tractor-divider-double"></div>
+
+            <!-- Continuous Green-Bar / Pale Blue-Bar Item Table -->
+            <table class="inv-tractor-table">
+              <thead>
+                <tr>
+                  <th class="inv-tractor-th text-center" style="width:40px;">ITEM</th>
+                  <th class="inv-tractor-th text-left">DESCRIPTION OF GOODS</th>
+                  <th class="inv-tractor-th text-center" style="width:60px;">QTY</th>
+                  <th class="inv-tractor-th text-right" style="width:95px;">PRICE</th>
+                  <th class="inv-tractor-th text-right" style="width:65px;">TAX</th>
+                  <th class="inv-tractor-th text-right" style="width:110px;">AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsRows}
+              </tbody>
+            </table>
+
+            <!-- Solid double-line divider -->
+            <div class="inv-tractor-divider-double"></div>
+
+            <!-- Bottom Settlement, Barcode & Totals Section -->
+            <div class="inv-tractor-bottom-grid">
+              <div class="inv-tractor-bottom-left">
+                ${state.settlement.bankDetails ? `
+                  <div class="inv-tractor-block">
+                    <div class="inv-tractor-block-lbl">REMITTANCE INSTRUCTIONS:</div>
+                    <div class="inv-tractor-block-val">${escapeHTML(state.settlement.bankDetails).toUpperCase().replace(/\n/g, '<br>')}</div>
+                  </div>
+                ` : ''}
+                ${state.settlement.terms ? `
+                  <div class="inv-tractor-block">
+                    <div class="inv-tractor-block-lbl">POLICY &amp; CONDITIONS:</div>
+                    <div class="inv-tractor-block-val">${escapeHTML(state.settlement.terms).toUpperCase().replace(/\n/g, '<br>')}</div>
+                  </div>
+                ` : ''}
+                <div id="receipt-barcode-target" class="receipt-barcode-target tractor-barcode"></div>
+              </div>
+
+              <!-- Monospace Totals Ledger -->
+              <div class="inv-tractor-totals-box">
+                <div class="inv-tractor-tot-row">
+                  <span class="inv-tractor-tot-lbl">SUBTOTAL</span>
+                  <span class="inv-tractor-tot-val">${formatDisplayCurrency(totals.subtotal, curr)}</span>
+                </div>
+                ${totals.discountTotal > 0 ? `
+                  <div class="inv-tractor-tot-row">
+                    <span class="inv-tractor-tot-lbl">LESS DISCOUNT</span>
+                    <span class="inv-tractor-tot-val">-${formatDisplayCurrency(totals.discountTotal, curr)}</span>
+                  </div>
+                ` : ''}
+                ${totals.taxTotal > 0 ? `
+                  <div class="inv-tractor-tot-row">
+                    <span class="inv-tractor-tot-lbl">SALES TAX</span>
+                    <span class="inv-tractor-tot-val">${formatDisplayCurrency(totals.taxTotal, curr)}</span>
+                  </div>
+                ` : ''}
+                ${totals.shipping > 0 ? `
+                  <div class="inv-tractor-tot-row">
+                    <span class="inv-tractor-tot-lbl">FREIGHT / POST</span>
+                    <span class="inv-tractor-tot-val">${formatDisplayCurrency(totals.shipping, curr)}</span>
+                  </div>
+                ` : ''}
+                
+                <div class="inv-tractor-divider-double" style="margin: 4px 0;"></div>
+
+                <div class="inv-tractor-tot-row inv-tractor-grand-row">
+                  <span class="inv-tractor-grand-lbl">TOTAL AMOUNT</span>
+                  <span class="inv-tractor-grand-val">${formatDisplayCurrency(totals.grandTotal, curr)}</span>
+                </div>
+
+                ${totals.amountPaid > 0 ? `
+                  <div class="inv-tractor-tot-row">
+                    <span class="inv-tractor-tot-lbl">AMOUNT PAID</span>
+                    <span class="inv-tractor-tot-val">${formatDisplayCurrency(totals.amountPaid, curr)}</span>
+                  </div>
+                ` : ''}
+
+                <div class="inv-tractor-tot-row inv-tractor-due-row">
+                  <span class="inv-tractor-due-lbl">BALANCE DUE</span>
+                  <span class="inv-tractor-due-val">${formatDisplayCurrency(totals.balanceDue, curr)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="inv-tractor-footer-rule"></div>
+            <div class="inv-tractor-footer-banner">
+              <span>* * * CONTINUOUS FORM #408 - RETAIN FOR INDUSTRIAL AUDIT &amp; TAX RECORDS * * *</span>
+            </div>
+          </div>
+        </div>
+      `;
+    },
+
+    // --- TEMPLATE F: ENTERPRISE ERP / LATE-90S CORPORATE ---
+    generateErpClassic90sHtml(state, totals) {
+      const m = state.meta;
+      const s = state.seller;
+      const b = state.buyer;
+      const curr = m.currency;
+
+      const docTypeName = m.docType === 'receipt' ? 'RECEIPT'
+        : m.docType === 'tax-invoice' ? 'TAX INVOICE'
+        : m.docType === 'pro-forma' ? 'PRO FORMA'
+        : 'INVOICE';
+
+      let itemsRows = state.items.map((item, idx) => {
+        const qty = Number(item.qty) || 0;
+        const price = Math.round(Number(item.unitPrice) || 0);
+        const base = Math.round(qty * price);
+        const disc = item.discountType === 'percent'
+          ? Math.round(base * ((Number(item.discount) || 0) / 100))
+          : Math.min(base, Math.round(Number(item.discount) || 0));
+        const lineTotal = base - disc;
+
+        return `
+          <tr class="inv-erp-tr">
+            <td class="inv-erp-td text-center" style="width:45px;">${idx + 1}</td>
+            <td class="inv-erp-td text-center" style="width:90px;">${escapeHTML(item.id || ('ITM-' + (idx + 1)))}</td>
+            <td class="inv-erp-td">
+              <div class="inv-erp-item-name">${escapeHTML(item.name)}</div>
+              ${item.description ? `<div class="inv-erp-item-desc">${escapeHTML(item.description)}</div>` : ''}
+            </td>
+            <td class="inv-erp-td text-right" style="width:60px;">${qty}</td>
+            <td class="inv-erp-td text-right" style="width:95px;">${formatDisplayCurrency(price, curr)}</td>
+            <td class="inv-erp-td text-right" style="width:65px;">${item.taxRate ? item.taxRate + '%' : '0%'}</td>
+            <td class="inv-erp-td text-right font-bold" style="width:110px;">${formatDisplayCurrency(lineTotal, curr)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // ERP classic grid pre-printed rows: if few items, add blank grid rows to fill the table grid authentically
+      const minRows = 5;
+      if (state.items.length < minRows) {
+        for (let r = state.items.length; r < minRows; r++) {
+          itemsRows += `
+            <tr class="inv-erp-tr inv-erp-empty-row">
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+              <td class="inv-erp-td">&nbsp;</td>
+            </tr>
+          `;
+        }
+      }
+
+      const termsFirstLine = state.settlement.terms ? state.settlement.terms.split('\n')[0] : 'Net 30 Days';
+      const repName = s.cashier || s.terminalId || 'SALES REP';
+      const shipVia = 'UPS GROUND';
+      const fobPoint = 'DESTINATION';
+
+      return `
+        <div class="inv-erp-doc">
+          <!-- Top Header / Masthead -->
+          <div class="inv-erp-header">
+            <div class="inv-erp-brand">
+              ${s.logoUrl ? `<img src="${s.logoUrl}" class="inv-erp-logo" alt="logo">` : ''}
+              <div class="inv-erp-store-name">${escapeHTML(s.name || 'GLOBAL ENTERPRISE CORP.')}</div>
+              <div class="inv-erp-store-addr">${escapeHTML(s.address || '').replace(/\n/g, '<br>')}</div>
+              ${s.taxId ? `<div class="inv-erp-store-meta">Tax ID / EIN: ${escapeHTML(s.taxId)}</div>` : ''}
+              ${s.email ? `<div class="inv-erp-store-meta">Email: ${escapeHTML(s.email)}</div>` : ''}
+            </div>
+
+            <div class="inv-erp-masthead-right">
+              <div class="inv-erp-doc-title-bar">${docTypeName}</div>
+              <!-- Boxed Document Meta Table -->
+              <table class="inv-erp-meta-box">
+                <thead>
+                  <tr>
+                    <th class="inv-erp-meta-th">DATE</th>
+                    <th class="inv-erp-meta-th">INVOICE NO.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="inv-erp-meta-td">${escapeHTML(m.issueDate)}</td>
+                    <td class="inv-erp-meta-td font-bold">${escapeHTML(m.docNumber)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Rigid Boxed Entity Layout (Explicit 1px bordered rectangle cells) -->
+          <div class="inv-erp-entity-row">
+            <div class="inv-erp-entity-box">
+              <div class="inv-erp-box-hdr">BILL TO</div>
+              <div class="inv-erp-box-body">
+                <div class="inv-erp-client-name">${escapeHTML(b.name || 'Client Corporation')}</div>
+                <div class="inv-erp-client-addr">${escapeHTML(b.address || '').replace(/\n/g, '<br>')}</div>
+                ${b.phone ? `<div class="inv-erp-client-sub">Phone: ${escapeHTML(b.phone)}</div>` : ''}
+                ${b.taxId ? `<div class="inv-erp-client-sub">Tax ID: ${escapeHTML(b.taxId)}</div>` : ''}
+              </div>
+            </div>
+
+            <div class="inv-erp-entity-box">
+              <div class="inv-erp-box-hdr">SHIP TO</div>
+              <div class="inv-erp-box-body">
+                <div class="inv-erp-client-name">${escapeHTML(b.name || 'Client Corporation')}</div>
+                <div class="inv-erp-client-addr">${escapeHTML(b.address || 'Same as Billing Address').replace(/\n/g, '<br>')}</div>
+                <div class="inv-erp-client-sub">Attn: Receiving Dept / Dock</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rigid Boxed Order Metadata Bar (P.O. Number, Terms, Rep, Ship Via) -->
+          <table class="inv-erp-order-meta-grid">
+            <thead>
+              <tr>
+                <th class="inv-erp-order-th">P.O. NUMBER</th>
+                <th class="inv-erp-order-th">TERMS</th>
+                <th class="inv-erp-order-th">REP</th>
+                <th class="inv-erp-order-th">SHIP VIA</th>
+                <th class="inv-erp-order-th">F.O.B.</th>
+                <th class="inv-erp-order-th">DUE DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="inv-erp-order-td">${escapeHTML(b.poNumber || 'N/A')}</td>
+                <td class="inv-erp-order-td">${escapeHTML(termsFirstLine)}</td>
+                <td class="inv-erp-order-td">${escapeHTML(repName)}</td>
+                <td class="inv-erp-order-td">${escapeHTML(shipVia)}</td>
+                <td class="inv-erp-order-td">${escapeHTML(fobPoint)}</td>
+                <td class="inv-erp-order-td">${escapeHTML(m.dueDate || m.issueDate)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Full-Grid Item Table with active vertical and horizontal cell borders -->
+          <table class="inv-erp-grid-table">
+            <thead>
+              <tr>
+                <th class="inv-erp-th text-center" style="width:45px;">LINE</th>
+                <th class="inv-erp-th text-center" style="width:90px;">ITEM CODE</th>
+                <th class="inv-erp-th text-left">DESCRIPTION</th>
+                <th class="inv-erp-th text-right" style="width:60px;">QTY</th>
+                <th class="inv-erp-th text-right" style="width:95px;">RATE</th>
+                <th class="inv-erp-th text-right" style="width:65px;">TAX</th>
+                <th class="inv-erp-th text-right" style="width:110px;">AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRows}
+            </tbody>
+          </table>
+
+          <!-- Settlement & Boxed Totals Module -->
+          <div class="inv-erp-mid-summary">
+            <div class="inv-erp-summary-left">
+              ${state.settlement.bankDetails ? `
+                <div class="inv-erp-notes-box">
+                  <div class="inv-erp-notes-title">REMITTANCE &amp; WIRE INSTRUCTIONS:</div>
+                  <div class="inv-erp-notes-body">${escapeHTML(state.settlement.bankDetails).replace(/\n/g, '<br>')}</div>
+                </div>
+              ` : ''}
+              ${state.settlement.terms ? `
+                <div class="inv-erp-notes-box">
+                  <div class="inv-erp-notes-title">TERMS &amp; CONDITIONS:</div>
+                  <div class="inv-erp-notes-body">${escapeHTML(state.settlement.terms).replace(/\n/g, '<br>')}</div>
+                </div>
+              ` : ''}
+              <div id="receipt-barcode-target" class="receipt-barcode-target erp-barcode"></div>
+            </div>
+
+            <table class="inv-erp-totals-grid">
+              <tbody>
+                <tr>
+                  <td class="inv-erp-tot-lbl">SUBTOTAL</td>
+                  <td class="inv-erp-tot-val">${formatDisplayCurrency(totals.subtotal, curr)}</td>
+                </tr>
+                ${totals.discountTotal > 0 ? `
+                  <tr>
+                    <td class="inv-erp-tot-lbl">DISCOUNT</td>
+                    <td class="inv-erp-tot-val">-${formatDisplayCurrency(totals.discountTotal, curr)}</td>
+                  </tr>
+                ` : ''}
+                ${totals.taxTotal > 0 ? `
+                  <td class="inv-erp-tot-lbl">SALES TAX</td>
+                  <td class="inv-erp-tot-val">${formatDisplayCurrency(totals.taxTotal, curr)}</td>
+                ` : ''}
+                ${totals.shipping > 0 ? `
+                  <tr>
+                    <td class="inv-erp-tot-lbl">SHIPPING &amp; HANDLING</td>
+                    <td class="inv-erp-tot-val">${formatDisplayCurrency(totals.shipping, curr)}</td>
+                  </tr>
+                ` : ''}
+                <tr class="inv-erp-total-row">
+                  <td class="inv-erp-tot-lbl font-bold">TOTAL INVOICE</td>
+                  <td class="inv-erp-tot-val font-bold">${formatDisplayCurrency(totals.grandTotal, curr)}</td>
+                </tr>
+                ${totals.amountPaid > 0 ? `
+                  <tr>
+                    <td class="inv-erp-tot-lbl">PAYMENTS APPLIED</td>
+                    <td class="inv-erp-tot-val">-${formatDisplayCurrency(totals.amountPaid, curr)}</td>
+                  </tr>
+                ` : ''}
+                <tr class="inv-erp-due-row">
+                  <td class="inv-erp-tot-lbl font-bold">BALANCE DUE</td>
+                  <td class="inv-erp-tot-val font-bold">${formatDisplayCurrency(totals.balanceDue, curr)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Remittance Slip with scissors icon and dashed detachment line -->
+          <div class="inv-erp-remittance-wrap">
+            <div class="inv-erp-detach-line">
+              <span>--- &#9986; PLEASE DETACH HERE AND RETURN WITH PAYMENT ---</span>
+            </div>
+            <div class="inv-erp-remittance-slip">
+              <div class="inv-erp-slip-header">
+                <span class="inv-erp-slip-title">REMITTANCE ADVICE</span>
+                <span class="inv-erp-slip-doc">${escapeHTML(m.docNumber)}</span>
+              </div>
+              <div class="inv-erp-slip-grid">
+                <div class="inv-erp-slip-col">
+                  <div class="inv-erp-slip-lbl">CUSTOMER:</div>
+                  <div class="inv-erp-slip-val font-bold">${escapeHTML(b.name || 'Valued Customer')}</div>
+                  <div class="inv-erp-slip-sub">${escapeHTML(b.address || '').split('\n')[0]}</div>
+                </div>
+                <div class="inv-erp-slip-col">
+                  <div class="inv-erp-slip-lbl">INVOICE DATE:</div>
+                  <div class="inv-erp-slip-val">${escapeHTML(m.issueDate)}</div>
+                  <div class="inv-erp-slip-lbl" style="margin-top:4px;">DUE DATE:</div>
+                  <div class="inv-erp-slip-val">${escapeHTML(m.dueDate || m.issueDate)}</div>
+                </div>
+                <div class="inv-erp-slip-col">
+                  <div class="inv-erp-slip-lbl">AMOUNT DUE:</div>
+                  <div class="inv-erp-slip-val font-bold inv-erp-due-text">${formatDisplayCurrency(totals.balanceDue, curr)}</div>
+                </div>
+                <div class="inv-erp-slip-col inv-erp-slip-box">
+                  <div class="inv-erp-slip-lbl">AMOUNT ENCLOSED:</div>
+                  <div class="inv-erp-enclosed-line">$ ____________________</div>
+                </div>
+              </div>
+              <div class="inv-erp-slip-footer">
+                <span>REMIT TO: <strong>${escapeHTML(s.name)}</strong> &bull; ${escapeHTML(s.address.split('\n')[0])}</span>
               </div>
             </div>
           </div>
@@ -2839,6 +3556,8 @@
       const isThermal = template === 'thermal-pos';
       const is58 = isThermal && this.state.meta.thermalWidth === '58mm';
       const isVintage = template === 'bn-vintage-ledger';
+      const isTractor = template === 'mid-century-tractor';
+      const docBg = isVintage ? '#fbf9f4' : (isTractor ? '#fbfbf7' : '#ffffff');
       const docNum = (this.state.meta.docNumber || 'document').trim().replace(/[^a-zA-Z0-9_\-\.]/g, '_');
       const fileName = `${docNum}.pdf`;
 
@@ -2870,7 +3589,7 @@
           scale: 2, // 2x gives 300 DPI crisp, clean, vector-grade rendering
           useCORS: true,
           logging: false,
-          backgroundColor: isVintage ? '#fbf9f4' : '#ffffff',
+          backgroundColor: docBg,
           scrollX: 0,
           scrollY: 0
         });
@@ -2894,7 +3613,7 @@
           doc.addImage(canvas, 'PNG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
           doc.save(fileName);
         } else {
-          // --- STANDARD A4 (Modern Digital, Minimal Classic, Vintage Bengali) ---
+          // --- STANDARD A4 (Modern Digital, Minimal Classic, Vintage Bengali, Tractor Feed, ERP) ---
           const pageWidthPt = 595.28; // exact A4 pt width (210mm)
           const pageHeightPt = 841.89; // exact A4 pt height (297mm)
           const totalImgHeightPt = (canvas.height * pageWidthPt) / canvas.width;
@@ -2916,6 +3635,9 @@
 
             if (isVintage) {
               doc.setFillColor(251, 249, 244);
+              doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
+            } else if (isTractor) {
+              doc.setFillColor(251, 251, 247);
               doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
             }
             doc.addImage(canvas, 'PNG', offsetX, 0, fitWidth, fitHeight, undefined, 'FAST');
@@ -2951,7 +3673,7 @@
               sliceCanvas.width = canvas.width;
               sliceCanvas.height = cSliceHeight;
               const sCtx = sliceCanvas.getContext('2d');
-              sCtx.fillStyle = isVintage ? '#fbf9f4' : '#ffffff';
+              sCtx.fillStyle = docBg;
               sCtx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
               sCtx.drawImage(
                 canvas,
@@ -2965,6 +3687,9 @@
                 if (isVintage) {
                   doc.setFillColor(251, 249, 244);
                   doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
+                } else if (isTractor) {
+                  doc.setFillColor(251, 251, 247);
+                  doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
                 }
                 doc.addImage(sliceCanvas, 'PNG', 0, 0, pageWidthPt, sliceHeightPt, undefined, 'FAST');
               } else {
@@ -2977,6 +3702,9 @@
                   doc.setLineWidth(0.75);
                   doc.line(25.5, 0, 25.5, pageTopPadPt + 2);
                   doc.line(28.5, 0, 28.5, pageTopPadPt + 2);
+                } else if (isTractor) {
+                  doc.setFillColor(251, 251, 247);
+                  doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
                 }
                 doc.addImage(sliceCanvas, 'PNG', 0, pageTopPadPt, pageWidthPt, sliceHeightPt, undefined, 'FAST');
               }
@@ -3017,6 +3745,8 @@
       else if (template === 'thermal-pos') docContent = this.generateThermalPosHtml(this.state, totals);
       else if (template === 'minimal-classic') docContent = this.generateMinimalClassicHtml(this.state, totals);
       else if (template === 'bn-vintage-ledger') docContent = this.generateBnVintageLedgerHtml(this.state, totals);
+      else if (template === 'mid-century-tractor') docContent = this.generateMidCenturyTractorHtml(this.state, totals);
+      else if (template === 'erp-classic-90s') docContent = this.generateErpClassic90sHtml(this.state, totals);
 
       // Extract Barcode SVG
       let barcodeSvg = '';
@@ -3056,6 +3786,12 @@
       ).replace(
         '<div id="receipt-barcode-target" class="receipt-barcode-target vbn-barcode"></div>',
         `<div id="receipt-barcode-target" class="receipt-barcode-target vbn-barcode">${barcodeSvg}</div>`
+      ).replace(
+        '<div id="receipt-barcode-target" class="receipt-barcode-target tractor-barcode"></div>',
+        `<div id="receipt-barcode-target" class="receipt-barcode-target tractor-barcode">${barcodeSvg}</div>`
+      ).replace(
+        '<div id="receipt-barcode-target" class="receipt-barcode-target erp-barcode"></div>',
+        `<div id="receipt-barcode-target" class="receipt-barcode-target erp-barcode">${barcodeSvg}</div>`
       );
 
       // Create isolated printing iframe
@@ -3101,7 +3837,7 @@
               margin: 0 auto !important;
               width: ${isThermal ? (is58 ? '58mm' : '80mm') : '794px'} !important;
               max-width: none !important;
-              padding: ${isThermal ? (is58 ? '8px 6px !important' : '12px 10px !important') : (template === 'bn-vintage-ledger' ? '32px 36px 32px 56px !important' : '48px !important')};
+              padding: ${isThermal ? (is58 ? '8px 6px !important' : '12px 10px !important') : (template === 'bn-vintage-ledger' ? '32px 36px 32px 56px !important' : (template === 'mid-century-tractor' ? '0 !important' : (template === 'erp-classic-90s' ? '34px 38px !important' : '48px !important')))};
             }
             .receipt-barcode-target svg {
               max-width: 100% !important;
@@ -3131,6 +3867,13 @@
       }, 350);
     }
   };
+
+  // Pre-seed templateStates and default active state on singleton
+  InvoiceGenerator.templateStates = {};
+  for (const key of Object.keys(SAMPLE_PRESETS)) {
+    InvoiceGenerator.templateStates[key] = cloneObject(SAMPLE_PRESETS[key]);
+  }
+  InvoiceGenerator.state = InvoiceGenerator.templateStates['stripe-modern'];
 
   return InvoiceGenerator;
 });
