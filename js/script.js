@@ -1333,6 +1333,13 @@ Volume  : ${vol}%`;
           win.classList.toggle('tm-tool-unicodemap', toolId === 'unicodemap');
           win.classList.toggle('tm-tool-invoice', toolId === 'invoice' || toolId === 'receipt' || toolId === 'inv');
           win.classList.toggle('tm-tool-prescription', toolId === 'prescription' || toolId === 'rx' || toolId === 'pad' || toolId === 'clinical');
+
+          const isSymbology = toolId === 'qrcode' || toolId === 'qr' || toolId === 'barcode' || toolId === 'bc';
+          win.classList.toggle('tm-tool-symbology', isSymbology);
+
+          const vastTools = ['diff', 'mapdiff', 'decayfmt', 'replace', 'encrypt', 'iconv', 'filter', 'sort', 'seq', 'comb', 'perm', 'zenkaku', 'punycode'];
+          const isVast = vastTools.includes(toolId);
+          win.classList.toggle('tm-vast-params', isVast && !isSymbology && toolId !== 'invoice' && toolId !== 'prescription');
         }
       }
 
@@ -5153,22 +5160,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    idcy: {
-      desc: 'alias for decayfmt',
-      usage: 'idcy [args...]',
-      exec(args, stdin) {
-        return commands.decayfmt.exec(args, stdin);
-      }
-    },
-
-    tdcy: {
-      desc: 'alias for decayfmt',
-      usage: 'tdcy [args...]',
-      exec(args, stdin) {
-        return commands.decayfmt.exec(args, stdin);
-      }
-    },
-
     count: {
       desc: 'count characters, words, sentences, lines, bytes and frequency',
       usage: 'count [-c|-w|-s|-l|-b|--freq] [-q query] [file/text...]',
@@ -5215,14 +5206,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         }
         out += '</div>';
         return out;
-      }
-    },
-
-    ccwsl: {
-      desc: 'alias for count',
-      usage: 'ccwsl [file/text...]',
-      exec(args, stdin) {
-        return commands.count.exec(args, stdin);
       }
     },
 
@@ -5283,14 +5266,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
             return commands.replace.exec(passArgs, stdin);
           }
         }
-        return commands.replace.exec(args, stdin);
-      }
-    },
-
-    far: {
-      desc: 'alias for replace',
-      usage: 'far <find> <replace> [file/text...]',
-      exec(args, stdin) {
         return commands.replace.exec(args, stdin);
       }
     },
@@ -5364,17 +5339,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    deaccent: {
-      desc: 'alias for unaccent',
-      usage: 'deaccent [file/text...]',
-      exec(args, stdin) {
-        return commands.unaccent.exec(args, stdin);
-      }
-    },
-
-    rla: {
-      desc: 'alias for unaccent',
-      usage: 'rla [file/text...]',
+    accent: {
+      desc: 'alias for unaccent (strip diacritics & accents)',
+      usage: 'accent [file/text...]',
       exec(args, stdin) {
         return commands.unaccent.exec(args, stdin);
       }
@@ -5399,17 +5366,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    rmspace: {
-      desc: 'alias for trim',
-      usage: 'rmspace [file/text...]',
-      exec(args, stdin) {
-        return commands.trim.exec(args, stdin);
-      }
-    },
-
-    rus: {
-      desc: 'alias for trim',
-      usage: 'rus [file/text...]',
+    spaces: {
+      desc: 'alias for trim (clean up unwanted whitespace)',
+      usage: 'spaces [--all|--trim] [file/text...]',
       exec(args, stdin) {
         return commands.trim.exec(args, stdin);
       }
@@ -5496,6 +5455,14 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const wordWrap = !flags.includes('--no-word') && !flags.includes('-c');
         return window.TextEngine.lineBreaks(input.text, action, { width, wordWrap, replaceWith, matchText, position });
+      }
+    },
+
+    breaks: {
+      desc: 'alias for wrap (line breaks / word wrap)',
+      usage: 'breaks [flags] [file/text...]',
+      exec(args, stdin) {
+        return commands.wrap.exec(args, stdin);
       }
     },
 
@@ -5586,9 +5553,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    rmempty: {
-      desc: 'alias for compact',
-      usage: 'rmempty [file/text...]',
+    emptylines: {
+      desc: 'alias for compact (remove empty lines)',
+      usage: 'emptylines [file/text...]',
       exec(args, stdin) {
         return commands.compact.exec(args, stdin);
       }
@@ -5615,6 +5582,14 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const res = window.TextEngine.filterLines(input.text, pattern, { invert, caseSensitive, regex: isRegex });
         return res.text;
+      }
+    },
+
+    grep: {
+      desc: 'alias for filter (search pattern in lines)',
+      usage: 'grep [-v] [-i] [-E] <pattern> [file/text...]',
+      exec(args, stdin) {
+        return commands.filter.exec(args, stdin);
       }
     },
 
@@ -5686,14 +5661,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const pad = flags.includes('--pad') || flags.includes('-w');
         return window.TextEngine.generateNumbers(start, end, { step, pad, prefix: pfx, suffix: sfx, delimiter: delim });
-      }
-    },
-
-    gennum: {
-      desc: 'alias for seq',
-      usage: 'gennum <start> <end> [step]',
-      exec(args) {
-        return commands.seq.exec(args);
       }
     },
 
@@ -6012,14 +5979,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    randint: {
-      desc: 'alias for rng',
-      usage: 'randint [-n count] [-min low] [-max high]',
-      exec(args) {
-        return commands.rng.exec(args);
-      }
-    },
-
     randstr: {
       desc: 'generate random strings from character sets',
       usage: 'randstr [-n count] [-l length] [-c charset] [-d delim]',
@@ -6084,14 +6043,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    column: {
-      desc: 'alias for cut',
-      usage: 'column -d <delim> -f <col_number> [file/text...]',
-      exec(args, stdin) {
-        return commands.cut.exec(args, stdin);
-      }
-    },
-
     unicode: {
       desc: 'convert text to HTML entities, hex, UTF-16, or C/C++ escapes',
       usage: 'unicode [-f html_dec|html_hex|utf16_hex|utf16_dec|c_source|codepoint] [-s skip] [file/text...]',
@@ -6110,14 +6061,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         const input = extractTextInput(textArgs, stdin);
         if (!input.text && input.isEmpty) return 'unicode: missing input text or file';
         return window.TextEngine.unicodeConvert(input.text, format, { skipChars: skip });
-      }
-    },
-
-    unicvr: {
-      desc: 'alias for unicode',
-      usage: 'unicvr [file/text...]',
-      exec(args, stdin) {
-        return commands.unicode.exec(args, stdin);
       }
     },
 
@@ -6297,22 +6240,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    base64encode: {
-      desc: 'encode string to Base64',
-      usage: 'base64encode [file/text...]',
-      exec(args, stdin) {
-        return commands.base64.exec(args, stdin);
-      }
-    },
-
-    base64decode: {
-      desc: 'decode Base64 string',
-      usage: 'base64decode [file/text...]',
-      exec(args, stdin) {
-        return commands.base64.exec(['-d', ...args], stdin);
-      }
-    },
-
     'detect-encoding': {
       desc: 'detect character encoding of text or file (UTF-8, Windows-1252, Shift_JIS, EUC-JP, ISO-2022-JP, UTF-16, ASCII, etc.)',
       usage: 'detect-encoding [file/text...]',
@@ -6326,14 +6253,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         } catch (err) {
           return `detect-encoding: error: ${escapeHTML(err.message)}`;
         }
-      }
-    },
-
-    chardet: {
-      desc: 'alias for detect-encoding',
-      usage: 'chardet [file/text...]',
-      exec(args, stdin) {
-        return commands['detect-encoding'].exec(args, stdin);
       }
     },
 
@@ -6377,14 +6296,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         } catch (err) {
           return `iconv: error: ${escapeHTML(err.message)}`;
         }
-      }
-    },
-
-    reencode: {
-      desc: 'alias for iconv',
-      usage: 'reencode -t <to_encoding> [-f <from_encoding>] [--hex|--url|--base64] [-l] [file/text...]',
-      exec(args, stdin) {
-        return commands.iconv.exec(args, stdin);
       }
     },
 
@@ -6496,22 +6407,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    'to-ascii': {
-      desc: 'alias for idn encode (convert domain/email to ASCII Punycode)',
-      usage: 'to-ascii <domain/email...>',
-      exec(args, stdin) {
-        return commands.idn.exec(['encode', ...args], stdin);
-      }
-    },
-
-    'to-unicode': {
-      desc: 'alias for idn decode (convert ASCII Punycode domain/email to Unicode)',
-      usage: 'to-unicode <domain/email...>',
-      exec(args, stdin) {
-        return commands.idn.exec(['decode', ...args], stdin);
-      }
-    },
-
     diff: {
       desc: 'compare two files, code snippets, or strings line-by-line or word-by-word',
       usage: 'diff [-w|--ignore-all-space] [-i|--ignore-case] [-W|--word] [-c|--char] <file1/text1> <file2/text2> | cat file2.txt | diff file1.txt',
@@ -6577,35 +6472,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    diffchecker: {
-      desc: 'alias for diff',
-      usage: 'diffchecker <file1/text1> <file2/text2>',
-      exec(args, stdin) {
-        return commands.diff.exec(args, stdin);
-      }
-    },
-
-    textdiff: {
-      desc: 'alias for diff',
-      usage: 'textdiff <file1/text1> <file2/text2>',
-      exec(args, stdin) {
-        return commands.diff.exec(args, stdin);
-      }
-    },
-
     wdiff: {
       desc: 'word-by-word diff checker (alias for diff --word)',
       usage: 'wdiff <file1/text1> <file2/text2>',
       exec(args, stdin) {
         return commands.diff.exec(['--word', ...args], stdin);
-      }
-    },
-
-    'unified-diff': {
-      desc: 'alias for diff',
-      usage: 'unified-diff <file1/text1> <file2/text2>',
-      exec(args, stdin) {
-        return commands.diff.exec(args, stdin);
       }
     },
 
@@ -6667,29 +6538,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    diffmap: {
-      desc: 'alias for mapdiff',
-      usage: 'diffmap <file1/json1> <file2/json2>',
-      exec(args, stdin) {
-        return commands.mapdiff.exec(args, stdin);
-      }
-    },
-
-    diffmaps: {
-      desc: 'alias for mapdiff',
-      usage: 'diffmaps <file1/json1> <file2/json2>',
-      exec(args, stdin) {
-        return commands.mapdiff.exec(args, stdin);
-      }
-    },
-
-    mapdiffchecker: {
-      desc: 'alias for mapdiff',
-      usage: 'mapdiffchecker <file1/json1> <file2/json2>',
-      exec(args, stdin) {
-        return commands.mapdiff.exec(args, stdin);
-      }
-    },
 
     bijoy: {
       desc: 'convert Bengali text between Bijoy (ANSI) and Unicode (mjcdi engine)',
@@ -6758,22 +6606,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    bijoy2unicode: {
-      desc: 'alias for ansi2uni',
-      usage: 'bijoy2unicode [file/text...]',
-      exec(args, stdin) {
-        return commands.ansi2uni.exec(args, stdin);
-      }
-    },
-
-    unicode2bijoy: {
-      desc: 'alias for uni2ansi',
-      usage: 'unicode2bijoy [file/text...]',
-      exec(args, stdin) {
-        return commands.uni2ansi.exec(args, stdin);
-      }
-    },
-
     longs: {
       desc: 'insert historical long S (ſ) into English, French, German, Spanish, and Italian text',
       usage: 'longs [-l en|fr|de|es|it] [-x|--keep-unknown] [--ui] [file/text...]',
@@ -6830,22 +6662,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
         }
 
         return window.TextEngine.convertLongS(input.text, lang, keepUnknown);
-      }
-    },
-
-    'long-s': {
-      desc: 'alias for longs',
-      usage: 'long-s [-l en|fr|de|es|it] [-x] [file/text...]',
-      exec(args, stdin) {
-        return commands.longs.exec(args, stdin);
-      }
-    },
-
-    'archaic-s': {
-      desc: 'alias for longs',
-      usage: 'archaic-s [-l en|fr|de|es|it] [-x] [file/text...]',
-      exec(args, stdin) {
-        return commands.longs.exec(args, stdin);
       }
     },
 
@@ -7179,14 +6995,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    qrcodegen: {
-      desc: 'alias for qrcode',
-      usage: 'qrcodegen [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.qrcode.exec(args, stdin);
-      }
-    },
-
     microqr: {
       desc: 'generate Micro QR Code (compact single-finder QR code for small items; up to 35 digits / 15 bytes; versions M1-M4)',
       usage: 'microqr [-v M1-M4] [-e L|M|Q] [--mask 0-3] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
@@ -7203,59 +7011,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    microqrcode: {
-      desc: 'alias for microqr',
-      usage: 'microqrcode [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.microqr.exec(args, stdin);
-      }
-    },
-
-    uqr: {
-      desc: 'alias for microqr',
-      usage: 'uqr [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.microqr.exec(args, stdin);
-      }
-    },
-
     rmqr: {
       desc: 'generate Rectangular Micro QR Code (rMQR / ISO/IEC 23943; 32 sizes from R7x43 to R17x139; M and H error correction)',
       usage: 'rmqr [--rmqr-size R7x43..R17x139] [-e M|H] [-s scale] [-b border] [--ascii|--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(['-t', 'rmqr', ...args], stdin);
-      }
-    },
-
-    rectmicroqr: {
-      desc: 'alias for rmqr',
-      usage: 'rectmicroqr [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.rmqr.exec(args, stdin);
-      }
-    },
-
-    rectmicroqrcode: {
-      desc: 'alias for rmqr',
-      usage: 'rectmicroqrcode [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.rmqr.exec(args, stdin);
-      }
-    },
-
-    rmqrcode: {
-      desc: 'alias for rmqr',
-      usage: 'rmqrcode [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.rmqr.exec(args, stdin);
-      }
-    },
-
-    rectangularmicroqrcode: {
-      desc: 'alias for rmqr',
-      usage: 'rectangularmicroqrcode [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.rmqr.exec(args, stdin);
       }
     },
 
@@ -7283,27 +7043,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    azteccode: {
-      desc: 'alias for aztec',
-      usage: 'azteccode [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.aztec.exec(args, stdin);
-      }
-    },
-
     maxicode: {
       desc: 'generate 2D MaxiCode barcodes (hexagonal postal symbols; Mode 4 standard 93 chars, Mode 2/3 SCM)',
       usage: 'maxicode [--mode 2|3|4|5|6] [-s scale] [--svg|--dataurl] [file/text...]',
       exec(args, stdin) {
         return commands.qrcode.exec(['-t', 'maxicode', ...args], stdin);
-      }
-    },
-
-    maxi: {
-      desc: 'alias for maxicode',
-      usage: 'maxi [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.maxicode.exec(args, stdin);
       }
     },
 
@@ -7323,14 +7067,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
       }
     },
 
-    'dot-code': {
-      desc: 'alias for dotcode',
-      usage: 'dot-code [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.dotcode.exec(args, stdin);
-      }
-    },
-
     hanxin: {
       desc: 'generate 2D Han Xin code (汉信码 / chinese sensible code / ISO/IEC 20830; up to 7,827 digits / 2,174 chinese chars)',
       usage: 'hanxin [-e L1|L2|L3|L4] [-v version] [--mask 1-4] [--parsefnc] [-s scale] [-b border] [--size 4000] [--ascii|--svg|--dataurl] [file/text...]',
@@ -7342,22 +7078,6 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
     hx: {
       desc: 'alias for hanxin',
       usage: 'hx [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.hanxin.exec(args, stdin);
-      }
-    },
-
-    'han-xin': {
-      desc: 'alias for hanxin',
-      usage: 'han-xin [flags] [file/text...]',
-      exec(args, stdin) {
-        return commands.hanxin.exec(args, stdin);
-      }
-    },
-
-    hanxincode: {
-      desc: 'alias for hanxin',
-      usage: 'hanxincode [flags] [file/text...]',
       exec(args, stdin) {
         return commands.hanxin.exec(args, stdin);
       }
@@ -7640,10 +7360,14 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
         const categories = {
           'profile & CV': ['about', 'experience', 'projects', 'works', 'skills', 'languages', 'education', 'contact', 'references', 'resume'],
-          'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'diff', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
+          'navigation & files': ['ls', 'll', 'cd', 'pwd', 'tree', 'cat', 'head', 'tail', 'touch', 'mkdir', 'rm', 'cp', 'mv', 'find', 'open'],
           'system & specs': ['neofetch', 'whoami', 'uname', 'uptime', 'date', 'cal', 'top', 'ps', 'free', 'df', 'env', 'hostname'],
           'network & web': ['ping', 'curl', 'wget', 'weather', 'ifconfig', 'nslookup'],
-          'text manipulation & utilities': ['textmanip', 'text-tools', 'tools', 'unicodemap', 'unimap', 'decayfmt', 'idcy', 'tdcy', 'diff', 'diffchecker', 'wdiff', 'count', 'replace', 'case', 'unaccent', 'longs', 'long-s', 'archaic-s', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'sort', 'seq', 'nl', 'binary', 'disemvowel', 'encrypt', 'decrypt', 'rev', 'rot13', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'mapdiff', 'mapdiffchecker', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'urlencode', 'urldecode', 'base64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn', 'to-ascii', 'to-unicode', 'qrcode', 'qr', 'qrcodegen', 'microqr', 'mqr', 'microqrcode', 'uqr', 'rmqr', 'rectmicroqr', 'rectmicroqrcode', 'rmqrcode', 'rectangularmicroqrcode', 'datamatrix', 'dm', 'aztec', 'azteccode', 'maxicode', 'maxi', 'dotcode', 'dot', 'dot-code', 'hanxin', 'hx', 'han-xin', 'hanxincode', 'barcode', 'bc', 'pdf417'],
+          'document & commerce': ['invoice', 'receipt', 'prescription', 'rx', 'pad'],
+          'symbology & matrix': ['qrcode', 'qr', 'microqr', 'rmqr', 'datamatrix', 'dm', 'aztec', 'maxicode', 'dotcode', 'dot', 'hanxin', 'hx', 'barcode', 'bc', 'pdf417', 'mailmark'],
+          'text manipulation & utilities': ['textmanip', 'tm', 'count', 'replace', 'sed', 'case', 'unaccent', 'trim', 'prefix', 'suffix', 'wrap', 'join', 'uniq', 'compact', 'filter', 'grep', 'sort', 'seq', 'nl', 'diff', 'wdiff', 'mapdiff'],
+          'linguistics & encoding': ['unicodemap', 'unimap', 'bijoy', 'ansi2uni', 'uni2ansi', 'mjcdi', 'longs', 'url', 'urlencode', 'urldecode', 'base64', 'b64', 'iconv', 'detect-encoding', 'zenkaku', 'hankaku', 'kana', 'punycode', 'idn'],
+          'crypto & obfuscation': ['encrypt', 'decrypt', 'rot13', 'caesar', 'binary', 'disemvowel', 'rev', 'flip', 'scramble', 'comb', 'perm', 'rng', 'randstr', 'shuffle', 'cut', 'unicode', 'decayfmt'],
           'customization & misc.': ['theme', 'font', 'music', 'matrix', 'snake', 'cowsay', 'fortune', 'sl', 'figlet', 'clear', 'history', 'reset', 'exit']
         };
 
@@ -9212,6 +8936,7 @@ __(@)(@)--------------------------------------(@)(@)__`;
       }
     }
   };
+  window.commands = commands;
 
   function parseCommandLine(rawInput) {
     const regex = /[^\s"']+|"([^"]*)"|'([^']*)'/g;
@@ -9282,6 +9007,7 @@ __(@)(@)--------------------------------------(@)(@)__`;
 
     return stageInput;
   }
+  window.executeCommandLine = executeCommandLine;
 
   function updateInputDisplay() {
     cliText.textContent = currentInputBuffer;

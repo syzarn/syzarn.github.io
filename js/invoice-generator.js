@@ -1006,8 +1006,12 @@
     let balanceDue = 0;
 
     if (state.meta.docType === 'receipt') {
-      amountPaid = targetTotal;
-      balanceDue = 0;
+      if (state.settlement.amountPaid !== undefined && state.settlement.amountPaid !== null && state.settlement.amountPaid !== '' && !isNaN(Number(state.settlement.amountPaid))) {
+        amountPaid = Math.round(Number(state.settlement.amountPaid) || 0);
+      } else {
+        amountPaid = targetTotal;
+      }
+      balanceDue = Math.max(0, targetTotal - amountPaid);
     } else {
       balanceDue = Math.max(0, targetTotal - amountPaid);
     }
@@ -2114,7 +2118,7 @@
 
           <div class="inv-field-row">
             <label class="inv-label" for="settle-amountpaid">amount paid (${curr.symbol}):</label>
-            <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-amountpaid" value="${paidStr}" ${isReceipt ? 'disabled title="auto-computed for receipts"' : ''}>
+            <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-amountpaid" value="${paidStr}">
           </div>
 
           ${isThermal ? `
