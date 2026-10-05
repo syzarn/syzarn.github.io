@@ -1876,13 +1876,13 @@
         if (scaler) scaler.style.transform = 'none';
         paperTarget.classList.add('rx-exporting-pdf');
 
-        // Ensure exact TrueType fonts (SolaimanLipi, Hind Siliguri, Arial) are preloaded and rendered
+        // Ensure exact TrueType fonts (Nirmala UI, SolaimanLipi, Arial) are preloaded and rendered
         if (document.fonts) {
           await Promise.all([
-            document.fonts.load('11.5pt "SolaimanLipi"'),
-            document.fonts.load('bold 11.5pt "SolaimanLipi"'),
-            document.fonts.load('11.5pt "Hind Siliguri"'),
-            document.fonts.load('bold 11.5pt "Hind Siliguri"'),
+            document.fonts.load('12px "Nirmala UI"'),
+            document.fonts.load('bold 12px "Nirmala UI"'),
+            document.fonts.load('12px "SolaimanLipi"'),
+            document.fonts.load('bold 12px "SolaimanLipi"'),
             document.fonts.ready
           ]).catch(() => { });
         }
@@ -1896,7 +1896,12 @@
           logging: false,
           backgroundColor: '#ffffff',
           scrollX: 0,
-          scrollY: 0
+          scrollY: 0,
+          onclone: (clonedDoc) => {
+            if (clonedDoc.fonts && clonedDoc.fonts.ready) {
+              return clonedDoc.fonts.ready;
+            }
+          }
         });
 
         if (!canvas || !canvas.width || !canvas.height) {
@@ -1962,10 +1967,10 @@
 
       if (document.fonts) {
         await Promise.all([
-          document.fonts.load('11.5pt "SolaimanLipi"'),
-          document.fonts.load('bold 11.5pt "SolaimanLipi"'),
-          document.fonts.load('11.5pt "Hind Siliguri"'),
-          document.fonts.load('bold 11.5pt "Hind Siliguri"'),
+          document.fonts.load('12px "Nirmala UI"'),
+          document.fonts.load('bold 12px "Nirmala UI"'),
+          document.fonts.load('12px "SolaimanLipi"'),
+          document.fonts.load('bold 12px "SolaimanLipi"'),
           document.fonts.ready
         ]).catch(() => { });
       }
