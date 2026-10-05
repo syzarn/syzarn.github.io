@@ -9007,7 +9007,8 @@ __(@)(@)--------------------------------------(@)(@)__`;
 
     return stageInput;
   }
-  window.executeCommandLine = executeCommandLine;
+  window.executePipeline = executePipeline;
+  window.executeCommandLine = executePipeline;
 
   function updateInputDisplay() {
     cliText.textContent = currentInputBuffer;

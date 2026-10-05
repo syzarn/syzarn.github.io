@@ -4776,7 +4776,7 @@ a.term-link:hover {
   flex: 1 1 0%;
   min-width: 0;
   text-align: right;
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
 }
 
 .rx-doc-name-en {
@@ -4789,7 +4789,7 @@ a.term-link:hover {
 }
 
 .rx-doc-name-bn {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 10.5pt;
   font-weight: 700;
   color: #164194;
@@ -4806,7 +4806,7 @@ a.term-link:hover {
 }
 
 .rx-doc-sub-bn {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 7.8pt;
   line-height: 1.25;
   color: #1f2937;
@@ -4822,7 +4822,7 @@ a.term-link:hover {
 }
 
 .rx-doc-col-bn .rx-doc-desig {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 7.8pt;
   font-weight: 700;
   color: var(--rx-desig-color, #dc2626);
@@ -4839,7 +4839,7 @@ a.term-link:hover {
 }
 
 .rx-doc-col-bn .rx-doc-spec {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 7.8pt;
   font-weight: 700;
   color: var(--rx-spec-color, #164194);
@@ -4920,7 +4920,7 @@ a.term-link:hover {
 
 .clinical-sidebar {
   padding-right: 10px;
-  font-family: Arial, 'SolaimanLipi', 'Kalpurush', sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', Arial, sans-serif;
 }
 
 .vertical-separator {
@@ -4981,7 +4981,7 @@ a.term-link:hover {
   line-height: 1.25;
   margin-bottom: 2px;
   color: #111827;
-  font-family: Arial, 'SolaimanLipi', 'Kalpurush', sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', Arial, sans-serif;
 }
 
 .advice-section {
@@ -4995,7 +4995,7 @@ a.term-link:hover {
   font-size: 8pt;
   line-height: 1.25;
   color: #111827;
-  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', serif;
 }
 
 .advice-num {
@@ -5003,12 +5003,12 @@ a.term-link:hover {
   font-weight: 700;
   flex-shrink: 0;
   color: #111827;
-  font-family: 'SolaimanLipi', Arial, serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', Arial, serif;
 }
 
 .advice-text {
   flex-grow: 1;
-  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', serif;
 }
 
 /* 6. Rx Medication Hierarchy & Dosage Padding */
@@ -5027,7 +5027,7 @@ a.term-link:hover {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  font-family: Arial, 'SolaimanLipi', sans-serif;
+  font-family: Arial, 'SolaimanLipi', 'Hind Siliguri', sans-serif;
 }
 
 .medication-header .med-index {
@@ -5039,7 +5039,7 @@ a.term-link:hover {
 
 .medication-header .med-name {
   font-weight: 700;
-  font-family: Arial, 'SolaimanLipi', sans-serif;
+  font-family: Arial, 'SolaimanLipi', 'Hind Siliguri', sans-serif;
 }
 
 .medication-header .generic-name {
@@ -5081,7 +5081,7 @@ a.term-link:hover {
 }
 
 .special-note-container .bullet-list li {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 8pt;
   line-height: 1.25;
   color: #111827;
@@ -5103,11 +5103,11 @@ a.term-link:hover {
   padding-top: 4px;
   text-align: center;
   line-height: 1.28;
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
 }
 
 .rx-foot-hosp-name {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 9pt;
   font-weight: 700;
   color: #164194;
@@ -5115,7 +5115,7 @@ a.term-link:hover {
 }
 
 .rx-foot-addr {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 6.2pt;
   color: #374151;
   font-weight: 400;
@@ -5123,7 +5123,7 @@ a.term-link:hover {
 }
 
 .rx-foot-helplines {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 6.2pt;
   color: #111827;
   font-weight: 400;
@@ -5136,7 +5136,7 @@ a.term-link:hover {
 }
 
 .rx-foot-contact {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 6.2pt;
   color: #111827;
   font-weight: 400;
@@ -5144,7 +5144,7 @@ a.term-link:hover {
 }
 
 .rx-foot-hours {
-  font-family: 'Nirmala UI', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Anek Bangla', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 6.2pt;
   font-weight: 700;
   color: #164194;
@@ -5183,7 +5183,7 @@ a.term-link:hover {
 }
 
 .rx-tpl-minimal-clinical .minimal-doc-name-bn {
-  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', sans-serif;
   font-size: 10.5pt;
   font-weight: 700;
   color: #0f2942;
@@ -5358,7 +5358,7 @@ a.term-link:hover {
   line-height: 1.4;
   color: #1e293b;
   margin-bottom: 3px;
-  font-family: Arial, 'SolaimanLipi', sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', Arial, sans-serif;
 }
 
 .rx-tpl-minimal-clinical .minimal-treatment-col {
@@ -5398,7 +5398,7 @@ a.term-link:hover {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px;
-  font-family: Arial, 'SolaimanLipi', sans-serif;
+  font-family: Arial, 'SolaimanLipi', 'Hind Siliguri', sans-serif;
 }
 
 .rx-tpl-minimal-clinical .min-med-num {
@@ -5422,7 +5422,7 @@ a.term-link:hover {
   font-size: 9pt;
   line-height: 1.4;
   color: #1e293b;
-  font-family: 'SolaimanLipi', 'Kalpurush', sans-serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', sans-serif;
 }
 
 .rx-tpl-minimal-clinical .min-dosage-inst {
@@ -5446,7 +5446,7 @@ a.term-link:hover {
   line-height: 1.45;
   color: #1e293b;
   margin-bottom: 4px;
-  font-family: 'SolaimanLipi', 'Kalpurush', serif;
+  font-family: 'SolaimanLipi', 'Hind Siliguri', 'Kalpurush', serif;
 }
 
 .rx-tpl-minimal-clinical .min-followup-section {

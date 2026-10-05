@@ -1876,13 +1876,13 @@
         if (scaler) scaler.style.transform = 'none';
         paperTarget.classList.add('rx-exporting-pdf');
 
-        // Ensure exact TrueType fonts (Nirmala UI, SolaimanLipi, Arial) are preloaded and rendered
+        // Ensure exact TrueType fonts (SolaimanLipi, Hind Siliguri, Arial) are preloaded and rendered
         if (document.fonts) {
           await Promise.all([
-            document.fonts.load('11.5pt "Nirmala UI"'),
-            document.fonts.load('bold 11.5pt "Nirmala UI"'),
-            document.fonts.load('9.3pt "SolaimanLipi"'),
-            document.fonts.load('bold 9.3pt "SolaimanLipi"'),
+            document.fonts.load('11.5pt "SolaimanLipi"'),
+            document.fonts.load('bold 11.5pt "SolaimanLipi"'),
+            document.fonts.load('11.5pt "Hind Siliguri"'),
+            document.fonts.load('bold 11.5pt "Hind Siliguri"'),
             document.fonts.ready
           ]).catch(() => { });
         }
@@ -1962,10 +1962,10 @@
 
       if (document.fonts) {
         await Promise.all([
-          document.fonts.load('11.5pt "Nirmala UI"'),
-          document.fonts.load('bold 11.5pt "Nirmala UI"'),
-          document.fonts.load('9.3pt "SolaimanLipi"'),
-          document.fonts.load('bold 9.3pt "SolaimanLipi"'),
+          document.fonts.load('11.5pt "SolaimanLipi"'),
+          document.fonts.load('bold 11.5pt "SolaimanLipi"'),
+          document.fonts.load('11.5pt "Hind Siliguri"'),
+          document.fonts.load('bold 11.5pt "Hind Siliguri"'),
           document.fonts.ready
         ]).catch(() => { });
       }

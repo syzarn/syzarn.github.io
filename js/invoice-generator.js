@@ -377,6 +377,118 @@
 
   const ALL_MFS_PSP_PROVIDERS = [...MFS_PROVIDERS, ...PSP_PROVIDERS];
 
+  // --- Internet Banking (Apps & Portals) in Bangladesh ---
+  const IBANKING_PROVIDERS = [
+    'AB Direct',
+    'Agrani Smart Banking',
+    'aib i-Banking',
+    'BanglaPay',
+    'Bank Alfalah Transact',
+    'Bank Asia Zen',
+    'BCB e-Cash',
+    'BDBL Digital Bank',
+    'BENGAL iNSPIRE',
+    'BRAC BANK Astha',
+    'CBC Digital',
+    'CellFin',
+    'CitiDirect',
+    'Citizens Fast',
+    'Citytouch',
+    'Community Cash',
+    'Dhaka Bank Go Plus',
+    'EBL SKYBANKING',
+    'EXIM aiser',
+    'eJanata',
+    'FSIB Cloud Banking',
+    'GiB GoFast',
+    'HBL Mobile',
+    'HSBC Mobile Banking',
+    'IBBL iSmart',
+    'ICBI Easy Pay',
+    'IFIC Aamar Bank',
+    'JBL Shadhin',
+    'Magpie',
+    'MBL Rainbow',
+    'Meghna Bank i-Banking',
+    'midland online',
+    'Modhumoti Digital Banking (Go Smart)',
+    'MTB Neo',
+    'myBKB',
+    'MyPrime',
+    'NBL iPower',
+    'NBP Digital',
+    'NCC Always',
+    'NexusPay',
+    'NRB Click',
+    'NRBC PLANET',
+    'ONE Bank App (1 App)',
+    'Padma Wallet',
+    'PKB eBanking',
+    'Prime NOW',
+    'PI Banking',
+    'pmoney',
+    'RAKUB eBanking',
+    'Rupali eBank',
+    'SBL DigiBanking',
+    'SC Mobile',
+    'SEBL InstaPay',
+    'ShahjalalTouchPay',
+    'Shimanto Bank Connect',
+    'SIBL NOW',
+    'Sonali e-Wallet',
+    'Trust Money',
+    'UCB One',
+    'UniON',
+    'Uttara eWallet',
+    'Woori WON',
+    'YONO SBI'
+  ];
+
+  const IBANKING_CHANNELS = [
+    'NPSB',
+    'BEFTN',
+    'RTGS',
+    'Intrabank / Direct Transfer'
+  ];
+
+  function formatBankDetails(s) {
+    if (!s) return '';
+    const parts = [];
+    if (s.bankName) parts.push(`Bank Name: ${s.bankName}`);
+    if (s.accountName) parts.push(`Account Name: ${s.accountName}`);
+    if (s.accountNumber) parts.push(`Account No: ${s.accountNumber}`);
+    if (s.branchName) parts.push(`Branch: ${s.branchName}`);
+    if (s.routingNumber) parts.push(`Routing No: ${s.routingNumber}`);
+    if (s.swiftBic) parts.push(`SWIFT / BIC / IBAN: ${s.swiftBic}`);
+    if (s.bankNotes) parts.push(s.bankNotes);
+    if (parts.length > 0) return parts.join('\n');
+    return s.bankDetails || '';
+  }
+
+  function hasBankDetails(s) {
+    if (!s) return false;
+    return !!(s.bankName || s.accountName || s.accountNumber || s.branchName || s.routingNumber || s.swiftBic || s.bankNotes || s.bankDetails);
+  }
+
+  function normalizeSettlement(settle) {
+    if (!settle) return;
+    settle.method = settle.method || 'CASH';
+    settle.mfsProvider = settle.mfsProvider || '';
+    settle.mfsNumber = settle.mfsNumber || '';
+    settle.trxId = settle.trxId || '';
+    settle.iBankingProvider = settle.iBankingProvider || '';
+    settle.iBankingChannel = settle.iBankingChannel || 'NPSB';
+    settle.iBankingRef = settle.iBankingRef || '';
+    settle.bankName = settle.bankName || '';
+    settle.accountName = settle.accountName || '';
+    settle.accountNumber = settle.accountNumber || '';
+    settle.branchName = settle.branchName || '';
+    settle.routingNumber = settle.routingNumber || '';
+    settle.swiftBic = settle.swiftBic || '';
+    settle.bankNotes = settle.bankNotes || '';
+    settle.bankDetails = settle.bankDetails || '';
+  }
+
   // --- presets & sample data generator ---
   const SAMPLE_PRESETS = {
     'stripe-modern': {
@@ -450,11 +562,21 @@
         mfsProvider: '',
         mfsNumber: '',
         trxId: '',
+        iBankingProvider: '',
+        iBankingChannel: 'NPSB',
+        iBankingRef: '',
         amountPaid: 0,
         tendered: 0,
         change: 0,
         authCode: '',
         last4: '',
+        bankName: 'Silicon Valley Bank (First Citizens Bank)',
+        accountName: 'TechWave Solutions Inc.',
+        accountNumber: '4099-2810-4820',
+        branchName: 'Santa Clara Commercial Banking',
+        routingNumber: '121000358',
+        swiftBic: 'SVBKUS6S / US42SVBK12100035840992810',
+        bankNotes: '',
         bankDetails: 'Bank: Silicon Valley Bank (First Citizens Bank)\nRouting (ABA): 121000358\nAccount: 4099-2810-4820\nSWIFT / BIC: SVBKUS6S\nIBAN: US42SVBK12100035840992810',
         terms: 'Payment is due within 14 days of invoice issue.\nOnline direct settlement link: https://pay.stripeflow.io/inv-2026-0042'
       }
@@ -673,12 +795,22 @@
         mfsProvider: 'bKash',
         mfsNumber: '',
         trxId: '',
+        iBankingProvider: 'CellFin',
+        iBankingChannel: 'NPSB',
+        iBankingRef: '',
         amountPaid: 570000,
         tendered: 600000,
         change: 30000,
         authCode: '',
         last4: '',
-        bankDetails: '',
+        bankName: 'ইসলামী ব্যাংক বাংলাদেশ পিএলসি',
+        accountName: 'মেসার্স চৌধুরী ব্রাদার্স ট্রেডার্স',
+        accountNumber: '২০৫০১২৩৪৫৬৭৮৯০১',
+        branchName: 'মিরপুর শাখা, ঢাকা',
+        routingNumber: '১২৫২৬০৯৪৩',
+        swiftBic: 'IBBLBDDH',
+        bankNotes: 'অনলাইন ও আরটিজিএস ফান্ড ট্রান্সফারের জন্য প্রযোজ্য।',
+        bankDetails: 'ব্যাংক: ইসলামী ব্যাংক বাংলাদেশ পিএলসি\nহিসাবের নাম: মেসার্স চৌধুরী ব্রাদার্স ট্রেডার্স\nহিসাব নম্বর: ২০৫০১২৩৪৫৬৭৮৯০১\nশাখা: মিরপুর শাখা, ঢাকা\nরাউটিং নম্বর: ১২৫২৬০৯৪৩',
         terms: 'বিক্রিত মাল ফেরত বা পরিবর্তন হয় না।\nআমাদের সাথে ব্যবসা করার জন্য ধন্যবাদ।'
       },
       vintageBn: {
@@ -843,11 +975,21 @@
         mfsProvider: '',
         mfsNumber: '',
         trxId: '',
+        iBankingProvider: '',
+        iBankingChannel: 'NPSB',
+        iBankingRef: '',
         amountPaid: 0,
         tendered: 0,
         change: 0,
         authCode: '',
         last4: '',
+        bankName: 'WELLS FARGO BANK, N.A.',
+        accountName: 'APEX INDUSTRIAL SUPPLY CORP.',
+        accountNumber: '409-182903-12',
+        branchName: 'San Francisco Commercial Branch',
+        routingNumber: '121000248',
+        swiftBic: 'WFBIUS6S',
+        bankNotes: 'LOCKBOX: DEPT 901, SAN FRANCISCO, CA',
         bankDetails: 'BANK: WELLS FARGO BANK, N.A.\nROUTING: 121000248\nACCOUNT: 409-182903-12\nLOCKBOX: DEPT 901, SAN FRANCISCO, CA',
         terms: 'PAYMENT TERMS: NET 30 DAYS.\nACCOUNTS PAST DUE OVER 30 DAYS ARE SUBJECT TO A 1.5% PER MONTH LATE CHARGE.'
       }
@@ -1340,6 +1482,12 @@
         }
         if (saved.activeTemplate && SAMPLE_PRESETS[saved.activeTemplate]) {
           this.activeTemplate = saved.activeTemplate;
+        }
+      }
+
+      for (const key of Object.keys(this.templateStates)) {
+        if (this.templateStates[key]) {
+          normalizeSettlement(this.templateStates[key].settlement);
         }
       }
 
@@ -2059,9 +2207,11 @@
       const paidStr = formatMinorUnitsToInput(s.amountPaid || 0, decimals);
       const tenderedStr = formatMinorUnitsToInput(s.tendered || 0, decimals);
 
-      const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + (s.bankDetails || '') + (m.barcodeValue || ''));
+      const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + (formatBankDetails(s) || '') + (m.barcodeValue || ''));
       const isMfs = s.method === 'MFS';
       const isCustomMfs = s.mfsProvider && !ALL_MFS_PSP_PROVIDERS.includes(s.mfsProvider);
+      const isIBanking = s.method === 'IBANKING';
+      const isCustomIBanking = s.iBankingProvider && !IBANKING_PROVIDERS.includes(s.iBankingProvider);
 
       return `
         <div class="inv-form-section">
@@ -2073,6 +2223,7 @@
               <option value="CASH" ${s.method === 'CASH' ? 'selected' : ''}>cash</option>
               <option value="COD" ${s.method === 'COD' ? 'selected' : ''}>cash on delivery (COD)</option>
               <option value="MFS" ${s.method === 'MFS' ? 'selected' : ''}>MFS &amp; PSP (mobile banking / payment wallets)</option>
+              <option value="IBANKING" ${s.method === 'IBANKING' ? 'selected' : ''}>internet banking (apps &amp; online portals)</option>
               <option value="CARD" ${s.method === 'CARD' ? 'selected' : ''}>card (credit / debit)</option>
               <option value="TRANSFER" ${s.method === 'TRANSFER' ? 'selected' : ''}>bank transfer / online</option>
               <option value="CHECK" ${s.method === 'CHECK' ? 'selected' : ''}>cheque / check</option>
@@ -2116,6 +2267,43 @@
             </div>
           </div>
 
+          <!-- Internet Banking Dynamic Fields -->
+          <div id="inv-ibanking-fields" style="${isIBanking ? 'display:flex;' : 'display:none;'}">
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-ibankingprovider">banking app / portal:</label>
+              <select class="tm-select inv-control" id="settle-ibankingprovider">
+                ${IBANKING_PROVIDERS.map(p => `
+                  <option value="${p}" ${s.iBankingProvider === p ? 'selected' : ''}>${p}</option>
+                `).join('')}
+                <option value="other" ${isCustomIBanking ? 'selected' : ''}>other / custom app...</option>
+              </select>
+            </div>
+
+            <div class="inv-field-row" id="inv-ibanking-custom-row" style="${isCustomIBanking ? 'display:flex;' : 'display:none;'}">
+              <label class="inv-label" for="settle-ibankingcustom">custom app / portal name:</label>
+              <input type="text" class="tm-input inv-control" id="settle-ibankingcustom" value="${escapeHTML(isCustomIBanking ? s.iBankingProvider : '')}" placeholder="app or portal name">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-ibankingchannel">channel / switch:</label>
+              <select class="tm-select inv-control" id="settle-ibankingchannel">
+                ${IBANKING_CHANNELS.map(ch => `
+                  <option value="${ch}" ${(s.iBankingChannel || 'NPSB') === ch ? 'selected' : ''}>${ch}</option>
+                `).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-ibankingref">account / customer ID / ref:</label>
+              <input type="text" class="tm-input inv-control" id="settle-ibankingref" value="${escapeHTML(s.iBankingRef || '')}" placeholder="e.g. A/C No. or Customer Ref">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-ibankingtrxid">transaction ID (TrxID / Ref):</label>
+              <input type="text" class="tm-input inv-control" id="settle-ibankingtrxid" value="${escapeHTML(s.trxId || '')}" placeholder="e.g. TXN-8924019">
+            </div>
+          </div>
+
           <div class="inv-field-row">
             <label class="inv-label" for="settle-amountpaid">amount paid (${curr.symbol}):</label>
             <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-amountpaid" value="${paidStr}">
@@ -2137,9 +2325,41 @@
           ` : ''}
 
           ${!isThermal ? `
+            <div class="inv-section-title" style="margin-top:10px;">bank remittance &amp; wire details</div>
+
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-bank">bank / wire details:</label>
-              <textarea class="tm-input inv-control" id="settle-bank" rows="3" placeholder="IBAN, SWIFT / BIC, routing, account numbers">${escapeHTML(s.bankDetails || '')}</textarea>
+              <label class="inv-label" for="settle-bankname">bank name:</label>
+              <input type="text" class="tm-input inv-control" id="settle-bankname" value="${escapeHTML(s.bankName || '')}" placeholder="e.g. Dutch-Bangla Bank PLC / Wells Fargo">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-accname">account name:</label>
+              <input type="text" class="tm-input inv-control" id="settle-accname" value="${escapeHTML(s.accountName || '')}" placeholder="e.g. Syzarn Technologies Ltd.">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-accnumber">account number:</label>
+              <input type="text" class="tm-input inv-control" id="settle-accnumber" value="${escapeHTML(s.accountNumber || '')}" placeholder="e.g. 115.120.987654">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-branch">branch name:</label>
+              <input type="text" class="tm-input inv-control" id="settle-branch" value="${escapeHTML(s.branchName || '')}" placeholder="e.g. Mirpur Branch, Dhaka / Main Branch">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-routing">routing number:</label>
+              <input type="text" class="tm-input inv-control" id="settle-routing" value="${escapeHTML(s.routingNumber || '')}" placeholder="e.g. 090261234">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-swift">SWIFT / BIC / IBAN:</label>
+              <input type="text" class="tm-input inv-control" id="settle-swift" value="${escapeHTML(s.swiftBic || '')}" placeholder="e.g. DBBLBDDH / DE89 1007...">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-banknotes">additional remittance notes:</label>
+              <textarea class="tm-input inv-control" id="settle-banknotes" rows="2" placeholder="lockbox, clearing instructions, or additional notes">${escapeHTML(s.bankNotes || '')}</textarea>
             </div>
           ` : ''}
 
@@ -2444,6 +2664,10 @@
         if (mfsBox) {
           mfsBox.style.display = val === 'MFS' ? 'flex' : 'none';
         }
+        const ibankingBox = container.querySelector('#inv-ibanking-fields');
+        if (ibankingBox) {
+          ibankingBox.style.display = val === 'IBANKING' ? 'flex' : 'none';
+        }
       });
       handleInput('settle-mfsprovider', val => {
         const customRow = container.querySelector('#inv-mfs-custom-row');
@@ -2465,6 +2689,32 @@
       handleInput('settle-trxid', val => {
         this.state.settlement.trxId = val;
       });
+
+      // Internet Banking handlers
+      handleInput('settle-ibankingprovider', val => {
+        const customRow = container.querySelector('#inv-ibanking-custom-row');
+        if (val === 'other') {
+          if (customRow) customRow.style.display = 'flex';
+          const customIn = container.querySelector('#settle-ibankingcustom');
+          this.state.settlement.iBankingProvider = (customIn && customIn.value.trim()) ? customIn.value.trim() : 'custom';
+        } else {
+          if (customRow) customRow.style.display = 'none';
+          this.state.settlement.iBankingProvider = val;
+        }
+      });
+      handleInput('settle-ibankingcustom', val => {
+        this.state.settlement.iBankingProvider = val.trim() || 'custom';
+      });
+      handleInput('settle-ibankingchannel', val => {
+        this.state.settlement.iBankingChannel = val;
+      });
+      handleInput('settle-ibankingref', val => {
+        this.state.settlement.iBankingRef = val;
+      });
+      handleInput('settle-ibankingtrxid', val => {
+        this.state.settlement.trxId = val;
+      });
+
       handleInput('settle-symbology', val => {
         this.state.meta.barcodeSymbology = val;
       });
@@ -2472,13 +2722,37 @@
         this.state.meta.barcodeValue = val;
       });
       handleInput('settle-amountpaid', val => {
-        this.state.settlement.amountPaid = parseToMinorUnits(val, decimals);
+        const prevPaid = this.state.settlement.amountPaid;
+        const parsed = parseToMinorUnits(val, decimals);
+        this.state.settlement.amountPaid = parsed;
+        const tmpl = this.state.meta.template;
+        if (tmpl === 'thermal-pos' || tmpl === 'thermal-retail-mushak') {
+          if (!this.state.settlement.tendered || this.state.settlement.tendered === prevPaid) {
+            this.state.settlement.tendered = parsed;
+            const tendEl = container.querySelector('#settle-tendered');
+            if (tendEl) tendEl.value = formatMinorUnitsToInput(parsed, decimals);
+          }
+        }
       });
       handleInput('settle-tendered', val => {
         this.state.settlement.tendered = parseToMinorUnits(val, decimals);
       });
       handleInput('settle-auth', val => { this.state.settlement.authCode = val; });
       handleInput('settle-last4', val => { this.state.settlement.last4 = val; });
+
+      // Divided bank details
+      const updateBankField = (prop, val) => {
+        this.state.settlement[prop] = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+        this.checkUrlInTerms();
+      };
+      handleInput('settle-bankname', val => updateBankField('bankName', val));
+      handleInput('settle-accname', val => updateBankField('accountName', val));
+      handleInput('settle-accnumber', val => updateBankField('accountNumber', val));
+      handleInput('settle-branch', val => updateBankField('branchName', val));
+      handleInput('settle-routing', val => updateBankField('routingNumber', val));
+      handleInput('settle-swift', val => updateBankField('swiftBic', val));
+      handleInput('settle-banknotes', val => updateBankField('bankNotes', val));
       handleInput('settle-bank', val => {
         this.state.settlement.bankDetails = val;
         this.checkUrlInTerms();
@@ -2545,7 +2819,8 @@
 
     checkUrlInTerms() {
       const s = this.state.settlement;
-      const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + (s.bankDetails || ''));
+      const bankText = formatBankDetails(s);
+      const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + bankText);
       const notice = document.getElementById('inv-url-notice');
       if (notice) {
         notice.style.display = hasUrl && this.state.meta.barcodeSymbology !== 'QR' ? 'flex' : 'none';
@@ -2649,7 +2924,8 @@
       if (this.state.meta.barcodeValue && this.state.meta.barcodeValue.trim()) {
         return this.state.meta.barcodeValue.trim();
       }
-      const match = ((this.state.settlement.terms || '') + ' ' + (this.state.settlement.bankDetails || '')).match(/https?:\/\/[^\s]+/i);
+      const bankText = formatBankDetails(this.state.settlement);
+      const match = ((this.state.settlement.terms || '') + ' ' + bankText).match(/https?:\/\/[^\s]+/i);
       return match ? match[0] : '';
     },
 
@@ -2795,16 +3071,26 @@
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
                   </div>
                 </div>
+              ` : state.settlement.method === 'IBANKING' ? `
+                <div class="inv-stripe-foot-block">
+                  <div class="inv-foot-heading">Payment Method:</div>
+                  <div class="inv-foot-body">
+                    <strong>Internet Banking (${escapeHTML(state.settlement.iBankingProvider || 'Internet Banking')})</strong>
+                    ${state.settlement.iBankingChannel ? `<br>Channel / Switch: ${escapeHTML(state.settlement.iBankingChannel)}` : ''}
+                    ${state.settlement.iBankingRef ? `<br>Ref / Account: ${escapeHTML(state.settlement.iBankingRef)}` : ''}
+                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                  </div>
+                </div>
               ` : state.settlement.method === 'COD' ? `
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Method:</div>
                   <div class="inv-foot-body"><strong>Cash on Delivery (COD)</strong></div>
                 </div>
               ` : ''}
-              ${state.settlement.bankDetails ? `
+              ${formatBankDetails(state.settlement) ? `
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Instructions &amp; Bank Details:</div>
-                  <div class="inv-foot-body">${escapeHTML(state.settlement.bankDetails).replace(/\n/g, '<br>')}</div>
+                  <div class="inv-foot-body">${escapeHTML(formatBankDetails(state.settlement)).replace(/\n/g, '<br>')}</div>
                 </div>
               ` : ''}
               ${state.settlement.terms ? `
@@ -2913,6 +3199,7 @@
               <span>METHOD:</span>
               <span>${state.settlement.method === 'COD' ? 'CASH ON DELIVERY'
           : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'MFS').toUpperCase()}`
+          : state.settlement.method === 'IBANKING' ? `I-BANK - ${escapeHTML(state.settlement.iBankingProvider || 'INTERNET BANKING').toUpperCase()}`
             : escapeHTML(state.settlement.method || 'CASH')
         }</span>
             </div>
@@ -2921,6 +3208,26 @@
                 <div class="inv-thermal-tot-row">
                   <span>MOBILE:</span>
                   <span>${escapeHTML(state.settlement.mfsNumber)}</span>
+                </div>
+              ` : ''}
+              ${state.settlement.trxId ? `
+                <div class="inv-thermal-tot-row">
+                  <span>TRXID:</span>
+                  <span>${escapeHTML(state.settlement.trxId)}</span>
+                </div>
+              ` : ''}
+            ` : ''}
+            ${state.settlement.method === 'IBANKING' ? `
+              ${state.settlement.iBankingChannel ? `
+                <div class="inv-thermal-tot-row">
+                  <span>CHANNEL:</span>
+                  <span>${escapeHTML(state.settlement.iBankingChannel)}</span>
+                </div>
+              ` : ''}
+              ${state.settlement.iBankingRef ? `
+                <div class="inv-thermal-tot-row">
+                  <span>REF / A/C:</span>
+                  <span>${escapeHTML(state.settlement.iBankingRef)}</span>
                 </div>
               ` : ''}
               ${state.settlement.trxId ? `
@@ -3050,16 +3357,26 @@
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
                   </div>
                 </div>
+              ` : state.settlement.method === 'IBANKING' ? `
+                <div class="inv-classic-block">
+                  <div class="inv-classic-heading">Payment Information:</div>
+                  <div class="inv-classic-body">
+                    Method: Internet Banking (${escapeHTML(state.settlement.iBankingProvider || 'Internet Banking')})
+                    ${state.settlement.iBankingChannel ? `<br>Channel / Switch: ${escapeHTML(state.settlement.iBankingChannel)}` : ''}
+                    ${state.settlement.iBankingRef ? `<br>Ref / Account: ${escapeHTML(state.settlement.iBankingRef)}` : ''}
+                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                  </div>
+                </div>
               ` : state.settlement.method === 'COD' ? `
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Payment Terms:</div>
                   <div class="inv-classic-body">Cash on Delivery (COD)</div>
                 </div>
               ` : ''}
-              ${state.settlement.bankDetails ? `
+              ${formatBankDetails(state.settlement) ? `
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Remittance &amp; Bank Details:</div>
-                  <div class="inv-classic-body">${escapeHTML(state.settlement.bankDetails).replace(/\n/g, '<br>')}</div>
+                  <div class="inv-classic-body">${escapeHTML(formatBankDetails(state.settlement)).replace(/\n/g, '<br>')}</div>
                 </div>
               ` : ''}
               ${state.settlement.terms ? `
@@ -3141,6 +3458,13 @@
         if (state.settlement.mfsNumber) parts.push(toBengaliNumerals(state.settlement.mfsNumber));
         if (state.settlement.trxId) parts.push('TrxID: ' + state.settlement.trxId);
         paymentMethodText = `এমএফএস (${prov})${parts.length ? ' — ' + parts.join(', ') : ''}`;
+      } else if (state.settlement.method === 'IBANKING') {
+        const prov = state.settlement.iBankingProvider || 'ইন্টারনেট ব্যাংকিং';
+        const parts = [];
+        if (state.settlement.iBankingChannel) parts.push(state.settlement.iBankingChannel);
+        if (state.settlement.iBankingRef) parts.push('হিসাব/রেফ: ' + state.settlement.iBankingRef);
+        if (state.settlement.trxId) parts.push('TrxID: ' + state.settlement.trxId);
+        paymentMethodText = `ইন্টারনেট ব্যাংকিং (${prov})${parts.length ? ' — ' + parts.join(', ') : ''}`;
       } else if (state.settlement.method === 'TRANSFER') {
         paymentMethodText = 'ব্যাংক ট্রান্সফার';
       } else if (state.settlement.method === 'CARD') {
@@ -3467,10 +3791,10 @@
             <!-- Bottom Settlement, Barcode & Totals Section -->
             <div class="inv-tractor-bottom-grid">
               <div class="inv-tractor-bottom-left">
-                ${state.settlement.bankDetails ? `
+                ${formatBankDetails(state.settlement) ? `
                   <div class="inv-tractor-block">
                     <div class="inv-tractor-block-lbl">REMITTANCE INSTRUCTIONS:</div>
-                    <div class="inv-tractor-block-val">${escapeHTML(state.settlement.bankDetails).toUpperCase().replace(/\n/g, '<br>')}</div>
+                    <div class="inv-tractor-block-val">${escapeHTML(formatBankDetails(state.settlement)).toUpperCase().replace(/\n/g, '<br>')}</div>
                   </div>
                 ` : ''}
                 ${state.settlement.terms ? `
@@ -3696,10 +4020,10 @@
           <!-- Settlement & Boxed Totals Module -->
           <div class="inv-erp-mid-summary">
             <div class="inv-erp-summary-left">
-              ${state.settlement.bankDetails ? `
+              ${formatBankDetails(state.settlement) ? `
                 <div class="inv-erp-notes-box">
                   <div class="inv-erp-notes-title">REMITTANCE &amp; WIRE INSTRUCTIONS:</div>
-                  <div class="inv-erp-notes-body">${escapeHTML(state.settlement.bankDetails).replace(/\n/g, '<br>')}</div>
+                  <div class="inv-erp-notes-body">${escapeHTML(formatBankDetails(state.settlement)).replace(/\n/g, '<br>')}</div>
                 </div>
               ` : ''}
               ${state.settlement.terms ? `
@@ -3858,11 +4182,18 @@
 
       // Payment Tender Line
       let tenderLabel = 'CASH PAID';
-      let tenderAmount = totals.tendered || totals.netPayable;
+      const isCash = !state.settlement.method || state.settlement.method === 'CASH';
+      let tenderAmount = isCash
+        ? (totals.tendered > 0 ? totals.tendered : (totals.amountPaid > 0 ? totals.amountPaid : totals.netPayable))
+        : (totals.amountPaid > 0 ? totals.amountPaid : (totals.tendered > 0 ? totals.tendered : totals.netPayable));
+
       if (state.settlement.method === 'TRANSFER') {
         tenderLabel = 'eCom Online';
       } else if (state.settlement.method === 'MFS') {
         const prov = state.settlement.mfsProvider || 'MFS';
+        tenderLabel = escapeHTML(prov);
+      } else if (state.settlement.method === 'IBANKING') {
+        const prov = state.settlement.iBankingProvider || 'Internet Banking';
         tenderLabel = escapeHTML(prov);
       } else if (state.settlement.method === 'CARD') {
         tenderLabel = 'CARD PAID';
@@ -4053,6 +4384,12 @@ Powered by MIS@ACI Limited`;
               <span class="inv-mushak-ledg-lbl">${tenderLabel} :</span>
               <span class="inv-mushak-ledg-val">${fmtMoney(tenderAmount)}</span>
             </div>
+            ${state.settlement.trxId ? `
+              <div class="inv-mushak-ledg-row">
+                <span class="inv-mushak-ledg-lbl">TRX ID :</span>
+                <span class="inv-mushak-ledg-val" style="font-family:monospace;font-size:10px;">${escapeHTML(state.settlement.trxId)}</span>
+              </div>
+            ` : ''}
             ${(totals.change > 0 || state.settlement.method === 'CASH') ? `
               <div class="inv-mushak-ledg-row">
                 <span class="inv-mushak-ledg-lbl">CHANGE AMOUNT :</span>
