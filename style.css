@@ -4928,14 +4928,14 @@ optgroup[disabled] option {
   font-family: Arial, sans-serif;
   font-size: 8.22pt;
   font-weight: 400;
-  color: var(--rx-desig-color, #1f1491);
+  color: var(--rx-desig-color, #e03e2d);
 }
 
 .rx-doc-col-bn .rx-doc-desig {
   font-family: 'Nirmala UI', 'Noto Sans Bengali', Arial, sans-serif;
   font-size: 8.22pt;
   font-weight: 400;
-  color: var(--rx-desig-color, #1f1491);
+  color: var(--rx-desig-color, #e03e2d);
 }
 
 .rx-doc-col-en .rx-doc-spec,
@@ -4998,12 +4998,12 @@ optgroup[disabled] option {
 
 /* 2. Patient Demographics Strip */
 .patient-strip {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 130pt 92pt 140pt 65pt 1fr;
   align-items: center;
   border: 0.62pt solid #d9d9d9;
   border-radius: 0;
-  padding: 0 8pt;
+  padding: 0 6.5pt;
   height: 25.3pt;
   box-sizing: border-box;
   margin: 16.8pt 0 13pt 0;
@@ -5011,24 +5011,39 @@ optgroup[disabled] option {
   background-color: #ffffff;
   font-family: Arial, sans-serif;
   color: #000000;
+  white-space: nowrap;
+}
+
+.patient-strip > div {
+  white-space: nowrap !important;
+  overflow: visible;
+  line-height: 1.2;
+}
+
+.patient-strip > div:last-child {
+  justify-self: end;
 }
 
 .patient-field-label {
   color: #000000;
   font-weight: 400;
   margin-right: 4px;
+  white-space: nowrap;
 }
 
 .patient-field-value {
   color: #000000;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 /* 3. Asymmetric Two-Column Grid (Zero separator line) */
 .rx-body-grid {
   display: grid;
-  grid-template-columns: 180pt 1fr;
-  gap: 22.2pt;
+  grid-template-columns: 181pt 1fr;
+  gap: 21.3pt;
+  margin-left: 21.3pt; /* Clinically aligns sidebar to exact x = 40.1pt */
+  margin-right: 0;
   min-height: 480pt;
   flex: 1;
 }
@@ -5036,7 +5051,7 @@ optgroup[disabled] option {
 .clinical-sidebar {
   padding-left: 0;
   padding-right: 0;
-  font-family: Arial, 'Nirmala UI', sans-serif;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 .vertical-separator {
@@ -5064,7 +5079,7 @@ optgroup[disabled] option {
   font-size: 9.87pt;
   font-weight: 700;
   margin-top: 10pt;
-  margin-bottom: 3pt;
+  margin-bottom: 3.5pt;
   color: #000000;
 }
 
@@ -5080,14 +5095,14 @@ optgroup[disabled] option {
   font-weight: 400;
   font-style: italic;
   color: #1d1d1d;
-  margin: 3pt 0 2pt 0;
+  margin: 4pt 0 2pt 4.9pt;
 }
 
 .clinical-section {
   margin-bottom: 6pt;
 }
 
-/* 5. Bullet List Structure with Proper Hanging Indent */
+/* 5. Bullet List Structure with Crisp Institutional Square Bullets & SolaimanLipi */
 .bullet-list {
   list-style: none !important;
   padding: 0 !important;
@@ -5097,65 +5112,83 @@ optgroup[disabled] option {
 .bullet-item {
   display: flex !important;
   align-items: flex-start !important;
+  margin-left: 4.9pt !important;
+  margin-bottom: 2.5pt !important;
   font-size: 9.25pt !important;
   line-height: 1.35 !important;
-  margin-bottom: 2pt !important;
   color: #1d1d1d !important;
-  font-family: 'Nirmala UI', Arial, sans-serif !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .bullet-dot {
   display: inline-block !important;
-  width: 10pt !important;
-  min-width: 10pt !important;
+  width: 9.9pt !important;
+  min-width: 9.9pt !important;
   flex-shrink: 0 !important;
-  font-size: 9pt !important;
   line-height: 1.35 !important;
-  color: #1d1d1d !important;
+  text-align: left !important;
+  color: transparent !important; /* Hide unicode glyph in favor of crisp CSS square bullet */
+  user-select: none !important;
+}
+
+.bullet-dot::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 3.1pt !important;
+  height: 3.1pt !important;
+  background-color: #1d1d1d !important;
+  vertical-align: middle !important;
+  margin-top: -2.5pt !important;
 }
 
 .bullet-text {
   flex: 1 !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .bullet-text .sub-line {
-  margin-top: 1pt;
+  margin-top: 1.5pt;
+  margin-left: 5.3pt;
   font-size: 9.25pt;
   line-height: 1.35;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 /* Advice items */
 .advice-section {
-  margin-top: 6pt;
+  margin-top: 8pt;
 }
 
 .advice-item {
   display: flex !important;
   align-items: flex-start !important;
-  margin-bottom: 3pt !important;
+  margin-left: 7.5pt !important;
+  margin-bottom: 3.5pt !important;
   font-size: 9.25pt !important;
   line-height: 1.35 !important;
   color: #1d1d1d !important;
-  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .advice-num {
-  min-width: 14pt !important;
-  font-weight: 400 !important;
+  width: 10.3pt !important;
+  min-width: 10.3pt !important;
   flex-shrink: 0 !important;
+  font-weight: 400 !important;
   color: #1d1d1d !important;
-  font-family: 'Nirmala UI', Arial, sans-serif !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .advice-text {
   flex-grow: 1 !important;
-  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .advice-subline {
-  margin-top: 1pt;
+  margin-top: 1.5pt;
   font-size: 9.25pt;
   line-height: 1.35;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 /* 6. Rx Medication Hierarchy & Dosage */
@@ -5164,29 +5197,30 @@ optgroup[disabled] option {
 }
 
 .medication-block {
+  margin-left: 15.4pt;
   margin-bottom: 6pt;
 }
 
 .medication-header {
   font-size: 9.87pt;
   font-weight: 700;
-  color: #1d1d1d;
+  color: #000000;
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  font-family: Arial, sans-serif;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 .medication-header .med-index {
-  min-width: 16pt;
+  min-width: 14pt;
   font-weight: 700;
   flex-shrink: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 .medication-header .med-name {
   font-weight: 700;
-  font-family: Arial, sans-serif;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 .medication-header .generic-name {
@@ -5194,27 +5228,33 @@ optgroup[disabled] option {
   font-style: italic;
   color: #5a5959;
   margin-left: 4pt;
-  font-family: Arial, sans-serif;
-  font-size: 8.22pt;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
+  font-size: 9.87pt;
 }
 
 .dosage-subline {
-  margin-left: 16pt;
-  margin-top: 1pt;
+  margin-left: 24.7pt;
+  margin-top: 1.5pt;
   font-size: 9.87pt;
   line-height: 1.35;
   color: #1d1d1d;
-  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
 }
 
 /* 7. Bottom Sections */
 .followup-section {
-  margin-top: 6pt;
-  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
+  margin-top: 8pt;
+  font-family: 'SolaimanLipi', Arial, sans-serif;
+}
+
+.followup-section .bullet-item {
+  margin-left: 4.8pt !important;
+  margin-bottom: 2.5pt !important;
+  font-family: 'SolaimanLipi', Arial, sans-serif !important;
 }
 
 .special-note-container {
-  margin-top: 6pt;
+  margin-top: 8pt;
   padding-top: 0;
   border-top: none;
 }
@@ -5227,20 +5267,30 @@ optgroup[disabled] option {
   margin-top: 2pt;
 }
 
+.special-note-content .bullet-item {
+  margin-left: 4.8pt !important;
+  margin-bottom: 2.5pt !important;
+  font-family: 'Nirmala UI', sans-serif !important;
+}
+
+.special-note-content .bullet-text {
+  font-family: 'Nirmala UI', sans-serif !important;
+}
+
 .special-note-subline {
-  margin-top: 2pt;
+  margin-top: 1.5pt;
   font-size: 9.25pt;
   line-height: 1.35;
   color: #1d1d1d;
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', sans-serif !important;
 }
 
 .doctor-signature-block {
   font-size: 9.87pt;
-  font-weight: 700;
+  font-weight: 400; /* Statutory regular font weight */
   text-align: right;
   margin-top: 14pt;
-  padding-right: 0;
+  padding-right: 45.4pt; /* Precise statutory right margin */
   color: #000000;
   font-family: Arial, sans-serif;
 }
@@ -5251,31 +5301,31 @@ optgroup[disabled] option {
   padding-top: 6pt;
   text-align: center;
   line-height: 1.3;
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
 }
 
 .rx-foot-hosp-name {
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
   font-size: 9.87pt;
   font-weight: 700;
-  color: #a91b22;
+  color: #1f1491; /* Statutory Institutional Navy Blue */
   margin-bottom: 2pt;
 }
 
 .rx-foot-addr {
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
   font-size: 6.58pt;
   color: #000000;
   font-weight: 400;
-  margin-bottom: 1pt;
+  margin-bottom: 1.5pt;
 }
 
 .rx-foot-helplines {
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
   font-size: 6.58pt;
   color: #000000;
-  font-weight: 400;
-  margin-bottom: 1pt;
+  font-weight: 700;
+  margin-bottom: 1.5pt;
 }
 
 .rx-foot-hotline {
@@ -5284,15 +5334,15 @@ optgroup[disabled] option {
 }
 
 .rx-foot-contact {
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
   font-size: 6.58pt;
   color: #000000;
-  font-weight: 400;
-  margin-bottom: 1pt;
+  font-weight: 700;
+  margin-bottom: 1.5pt;
 }
 
 .rx-foot-hours {
-  font-family: 'Nirmala UI', sans-serif;
+  font-family: 'Nirmala UI', 'SolaimanLipi', sans-serif;
   font-size: 6.58pt;
   font-weight: 400;
   color: #000000;

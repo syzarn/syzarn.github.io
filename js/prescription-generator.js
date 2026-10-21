@@ -95,7 +95,7 @@
         contactBn: 'জরুরী প্রয়োজনে: ০১৮৯৪-৯৩৫৯৮৫',
         specialtyBn: 'মানসিক রোগ, মাদকাসক্তি নিরাময় ও মনো-যৌন রোগ\nবিশেষজ্ঞ',
 
-        designationColor: '#1f1491',
+        designationColor: '#e03e2d',
         specialtyColor: '#1f1491'
       },
       hospitalLogoUrl: 'files/ibn-sina-logo.png',
@@ -370,7 +370,7 @@
         if (typeof localStorage !== 'undefined') {
           // Clear any legacy storage keys containing old personal data
           ['syzarn_prescription_data_v8', 'syzarn_prescription_data_v7', 'syzarn_prescription_data_v6'].forEach(k => {
-            try { localStorage.removeItem(k); } catch(e) {}
+            try { localStorage.removeItem(k); } catch (e) { }
           });
           const raw = localStorage.getItem(this.storageKey);
           if (raw) {
@@ -1510,15 +1510,15 @@
           <div class="advice-section">
             <div class="section-header">Advice</div>
             ${rx.advice.map((item, idx) => {
-              const lines = escapeHTML(item).split('\n');
-              const head = lines[0] || '';
-              const sub = lines.slice(1).map(l => `<div style="padding-left: 2px; margin-top: 1px;">${l}</div>`).join('');
-              return `
+          const lines = escapeHTML(item).split('\n');
+          const head = lines[0] || '';
+          const sub = lines.slice(1).map(l => `<div style="padding-left: 2px; margin-top: 1px;">${l}</div>`).join('');
+          return `
               <div class="advice-item">
                 <span class="advice-num">${idx + 1}.</span>
                 <div class="advice-text">${head}${sub}</div>
               </div>`;
-            }).join('')}
+        }).join('')}
           </div>
         `;
       }
@@ -1544,15 +1544,18 @@
             <div class="section-header">Special Note</div>
             <div class="special-note-content">
               ${rx.specialNotes.map(item => {
-                const lines = escapeHTML(item).split('\n');
-                const first = lines[0] ? `
+          const lines = escapeHTML(item).split('\n');
+          const first = lines[0] || '';
+          const rest = lines.slice(1).map(l => `<div class="special-note-subline">${l}</div>`).join('');
+          return `
                   <div class="bullet-item">
                     <span class="bullet-dot">•</span>
-                    <div class="bullet-text">${lines[0]}</div>
-                  </div>` : '';
-                const rest = lines.slice(1).map(l => `<div class="special-note-subline">${l}</div>`).join('');
-                return `${first}${rest}`;
-              }).join('')}
+                    <div class="bullet-text">
+                      ${first}
+                      ${rest}
+                    </div>
+                  </div>`;
+        }).join('')}
             </div>
           </div>
         `;
@@ -1942,7 +1945,7 @@
       const pdfBtn = document.getElementById('rx-pdf-btn');
       if (pdfBtn) {
         pdfBtn.disabled = true;
-        pdfBtn.textContent = '⏳ generating PDF...';
+        pdfBtn.textContent = 'generating PDF...';
       }
       if (this.workbench && typeof this.workbench.setStatus === 'function') {
         this.workbench.setStatus('generating vector A4 PDF...');
@@ -2044,7 +2047,7 @@
         console.error('PDF generation error:', err);
         alert('Could not generate PDF: ' + (err.message || 'Canvas export failed.'));
         if (this.workbench && typeof this.workbench.setStatus === 'function') {
-          this.workbench.setStatus('Error generating PDF');
+          this.workbench.setStatus('error generating PDF');
         }
       } finally {
         paperTarget.classList.remove('rx-exporting-pdf');
