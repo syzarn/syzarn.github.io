@@ -905,8 +905,9 @@
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 80px 1fr 90px; gap:6px;">
-                  <div>
+                <!-- Responsive Top Grid: Form, Brand Name (with Medex), Strength -->
+                <div class="rx-med-top-grid">
+                  <div class="rx-med-col-form">
                     <label class="rx-label">form:</label>
                     <select class="tm-select rx-control rx-med-type" data-idx="${idx}">
                       <option value="Tab." ${med.type === 'Tab.' ? 'selected' : ''}>Tab.</option>
@@ -920,8 +921,8 @@
                       <option value="Inhaler" ${med.type === 'Inhaler' ? 'selected' : ''}>Inhaler</option>
                     </select>
                   </div>
-                  <div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <div class="rx-med-col-brand">
+                    <div class="rx-field-header">
                       <label class="rx-label" style="margin-bottom:0;">brand name:</label>
                       <button type="button" class="rx-medex-btn rx-medex-brand-btn" data-idx="${idx}" title="search brand &amp; strength on Medex">
                         <img src="files/medex.com.bd.png" alt="" class="rx-medex-icon">
@@ -930,18 +931,19 @@
                     </div>
                     <input type="text" class="tm-input rx-control rx-med-brand" data-idx="${idx}" value="${escapeHTML(med.brandName || '')}" placeholder="e.g. Intimate">
                   </div>
-                  <div>
+                  <div class="rx-med-col-strength">
                     <label class="rx-label">strength:</label>
                     <input type="text" class="tm-input rx-control rx-med-strength" data-idx="${idx}" value="${escapeHTML(med.strength || '')}" placeholder="e.g. 10 mg">
                   </div>
                 </div>
 
-                <div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-                    <label class="rx-label" style="margin-bottom:0;">generic name (in parentheses):</label>
+                <!-- Generic Name (with Medex search) -->
+                <div class="rx-med-col-generic">
+                  <div class="rx-field-header">
+                    <label class="rx-label" style="margin-bottom:0;">generic name <span style="font-size:10px;color:#94a3b8;font-weight:normal;">(in parentheses)</span>:</label>
                     <button type="button" class="rx-medex-btn rx-medex-generic-btn" data-idx="${idx}" title="search generic on Medex">
-                        <img src="files/medex.com.bd.png" alt="" class="rx-medex-icon">
-                        <span>medex</span>
+                      <img src="files/medex.com.bd.png" alt="" class="rx-medex-icon">
+                      <span>medex</span>
                     </button>
                   </div>
                   <input type="text" class="tm-input rx-control rx-med-generic" data-idx="${idx}" value="${escapeHTML(med.genericName || '')}" placeholder="e.g. Escitalopram Oxalate">

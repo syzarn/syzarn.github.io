@@ -4676,29 +4676,41 @@ optgroup[disabled] option {
   border-color: #3b82f6;
 }
 
+.rx-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  min-height: 20px;
+}
+
 .rx-medex-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(14, 165, 233, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.45);
   color: #38bdf8;
-  padding: 1px 6px;
-  border-radius: 3px;
+  padding: 2px 7px;
+  border-radius: 4px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 10.5px;
   line-height: 1.2;
   text-transform: lowercase;
   transition: all 0.15s ease;
   user-select: none;
+  flex-shrink: 0 !important;
+  white-space: nowrap;
+  touch-action: manipulation;
 }
 
 .rx-medex-btn:hover {
-  background: rgba(14, 165, 233, 0.25);
+  background: rgba(14, 165, 233, 0.28);
   border-color: #38bdf8;
   color: #ffffff;
-  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.45);
 }
 
 .rx-medex-btn:active {
@@ -4712,6 +4724,46 @@ optgroup[disabled] option {
   border-radius: 2px;
   display: inline-block;
   vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.rx-med-top-grid {
+  display: grid;
+  grid-template-columns: 85px 1fr 95px;
+  gap: 6px;
+  align-items: end;
+}
+
+@media (max-width: 680px) {
+  .rx-med-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-items: start;
+  }
+
+  .rx-med-col-brand {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .rx-med-col-form {
+    grid-column: 1 / 2;
+  }
+
+  .rx-med-col-strength {
+    grid-column: 2 / 3;
+  }
+
+  .rx-field-header {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .rx-medex-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    min-height: 22px;
+  }
 }
 
 .rx-item-card {

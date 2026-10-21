@@ -2693,7 +2693,7 @@
           `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
         ).join('');
         const uncertHtml = BANGLAQR_MFS_UNCERTIFIED.map(a =>
-          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+          `<option value="${a}" disabled style="color:#64748b;">${a}</option>`
         ).join('');
         return `
           <optgroup label="mobile financial services">
@@ -2708,7 +2708,7 @@
           `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
         ).join('');
         const uncertHtml = BANGLAQR_PSP_UNCERTIFIED.map(a =>
-          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+          `<option value="${a}" disabled style="color:#64748b;">${a}</option>`
         ).join('');
         return `
           <optgroup label="payment service providers">
@@ -2723,7 +2723,7 @@
           `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
         ).join('');
         const uncertHtml = BANGLAQR_PSO_UNCERTIFIED.map(a =>
-          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+          `<option value="${a}" disabled style="color:#64748b;">${a}</option>`
         ).join('');
         return `
           <optgroup label="payment system operators">
@@ -2739,13 +2739,13 @@
           `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
         ).join('');
         const uncertHtml = BANGLAQR_BANK_APPS_UNCERTIFIED.map(a =>
-          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+          `<option value="${a}" disabled style="color:#64748b;">${a}</option>`
         ).join('');
         return `
           <optgroup label="bank apps">
             ${certHtml}
           </optgroup>
-          <optgroup label="bank apps (not certified for BanglaQR)" disabled>
+          <optgroup label="bank apps (not certified)" disabled>
             ${uncertHtml}
           </optgroup>
         `;
