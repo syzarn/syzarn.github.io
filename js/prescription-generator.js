@@ -74,72 +74,71 @@
     'ibn-sina-standard': {
       meta: {
         template: 'ibn-sina-standard',
-        prescriptionId: 'RX-2026-4040'
+        prescriptionId: 'RX-2026-70839'
       },
       doctor: {
-        nameEn: 'Dr. Farzana Meem (Offline)',
-        degreesEn: 'MBBS (DU), MD (Digital Detox & Cyber-Psychiatry)',
-        instituteEn: 'National Institute of Screen Fatigue & Reel Addiction',
-        designationEn: 'Associate Professor, Dept. of Cyber-Rehabilitation',
-        hospitalEn: 'The Reboot Hospital & Wellness Center',
-        regNoEn: 'BMDC Reg. No.: A-40404',
-        contactEn: 'E-mail: farzana.meem@rebootmail.com',
-        specialtyEn: 'Cyber-Psychiatrist & Screen Detox Specialist',
+        nameEn: 'Dr. Mustaquim Farooqui',
+        degreesEn: 'MBBS (SOMC), MD (Psychiatry)',
+        instituteEn: 'Bangabandhu Sheikh Mujib Medical University',
+        designationEn: 'Assistant Professor, Dept. of Psychiatry',
+        hospitalEn: 'Ibn Sina Medical College Hospital',
+        regNoEn: 'BMDC Reg. No.: A-70839',
+        contactEn: 'E-mail: mustaquimfarooqui@gmail.com',
+        specialtyEn: 'Psychiatrist & Psychotherapist',
 
-        nameBn: 'ডা. ফারজানা মীম (অফলাইন)',
-        degreesBn: 'এমবিবিএস (ডিইউ), এমডি (ডিজিটাল ডিটক্স ও সাইবার-সাইকিয়াট্রি)',
-        instituteBn: 'জাতীয় স্ক্রিন ক্লান্তি ও রিলস আসক্তি ইনস্টিটিউট',
-        designationBn: 'সহযোগী অধ্যাপক, সাইবার পুনর্বাসন বিভাগ',
-        hospitalBn: 'দ্য রিবুট হাসপাতাল ও ওয়েলনেস সেন্টার',
-        regNoBn: 'বিএমডিসি রেজি: নং: এ-৪০৪০৪',
-        contactBn: 'জরুরী প্রয়োজনে: ০১৯০০-৪০৪৪০৪',
-        specialtyBn: 'মানসিক স্বাস্থ্য, সোশ্যাল মিডিয়া আসক্তি নিরাময় ও স্ক্রিন ডিটক্স বিশেষজ্ঞ',
+        nameBn: 'ডা. মুস্তাকীম ফারূকী',
+        degreesBn: 'এমবিবিএস (সিওমেক), এমডি (সাইকিয়াট্রি)',
+        instituteBn: 'বঙ্গবন্ধু শেখ মুজিব মেডিকেল বিশ্ববিদ্যালয়',
+        designationBn: 'সহকারী অধ্যাপক, মনোরোগ বিদ্যা বিভাগ',
+        hospitalBn: 'ইবনে সিনা মেডিকেল কলেজ হাসপাতাল',
+        regNoBn: 'বিএমডিসি রেজি: নং: এ-৭০৮৩৯',
+        contactBn: 'জরুরী প্রয়োজনে: ০১৮৯৪-৯৩৫৯৮৫',
+        specialtyBn: 'মানসিক রোগ, মাদকাসক্তি নিরাময় ও মনো-যৌন রোগ\nবিশেষজ্ঞ',
 
-        designationColor: '#dc2626',
-        specialtyColor: '#164194'
+        designationColor: '#1f1491',
+        specialtyColor: '#1f1491'
       },
       hospitalLogoUrl: 'files/ibn-sina-logo.png',
       patient: {
-        name: 'Alvee Ahnaf Khan',
+        name: 'Alvee Ahnaf',
         age: '22 Years',
         sex: 'Male',
-        mobile: '01580-925581',
-        date: '04/10/2026'
+        mobile: '01712-984512',
+        date: '21/10/2026'
       },
       clinical: {
         showChiefComplaints: true,
         chiefComplaints: [
-          'Phantom pocket vibration (পকেটে ফোন না থাকলেও ভাইব্রেট হচ্ছে মনে হওয়া)',
-          'Irritable when Wi-Fi speed drops below 50 Mbps',
-          'Anhedonia (বাস্তব জীবনের সাধারণ জিনিসে আনন্দ না পাওয়া, সারাক্ষণ স্ক্রল করার তাগিদ)',
-          'Severe thumb fatigue & neck spasm',
-          'Chronic insomnia due to 3 AM doomscrolling'
+          'Erectile dysfunction (উত্থানজনিত দুর্বলতা)',
+          'Performance anxiety (মানসিক উদ্বেগ ও ভীতি)',
+          'Loss of libido (যৌন আকাঙ্ক্ষা হ্রাস)',
+          'Fatigue & sleep disturbance'
         ],
         showHistory: true,
         history: [
-          'Total Duration: 4 years (Facebook ইনস্টল করার পর থেকে তীব্রতা বৃদ্ধি)',
-          'Multiple stressors are present.\nAcute stress: ব্যাটারি ১০%-এ নেমে যাওয়া এবং আশেপাশে চার্জার না থাকা; মেসেজে \'Seen\' আসার পর রিপ্লাই না পেয়ে তীব্র বুক ধড়ফড়ানি।',
-          'H/O Smartphone Face-Drop: বিছানায় শুয়ে স্ক্রল করার সময় নাকের ওপর ফোন পড়ে যাওয়ার পূর্ব ইতিহাস রয়েছে।',
-          'H/O Attention Deficit: টানা ১০ সেকেন্ডের বেশি কোনো স্থির বিষয়ের দিকে তাকাতে না পারা।'
+          'Total Duration - 6 months',
+          'Multiple stressors are present.\nAcute psychological stress: High performance anxiety and apprehension regarding marital life. Normal morning erection on stress-free days.',
+          'No history of diabetes mellitus, hypertension, or substance abuse.'
         ],
         showOnExaminations: true,
         onExaminations: [
           {
-            category: 'Digital & Mental State Examination',
+            category: 'Mental State Examination',
             findings: [
-              'Mood and Affect: স্ক্রিন অন থাকলে শান্ত, নেটওয়ার্ক চলে গেলে অস্থির ও আতঙ্কিত।',
-              'Thought Content: মাথায় সারাক্ষণ ট্রেন্ডিং ব্যাকগ্রাউন্ড মিউজিক এবং নোটিফিকেশনের কাল্পনিক শব্দ ঘোরাফেরা করা।'
+              'Appearance & Behavior: Alert, anxious, cooperative',
+              'Mood and Affect: Anxious & apprehensive',
+              'Thought Content: Performance anxiety, fear of failure, no suicidal ideation'
             ]
           }
         ],
         showDiagnosis: true,
         diagnosis: [
-          'Acute Screen Addiction (ASA)\nSevere with Comorbid Chronic Doomscrolling Disorder'
+          'Psychogenic Erectile Dysfunction (মনো-যৌন সমস্যা)\nPerformance Anxiety Disorder'
         ],
         showInvestigations: true,
         investigations: [
-          'Daily Screen-Time Breakdown: সেটিংস থেকে ৭ দিনের স্ক্রিনটাইম হিস্ট্রি প্রিন্ট করে আনবেন।',
-          'Fasting Blue-Light Level: সকালবেলা ফোন স্পর্শ করার পূর্বে চোখের পরীক্ষা।\n- ২ সপ্তাহ পর'
+          'Serum Testosterone (Total) - সকাল ৮টা থেকে ১০টার মধ্যে রক্ত দিবেন।\n- আগামী সপ্তাহে',
+          'Fasting Blood Sugar (FBS), Lipid Profile, Serum Prolactin'
         ]
       },
       rx: {
@@ -147,73 +146,71 @@
           {
             id: 'med-1',
             type: 'Tab.',
-            brandName: 'TouchGrass',
-            strength: '500 mg',
-            genericName: 'Chlorophyll Extract',
-            dosagePattern: '১/২ + ০ + ০ টি   ৭ দিন\n১ + ০ + ০ টি   চলবে (খালি পায়ে মাটির ওপর বা ঘাসে হেঁটে খাবেন)',
+            brandName: 'Intimate',
+            strength: '5 mg',
+            genericName: 'Tadalafil',
+            dosagePattern: '০ + ০ + ১ টি   রাতে শোবার ১ ঘন্টা আগে খাবেন   চলবে',
             duration: '',
             instruction: ''
           },
           {
             id: 'med-2',
-            type: 'Cap.',
-            brandName: 'AirplaneMode',
-            strength: '100 mg',
-            genericName: 'Radio Silence XR',
-            dosagePattern: '০ + ০ + ১ টি   রাত ১০টায় খাবেন। চলবে (খাওয়ার সাথে সাথে সব ডিভাইসের নেটওয়ার্ক অফ)',
+            type: 'Tab.',
+            brandName: 'Anxit',
+            strength: '0.5 mg',
+            genericName: 'Alprazolam',
+            dosagePattern: '০ + ০ + ১/২ টি   রাতে শোবার আগে খাবেন   ১৪ দিন',
             duration: '',
             instruction: ''
           },
           {
             id: 'med-3',
-            type: 'Tab.',
-            brandName: 'RealBook',
-            strength: '25 mg',
-            genericName: 'Paperback Fiction',
-            dosagePattern: '০ + ০ + ২ পাতা   (ঘুমানোর আগে বিছানায় বসে পড়তে হবে, স্ক্রিন সোয়াইপ করার বদলে কাগজের পাতা উল্টাবেন)',
+            type: 'Cap.',
+            brandName: 'E-Gel',
+            strength: '400 IU',
+            genericName: 'Vitamin E (d-alpha-tocopheryl acetate)',
+            dosagePattern: '১ + ০ + ১ টি   ভরা পেটে খাবেন   ১ মাস',
             duration: '',
             instruction: ''
           },
           {
             id: 'med-4',
-            type: 'Syp.',
-            brandName: 'NoScroll',
-            strength: '10 ml',
-            genericName: 'Dopamine Regulator',
-            dosagePattern: '২ চামচ করে   (যখনই অকারণে ফোন আনলক করার তীব্র ইচ্ছা হবে তখনই সেবন করবেন)',
+            type: 'Tab.',
+            brandName: 'Provita Z',
+            strength: '',
+            genericName: 'Zinc + Multivitamin & Mineral',
+            dosagePattern: '০ + ১ + ০ টি   দুপুরে ভরা পেটে খাবেন   চলবে',
             duration: '',
             instruction: ''
           }
         ],
         advice: [
-          'নিয়মিত হাঁটাহাঁটি করবেন—সপ্তাহে ৫ দিন অন্তত ৩০ মিনিট ফোন সম্পূর্ণ বাসায় রেখে খোলা আকাশের নিচে হাঁটবেন।',
-          'শ্বাস-প্রশ্বাসের ব্যায়াম করবেন—নাক দিয়ে গভীর শ্বাস নিয়ে ৫ সেকেন্ড আটকে রাখবেন, মনে মনে বলবেন "ইন্টারনেট ছাড়াও পৃথিবী সুন্দর ছিল", তারপর ধীরে ধীরে শ্বাস ছাড়বেন। দিনে ৩-৪ বার করবেন।',
-          'নোটিফিকেশন হাইজিন মেনে চলবেন: অপ্রয়োজনীয় সব সোশ্যাল মিডিয়া অ্যাপের পুশ নোটিফিকেশন বন্ধ রাখবেন।',
-          'ফলোআপে আসার আগ পর্যন্ত কোনো অবস্থাতেই রিলস/শর্টস অ্যাপের ‘অটো-প্লে’ চালু রাখা যাবে না।',
-          'কমেন্ট সেকশনে অপরিচিত ব্যক্তির সাথে রাজনৈতিক বা অপ্রাসঙ্গিক তর্ক করা সম্পূর্ণ নিষিদ্ধ।',
-          'পরিবারের সদস্যরা সহানুভূতিশীল আচরণ করবেন। "সারাদিন ফোনের ভেতর মুখ গুঁজে রাখিস" জাতীয় সরাসরি খোঁচা না দিয়ে বাস্তব কথোপকথনে যুক্ত করবেন।',
-          'ওয়াই-ফাই রাউটার বা নেটওয়ার্ক সাময়িকভাবে বন্ধ হলে আতঙ্কিত হবেন না; শান্ত থেকে পরিবারের বাকি সদস্যদের সাথে পরিচিত হওয়ার চেষ্টা করবেন।'
+          'মানসিক চাপ ও দুশ্চিন্তা মুক্ত থাকার চেষ্টা করুন\nঅহেতুক কর্মক্ষমতা ভীতি বা পারফরম্যান্স অ্যাংজাইটি পরিহার করুন। মন প্রফুল্ল রাখুন।',
+          'নিয়মিত পুষ্টিকর খাদ্য গ্রহণ করুন\nপ্রতিদিন ডিম, দুধ, বাদাম, মধু, তাজা ফলমূল ও পর্যাপ্ত পানি পান করবেন।',
+          'নিয়মিত শারীরিক ব্যায়াম ও হাঁটার অভ্যাস করুন\nসপ্তাহে ৫ দিন অন্তত ৩০ মিনিট করে দ্রুত হাঁটবেন। কিগেল এক্সারসাইজ করবেন।',
+          'ধূমপান, অ্যালকোহল, ক্যাফেইন ও অনিদ্রা পরিহার করুন\nরাতে অন্তত ৭-৮ ঘণ্টা নিয়মিত গভীর ঘুম নিশ্চিত করবেন।',
+          'কোনো ধরনের কবিরাজি বা বাজারচলতি অনিবন্ধিত ক্ষতিকর যৌন উত্তেজক ওষুধ খাবেন না।',
+          'প্রেসক্রিপশনের ওষুধ ডাক্তারের পরামর্শ ছাড়া হঠাৎ বন্ধ বা মাত্রা পরিবর্তন করবেন না।'
         ],
         followUp: [
-          '২ সপ্তাহ পর স্ক্রিনটাইম ৩ ঘণ্টার নিচে নামিয়ে রিপোর্টসহ দেখা করবেন।',
-          'সরাসরি আসতে না পারলে এনালগ ফোন বা ল্যান্ডলাইনে যোগাযোগ করবেন। দয়া করে হোয়াটসঅ্যাপে দীর্ঘ ভয়েস নোট পাঠাবেন না।'
+          '২ সপ্তাহ পর টেস্টের রিপোর্টসহ দেখা করবেন',
+          'সরাসরি চেম্বারে এসে দেখাতে না পারলে অনলাইনে ফলোয়াপ সম্পন্ন করবেন। এপয়েন্টমেন্ট নিতে (হোয়াটসএ্যাপ - ০১৮৯৪-৯৩৫৯৮৫) ম্যাসেজ পাঠাবেন।'
         ],
         specialNotes: [
-          'রোগীর গভীর রাতে অবচেতনভাবে স্ক্রল করার প্রবল প্রবণতা রয়েছে; সুতরাং ঘুমানোর সময় চার্জার ও ফোন বেডরুম থেকে অন্তত ১০ হাত দূরে রাখবেন। মাঝরাতে বাথরুমে ফোন নিয়ে ঢোকা সম্পূর্ণ নিষিদ্ধ।'
+          'সমস্যাটি সম্পূর্ণ মানসিক চাপ ও উদ্বেগজনিত (Psychogenic), তাই অহেতুক ভীতি দূর করুন। প্রয়োজনে পরবর্তী ফলোয়াপে কাউন্সেলিং সেশন দেওয়া হবে।\nশারীরিক কোনো সমস্যা দেখা দিলে সাথে সাথে ডাক্তারের সাথে যোগাযোগ করবেন।'
         ],
-        signatureName: 'Dr. Farzana Meem'
+        signatureName: 'Dr. Mustaquim Farooqui'
       },
       footer: {
         enabled: true,
         hospitalNameBn: 'ইবনে সিনা মেডিকেল কলেজ হাসপাতাল',
         hospitalAddressBn: '১/১-বি, কল্যাণপুর, মিরপুর রোড, ঢাকা-১২১৬',
-        serialHelplinesBn: 'তথ্য ও সিরিয়ালের জন্য: ',
-        hotlineBn: 'হটলাইন: ১০৬১৫/০৯৬১০০০৯৬১৬',
+        serialHelplinesBn: 'তথ্য ও সিরিয়ালের জন্য ',
+        hotlineBn: 'হটলাইন: ০৯৬১০০০৯৬১৬',
         contactBn: 'ফোন: ০২-৪১০০২১৭১-৭, কাস্টমার সার্ভিস: ০১৮৯০৩৭৩৯৯৯',
-        visitingHoursBn: 'রোগী দেখার সময়: সকাল ৯টা থেকে দুপুর ১টা এবং রাত ৮.০০টা ১০.০০টা (শনি-বৃহস্পতিবার)'
+        visitingHoursBn: 'রোগী দেখার সময়: সকাল ৯টা থেকে দুপুর ১টা এবং রাত ৮.০০টা ১০.০০টা (শনি বৃহস্পতিবার)'
       }
     },
-
     'minimal-clinical': {
       meta: {
         template: 'minimal-clinical',
@@ -341,7 +338,7 @@
 
   // --- PRESCRIPTION ENGINE SINGLETON ---
   const PrescriptionGenerator = {
-    storageKey: 'syzarn_prescription_data_v7',
+    storageKey: 'syzarn_prescription_data_v9',
     activeTemplate: 'ibn-sina-standard',
     activeTab: 'rx',
     zoomLevel: 1.0,
@@ -371,8 +368,16 @@
     loadFromStorage() {
       try {
         if (typeof localStorage !== 'undefined') {
+          // Clear any legacy storage keys containing old personal data
+          ['syzarn_prescription_data_v8', 'syzarn_prescription_data_v7', 'syzarn_prescription_data_v6'].forEach(k => {
+            try { localStorage.removeItem(k); } catch(e) {}
+          });
           const raw = localStorage.getItem(this.storageKey);
           if (raw) {
+            if (raw.includes('Antar') || raw.includes('01887454935') || raw.includes('Suicidal')) {
+              localStorage.removeItem(this.storageKey);
+              return null;
+            }
             const parsed = JSON.parse(raw);
             if (parsed && typeof parsed === 'object') return parsed;
           }
@@ -477,7 +482,7 @@
               <span class="rx-tool-label">rx clinical pad</span>
               <select id="rx-top-tpl-select" class="tm-select" style="margin-left: 10px; font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #161a23; color: #e2e8f0; border: 1px solid #2d3748;">
                 <option value="ibn-sina-standard" ${this.activeTemplate === 'ibn-sina-standard' ? 'selected' : ''}>Ibn Sina Medical College Hospital</option>
-                <option value="minimal-clinical" ${this.activeTemplate === 'minimal-clinical' ? 'selected' : ''}>Minimal General Pad</option>
+                <option value="minimal-clinical" ${this.activeTemplate === 'minimal-clinical' ? 'selected' : ''}>minimal general pad</option>
               </select>
             </div>
             <div class="rx-topbar-right">
@@ -787,9 +792,9 @@
           <div class="rx-field-row">
             <label class="rx-label" for="rx-pat-sex">sex:</label>
             <select class="tm-select rx-control" id="rx-pat-sex">
-              <option value="Male" ${p.sex === 'Male' ? 'selected' : ''}>Male</option>
-              <option value="Female" ${p.sex === 'Female' ? 'selected' : ''}>Female</option>
-              <option value="Other" ${p.sex === 'Other' ? 'selected' : ''}>Other</option>
+              <option value="Male" ${p.sex === 'Male' ? 'selected' : ''}>male</option>
+              <option value="Female" ${p.sex === 'Female' ? 'selected' : ''}>female</option>
+              <option value="Other" ${p.sex === 'Other' ? 'selected' : ''}>other</option>
             </select>
           </div>
           <div class="rx-field-row">
@@ -845,12 +850,12 @@
 
         <div class="rx-form-section">
           <div class="rx-section-title">chief complaints (1 per line)</div>
-          <textarea class="tm-textarea rx-control" id="rx-clin-cc" rows="4" placeholder="Low mood&#10;Irritable&#10;Anhedonia&#10;Suicidal Thought">${escapeHTML(complaintsText)}</textarea>
+          <textarea class="tm-textarea rx-control" id="rx-clin-cc" rows="4" placeholder="Erectile dysfunction (উত্থানজনিত দুর্বলতা)&#10;Performance anxiety&#10;Loss of libido">${escapeHTML(complaintsText)}</textarea>
         </div>
 
         <div class="rx-form-section">
           <div class="rx-section-title">history &amp; clinical context (separate items with '---')</div>
-          <textarea class="tm-textarea rx-control" id="rx-clin-hx" rows="5" placeholder="Total Duration - for long time&#10;---&#10;Multiple stressors are present.&#10;---&#10;H/O Suicidal Attempt">${escapeHTML(historyText)}</textarea>
+          <textarea class="tm-textarea rx-control" id="rx-clin-hx" rows="5" placeholder="Total Duration - 6 months&#10;---&#10;High performance anxiety and psychological stress&#10;---&#10;No history of DM or HTN">${escapeHTML(historyText)}</textarea>
         </div>
 
         <div class="rx-form-section">
@@ -861,18 +866,18 @@
           </div>
           <div class="rx-field-row">
             <label class="rx-label" for="rx-clin-oe-find">findings (1 per line):</label>
-            <textarea class="tm-textarea rx-control" id="rx-clin-oe-find" rows="3" placeholder="Mood and Affect: Depressed&#10;Thought Content: Suicidal thought">${escapeHTML(examFindingsText)}</textarea>
+            <textarea class="tm-textarea rx-control" id="rx-clin-oe-find" rows="3" placeholder="Appearance & Behavior: Anxious&#10;Mood: Apprehensive&#10;Thought Content: Performance anxiety, fear of failure">${escapeHTML(examFindingsText)}</textarea>
           </div>
         </div>
 
         <div class="rx-form-section">
           <div class="rx-section-title">diagnosis (1 per line)</div>
-          <textarea class="tm-textarea rx-control" id="rx-clin-dx" rows="3" placeholder="Major Depressive Disorder (MDD)&#10;Severe with suicidal ideation">${escapeHTML(diagnosisText)}</textarea>
+          <textarea class="tm-textarea rx-control" id="rx-clin-dx" rows="3" placeholder="Psychogenic Erectile Dysfunction (মনো-যৌন সমস্যা)&#10;Performance Anxiety Disorder">${escapeHTML(diagnosisText)}</textarea>
         </div>
 
         <div class="rx-form-section">
           <div class="rx-section-title">investigations (separate items with '---')</div>
-          <textarea class="tm-textarea rx-control" id="rx-clin-ix" rows="3" placeholder="S.lithium- রাতে Lithosun খাওয়ার ১২ ঘণ্টা পরে সকালে blood sample দিবেন।&#10;---&#10;CBC with ESR">${escapeHTML(investigationsText)}</textarea>
+          <textarea class="tm-textarea rx-control" id="rx-clin-ix" rows="3" placeholder="Serum Testosterone (Total) - সকাল ৮টা-১০টার মধ্যে রক্ত দিবেন&#10;---&#10;Fasting Blood Sugar (FBS), Lipid Profile">${escapeHTML(investigationsText)}</textarea>
         </div>
       `;
     },
@@ -916,8 +921,14 @@
                     </select>
                   </div>
                   <div>
-                    <label class="rx-label">brand name:</label>
-                    <input type="text" class="tm-input rx-control rx-med-brand" data-idx="${idx}" value="${escapeHTML(med.brandName || '')}" placeholder="e.g. Escilex">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                      <label class="rx-label" style="margin-bottom:0;">brand name:</label>
+                      <button type="button" class="rx-medex-btn rx-medex-brand-btn" data-idx="${idx}" title="search brand &amp; strength on Medex">
+                        <img src="files/medex.com.bd.png" alt="" class="rx-medex-icon">
+                        <span>medex</span>
+                      </button>
+                    </div>
+                    <input type="text" class="tm-input rx-control rx-med-brand" data-idx="${idx}" value="${escapeHTML(med.brandName || '')}" placeholder="e.g. Intimate">
                   </div>
                   <div>
                     <label class="rx-label">strength:</label>
@@ -926,7 +937,13 @@
                 </div>
 
                 <div>
-                  <label class="rx-label">generic name (in parentheses):</label>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                    <label class="rx-label" style="margin-bottom:0;">generic name (in parentheses):</label>
+                    <button type="button" class="rx-medex-btn rx-medex-generic-btn" data-idx="${idx}" title="search generic on Medex">
+                        <img src="files/medex.com.bd.png" alt="" class="rx-medex-icon">
+                        <span>medex</span>
+                    </button>
+                  </div>
                   <input type="text" class="tm-input rx-control rx-med-generic" data-idx="${idx}" value="${escapeHTML(med.genericName || '')}" placeholder="e.g. Escitalopram Oxalate">
                 </div>
 
@@ -1265,6 +1282,49 @@
         });
       });
 
+      // Medex Search: Brand Name + Strength
+      container.querySelectorAll('.rx-medex-brand-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const card = btn.closest('.rx-item-card') || container;
+          const brandInput = card.querySelector(`.rx-med-brand[data-idx="${idx}"]`) || card.querySelector('.rx-med-brand');
+          const strengthInput = card.querySelector(`.rx-med-strength[data-idx="${idx}"]`) || card.querySelector('.rx-med-strength');
+          const brand = (brandInput ? brandInput.value : (this.state.rx.medications[idx]?.brandName || '')).trim();
+          const strength = (strengthInput ? strengthInput.value : (this.state.rx.medications[idx]?.strength || '')).trim();
+
+          const query = [brand, strength].filter(Boolean).join(' ').trim();
+          if (!query) {
+            alert('Please enter a brand name to search on Medex.');
+            if (brandInput) brandInput.focus();
+            return;
+          }
+          const searchParam = encodeURIComponent(query).replace(/%20/g, '+');
+          window.open(`https://medex.com.bd/search?search=${searchParam}`, '_blank', 'noopener,noreferrer');
+        });
+      });
+
+      // Medex Search: Generic Name
+      container.querySelectorAll('.rx-medex-generic-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const card = btn.closest('.rx-item-card') || container;
+          const genericInput = card.querySelector(`.rx-med-generic[data-idx="${idx}"]`) || card.querySelector('.rx-med-generic');
+          const generic = (genericInput ? genericInput.value : (this.state.rx.medications[idx]?.genericName || '')).trim();
+
+          if (!generic) {
+            alert('Please enter a generic name to search on Medex.');
+            if (genericInput) genericInput.focus();
+            return;
+          }
+          const searchParam = encodeURIComponent(generic).replace(/%20/g, '+');
+          window.open(`https://medex.com.bd/search?search=${searchParam}`, '_blank', 'noopener,noreferrer');
+        });
+      });
+
       // Delete & Reorder Buttons
       container.querySelectorAll('.rx-med-del-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1346,6 +1406,21 @@
         logoMarkup = `<img src="${escapeHTML(rawLogo)}" class="rx-custom-logo-img" alt="Hospital Logo">`;
       }
 
+      // Reusable structured bullet list generator
+      const renderBulletItems = (items) => {
+        return (items || []).map(item => {
+          const lines = escapeHTML(item).split('\n');
+          const first = lines[0] || '';
+          const sub = lines.slice(1).map(l => `<div class="sub-line">${l}</div>`).join('');
+          return `
+            <li class="bullet-item">
+              <span class="bullet-dot">•</span>
+              <div class="bullet-text">${first}${sub}</div>
+            </li>
+          `;
+        }).join('');
+      };
+
       // Clinical sections (Left Sidebar)
       let clinicalSectionsHtml = '';
 
@@ -1354,7 +1429,7 @@
           <div class="clinical-section">
             <div class="section-header">Chief Complain</div>
             <ul class="bullet-list">
-              ${c.chiefComplaints.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
+              ${renderBulletItems(c.chiefComplaints)}
             </ul>
           </div>
         `;
@@ -1365,10 +1440,7 @@
           <div class="clinical-section">
             <div class="section-header">History</div>
             <ul class="bullet-list">
-              ${c.history.map(item => {
-          const formatted = escapeHTML(item).split('\n').join('<br>');
-          return `<li>${formatted}</li>`;
-        }).join('')}
+              ${renderBulletItems(c.history)}
             </ul>
           </div>
         `;
@@ -1381,7 +1453,7 @@
             ${c.onExaminations.map(exam => `
               ${exam.category ? `<div class="clinical-sub-header">${escapeHTML(exam.category)}</div>` : ''}
               <ul class="bullet-list">
-                ${(exam.findings || []).map(fld => `<li>${escapeHTML(fld)}</li>`).join('')}
+                ${renderBulletItems(exam.findings || [])}
               </ul>
             `).join('')}
           </div>
@@ -1393,10 +1465,7 @@
           <div class="clinical-section">
             <div class="section-header">Diagnosis</div>
             <ul class="bullet-list">
-              ${c.diagnosis.map(item => {
-          const formatted = escapeHTML(item).split('\n').join('<br>');
-          return `<li>${formatted}</li>`;
-        }).join('')}
+              ${renderBulletItems(c.diagnosis)}
             </ul>
           </div>
         `;
@@ -1407,10 +1476,7 @@
           <div class="clinical-section">
             <div class="section-header">Investigations</div>
             <ul class="bullet-list">
-              ${c.investigations.map(item => {
-          const formatted = escapeHTML(item).split('\n').join('<br>');
-          return `<li>${formatted}</li>`;
-        }).join('')}
+              ${renderBulletItems(c.investigations)}
             </ul>
           </div>
         `;
@@ -1441,12 +1507,16 @@
         adviceHtml = `
           <div class="advice-section">
             <div class="section-header">Advice</div>
-            ${rx.advice.map((item, idx) => `
+            ${rx.advice.map((item, idx) => {
+              const lines = escapeHTML(item).split('\n');
+              const head = lines[0] || '';
+              const sub = lines.slice(1).map(l => `<div style="padding-left: 2px; margin-top: 1px;">${l}</div>`).join('');
+              return `
               <div class="advice-item">
                 <span class="advice-num">${idx + 1}.</span>
-                <span class="advice-text">${escapeHTML(item).split('\n').join('<br>')}</span>
-              </div>
-            `).join('')}
+                <div class="advice-text">${head}${sub}</div>
+              </div>`;
+            }).join('')}
           </div>
         `;
       }
@@ -1458,9 +1528,7 @@
           <div class="followup-section">
             <div class="section-header">Follow Up</div>
             <ul class="bullet-list">
-              ${rx.followUp.map(item => `
-                <li>${escapeHTML(item).split('\n').join('<br>')}</li>
-              `).join('')}
+              ${renderBulletItems(rx.followUp)}
             </ul>
           </div>
         `;
@@ -1471,12 +1539,19 @@
       if (rx.specialNotes && rx.specialNotes.length > 0) {
         specialNotesHtml = `
           <div class="special-note-container">
-            <div class="section-header" style="margin-top: 0;">Special Note</div>
-            <ul class="bullet-list">
-              ${rx.specialNotes.map(item => `
-                <li>${escapeHTML(item).split('\n').join('<br>')}</li>
-              `).join('')}
-            </ul>
+            <div class="section-header">Special Note</div>
+            <div class="special-note-content">
+              ${rx.specialNotes.map(item => {
+                const lines = escapeHTML(item).split('\n');
+                const first = lines[0] ? `
+                  <div class="bullet-item">
+                    <span class="bullet-dot">•</span>
+                    <div class="bullet-text">${lines[0]}</div>
+                  </div>` : '';
+                const rest = lines.slice(1).map(l => `<div class="special-note-subline">${l}</div>`).join('');
+                return `${first}${rest}`;
+              }).join('')}
+            </div>
           </div>
         `;
       }
@@ -1484,15 +1559,19 @@
       // Institutional Footer
       let footerHtml = '';
       if (f.enabled !== false) {
+        const vHours = escapeHTML(f.visitingHoursBn || '');
+        const vHoursClean = vHours.replace(/^রোগী দেখার সময়:\s*/, '');
         footerHtml = `
           <div class="rx-footer">
             <div class="rx-foot-hosp-name">${escapeHTML(f.hospitalNameBn || '')}</div>
             <div class="rx-foot-addr">${escapeHTML(f.hospitalAddressBn || '')}</div>
             <div class="rx-foot-helplines">
-              ${escapeHTML(f.serialHelplinesBn || '')} <span class="rx-foot-hotline">${escapeHTML(f.hotlineBn || '')}</span>
+              ${escapeHTML(f.serialHelplinesBn || '')}<span class="rx-foot-hotline">${escapeHTML(f.hotlineBn || '')}</span>
             </div>
             <div class="rx-foot-contact">${escapeHTML(f.contactBn || '')}</div>
-            <div class="rx-foot-hours">${escapeHTML(f.visitingHoursBn || '')}</div>
+            <div class="rx-foot-hours">
+              <span class="rx-foot-hours-label">রোগী দেখার সময়:</span> ${vHoursClean}
+            </div>
           </div>
         `;
       }
@@ -1547,9 +1626,6 @@
           <div class="clinical-sidebar">
             ${clinicalSectionsHtml}
           </div>
-
-          <!-- Hairline Vertical Separator -->
-          <div class="vertical-separator"></div>
 
           <!-- Right Column (Treatment & Rx Management) -->
           <div class="treatment-column">
@@ -1844,9 +1920,10 @@
     // --- VECTOR PDF COMPILATION PIPELINE ---
     async downloadPdf() {
       const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+      const htmlToImageLib = window.htmlToImage;
       const html2canvasFn = window.html2canvas;
 
-      if (!jsPDFClass || !html2canvasFn) {
+      if (!jsPDFClass || (!htmlToImageLib && !html2canvasFn)) {
         console.error('PDF compiler libraries not loaded');
         alert('PDF libraries are still initializing. Please wait a moment and try again.');
         return;
@@ -1888,35 +1965,53 @@
         }
         await new Promise(r => setTimeout(r, 150));
 
-        // High-DPI canvas capture for razor-sharp typography
-        const canvas = await html2canvasFn(paperTarget, {
-          scale: 2.5, // 2.5x yields pristine 300 DPI vector clarity
-          useCORS: true,
-          allowTaint: false,
-          logging: false,
-          backgroundColor: '#ffffff',
-          scrollX: 0,
-          scrollY: 0,
-          onclone: (clonedDoc) => {
-            if (clonedDoc.fonts && clonedDoc.fonts.ready) {
-              return clonedDoc.fonts.ready;
-            }
+        let canvas = null;
+
+        // Primary renderer: html-to-image (preserves HarfBuzz / OpenType conjuncts, matras & diacritics via SVG foreignObject)
+        if (htmlToImageLib && typeof htmlToImageLib.toCanvas === 'function') {
+          try {
+            canvas = await htmlToImageLib.toCanvas(paperTarget, {
+              pixelRatio: 3.0,
+              backgroundColor: '#ffffff',
+              cacheBust: false
+            });
+          } catch (h2iErr) {
+            console.warn('htmlToImage rendering encountered an issue, falling back to html2canvas:', h2iErr);
           }
-        });
+        }
+
+        // Resilient fallback: html2canvas
+        if (!canvas && html2canvasFn) {
+          canvas = await html2canvasFn(paperTarget, {
+            scale: 3.0, // 3x yields pristine 300+ DPI vector clarity
+            useCORS: true,
+            allowTaint: false,
+            logging: false,
+            backgroundColor: '#ffffff',
+            scrollX: 0,
+            scrollY: 0,
+            onclone: (clonedDoc) => {
+              if (clonedDoc.fonts && clonedDoc.fonts.ready) {
+                return clonedDoc.fonts.ready;
+              }
+            }
+          });
+        }
 
         if (!canvas || !canvas.width || !canvas.height) {
           throw new Error('Canvas render failed');
         }
 
-        const pageWidthPt = 595.28; // Standard A4 pt width (210mm)
-        const pageHeightPt = 841.89; // Standard A4 pt height (297mm)
+        const isLetter = (this.state.meta.template || this.activeTemplate) === 'ibn-sina-standard';
+        const pageWidthPt = isLetter ? 612.0 : 595.28;
+        const pageHeightPt = isLetter ? 792.0 : 841.89;
         const canvasRatio = canvas.width / canvas.height;
         const pageRatio = pageWidthPt / pageHeightPt;
 
         const doc = new jsPDFClass({
           orientation: 'portrait',
           unit: 'pt',
-          format: 'a4',
+          format: isLetter ? 'letter' : 'a4',
           compress: true
         });
 
@@ -1937,7 +2032,7 @@
           offsetY = (pageHeightPt - renderHeightPt) / 2;
         }
 
-        doc.addImage(canvas, 'PNG', offsetX, offsetY, renderWidthPt, renderHeightPt, undefined, 'FAST');
+        doc.addImage(canvas, 'PNG', offsetX, offsetY, renderWidthPt, renderHeightPt, undefined, 'SLOW');
 
         doc.save(fileName);
         if (this.workbench && typeof this.workbench.setStatus === 'function') {

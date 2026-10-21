@@ -1,17 +1,3 @@
-/**
- * invoice-generator.js
- * modular client-side invoice & receipt generator
- * features:
- * - zero server footprint (100% client side)
- * - arbitrary precision minor units (integer cents/poisha) financial math
- * - true vector output via native iframe @media print (no raster canvas)
- * - 4 core barcode symbologies: Code 128, QR Code, Data Matrix, EAN-13 / UPC-A
- * - 6 templates: stripe-modern, thermal-pos (80mm/58mm), minimal-classic, bn-vintage-ledger, mid-century-tractor, erp-classic-90s
- * - client-side logo upload & base64 encoding
- * - traditional bengali memo/ledger with Kobiguru, Biro Script Plus, Confidential Regular,
- *   bengali numerals, and number-to-words currency converter
- */
-
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     module.exports = factory();
@@ -20,6 +6,9 @@
   }
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
+
+  // --- Embedded bitArray-A2 base64 receipt font for instantaneous vector SVG & PDF compilation ---
+  const BITARRAY_A2_BASE64 = 'AAEAAAAMAIAAAwBAT1MvMjRJUqwAAAFIAAAAYFZETVhtgnT7AAADqAAABeBjbWFwg26KxAAACYgAAASoZ2FzcP//AAEAAEHUAAAACGdseWYS889tAAAOMAAALLxoZWFkJng5NQAAAMwAAAA2aGhlYQSDAk8AAAEEAAAAJGhtdHgACByMAAABqAAAAgBsb2NhqtifPAAAOuwAAAECbWF4cACHAE4AAAEoAAAAIG5hbWX14v4NAAA78AAABIZwb3N0qZ4ckgAAQHgAAAFZAAEAAAABAACLzSioXw889QAJA+gAAAAA4JhY4wAAAADlHpx4/9b/ggHOA3IAAAAJAAIAAAAAAAAAAQAAAqr/hAAzAiL/1gAoAc4AAQAAAAAAAAAAAAAAAAAAAIAAAQAAAIAATQAGAAAAAAABAAAAAAAAAAAAAAAAAAAAAAADAgABkAAFAAQCvAKKAAAAjAK8AooAAAHdADIA+gAAAgAAAAAAAAAAAAAAAAcAAAACAAAAAAAAAAAgICAgAEAAACWhAqr/hAAzA4QA3AAAAAEAAAAAAfQENwAAACAAAAIiACoB+ABUAfgAAAH4AAAB+ACoAfYAKgH4AFQB9gAqAfYAfgH2ACoB+ACoAfgAVAH4ACoB+AAqAfgAKgH4ACoB+ADSAfgAfgH4AH4B+AAqAfgAKgH4AH4B+ACoAfgAKgH4AH4B+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAVAH4ACoB+AAqAfgAVAH4ACoB+ABUAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+ABUAfgAfgH4ACoB+AB+AfgAVAH4ACoB+ACoAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AAqAfgAKgH4ACoB+AB+AfgAVAH4ACoB+AB+AfgAKgH4ACoB+ABUAfgAKgH4ACoB+AAqAfgAKgH4AFQB+AAqAfgAKgH4ACoB+AAqAfgAKgH4AFQB+ABUAfgA0gH4AFQB+AAqAfgAAAH2ACoB9gAqAfYAAAIiACoCIgAqAiIAVAIiACoCIgAqAiIAKgIiACoCIgAqAiIAKgIiAH4CIgAqAiIAKgIiACoCIgAqAiIAKgH4ACoCIgAqAiIAKgIiACoCIgAqAiIAKgH4/9YCIgAqAiIAKgH4/9YB9gAqAfYAKgH2ACoB+AAAAiIAKgIiACoB+AAqAAAAAQABAQEBAQAMAPgI/wAIAAj//gAJAAn//gAKAAn//QALAAr//QAMAAv//QANAAz//QAOAA3//AAPAA7//AAQAA///AARABD//AASABH//AATABL/+wAUABL/+wAVABP/+wAWABT/+wAXABX/+gAYABb/+gAZABf/+gAaABj/+gAbABn/+gAcABr/+QAdABv/+QAeABv/+QAfABz/+QAgAB3/+AAhAB7/+AAiAB//+AAjACD/+AAkACH/+AAlACL/9wAmACP/9wAnACT/9wAoACT/9wApACX/9gAqACb/9gArACf/9gAsACj/9gAtACn/9gAuACr/9QAvACv/9QAwACz/9QAxAC3/9QAyAC3/9QAzAC7/9AA0AC//9AA1ADD/9AA2ADH/9AA3ADL/8wA4ADP/8wA5ADT/8wA6ADX/8wA7ADb/8wA8ADb/8gA9ADf/8gA+ADj/8gA/ADn/8gBAADr/8QBBADv/8QBCADz/8QBDAD3/8QBEAD7/8QBFAD//8ABGAD//8ABHAED/8ABIAEH/8ABJAEL/7wBKAEP/7wBLAET/7wBMAEX/7wBNAEb/7wBOAEf/7gBPAEj/7gBQAEj/7gBRAEn/7gBSAEr/7QBTAEv/7QBUAEz/7QBVAE3/7QBWAE7/7QBXAE//7ABYAFD/7ABZAFH/7ABaAFH/7ABbAFL/6wBcAFP/6wBdAFT/6wBeAFX/6wBfAFb/6wBgAFf/6gBhAFj/6gBiAFn/6gBjAFr/6gBkAFr/6gBlAFv/6QBmAFz/6QBnAF3/6QBoAF7/6QBpAF//6ABqAGD/6ABrAGH/6ABsAGL/6ABtAGP/6ABuAGP/5wBvAGT/5wBwAGX/5wBxAGb/5wByAGf/5gBzAGj/5gB0AGn/5gB1AGr/5gB2AGv/5gB3AGz/5QB4AGz/5QB5AG3/5QB6AG7/5QB7AG//5AB8AHD/5AB9AHH/5AB+AHL/5AB/AHP/5ACAAHT/4wCBAHX/4wCCAHX/4wCDAHb/4wCEAHf/4gCFAHj/4gCGAHn/4gCHAHr/4gCIAHv/4gCJAHz/4QCKAH3/4QCLAH7/4QCMAH7/4QCNAH//4ACOAID/4ACPAIH/4ACQAIL/4ACRAIP/4ACSAIT/3wCTAIX/3wCUAIb/3wCV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';
 
   // --- currency metadata (complete ISO 4217 fiat + major cryptocurrencies) ---
   const CURRENCIES = {
@@ -344,54 +333,169 @@
     return out + ' মাত্র।';
   }
 
-  // --- MFS (Mobile Financial Services) & PSP (Payment Service Providers) lists ---
+  // --- 1. CARD SCHEMES & PROCESSING CHANNELS ---
+  const CARD_SCHEMES = [
+    'Visa',
+    'Mastercard',
+    'Amex',
+    'UnionPay',
+    'JCB',
+    'Discover',
+    'Diners Club',
+    'TakaPay',
+    'Q-Cash',
+    'Nexus',
+    'NPSB'
+  ];
+
+  const CARD_PROCESSING_CHANNELS = [
+    'bank POS terminal',
+    'online payment gateway (PSO)'
+  ];
+
+  // --- 2. ONLINE PAYMENT GATEWAYS (PSO) - ALPHABETICALLY SORTED ---
+  const PSO_GATEWAYS = [
+    'aamarPay',
+    'DGePay',
+    'EPS (Easy Payment System)',
+    'Moneybag',
+    'Paperless',
+    'PayStation',
+    'PaySuite',
+    'PortPos',
+    'Qpay',
+    'shurjopay',
+    'SSLCOMMERZ'
+  ];
+
+  // --- 3. MOBILE WALLET (MFS / PSP) PROVIDERS ---
   const MFS_PROVIDERS = [
     'bKash',
     'Nagad',
     'Rocket',
     'upay',
-    'mCash',
-    'tap',
-    'MYCash',
-    'MeghnaPay',
-    'Islamic Wallet',
     'FirstCash',
+    'Islamic Wallet',
+    'Lenden',
+    'mCash',
+    'MeghnaPay',
+    'MYCash',
     'OK Wallet',
-    'TeleCash',
     'RupaliCash',
-    'Lenden'
+    'tap',
+    'TeleCash'
   ];
 
   const PSP_PROVIDERS = [
+    'Cashbaba',
+    'Dmoney',
+    'gpay',
+    'iPay',
+    'Mukto Pay',
     'Pathao Pay',
     'Pocket',
-    'gpay',
-    'Mukto Pay',
-    'ST Pay',
-    'TallyKhata',
     'Sheba Pay',
-    'iPay',
-    'Dmoney',
-    'Cashbaba'
+    'ST Pay',
+    'TallyPay'
   ];
 
-  const ALL_MFS_PSP_PROVIDERS = [...MFS_PROVIDERS, ...PSP_PROVIDERS];
+  const WALLET_PROVIDERS = [...MFS_PROVIDERS, ...PSP_PROVIDERS];
 
-  // --- Internet Banking (Apps & Portals) in Bangladesh ---
-  const IBANKING_PROVIDERS = [
+  const MFS_PAYMENT_CHANNELS = [
+    'direct transfer / merchant pay',
+    'online payment gateway (PSO)'
+  ];
+
+  // --- 4. SCHEDULED BANKS (58 NPSB CERTIFIED, ALL CAPITAL, NO "LIMITED") ---
+  const SCHEDULED_BANKS_58 = [
+    'AB BANK PLC',
+    'AGRANI BANK PLC',
+    'AL-ARAFAH ISLAMI BANK PLC',
+    'BANGLADESH COMMERCE BANK',
+    'BANGLADESH DEVELOPMENT BANK PLC',
+    'BANGLADESH KRISHI BANK',
+    'BANK AL-FALAH',
+    'BANK ASIA',
+    'BASIC BANK PLC',
+    'BENGAL COMMERCIAL BANK PLC',
+    'BRAC BANK PLC',
+    'CITIZENS BANK PLC',
+    'COMMERCIAL BANK OF CEYLON',
+    'COMMUNITY BANK BANGLADESH PLC',
+    'DHAKA BANK PLC',
+    'DUTCH-BANGLA BANK PLC',
+    'EASTERN BANK PLC',
+    'EXIM BANK PLC',
+    'FIRST SECURITY ISLAMI BANK PLC',
+    'GLOBAL ISLAMI BANK PLC',
+    'HABIB BANK',
+    'ICB ISLAMIC BANK',
+    'IFIC BANK PLC',
+    'ISLAMI BANK BANGLADESH PLC',
+    'JAMUNA BANK PLC',
+    'JANATA BANK PLC',
+    'MEGHNA BANK PLC',
+    'MERCANTILE BANK PLC',
+    'MIDLAND BANK',
+    'MODHUMOTI BANK PLC',
+    'MUTUAL TRUST BANK PLC',
+    'NATIONAL BANK PLC',
+    'NCC BANK PLC',
+    'NRB BANK PLC',
+    'NRB COMMERCIAL BANK PLC',
+    'ONE BANK PLC',
+    'PADMA BANK',
+    'PRIME BANK PLC',
+    'PUBALI BANK PLC',
+    'RAJSHAHI KRISHI UNNAYAN BANK',
+    'RUPALI BANK PLC',
+    'SBAC BANK PLC',
+    'SHAHJALAL ISLAMI BANK PLC',
+    'SHIMANTO BANK PLC',
+    'SOCIAL ISLAMI BANK PLC',
+    'SONALI BANK PLC',
+    'SOUTHEAST BANK PLC',
+    'STANDARD BANK',
+    'STANDARD CHARTERED BANK',
+    'STATE BANK OF INDIA',
+    'THE CITY BANK PLC',
+    'THE HONGKONG AND SHANGHAI BANKING CORPORATION (HSBC)',
+    'THE PREMIER BANK PLC',
+    'TRUST BANK PLC',
+    'UNION BANK PLC',
+    'UNITED COMMERCIAL BANK PLC',
+    'UTTARA BANK PLC',
+    'WOORI BANK BANGLADESH'
+  ];
+
+  // Non-NPSB / Off-switch / Pipeline banks to include as greyed out / disabled
+  const NON_NPSB_BANKS = [
+    'CITIBANK N.A.',
+    'NATIONAL BANK OF PAKISTAN',
+    'PROBASHI KOLLYAN BANK',
+    'NAGAD DIGITAL BANK PLC',
+    'SAMMILITO ISLAMI BANK PLC'
+  ];
+
+  const A2A_RAILS = [
+    'NPSB (IBFT)',
+    'same-bank book transfer',
+    'BEFTN',
+    'RTGS'
+  ];
+
+  // --- 5. BANGLAQR REGISTRY (CERTIFIED VS UNCERTIFIED) ---
+  const BANGLAQR_BANK_APPS_CERTIFIED = [
     'AB Direct',
     'Agrani Smart Banking',
     'aib i-Banking',
     'BanglaPay',
-    'Bank Alfalah Transact',
     'Bank Asia Zen',
     'BCB e-Cash',
     'BDBL Digital Bank',
     'BENGAL iNSPIRE',
     'BRAC BANK Astha',
-    'CBC Digital',
     'CellFin',
-    'CitiDirect',
     'Citizens Fast',
     'Citytouch',
     'Community Cash',
@@ -399,12 +503,8 @@
     'EBL SKYBANKING',
     'EXIM aiser',
     'eJanata',
-    'FSIB Cloud Banking',
-    'GiB GoFast',
     'HBL Mobile',
-    'HSBC Mobile Banking',
     'IBBL iSmart',
-    'ICBI Easy Pay',
     'IFIC Aamar Bank',
     'JBL Shadhin',
     'Magpie',
@@ -416,14 +516,11 @@
     'myBKB',
     'MyPrime',
     'NBL iPower',
-    'NBP Digital',
     'NCC Always',
     'NexusPay',
     'NRB Click',
     'NRBC PLANET',
     'ONE Bank App (1 App)',
-    'Padma Wallet',
-    'PKB eBanking',
     'Prime NOW',
     'PI Banking',
     'pmoney',
@@ -438,29 +535,102 @@
     'Sonali e-Wallet',
     'Trust Money',
     'UCB One',
-    'UniON',
     'Uttara eWallet',
     'Woori WON',
     'YONO SBI'
   ];
 
-  const IBANKING_CHANNELS = [
-    'NPSB',
-    'BEFTN',
-    'RTGS',
-    'Intrabank / Direct Transfer'
+  const BANGLAQR_BANK_APPS_UNCERTIFIED = [
+    'Bank Alfalah Transact',
+    'CBC Digital',
+    'CitiDirect',
+    'FSIB Cloud Banking',
+    'GiB GoFast',
+    'HSBC Mobile Banking',
+    'ICBI Easy Pay',
+    'NBP Digital',
+    'Padma Wallet',
+    'PKB eBanking',
+    'UniON'
   ];
+
+  const BANGLAQR_MFS_CERTIFIED = [
+    'bKash',
+    'Rocket',
+    'Nagad',
+    'upay',
+    'Islamic Wallet',
+    'mCash',
+    'tap',
+    'MeghnaPay',
+    'Ok Wallet',
+    'RupaliCash',
+    'TeleCash'
+  ];
+
+  const BANGLAQR_MFS_UNCERTIFIED = [
+    'MYCash',
+    'FirstCash',
+    'LENDEN'
+  ];
+
+  const BANGLAQR_PSP_CERTIFIED = [
+    'Pathao Pay',
+    'gpay',
+    'TallyPay',
+    'Pocket'
+  ];
+
+  const BANGLAQR_PSP_UNCERTIFIED = [
+    'iPay',
+    'Dmoney',
+    'Mukto Pay',
+    'ST Pay',
+    'Sheba Pay',
+    'Cashbaba'
+  ];
+
+  const BANGLAQR_PSO_CERTIFIED = [
+    'SSLCOMMERZ',
+    'DGePay'
+  ];
+
+  const BANGLAQR_PSO_UNCERTIFIED = [
+    'aamarPay',
+    'EPS (Easy Payment System)',
+    'Moneybag',
+    'Paperless',
+    'PayStation',
+    'PaySuite',
+    'PortPos',
+    'Qpay',
+    'shurjopay'
+  ];
+
+  const ALL_MFS_PSP_PROVIDERS = [...WALLET_PROVIDERS];
 
   function formatBankDetails(s) {
     if (!s) return '';
     const parts = [];
-    if (s.bankName) parts.push(`Bank Name: ${s.bankName}`);
-    if (s.accountName) parts.push(`Account Name: ${s.accountName}`);
-    if (s.accountNumber) parts.push(`Account No: ${s.accountNumber}`);
-    if (s.branchName) parts.push(`Branch: ${s.branchName}`);
-    if (s.routingNumber) parts.push(`Routing No: ${s.routingNumber}`);
-    if (s.swiftBic) parts.push(`SWIFT / BIC / IBAN: ${s.swiftBic}`);
-    if (s.bankNotes) parts.push(s.bankNotes);
+    if (s.method === 'TRANSFER') {
+      if (s.bankName) parts.push(`Bank: ${s.bankName}`);
+      if (s.a2aRail) parts.push(`Transfer Rail: ${s.a2aRail}`);
+      if (s.accountName) parts.push(`Account Name: ${s.accountName}`);
+      if (s.accountNumber) parts.push(`Account No: ${s.accountNumber}`);
+      if (s.branchName) parts.push(`Branch: ${s.branchName}`);
+      if (s.routingNumber) parts.push(`Routing No: ${s.routingNumber}`);
+      if (s.swiftBic) parts.push(`SWIFT / BIC / IBAN: ${s.swiftBic}`);
+      if (s.trxId) parts.push(`TrxID: ${s.trxId}`);
+      if (s.bankNotes) parts.push(s.bankNotes);
+    } else if (s.bankName || s.accountNumber) {
+      if (s.bankName) parts.push(`Bank Name: ${s.bankName}`);
+      if (s.accountName) parts.push(`Account Name: ${s.accountName}`);
+      if (s.accountNumber) parts.push(`Account No: ${s.accountNumber}`);
+      if (s.branchName) parts.push(`Branch: ${s.branchName}`);
+      if (s.routingNumber) parts.push(`Routing No: ${s.routingNumber}`);
+      if (s.swiftBic) parts.push(`SWIFT / BIC / IBAN: ${s.swiftBic}`);
+      if (s.bankNotes) parts.push(s.bankNotes);
+    }
     if (parts.length > 0) return parts.join('\n');
     return s.bankDetails || '';
   }
@@ -473,13 +643,37 @@
   function normalizeSettlement(settle) {
     if (!settle) return;
     settle.method = settle.method || 'CASH';
-    settle.mfsProvider = settle.mfsProvider || '';
+    if (settle.method === 'IBANKING') {
+      settle.method = 'BANGLAQR';
+      settle.banglaQrApp = settle.iBankingProvider || 'NexusPay';
+    }
+    settle.cardScheme = settle.cardScheme || 'Visa';
+    settle.cardChannel = (settle.cardChannel && settle.cardChannel.toLowerCase().includes('gateway'))
+      ? 'online payment gateway (PSO)'
+      : 'bank POS terminal';
+    settle.cardPso = settle.cardPso || 'SSLCOMMERZ';
+    settle.mfsProvider = settle.mfsProvider || 'bKash';
+    settle.mfsChannel = (settle.mfsChannel && settle.mfsChannel.toLowerCase().includes('gateway'))
+      ? 'online payment gateway (PSO)'
+      : 'direct transfer / merchant pay';
+    settle.mfsPso = settle.mfsPso || 'SSLCOMMERZ';
     settle.mfsNumber = settle.mfsNumber || '';
+    settle.bankName = settle.bankName ? settle.bankName.toUpperCase() : 'DUTCH-BANGLA BANK PLC';
+    settle.a2aRail = settle.a2aRail || settle.iBankingChannel || 'NPSB - IBFT';
+    settle.banglaQrType = settle.banglaQrType || 'Bank App';
+    settle.banglaQrApp = settle.banglaQrApp || settle.iBankingProvider || 'NexusPay';
+    settle.chequeNumber = settle.chequeNumber || '';
+    settle.chequeBank = settle.chequeBank ? settle.chequeBank.toUpperCase() : 'DUTCH-BANGLA BANK PLC';
+    settle.chequeDate = settle.chequeDate || '';
     settle.trxId = settle.trxId || '';
     settle.iBankingProvider = settle.iBankingProvider || '';
     settle.iBankingChannel = settle.iBankingChannel || 'NPSB';
     settle.iBankingRef = settle.iBankingRef || '';
-    settle.bankName = settle.bankName || '';
+    settle.amountPaid = Number(settle.amountPaid) || 0;
+    settle.tendered = Number(settle.tendered) || 0;
+    settle.change = Number(settle.change) || 0;
+    settle.authCode = settle.authCode || '';
+    settle.last4 = settle.last4 || '';
     settle.accountName = settle.accountName || '';
     settle.accountNumber = settle.accountNumber || '';
     settle.branchName = settle.branchName || '';
@@ -487,6 +681,7 @@
     settle.swiftBic = settle.swiftBic || '';
     settle.bankNotes = settle.bankNotes || '';
     settle.bankDetails = settle.bankDetails || '';
+    settle.terms = settle.terms || '';
   }
 
   // --- presets & sample data generator ---
@@ -1640,7 +1835,7 @@
               <button type="button" class="tm-btn" id="inv-sample-btn" title="load template-tailored sample data">load sample</button>
               <button type="button" class="tm-btn" id="inv-reset-btn" title="reset form to clean template">reset form</button>
               <button type="button" class="tm-btn" id="inv-print-btn" title="open browser print dialog">print</button>
-              <button type="button" class="tm-btn tm-btn-primary" id="inv-pdf-btn" title="download authentic vector PDF file directly">download PDF</button>
+              <button type="button" class="tm-btn tm-btn-primary" id="inv-pdf-btn" title="download high-resolution PDF file directly">download PDF</button>
             </div>
           </div>
 
@@ -1694,6 +1889,8 @@
       // Wire topbar buttons
       const pdfBtn = document.getElementById('inv-pdf-btn');
       if (pdfBtn) pdfBtn.addEventListener('click', () => this.downloadPdf());
+
+
 
       const printBtn = document.getElementById('inv-print-btn');
       if (printBtn) printBtn.addEventListener('click', () => this.print());
@@ -1812,7 +2009,8 @@
 
     getSetupTabHtml() {
       const m = this.state.meta;
-      const isThermal = m.template === 'thermal-pos' || m.template === 'thermal-retail-mushak';
+      const isMushak = m.template === 'thermal-retail-mushak';
+      const isThermal = m.template === 'thermal-pos' || isMushak;
 
       return `
         <div class="inv-form-section">
@@ -1847,8 +2045,8 @@
           </div>
 
           <div class="inv-field-row">
-            <label class="inv-label" for="meta-issuedate">issue date:</label>
-            <input type="date" class="tm-input inv-control" id="meta-issuedate" value="${escapeHTML(m.issueDate)}">
+            <label class="inv-label" for="meta-issuedate">${isMushak ? 'receipt date &amp; time:' : (isThermal ? 'issue date / time:' : 'issue date:')}</label>
+            <input type="${isThermal ? 'text' : 'date'}" class="tm-input inv-control" id="meta-issuedate" value="${escapeHTML(m.issueDate)}" placeholder="${isThermal ? 'e.g. 2024-02-02 11:13' : 'YYYY-MM-DD'}">
           </div>
 
           ${!isThermal && m.docType !== 'receipt' ? `
@@ -1890,7 +2088,7 @@
             <label class="inv-label" for="meta-symbology">barcode symbology:</label>
             <select class="tm-select inv-control" id="meta-symbology">
               <option value="CODE128" ${m.barcodeSymbology === 'CODE128' ? 'selected' : ''}>Code 128 (universal linear receipt / order)</option>
-              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR Code (payment link &amp; e-invoicing)</option>
+              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR code (payment link &amp; e-invoicing)</option>
               <option value="DATAMATRIX" ${m.barcodeSymbology === 'DATAMATRIX' ? 'selected' : ''}>Data Matrix (compact B2B enterprise)</option>
               <option value="EAN13" ${m.barcodeSymbology === 'EAN13' ? 'selected' : ''}>EAN-13 / UPC-A (retail SKU / lookup)</option>
             </select>
@@ -1962,6 +2160,11 @@
             <div class="inv-field-row">
               <label class="inv-label" for="seller-terminal">terminal ID:</label>
               <input type="text" class="tm-input inv-control" id="seller-terminal" value="${escapeHTML(s.terminalId || 'D094POS1N')}" placeholder="e.g. D094POS1N">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="seller-date">receipt date &amp; time:</label>
+              <input type="text" class="tm-input inv-control" id="seller-date" value="${escapeHTML(this.state.meta.issueDate || '')}" placeholder="e.g. 2024-02-02 11:13">
             </div>
           ` : `
             <div class="inv-field-row">
@@ -2200,18 +2403,24 @@
       const s = this.state.settlement;
       const m = this.state.meta;
       const isThermal = m.template === 'thermal-pos' || m.template === 'thermal-retail-mushak';
-      const isReceipt = m.docType === 'receipt';
       const curr = CURRENCIES[m.currency] || CURRENCIES.USD;
       const decimals = curr.decimals;
 
       const paidStr = formatMinorUnitsToInput(s.amountPaid || 0, decimals);
       const tenderedStr = formatMinorUnitsToInput(s.tendered || 0, decimals);
-
       const hasUrl = /https?:\/\/[^\s]+/i.test((s.terms || '') + (formatBankDetails(s) || '') + (m.barcodeValue || ''));
+
+      const isCash = s.method === 'CASH';
+      const isCod = s.method === 'COD';
+      const isCard = s.method === 'CARD';
       const isMfs = s.method === 'MFS';
-      const isCustomMfs = s.mfsProvider && !ALL_MFS_PSP_PROVIDERS.includes(s.mfsProvider);
-      const isIBanking = s.method === 'IBANKING';
-      const isCustomIBanking = s.iBankingProvider && !IBANKING_PROVIDERS.includes(s.iBankingProvider);
+      const isA2A = s.method === 'TRANSFER';
+      const isBanglaQr = s.method === 'BANGLAQR';
+      const isCheque = s.method === 'CHECK';
+
+      const isCardPso = (s.cardChannel || '').toLowerCase().includes('online payment gateway');
+      const isMfsPso = (s.mfsChannel || '').toLowerCase().includes('online payment gateway');
+      const isCustomMfs = s.mfsProvider && !WALLET_PROVIDERS.includes(s.mfsProvider);
 
       return `
         <div class="inv-form-section">
@@ -2220,32 +2429,71 @@
           <div class="inv-field-row">
             <label class="inv-label" for="settle-method">payment method:</label>
             <select class="tm-select inv-control" id="settle-method">
-              <option value="CASH" ${s.method === 'CASH' ? 'selected' : ''}>cash</option>
-              <option value="COD" ${s.method === 'COD' ? 'selected' : ''}>cash on delivery (COD)</option>
-              <option value="MFS" ${s.method === 'MFS' ? 'selected' : ''}>MFS &amp; PSP (mobile banking / payment wallets)</option>
-              <option value="IBANKING" ${s.method === 'IBANKING' ? 'selected' : ''}>internet banking (apps &amp; online portals)</option>
-              <option value="CARD" ${s.method === 'CARD' ? 'selected' : ''}>card (credit / debit)</option>
-              <option value="TRANSFER" ${s.method === 'TRANSFER' ? 'selected' : ''}>bank transfer / online</option>
-              <option value="CHECK" ${s.method === 'CHECK' ? 'selected' : ''}>cheque / check</option>
+              <option value="CASH" ${isCash ? 'selected' : ''}>cash</option>
+              <option value="COD" ${isCod ? 'selected' : ''}>cash on delivery</option>
+              <option value="CARD" ${isCard ? 'selected' : ''}>card payment</option>
+              <option value="MFS" ${isMfs ? 'selected' : ''}>mobile wallet (MFS / PSP)</option>
+              <option value="TRANSFER" ${isA2A ? 'selected' : ''}>bank account transfer (A2A)</option>
+              <option value="BANGLAQR" ${isBanglaQr ? 'selected' : ''}>BanglaQR</option>
+              <option value="CHECK" ${isCheque ? 'selected' : ''}>cheque / pay order</option>
             </select>
           </div>
 
-          <!-- MFS & PSP Dynamic Fields -->
-          <div id="inv-mfs-fields" style="${isMfs ? 'display:flex;' : 'display:none;'}">
+          <!-- 1. Card Payment Panel -->
+          <div id="inv-card-fields" style="${isCard ? 'display:flex;' : 'display:none;'} flex-direction:column; gap:8px;">
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-mfsprovider">provider:</label>
+              <label class="inv-label" for="settle-cardscheme">card scheme:</label>
+              <select class="tm-select inv-control" id="settle-cardscheme">
+                ${CARD_SCHEMES.map(sc => `<option value="${sc}" ${(s.cardScheme || 'Visa') === sc ? 'selected' : ''}>${sc}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-cardchannel">processing channel:</label>
+              <select class="tm-select inv-control" id="settle-cardchannel">
+                ${CARD_PROCESSING_CHANNELS.map(ch => `<option value="${ch}" ${(s.cardChannel || '').toLowerCase() === ch.toLowerCase() ? 'selected' : ''}>${ch}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row" id="inv-card-pso-row" style="${isCardPso ? 'display:flex;' : 'display:none;'}">
+              <label class="inv-label" for="settle-cardpso">online gateway (PSO):</label>
+              <select class="tm-select inv-control" id="settle-cardpso">
+                ${PSO_GATEWAYS.map(pso => `<option value="${pso}" ${(s.cardPso || 'SSLCOMMERZ') === pso ? 'selected' : ''}>${pso}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-last4">card last 4 digits:</label>
+              <input type="text" maxlength="4" class="tm-input inv-control" id="settle-last4" value="${escapeHTML(s.last4 || '')}" placeholder="e.g. 4242">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-auth">card auth code:</label>
+              <input type="text" class="tm-input inv-control" id="settle-auth" value="${escapeHTML(s.authCode || '')}" placeholder="e.g. AUTH: 839210">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-cardtrxid">transaction ID / RRN:</label>
+              <input type="text" class="tm-input inv-control" id="settle-cardtrxid" value="${escapeHTML(s.trxId || '')}" placeholder="e.g. TXN-998240">
+            </div>
+          </div>
+
+          <!-- 2. Mobile Wallet (MFS / PSP) Panel -->
+          <div id="inv-mfs-fields" style="${isMfs ? 'display:flex;' : 'display:none;'} flex-direction:column; gap:8px;">
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-mfsprovider">wallet provider:</label>
               <select class="tm-select inv-control" id="settle-mfsprovider">
-                <optgroup label="Mobile Financial Services (MFS)">
+                <optgroup label="mobile financial services (MFS)">
                   ${MFS_PROVIDERS.map(p => `
-                    <option value="${p}" ${(s.mfsProvider || (m.template === 'bn-vintage-ledger' ? 'bKash' : '')) === p ? 'selected' : ''}>${p}</option>
+                    <option value="${p}" ${(s.mfsProvider || 'bKash') === p ? 'selected' : ''}>${p}</option>
                   `).join('')}
                 </optgroup>
-                <optgroup label="Payment Service Providers (PSP)">
+                <optgroup label="payment service providers (PSP)">
                   ${PSP_PROVIDERS.map(p => `
                     <option value="${p}" ${s.mfsProvider === p ? 'selected' : ''}>${p}</option>
                   `).join('')}
                 </optgroup>
-                <optgroup label="Others / Custom">
+                <optgroup label="others / custom">
                   <option value="other" ${isCustomMfs ? 'selected' : ''}>other / custom provider...</option>
                 </optgroup>
               </select>
@@ -2254,6 +2502,20 @@
             <div class="inv-field-row" id="inv-mfs-custom-row" style="${isCustomMfs ? 'display:flex;' : 'display:none;'}">
               <label class="inv-label" for="settle-mfscustom">custom provider:</label>
               <input type="text" class="tm-input inv-control" id="settle-mfscustom" value="${escapeHTML(isCustomMfs ? s.mfsProvider : '')}" placeholder="provider name">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-mfschannel">payment channel / mode:</label>
+              <select class="tm-select inv-control" id="settle-mfschannel">
+                ${MFS_PAYMENT_CHANNELS.map(ch => `<option value="${ch}" ${(s.mfsChannel || '').toLowerCase() === ch.toLowerCase() ? 'selected' : ''}>${ch}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row" id="inv-mfs-pso-row" style="${isMfsPso ? 'display:flex;' : 'display:none;'}">
+              <label class="inv-label" for="settle-mfspso">online gateway (PSO):</label>
+              <select class="tm-select inv-control" id="settle-mfspso">
+                ${PSO_GATEWAYS.map(pso => `<option value="${pso}" ${(s.mfsPso || 'SSLCOMMERZ') === pso ? 'selected' : ''}>${pso}</option>`).join('')}
+              </select>
             </div>
 
             <div class="inv-field-row">
@@ -2267,69 +2529,25 @@
             </div>
           </div>
 
-          <!-- Internet Banking Dynamic Fields -->
-          <div id="inv-ibanking-fields" style="${isIBanking ? 'display:flex;' : 'display:none;'}">
+          <!-- 3. Bank Account Transfer (A2A) Panel -->
+          <div id="inv-transfer-fields" style="${isA2A ? 'display:flex;' : 'display:none;'} flex-direction:column; gap:8px;">
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-ibankingprovider">banking app / portal:</label>
-              <select class="tm-select inv-control" id="settle-ibankingprovider">
-                ${IBANKING_PROVIDERS.map(p => `
-                  <option value="${p}" ${s.iBankingProvider === p ? 'selected' : ''}>${p}</option>
-                `).join('')}
-                <option value="other" ${isCustomIBanking ? 'selected' : ''}>other / custom app...</option>
-              </select>
-            </div>
-
-            <div class="inv-field-row" id="inv-ibanking-custom-row" style="${isCustomIBanking ? 'display:flex;' : 'display:none;'}">
-              <label class="inv-label" for="settle-ibankingcustom">custom app / portal name:</label>
-              <input type="text" class="tm-input inv-control" id="settle-ibankingcustom" value="${escapeHTML(isCustomIBanking ? s.iBankingProvider : '')}" placeholder="app or portal name">
-            </div>
-
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-ibankingchannel">channel / switch:</label>
-              <select class="tm-select inv-control" id="settle-ibankingchannel">
-                ${IBANKING_CHANNELS.map(ch => `
-                  <option value="${ch}" ${(s.iBankingChannel || 'NPSB') === ch ? 'selected' : ''}>${ch}</option>
-                `).join('')}
+              <label class="inv-label" for="settle-a2abank">bank:</label>
+              <select class="tm-select inv-control" id="settle-a2abank">
+                <optgroup label="scheduled banks">
+                  ${SCHEDULED_BANKS_58.map(b => `<option value="${b}" ${(s.bankName || 'DUTCH-BANGLA BANK PLC').toUpperCase() === b ? 'selected' : ''}>${b}</option>`).join('')}
+                </optgroup>
+                <optgroup label="other scheduled &amp; pipeline banks (non-NPSB / off-switch)">
+                  ${NON_NPSB_BANKS.map(b => `<option value="${b}" disabled style="color:#64748b;">${b}</option>`).join('')}
+                </optgroup>
               </select>
             </div>
 
             <div class="inv-field-row">
-              <label class="inv-label" for="settle-ibankingref">account / customer ID / ref:</label>
-              <input type="text" class="tm-input inv-control" id="settle-ibankingref" value="${escapeHTML(s.iBankingRef || '')}" placeholder="e.g. A/C No. or Customer Ref">
-            </div>
-
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-ibankingtrxid">transaction ID (TrxID / Ref):</label>
-              <input type="text" class="tm-input inv-control" id="settle-ibankingtrxid" value="${escapeHTML(s.trxId || '')}" placeholder="e.g. TXN-8924019">
-            </div>
-          </div>
-
-          <div class="inv-field-row">
-            <label class="inv-label" for="settle-amountpaid">amount paid (${curr.symbol}):</label>
-            <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-amountpaid" value="${paidStr}">
-          </div>
-
-          ${isThermal ? `
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-tendered">tendered / cash received (${curr.symbol}):</label>
-              <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-tendered" value="${tenderedStr}" placeholder="e.g. 1000.00">
-            </div>
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-auth">card auth code:</label>
-              <input type="text" class="tm-input inv-control" id="settle-auth" value="${escapeHTML(s.authCode || '')}" placeholder="e.g. AUTH: 839210">
-            </div>
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-last4">card last 4 digits:</label>
-              <input type="text" maxlength="4" class="tm-input inv-control" id="settle-last4" value="${escapeHTML(s.last4 || '')}" placeholder="e.g. 4242">
-            </div>
-          ` : ''}
-
-          ${!isThermal ? `
-            <div class="inv-section-title" style="margin-top:10px;">bank remittance &amp; wire details</div>
-
-            <div class="inv-field-row">
-              <label class="inv-label" for="settle-bankname">bank name:</label>
-              <input type="text" class="tm-input inv-control" id="settle-bankname" value="${escapeHTML(s.bankName || '')}" placeholder="e.g. Dutch-Bangla Bank PLC / Wells Fargo">
+              <label class="inv-label" for="settle-a2arail">rail:</label>
+              <select class="tm-select inv-control" id="settle-a2arail">
+                ${A2A_RAILS.map(r => `<option value="${r}" ${(s.a2aRail || 'NPSB - IBFT').toLowerCase() === r.toLowerCase() ? 'selected' : ''}>${r}</option>`).join('')}
+              </select>
             </div>
 
             <div class="inv-field-row">
@@ -2358,8 +2576,81 @@
             </div>
 
             <div class="inv-field-row">
+              <label class="inv-label" for="settle-a2atrxid">transaction ID / ref:</label>
+              <input type="text" class="tm-input inv-control" id="settle-a2atrxid" value="${escapeHTML(s.trxId || '')}" placeholder="e.g. IBFT-882910">
+            </div>
+
+            <div class="inv-field-row">
               <label class="inv-label" for="settle-banknotes">additional remittance notes:</label>
-              <textarea class="tm-input inv-control" id="settle-banknotes" rows="2" placeholder="lockbox, clearing instructions, or additional notes">${escapeHTML(s.bankNotes || '')}</textarea>
+              <textarea class="tm-input inv-control" id="settle-banknotes" rows="2" placeholder="clearing instructions or notes">${escapeHTML(s.bankNotes || '')}</textarea>
+            </div>
+          </div>
+
+          <!-- 4. BanglaQR Panel -->
+          <div id="inv-banglaqr-fields" style="${isBanglaQr ? 'display:flex;' : 'display:none;'} flex-direction:column; gap:8px;">
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-banglaqr-cat">app type / category:</label>
+              <select class="tm-select inv-control" id="settle-banglaqr-cat">
+                <option value="Bank App" ${(s.banglaQrType || 'Bank App') === 'Bank App' ? 'selected' : ''}>bank app (internet banking)</option>
+                <option value="MFS" ${s.banglaQrType === 'MFS' ? 'selected' : ''}>mobile financial services (MFS)</option>
+                <option value="PSP" ${s.banglaQrType === 'PSP' ? 'selected' : ''}>payment service providers (PSP)</option>
+                <option value="PSO" ${s.banglaQrType === 'PSO' ? 'selected' : ''}>payment system operators (PSO)</option>
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-banglaqr-app">app / provider:</label>
+              <select class="tm-select inv-control" id="settle-banglaqr-app">
+                ${this.getBanglaQrAppOptionsHtml(s.banglaQrType || 'Bank App', s.banglaQrApp)}
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-banglaqr-trxid">transaction ID (TrxID / ref):</label>
+              <input type="text" class="tm-input inv-control" id="settle-banglaqr-trxid" value="${escapeHTML(s.trxId || '')}" placeholder="e.g. BQR-7729104">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-banglaqr-ref">customer mobile / ref:</label>
+              <input type="text" class="tm-input inv-control" id="settle-banglaqr-ref" value="${escapeHTML(s.mfsNumber || '')}" placeholder="e.g. 017XXXXXXXX or account">
+            </div>
+          </div>
+
+          <!-- 5. Cheque / Pay Order Panel -->
+          <div id="inv-check-fields" style="${isCheque ? 'display:flex;' : 'display:none;'} flex-direction:column; gap:8px;">
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-checknumber">cheque / pay order no:</label>
+              <input type="text" class="tm-input inv-control" id="settle-checknumber" value="${escapeHTML(s.chequeNumber || '')}" placeholder="e.g. CHQ-9912048">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-checkbank">issuing bank:</label>
+              <select class="tm-select inv-control" id="settle-checkbank">
+                ${SCHEDULED_BANKS_58.map(b => `<option value="${b}" ${(s.chequeBank || 'SONALI BANK PLC').toUpperCase() === b ? 'selected' : ''}>${b}</option>`).join('')}
+              </select>
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-checkdate">cheque date:</label>
+              <input type="date" class="tm-input inv-control" id="settle-checkdate" value="${escapeHTML(s.chequeDate || '')}">
+            </div>
+
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-checkbranch">clearing branch / notes:</label>
+              <input type="text" class="tm-input inv-control" id="settle-checkbranch" value="${escapeHTML(s.bankNotes || '')}" placeholder="e.g. Principal Branch, Dhaka">
+            </div>
+          </div>
+
+          <!-- Common Financial Amounts -->
+          <div class="inv-field-row">
+            <label class="inv-label" for="settle-amountpaid">amount paid (${curr.symbol}):</label>
+            <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-amountpaid" value="${paidStr}">
+          </div>
+
+          ${isThermal ? `
+            <div class="inv-field-row">
+              <label class="inv-label" for="settle-tendered">tendered / cash received (${curr.symbol}):</label>
+              <input type="number" step="any" min="0" class="tm-input inv-control" id="settle-tendered" value="${tenderedStr}" placeholder="e.g. 1000.00">
             </div>
           ` : ''}
 
@@ -2375,7 +2666,7 @@
             <label class="inv-label" for="settle-symbology">symbology / format:</label>
             <select class="tm-select inv-control" id="settle-symbology">
               <option value="CODE128" ${m.barcodeSymbology === 'CODE128' ? 'selected' : ''}>Code 128 (universal 1D barcode)</option>
-              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR Code (2D payment link &amp; URL)</option>
+              <option value="QR" ${m.barcodeSymbology === 'QR' ? 'selected' : ''}>QR code (2D payment link &amp; URL)</option>
               <option value="DATAMATRIX" ${m.barcodeSymbology === 'DATAMATRIX' ? 'selected' : ''}>Data Matrix (compact 2D code)</option>
               <option value="EAN13" ${m.barcodeSymbology === 'EAN13' ? 'selected' : ''}>EAN-13 (retail 13-digit standard)</option>
             </select>
@@ -2389,11 +2680,76 @@
           ${hasUrl && m.barcodeSymbology !== 'QR' ? `
             <div class="inv-url-notice" id="inv-url-notice">
               <span>url detected in payment terms.</span>
-              <button type="button" class="tm-btn tm-btn-xs tm-btn-primary" id="inv-switch-qr-btn">switch barcode to QR Code</button>
+              <button type="button" class="tm-btn tm-btn-xs tm-btn-primary" id="inv-switch-qr-btn">switch barcode to QR code</button>
             </div>
           ` : ''}
         </div>
       `;
+    },
+
+    getBanglaQrAppOptionsHtml(cat, currentVal) {
+      if (cat === 'MFS') {
+        const certHtml = BANGLAQR_MFS_CERTIFIED.map(a =>
+          `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
+        ).join('');
+        const uncertHtml = BANGLAQR_MFS_UNCERTIFIED.map(a =>
+          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+        ).join('');
+        return `
+          <optgroup label="mobile financial services">
+            ${certHtml}
+          </optgroup>
+          <optgroup label="mobile financial services (not certified)" disabled>
+            ${uncertHtml}
+          </optgroup>
+        `;
+      } else if (cat === 'PSP') {
+        const certHtml = BANGLAQR_PSP_CERTIFIED.map(a =>
+          `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
+        ).join('');
+        const uncertHtml = BANGLAQR_PSP_UNCERTIFIED.map(a =>
+          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+        ).join('');
+        return `
+          <optgroup label="payment service providers">
+            ${certHtml}
+          </optgroup>
+          <optgroup label="payment service providers (not certified)" disabled>
+            ${uncertHtml}
+          </optgroup>
+        `;
+      } else if (cat === 'PSO') {
+        const certHtml = BANGLAQR_PSO_CERTIFIED.map(a =>
+          `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
+        ).join('');
+        const uncertHtml = BANGLAQR_PSO_UNCERTIFIED.map(a =>
+          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+        ).join('');
+        return `
+          <optgroup label="payment system operators">
+            ${certHtml}
+          </optgroup>
+          <optgroup label="payment system operators (not certified)" disabled>
+            ${uncertHtml}
+          </optgroup>
+        `;
+      } else {
+        // Bank App (Default)
+        const certHtml = BANGLAQR_BANK_APPS_CERTIFIED.map(a =>
+          `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`
+        ).join('');
+        const uncertHtml = BANGLAQR_BANK_APPS_UNCERTIFIED.map(a =>
+          `<option value="${a}" disabled style="color:#64748b;">${a} (not certified for BanglaQR)</option>`
+        ).join('');
+        return `
+          <optgroup label="bank apps">
+            ${certHtml}
+          </optgroup>
+          <optgroup label="bank apps (not certified for BanglaQR)" disabled>
+            ${uncertHtml}
+          </optgroup>
+        `;
+      }
     },
 
     getVintageTabHtml() {
@@ -2475,7 +2831,16 @@
         this.setDocType(val);
       });
       handleInput('meta-docnumber', val => { this.state.meta.docNumber = val; });
-      handleInput('meta-issuedate', val => { this.state.meta.issueDate = val; });
+      handleInput('meta-issuedate', val => {
+        this.state.meta.issueDate = val;
+        const sDate = container.querySelector('#seller-date');
+        if (sDate && sDate.value !== val) sDate.value = val;
+      });
+      handleInput('seller-date', val => {
+        this.state.meta.issueDate = val;
+        const mDate = container.querySelector('#meta-issuedate');
+        if (mDate && mDate.value !== val) mDate.value = val;
+      });
       handleInput('meta-duedate', val => { this.state.meta.dueDate = val; });
       handleInput('meta-currency', val => {
         this.state.meta.currency = val;
@@ -2660,15 +3025,41 @@
       // Settlement inputs
       handleInput('settle-method', val => {
         this.state.settlement.method = val;
+        const cardBox = container.querySelector('#inv-card-fields');
+        if (cardBox) cardBox.style.display = val === 'CARD' ? 'flex' : 'none';
         const mfsBox = container.querySelector('#inv-mfs-fields');
-        if (mfsBox) {
-          mfsBox.style.display = val === 'MFS' ? 'flex' : 'none';
-        }
-        const ibankingBox = container.querySelector('#inv-ibanking-fields');
-        if (ibankingBox) {
-          ibankingBox.style.display = val === 'IBANKING' ? 'flex' : 'none';
-        }
+        if (mfsBox) mfsBox.style.display = val === 'MFS' ? 'flex' : 'none';
+        const a2aBox = container.querySelector('#inv-transfer-fields');
+        if (a2aBox) a2aBox.style.display = val === 'TRANSFER' ? 'flex' : 'none';
+        const bqrBox = container.querySelector('#inv-banglaqr-fields');
+        if (bqrBox) bqrBox.style.display = val === 'BANGLAQR' ? 'flex' : 'none';
+        const chqBox = container.querySelector('#inv-check-fields');
+        if (chqBox) chqBox.style.display = val === 'CHECK' ? 'flex' : 'none';
       });
+
+      // Card Payment handlers
+      handleInput('settle-cardscheme', val => {
+        this.state.settlement.cardScheme = val;
+      });
+      handleInput('settle-cardchannel', val => {
+        this.state.settlement.cardChannel = val;
+        const psoRow = container.querySelector('#inv-card-pso-row');
+        if (psoRow) psoRow.style.display = val.toLowerCase().includes('online payment gateway') ? 'flex' : 'none';
+      });
+      handleInput('settle-cardpso', val => {
+        this.state.settlement.cardPso = val;
+      });
+      handleInput('settle-last4', val => {
+        this.state.settlement.last4 = val;
+      });
+      handleInput('settle-auth', val => {
+        this.state.settlement.authCode = val;
+      });
+      handleInput('settle-cardtrxid', val => {
+        this.state.settlement.trxId = val;
+      });
+
+      // MFS & PSP handlers
       handleInput('settle-mfsprovider', val => {
         const customRow = container.querySelector('#inv-mfs-custom-row');
         if (val === 'other') {
@@ -2683,6 +3074,14 @@
       handleInput('settle-mfscustom', val => {
         this.state.settlement.mfsProvider = val.trim() || 'custom';
       });
+      handleInput('settle-mfschannel', val => {
+        this.state.settlement.mfsChannel = val;
+        const psoRow = container.querySelector('#inv-mfs-pso-row');
+        if (psoRow) psoRow.style.display = val.toLowerCase().includes('online payment gateway') ? 'flex' : 'none';
+      });
+      handleInput('settle-mfspso', val => {
+        this.state.settlement.mfsPso = val;
+      });
       handleInput('settle-mfsnumber', val => {
         this.state.settlement.mfsNumber = val;
       });
@@ -2690,29 +3089,78 @@
         this.state.settlement.trxId = val;
       });
 
-      // Internet Banking handlers
-      handleInput('settle-ibankingprovider', val => {
-        const customRow = container.querySelector('#inv-ibanking-custom-row');
-        if (val === 'other') {
-          if (customRow) customRow.style.display = 'flex';
-          const customIn = container.querySelector('#settle-ibankingcustom');
-          this.state.settlement.iBankingProvider = (customIn && customIn.value.trim()) ? customIn.value.trim() : 'custom';
-        } else {
-          if (customRow) customRow.style.display = 'none';
-          this.state.settlement.iBankingProvider = val;
-        }
+      // Bank Account Transfer (A2A) handlers
+      handleInput('settle-a2abank', val => {
+        this.state.settlement.bankName = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+        this.checkUrlInTerms();
       });
-      handleInput('settle-ibankingcustom', val => {
-        this.state.settlement.iBankingProvider = val.trim() || 'custom';
+      handleInput('settle-a2arail', val => {
+        this.state.settlement.a2aRail = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
       });
-      handleInput('settle-ibankingchannel', val => {
-        this.state.settlement.iBankingChannel = val;
+      handleInput('settle-accname', val => {
+        this.state.settlement.accountName = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
       });
-      handleInput('settle-ibankingref', val => {
-        this.state.settlement.iBankingRef = val;
+      handleInput('settle-accnumber', val => {
+        this.state.settlement.accountNumber = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
       });
-      handleInput('settle-ibankingtrxid', val => {
+      handleInput('settle-branch', val => {
+        this.state.settlement.branchName = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+      });
+      handleInput('settle-routing', val => {
+        this.state.settlement.routingNumber = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+      });
+      handleInput('settle-swift', val => {
+        this.state.settlement.swiftBic = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+      });
+      handleInput('settle-a2atrxid', val => {
         this.state.settlement.trxId = val;
+      });
+      handleInput('settle-banknotes', val => {
+        this.state.settlement.bankNotes = val;
+        this.state.settlement.bankDetails = formatBankDetails(this.state.settlement);
+      });
+
+      // BanglaQR handlers
+      const bqrCatEl = container.querySelector('#settle-banglaqr-cat');
+      const bqrAppEl = container.querySelector('#settle-banglaqr-app');
+      if (bqrCatEl && bqrAppEl) {
+        bqrCatEl.addEventListener('change', (e) => {
+          this.state.settlement.banglaQrType = e.target.value;
+          bqrAppEl.innerHTML = this.getBanglaQrAppOptionsHtml(e.target.value, this.state.settlement.banglaQrApp);
+          this.state.settlement.banglaQrApp = bqrAppEl.value;
+          this.schedulePreviewUpdate();
+        });
+        bqrAppEl.addEventListener('change', (e) => {
+          this.state.settlement.banglaQrApp = e.target.value;
+          this.schedulePreviewUpdate();
+        });
+      }
+      handleInput('settle-banglaqr-trxid', val => {
+        this.state.settlement.trxId = val;
+      });
+      handleInput('settle-banglaqr-ref', val => {
+        this.state.settlement.mfsNumber = val;
+      });
+
+      // Cheque handlers
+      handleInput('settle-checknumber', val => {
+        this.state.settlement.chequeNumber = val;
+      });
+      handleInput('settle-checkbank', val => {
+        this.state.settlement.chequeBank = val;
+      });
+      handleInput('settle-checkdate', val => {
+        this.state.settlement.chequeDate = val;
+      });
+      handleInput('settle-checkbranch', val => {
+        this.state.settlement.bankNotes = val;
       });
 
       handleInput('settle-symbology', val => {
@@ -3061,24 +3509,46 @@
 
           <!-- Footer & Settlement -->
           <div class="inv-stripe-footer">
-            <div class="inv-stripe-footer-left">
+                        <div class="inv-stripe-footer-left">
               ${state.settlement.method === 'MFS' ? `
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Method:</div>
                   <div class="inv-foot-body">
-                    <strong>Mobile Financial Service (${escapeHTML(state.settlement.mfsProvider || 'MFS')})</strong>
-                    ${state.settlement.mfsNumber ? `<br>Account / Mobile: ${escapeHTML(state.settlement.mfsNumber)}` : ''}
-                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                    <strong>Mobile Wallet (${escapeHTML(state.settlement.mfsProvider || 'MFS')})</strong>
+                    <div>Mode: ${escapeHTML(state.settlement.mfsChannel || 'Direct Transfer')}${(state.settlement.mfsChannel || '').toLowerCase().includes('online payment gateway') && state.settlement.mfsPso ? ' via ' + escapeHTML(state.settlement.mfsPso) : ''}</div>
+                    ${state.settlement.mfsNumber ? `<div>Wallet No: ${escapeHTML(state.settlement.mfsNumber)}</div>` : ''}
+                    ${state.settlement.trxId ? `<div>TrxID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span></div>` : ''}
                   </div>
                 </div>
-              ` : state.settlement.method === 'IBANKING' ? `
+              ` : state.settlement.method === 'CARD' ? `
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Method:</div>
                   <div class="inv-foot-body">
-                    <strong>Internet Banking (${escapeHTML(state.settlement.iBankingProvider || 'Internet Banking')})</strong>
-                    ${state.settlement.iBankingChannel ? `<br>Channel / Switch: ${escapeHTML(state.settlement.iBankingChannel)}` : ''}
-                    ${state.settlement.iBankingRef ? `<br>Ref / Account: ${escapeHTML(state.settlement.iBankingRef)}` : ''}
-                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                    <strong>Card Payment (${escapeHTML(state.settlement.cardScheme || 'Card')})</strong>
+                    <div>Channel: ${escapeHTML(state.settlement.cardChannel || 'Bank POS Terminal')}${(state.settlement.cardChannel || '').toLowerCase().includes('online payment gateway') && state.settlement.cardPso ? ' via ' + escapeHTML(state.settlement.cardPso) : ''}</div>
+                    ${state.settlement.last4 ? `<div>Card: **** **** **** ${escapeHTML(state.settlement.last4)}</div>` : ''}
+                    ${state.settlement.authCode ? `<div>Auth Code: ${escapeHTML(state.settlement.authCode)}</div>` : ''}
+                    ${state.settlement.trxId ? `<div>TrxID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span></div>` : ''}
+                  </div>
+                </div>
+              ` : state.settlement.method === 'BANGLAQR' ? `
+                <div class="inv-stripe-foot-block">
+                  <div class="inv-foot-heading">Payment Method:</div>
+                  <div class="inv-foot-body">
+                    <strong>BanglaQR (${escapeHTML(state.settlement.banglaQrApp || 'QR')})</strong>
+                    <div>Category: ${escapeHTML(state.settlement.banglaQrType || 'Bank App')}</div>
+                    ${state.settlement.trxId ? `<div>TrxID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span></div>` : ''}
+                    ${state.settlement.mfsNumber ? `<div>Ref: ${escapeHTML(state.settlement.mfsNumber)}</div>` : ''}
+                  </div>
+                </div>
+              ` : state.settlement.method === 'CHECK' ? `
+                <div class="inv-stripe-foot-block">
+                  <div class="inv-foot-heading">Payment Method:</div>
+                  <div class="inv-foot-body">
+                    <strong>Cheque / Pay Order</strong>
+                    ${state.settlement.chequeNumber ? `<div>Cheque No: ${escapeHTML(state.settlement.chequeNumber)}</div>` : ''}
+                    ${state.settlement.chequeBank ? `<div>Bank: ${escapeHTML(state.settlement.chequeBank)}</div>` : ''}
+                    ${state.settlement.chequeDate ? `<div>Date: ${escapeHTML(state.settlement.chequeDate)}</div>` : ''}
                   </div>
                 </div>
               ` : state.settlement.method === 'COD' ? `
@@ -3086,8 +3556,24 @@
                   <div class="inv-foot-heading">Payment Method:</div>
                   <div class="inv-foot-body"><strong>Cash on Delivery (COD)</strong></div>
                 </div>
-              ` : ''}
-              ${formatBankDetails(state.settlement) ? `
+              ` : state.settlement.method === 'TRANSFER' ? `
+                <div class="inv-stripe-foot-block">
+                  <div class="inv-foot-heading">Payment Method:</div>
+                  <div class="inv-foot-body">
+                    <strong>Bank Account Transfer (A2A)</strong>
+                    ${state.settlement.bankName ? `<div>Bank: ${escapeHTML(state.settlement.bankName)}</div>` : ''}
+                    ${state.settlement.a2aRail ? `<div>Rail: ${escapeHTML(state.settlement.a2aRail)}</div>` : ''}
+                    ${state.settlement.accountNumber ? `<div>A/C: ${escapeHTML(state.settlement.accountNumber)}</div>` : ''}
+                    ${state.settlement.trxId ? `<div>TrxID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span></div>` : ''}
+                  </div>
+                </div>
+              ` : `
+                <div class="inv-stripe-foot-block">
+                  <div class="inv-foot-heading">Payment Method:</div>
+                  <div class="inv-foot-body"><strong>Cash</strong></div>
+                </div>
+              `}
+${formatBankDetails(state.settlement) ? `
                 <div class="inv-stripe-foot-block">
                   <div class="inv-foot-heading">Payment Instructions &amp; Bank Details:</div>
                   <div class="inv-foot-body">${escapeHTML(formatBankDetails(state.settlement)).replace(/\n/g, '<br>')}</div>
@@ -3198,11 +3684,38 @@
             <div class="inv-thermal-tot-row">
               <span>METHOD:</span>
               <span>${state.settlement.method === 'COD' ? 'CASH ON DELIVERY'
-          : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML(state.settlement.mfsProvider || 'MFS').toUpperCase()}`
-          : state.settlement.method === 'IBANKING' ? `I-BANK - ${escapeHTML(state.settlement.iBankingProvider || 'INTERNET BANKING').toUpperCase()}`
-            : escapeHTML(state.settlement.method || 'CASH')
+          : state.settlement.method === 'CARD' ? `CARD - ${escapeHTML((state.settlement.cardScheme || 'CARD').toUpperCase())}`
+            : state.settlement.method === 'MFS' ? `MFS - ${escapeHTML((state.settlement.mfsProvider || 'MFS').toUpperCase())}`
+              : state.settlement.method === 'BANGLAQR' ? `BANGLAQR - ${escapeHTML((state.settlement.banglaQrApp || 'QR').toUpperCase())}`
+                : state.settlement.method === 'TRANSFER' ? `A2A - ${escapeHTML((state.settlement.a2aRail || 'NPSB').toUpperCase())}`
+                  : state.settlement.method === 'CHECK' ? 'CHEQUE / PAY ORDER'
+                    : 'CASH'
         }</span>
             </div>
+            ${state.settlement.method === 'CARD' ? `
+              ${state.settlement.last4 ? `
+                <div class="inv-thermal-tot-row">
+                  <span>CARD NO:</span>
+                  <span>**** **** **** ${escapeHTML(state.settlement.last4)}</span>
+                </div>
+              ` : ''}
+              ${state.settlement.authCode ? `
+                <div class="inv-thermal-tot-row">
+                  <span>AUTH CODE:</span>
+                  <span>${escapeHTML(state.settlement.authCode)}</span>
+                </div>
+              ` : ''}
+              <div class="inv-thermal-tot-row">
+                <span>CHANNEL:</span>
+                <span>${(state.settlement.cardChannel || '').toLowerCase().includes('online payment gateway') ? escapeHTML((state.settlement.cardPso || 'PSO').toUpperCase()) : 'BANK POS TERMINAL'}</span>
+              </div>
+              ${state.settlement.trxId ? `
+                <div class="inv-thermal-tot-row">
+                  <span>TRX ID:</span>
+                  <span>${escapeHTML(state.settlement.trxId)}</span>
+                </div>
+              ` : ''}
+            ` : ''}
             ${state.settlement.method === 'MFS' ? `
               ${state.settlement.mfsNumber ? `
                 <div class="inv-thermal-tot-row">
@@ -3212,28 +3725,42 @@
               ` : ''}
               ${state.settlement.trxId ? `
                 <div class="inv-thermal-tot-row">
-                  <span>TRXID:</span>
+                  <span>TRX ID:</span>
                   <span>${escapeHTML(state.settlement.trxId)}</span>
                 </div>
               ` : ''}
             ` : ''}
-            ${state.settlement.method === 'IBANKING' ? `
-              ${state.settlement.iBankingChannel ? `
+            ${state.settlement.method === 'BANGLAQR' ? `
+              <div class="inv-thermal-tot-row">
+                <span>APP:</span>
+                <span>${escapeHTML((state.settlement.banglaQrApp || 'BANGLAQR').toUpperCase())}</span>
+              </div>
+              ${state.settlement.trxId ? `
                 <div class="inv-thermal-tot-row">
-                  <span>CHANNEL:</span>
-                  <span>${escapeHTML(state.settlement.iBankingChannel)}</span>
+                  <span>TRX ID:</span>
+                  <span>${escapeHTML(state.settlement.trxId)}</span>
                 </div>
               ` : ''}
-              ${state.settlement.iBankingRef ? `
+            ` : ''}
+            ${state.settlement.method === 'TRANSFER' ? `
+              ${state.settlement.bankName ? `
                 <div class="inv-thermal-tot-row">
-                  <span>REF / A/C:</span>
-                  <span>${escapeHTML(state.settlement.iBankingRef)}</span>
+                  <span>BANK:</span>
+                  <span>${escapeHTML(state.settlement.bankName)}</span>
                 </div>
               ` : ''}
               ${state.settlement.trxId ? `
                 <div class="inv-thermal-tot-row">
-                  <span>TRXID:</span>
+                  <span>REF / TRX:</span>
                   <span>${escapeHTML(state.settlement.trxId)}</span>
+                </div>
+              ` : ''}
+            ` : ''}
+            ${state.settlement.method === 'CHECK' ? `
+              ${state.settlement.chequeNumber ? `
+                <div class="inv-thermal-tot-row">
+                  <span>CHQ NO:</span>
+                  <span>${escapeHTML(state.settlement.chequeNumber)}</span>
                 </div>
               ` : ''}
             ` : ''}
@@ -3246,18 +3773,6 @@
                 <span>CHANGE GIVEN:</span>
                 <span>${formatDisplayCurrency(totals.change, curr)}</span>
               </div>
-            ` : ''}
-            ${state.settlement.method === 'CARD' ? `
-              <div class="inv-thermal-tot-row">
-                <span>CARD:</span>
-                <span>**** **** **** ${escapeHTML(state.settlement.last4 || '0000')}</span>
-              </div>
-              ${state.settlement.authCode ? `
-                <div class="inv-thermal-tot-row">
-                  <span>AUTH CODE:</span>
-                  <span>${escapeHTML(state.settlement.authCode)}</span>
-                </div>
-              ` : ''}
             ` : ''}
           </div>
 
@@ -3352,19 +3867,41 @@
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Payment Information:</div>
                   <div class="inv-classic-body">
-                    Method: MFS (${escapeHTML(state.settlement.mfsProvider || 'Mobile Wallet')})
+                    Method: Mobile Wallet (${escapeHTML(state.settlement.mfsProvider || 'MFS')})
+                    ${state.settlement.mfsChannel ? `<br>Channel: ${escapeHTML(state.settlement.mfsChannel)}${(state.settlement.mfsChannel || '').toLowerCase().includes('online payment gateway') && state.settlement.mfsPso ? ' via ' + escapeHTML(state.settlement.mfsPso) : ''}` : ''}
                     ${state.settlement.mfsNumber ? `<br>Account / Mobile: ${escapeHTML(state.settlement.mfsNumber)}` : ''}
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
                   </div>
                 </div>
-              ` : state.settlement.method === 'IBANKING' ? `
+              ` : state.settlement.method === 'CARD' ? `
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Payment Information:</div>
                   <div class="inv-classic-body">
-                    Method: Internet Banking (${escapeHTML(state.settlement.iBankingProvider || 'Internet Banking')})
-                    ${state.settlement.iBankingChannel ? `<br>Channel / Switch: ${escapeHTML(state.settlement.iBankingChannel)}` : ''}
-                    ${state.settlement.iBankingRef ? `<br>Ref / Account: ${escapeHTML(state.settlement.iBankingRef)}` : ''}
+                    Method: Card Payment (${escapeHTML(state.settlement.cardScheme || 'Card')})
+                    <br>Channel: ${escapeHTML(state.settlement.cardChannel || 'Bank POS Terminal')}${state.settlement.cardChannel === 'Online Payment Gateway (PSO)' && state.settlement.cardPso ? ' via ' + escapeHTML(state.settlement.cardPso) : ''}
+                    ${state.settlement.last4 ? `<br>Card: **** **** **** ${escapeHTML(state.settlement.last4)}` : ''}
+                    ${state.settlement.authCode ? `<br>Auth Code: ${escapeHTML(state.settlement.authCode)}` : ''}
                     ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                  </div>
+                </div>
+              ` : state.settlement.method === 'BANGLAQR' ? `
+                <div class="inv-classic-block">
+                  <div class="inv-classic-heading">Payment Information:</div>
+                  <div class="inv-classic-body">
+                    Method: BanglaQR (${escapeHTML(state.settlement.banglaQrApp || 'QR')})
+                    <br>Category: ${escapeHTML(state.settlement.banglaQrType || 'Bank App')}
+                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                    ${state.settlement.mfsNumber ? `<br>Ref: ${escapeHTML(state.settlement.mfsNumber)}` : ''}
+                  </div>
+                </div>
+              ` : state.settlement.method === 'CHECK' ? `
+                <div class="inv-classic-block">
+                  <div class="inv-classic-heading">Payment Information:</div>
+                  <div class="inv-classic-body">
+                    Method: Cheque / Pay Order
+                    ${state.settlement.chequeNumber ? `<br>Cheque No: ${escapeHTML(state.settlement.chequeNumber)}` : ''}
+                    ${state.settlement.chequeBank ? `<br>Bank: ${escapeHTML(state.settlement.chequeBank)}` : ''}
+                    ${state.settlement.chequeDate ? `<br>Date: ${escapeHTML(state.settlement.chequeDate)}` : ''}
                   </div>
                 </div>
               ` : state.settlement.method === 'COD' ? `
@@ -3372,7 +3909,23 @@
                   <div class="inv-classic-heading">Payment Terms:</div>
                   <div class="inv-classic-body">Cash on Delivery (COD)</div>
                 </div>
-              ` : ''}
+              ` : state.settlement.method === 'TRANSFER' ? `
+                <div class="inv-classic-block">
+                  <div class="inv-classic-heading">Payment Information:</div>
+                  <div class="inv-classic-body">
+                    Method: Bank Account Transfer (A2A)
+                    ${state.settlement.bankName ? `<br>Bank: ${escapeHTML(state.settlement.bankName)}` : ''}
+                    ${state.settlement.a2aRail ? `<br>Rail: ${escapeHTML(state.settlement.a2aRail)}` : ''}
+                    ${state.settlement.accountNumber ? `<br>Account No: ${escapeHTML(state.settlement.accountNumber)}` : ''}
+                    ${state.settlement.trxId ? `<br>Transaction ID: <span style="font-family:monospace;font-weight:bold;">${escapeHTML(state.settlement.trxId)}</span>` : ''}
+                  </div>
+                </div>
+              ` : `
+                <div class="inv-classic-block">
+                  <div class="inv-classic-heading">Payment Terms:</div>
+                  <div class="inv-classic-body">Cash</div>
+                </div>
+              `}
               ${formatBankDetails(state.settlement) ? `
                 <div class="inv-classic-block">
                   <div class="inv-classic-heading">Remittance &amp; Bank Details:</div>
@@ -3452,27 +4005,24 @@
       let paymentMethodText = 'নগদ ক্যাশ';
       if (state.settlement.method === 'COD') {
         paymentMethodText = 'ক্যাশ অন ডেলিভারি (COD)';
+      } else if (state.settlement.method === 'CARD') {
+        const sc = state.settlement.cardScheme || 'কার্ড';
+        paymentMethodText = `কার্ড পেমেন্ট (${sc})`;
       } else if (state.settlement.method === 'MFS') {
         const prov = state.settlement.mfsProvider || 'বিকাশ';
         const parts = [];
         if (state.settlement.mfsNumber) parts.push(toBengaliNumerals(state.settlement.mfsNumber));
         if (state.settlement.trxId) parts.push('TrxID: ' + state.settlement.trxId);
-        paymentMethodText = `এমএফএস (${prov})${parts.length ? ' — ' + parts.join(', ') : ''}`;
-      } else if (state.settlement.method === 'IBANKING') {
-        const prov = state.settlement.iBankingProvider || 'ইন্টারনেট ব্যাংকিং';
-        const parts = [];
-        if (state.settlement.iBankingChannel) parts.push(state.settlement.iBankingChannel);
-        if (state.settlement.iBankingRef) parts.push('হিসাব/রেফ: ' + state.settlement.iBankingRef);
-        if (state.settlement.trxId) parts.push('TrxID: ' + state.settlement.trxId);
-        paymentMethodText = `ইন্টারনেট ব্যাংকিং (${prov})${parts.length ? ' — ' + parts.join(', ') : ''}`;
+        paymentMethodText = `মোবাইল ওয়ালেট: ${prov}${parts.length ? ' — ' + parts.join(', ') : ''}`;
+      } else if (state.settlement.method === 'BANGLAQR') {
+        const app = state.settlement.banglaQrApp || 'বাংলা কিউআর';
+        paymentMethodText = `বাংলা কিউআর (${app})`;
       } else if (state.settlement.method === 'TRANSFER') {
-        paymentMethodText = 'ব্যাংক ট্রান্সফার';
-      } else if (state.settlement.method === 'CARD') {
-        paymentMethodText = `কার্ড পরিশোধ${state.settlement.last4 ? ' (**** ' + state.settlement.last4 + ')' : ''}`;
+        paymentMethodText = `ব্যাংক ট্রান্সফার (${state.settlement.bankName || 'A2A'})`;
       } else if (state.settlement.method === 'CHECK') {
-        paymentMethodText = 'চেক মারফত';
-      } else if (state.settlement.terms && state.settlement.terms.includes('ক্যাশ')) {
-        paymentMethodText = 'ক্যাশ অন ডেলিভারি (COD)';
+        paymentMethodText = `চেক / পে-অর্ডার${state.settlement.chequeNumber ? ' (' + state.settlement.chequeNumber + ')' : ''}`;
+      } else {
+        paymentMethodText = 'নগদ পরিশোধ';
       }
 
       let itemsRows = state.items.map((item, idx) => {
@@ -4188,17 +4738,20 @@
         : (totals.amountPaid > 0 ? totals.amountPaid : (totals.tendered > 0 ? totals.tendered : totals.netPayable));
 
       if (state.settlement.method === 'TRANSFER') {
-        tenderLabel = 'eCom Online';
+        tenderLabel = 'A2A TRANSFER';
       } else if (state.settlement.method === 'MFS') {
         const prov = state.settlement.mfsProvider || 'MFS';
-        tenderLabel = escapeHTML(prov);
-      } else if (state.settlement.method === 'IBANKING') {
-        const prov = state.settlement.iBankingProvider || 'Internet Banking';
-        tenderLabel = escapeHTML(prov);
+        tenderLabel = escapeHTML(prov.toUpperCase());
+      } else if (state.settlement.method === 'BANGLAQR') {
+        const app = state.settlement.banglaQrApp || 'BANGLAQR';
+        tenderLabel = `BANGLAQR (${escapeHTML(app.toUpperCase())})`;
       } else if (state.settlement.method === 'CARD') {
-        tenderLabel = 'CARD PAID';
+        const scheme = state.settlement.cardScheme || 'CARD';
+        tenderLabel = `${escapeHTML(scheme.toUpperCase())} PAID`;
       } else if (state.settlement.method === 'COD') {
         tenderLabel = 'COD PAYABLE';
+      } else if (state.settlement.method === 'CHECK') {
+        tenderLabel = 'CHEQUE';
       }
 
       // Discount Breakdown Module
@@ -4387,7 +4940,7 @@ Powered by MIS@ACI Limited`;
             ${state.settlement.trxId ? `
               <div class="inv-mushak-ledg-row">
                 <span class="inv-mushak-ledg-lbl">TRX ID :</span>
-                <span class="inv-mushak-ledg-val" style="font-family:monospace;font-size:10px;">${escapeHTML(state.settlement.trxId)}</span>
+                <span class="inv-mushak-ledg-val" style="font-size:10px;">${escapeHTML(state.settlement.trxId)}</span>
               </div>
             ` : ''}
             ${(totals.change > 0 || state.settlement.method === 'CASH') ? `
@@ -4420,8 +4973,9 @@ Powered by MIS@ACI Limited`;
     // --- VECTOR PRINT & PDF EXPORT PIPELINE ---
     async downloadPdf() {
       const jsPDFClass = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+      const htmlToImageLib = window.htmlToImage;
       const html2canvasFn = window.html2canvas;
-      if (!jsPDFClass || !html2canvasFn) {
+      if (!jsPDFClass || (!htmlToImageLib && !html2canvasFn)) {
         console.warn('PDF compiler libraries not loaded, falling back to print dialog');
         this.print();
         return;
@@ -4462,18 +5016,49 @@ Powered by MIS@ACI Limited`;
         }
         paperTarget.classList.add('inv-exporting-pdf');
 
-        // Allow microtask / DOM layout to settle
-        await new Promise(r => setTimeout(r, 80));
+        // Allow microtask / DOM layout to settle and ensure webfonts are fully rasterized
+        if (document.fonts) {
+          if (document.fonts.ready) await document.fonts.ready;
+          if (document.fonts.load) {
+            await Promise.allSettled([
+              document.fonts.load('12px "bitArray-A2"'),
+              document.fonts.load('12px "bitArray"'),
+              document.fonts.load('12px "VKP80II-CP437"')
+            ]);
+          }
+        }
+        await new Promise(r => setTimeout(r, 120));
 
-        // High-DPI canvas capture using html2canvas
-        const canvas = await html2canvasFn(paperTarget, {
-          scale: 2, // 2x gives 300 DPI crisp, clean, vector-grade rendering
-          useCORS: true,
-          logging: false,
-          backgroundColor: docBg,
-          scrollX: 0,
-          scrollY: 0
-        });
+        // High-DPI canvas capture using html-to-image (with html2canvas fallback):
+        // Use scale 5 for continuous roll thermal receipts (~480 DPI ultra-crisp resolution)
+        // and scale 3.5 for standard A4 documents (~336 DPI crisp vector-grade rendering)
+        const renderScale = isThermal ? 5 : 3.5;
+        let canvas = null;
+
+        // Primary renderer: html-to-image (preserves HarfBuzz / OpenType ligatures & pixel-crisp fonts)
+        if (htmlToImageLib && typeof htmlToImageLib.toCanvas === 'function') {
+          try {
+            canvas = await htmlToImageLib.toCanvas(paperTarget, {
+              pixelRatio: renderScale,
+              backgroundColor: docBg,
+              cacheBust: false
+            });
+          } catch (h2iErr) {
+            console.warn('htmlToImage rendering encountered an issue, falling back to html2canvas:', h2iErr);
+          }
+        }
+
+        // Resilient fallback: html2canvas
+        if (!canvas && html2canvasFn) {
+          canvas = await html2canvasFn(paperTarget, {
+            scale: renderScale,
+            useCORS: true,
+            logging: false,
+            backgroundColor: docBg,
+            scrollX: 0,
+            scrollY: 0
+          });
+        }
 
         if (!canvas || !canvas.width || !canvas.height) {
           throw new Error('Canvas render failed or produced 0x0 output');
@@ -4491,7 +5076,7 @@ Powered by MIS@ACI Limited`;
             format: [pageWidthPt, pageHeightPt]
           });
 
-          doc.addImage(canvas, 'PNG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'FAST');
+          doc.addImage(canvas, 'PNG', 0, 0, pageWidthPt, pageHeightPt, undefined, 'SLOW');
           doc.save(fileName);
         } else {
           // --- STANDARD A4 (Modern Digital, Minimal Classic, Vintage Bengali, Tractor Feed, ERP) ---
@@ -4521,7 +5106,7 @@ Powered by MIS@ACI Limited`;
               doc.setFillColor(251, 251, 247);
               doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
             }
-            doc.addImage(canvas, 'PNG', offsetX, 0, fitWidth, fitHeight, undefined, 'FAST');
+            doc.addImage(canvas, 'PNG', offsetX, 0, fitWidth, fitHeight, undefined, 'SLOW');
           } else {
             // Truly multi-page document (> 1.25x A4 height, e.g. 7+ items):
             // Perform DOM-aware clean page breaks between rows and blocks so no text line,
@@ -4572,7 +5157,7 @@ Powered by MIS@ACI Limited`;
                   doc.setFillColor(251, 251, 247);
                   doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
                 }
-                doc.addImage(sliceCanvas, 'PNG', 0, 0, pageWidthPt, sliceHeightPt, undefined, 'FAST');
+                doc.addImage(sliceCanvas, 'PNG', 0, 0, pageWidthPt, sliceHeightPt, undefined, 'SLOW');
               } else {
                 doc.addPage();
                 if (isVintage) {
@@ -4587,7 +5172,7 @@ Powered by MIS@ACI Limited`;
                   doc.setFillColor(251, 251, 247);
                   doc.rect(0, 0, pageWidthPt, pageHeightPt, 'F');
                 }
-                doc.addImage(sliceCanvas, 'PNG', 0, pageTopPadPt, pageWidthPt, sliceHeightPt, undefined, 'FAST');
+                doc.addImage(sliceCanvas, 'PNG', 0, pageTopPadPt, pageWidthPt, sliceHeightPt, undefined, 'SLOW');
               }
             }
           }
