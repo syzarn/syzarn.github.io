@@ -5035,6 +5035,16 @@ const SBCS_TABLES = {
     },
 
     unicodemap: {
+      coreProps: (typeof window !== 'undefined' && window.__UNICODE_CORE_PROPS__) || null,
+      corePropsLoaded: !!(typeof window !== 'undefined' && window.__UNICODE_CORE_PROPS__),
+      corePropsLoading: null,
+      unikemetCache: (typeof window !== 'undefined' && window.__UNICODE_KEMET__) || null,
+      rsIndexCache: (typeof window !== 'undefined' && window.__UNICODE_RSINDEX__) || null,
+      unihanBmpCache: (typeof window !== 'undefined' && window.__UNIHAN_BMP__) || null,
+      unihanExtCache: (typeof window !== 'undefined' && window.__UNIHAN_EXT__) || null,
+      emojiCache: (typeof window !== 'undefined' && window.__UNICODE_EMOJI__) || null,
+      securityCache: (typeof window !== 'undefined' && window.__UNICODE_SECURITY__) || null,
+      namesListCache: (typeof window !== 'undefined' && window.__UNICODE_NAMESLIST__) || null,
       planes: [
         { id: 0, name: "Plane 0: Basic Multilingual Plane (BMP)", range: [0x0000, 0xFFFF] },
         { id: 1, name: "Plane 1: Supplementary Multilingual Plane (SMP)", range: [0x10000, 0x1FFFF] },
@@ -5046,352 +5056,359 @@ const SBCS_TABLES = {
       ],
 
       blocks: [
-        { name: "Basic Latin", start: 0x0000, end: 0x007F, plane: 0 },
-        { name: "Latin-1 Supplement", start: 0x0080, end: 0x00FF, plane: 0 },
-        { name: "Latin Extended-A", start: 0x0100, end: 0x017F, plane: 0 },
-        { name: "Latin Extended-B", start: 0x0180, end: 0x024F, plane: 0 },
-        { name: "IPA Extensions", start: 0x0250, end: 0x02AF, plane: 0 },
-        { name: "Spacing Modifier Letters", start: 0x02B0, end: 0x02FF, plane: 0 },
-        { name: "Combining Diacritical Marks", start: 0x0300, end: 0x036F, plane: 0 },
-        { name: "Greek and Coptic", start: 0x0370, end: 0x03FF, plane: 0 },
-        { name: "Cyrillic", start: 0x0400, end: 0x04FF, plane: 0 },
-        { name: "Cyrillic Supplement", start: 0x0500, end: 0x052F, plane: 0 },
-        { name: "Armenian", start: 0x0530, end: 0x058F, plane: 0 },
-        { name: "Hebrew", start: 0x0590, end: 0x05FF, plane: 0 },
-        { name: "Arabic", start: 0x0600, end: 0x06FF, plane: 0 },
-        { name: "Syriac", start: 0x0700, end: 0x074F, plane: 0 },
-        { name: "Arabic Supplement", start: 0x0750, end: 0x077F, plane: 0 },
-        { name: "Thaana", start: 0x0780, end: 0x07BF, plane: 0 },
-        { name: "NKo", start: 0x07C0, end: 0x07FF, plane: 0 },
-        { name: "Samaritan", start: 0x0800, end: 0x083F, plane: 0 },
-        { name: "Mandaic", start: 0x0840, end: 0x085F, plane: 0 },
-        { name: "Syriac Supplement", start: 0x0860, end: 0x086F, plane: 0 },
-        { name: "Arabic Extended-B", start: 0x0870, end: 0x089F, plane: 0 },
-        { name: "Arabic Extended-A", start: 0x08A0, end: 0x08FF, plane: 0 },
-        { name: "Devanagari", start: 0x0900, end: 0x097F, plane: 0 },
-        { name: "Bengali", start: 0x0980, end: 0x09FF, plane: 0 },
-        { name: "Gurmukhi", start: 0x0A00, end: 0x0A7F, plane: 0 },
-        { name: "Gujarati", start: 0x0A80, end: 0x0AFF, plane: 0 },
-        { name: "Oriya", start: 0x0B00, end: 0x0B7F, plane: 0 },
-        { name: "Tamil", start: 0x0B80, end: 0x0BFF, plane: 0 },
-        { name: "Telugu", start: 0x0C00, end: 0x0C7F, plane: 0 },
-        { name: "Kannada", start: 0x0C80, end: 0x0CFF, plane: 0 },
-        { name: "Malayalam", start: 0x0D00, end: 0x0D7F, plane: 0 },
-        { name: "Sinhala", start: 0x0D80, end: 0x0DFF, plane: 0 },
-        { name: "Thai", start: 0x0E00, end: 0x0E7F, plane: 0 },
-        { name: "Lao", start: 0x0E80, end: 0x0EFF, plane: 0 },
-        { name: "Tibetan", start: 0x0F00, end: 0x0FFF, plane: 0 },
-        { name: "Myanmar", start: 0x1000, end: 0x109F, plane: 0 },
-        { name: "Georgian", start: 0x10A0, end: 0x10FF, plane: 0 },
-        { name: "Hangul Jamo", start: 0x1100, end: 0x11FF, plane: 0 },
-        { name: "Ethiopic", start: 0x1200, end: 0x137F, plane: 0 },
-        { name: "Ethiopic Supplement", start: 0x1380, end: 0x139F, plane: 0 },
-        { name: "Cherokee", start: 0x13A0, end: 0x13FF, plane: 0 },
-        { name: "Unified Canadian Aboriginal Syllabics", start: 0x1400, end: 0x167F, plane: 0 },
-        { name: "Ogham", start: 0x1680, end: 0x169F, plane: 0 },
-        { name: "Runic", start: 0x16A0, end: 0x16FF, plane: 0 },
-        { name: "Tagalog", start: 0x1700, end: 0x171F, plane: 0 },
-        { name: "Hanunoo", start: 0x1720, end: 0x173F, plane: 0 },
-        { name: "Buhid", start: 0x1740, end: 0x175F, plane: 0 },
-        { name: "Tagbanwa", start: 0x1760, end: 0x177F, plane: 0 },
-        { name: "Khmer", start: 0x1780, end: 0x17FF, plane: 0 },
-        { name: "Mongolian", start: 0x1800, end: 0x18AF, plane: 0 },
-        { name: "Unified Canadian Aboriginal Syllabics Extended", start: 0x18B0, end: 0x18FF, plane: 0 },
-        { name: "Limbu", start: 0x1900, end: 0x194F, plane: 0 },
-        { name: "Tai Le", start: 0x1950, end: 0x197F, plane: 0 },
-        { name: "New Tai Lue", start: 0x1980, end: 0x19DF, plane: 0 },
-        { name: "Khmer Symbols", start: 0x19E0, end: 0x19FF, plane: 0 },
-        { name: "Buginese", start: 0x1A00, end: 0x1A1F, plane: 0 },
-        { name: "Tai Tham", start: 0x1A20, end: 0x1AAF, plane: 0 },
-        { name: "Combining Diacritical Marks Extended", start: 0x1AB0, end: 0x1AFF, plane: 0 },
-        { name: "Balinese", start: 0x1B00, end: 0x1B7F, plane: 0 },
-        { name: "Sundanese", start: 0x1B80, end: 0x1BBF, plane: 0 },
-        { name: "Batak", start: 0x1BC0, end: 0x1BFF, plane: 0 },
-        { name: "Lepcha", start: 0x1C00, end: 0x1C4F, plane: 0 },
-        { name: "Ol Chiki", start: 0x1C50, end: 0x1C7F, plane: 0 },
-        { name: "Cyrillic Extended-C", start: 0x1C80, end: 0x1C8F, plane: 0 },
-        { name: "Georgian Extended", start: 0x1C90, end: 0x1CBF, plane: 0 },
-        { name: "Sundanese Supplement", start: 0x1CC0, end: 0x1CCF, plane: 0 },
-        { name: "Vedic Extensions", start: 0x1CD0, end: 0x1CFF, plane: 0 },
-        { name: "Phonetic Extensions", start: 0x1D00, end: 0x1D7F, plane: 0 },
-        { name: "Phonetic Extensions Supplement", start: 0x1D80, end: 0x1DBF, plane: 0 },
-        { name: "Combining Diacritical Marks Supplement", start: 0x1DC0, end: 0x1DFF, plane: 0 },
-        { name: "Latin Extended Additional", start: 0x1E00, end: 0x1EFF, plane: 0 },
-        { name: "Greek Extended", start: 0x1F00, end: 0x1FFF, plane: 0 },
-        { name: "General Punctuation", start: 0x2000, end: 0x206F, plane: 0 },
-        { name: "Superscripts and Subscripts", start: 0x2070, end: 0x209F, plane: 0 },
-        { name: "Currency Symbols", start: 0x20A0, end: 0x20CF, plane: 0 },
-        { name: "Combining Diacritical Marks for Symbols", start: 0x20D0, end: 0x20FF, plane: 0 },
-        { name: "Letterlike Symbols", start: 0x2100, end: 0x214F, plane: 0 },
-        { name: "Number Forms", start: 0x2150, end: 0x218F, plane: 0 },
-        { name: "Arrows", start: 0x2190, end: 0x21FF, plane: 0 },
-        { name: "Mathematical Operators", start: 0x2200, end: 0x22FF, plane: 0 },
-        { name: "Miscellaneous Technical", start: 0x2300, end: 0x23FF, plane: 0 },
-        { name: "Control Pictures", start: 0x2400, end: 0x243F, plane: 0 },
-        { name: "Optical Character Recognition", start: 0x2440, end: 0x245F, plane: 0 },
-        { name: "Enclosed Alphanumerics", start: 0x2460, end: 0x24FF, plane: 0 },
-        { name: "Box Drawing", start: 0x2500, end: 0x257F, plane: 0 },
-        { name: "Block Elements", start: 0x2580, end: 0x259F, plane: 0 },
-        { name: "Geometric Shapes", start: 0x25A0, end: 0x25FF, plane: 0 },
-        { name: "Miscellaneous Symbols", start: 0x2600, end: 0x26FF, plane: 0 },
-        { name: "Dingbats", start: 0x2700, end: 0x27BF, plane: 0 },
-        { name: "Miscellaneous Mathematical Symbols-A", start: 0x27C0, end: 0x27EF, plane: 0 },
-        { name: "Supplemental Arrows-A", start: 0x27F0, end: 0x27FF, plane: 0 },
-        { name: "Braille Patterns", start: 0x2800, end: 0x28FF, plane: 0 },
-        { name: "Supplemental Arrows-B", start: 0x2900, end: 0x297F, plane: 0 },
-        { name: "Miscellaneous Mathematical Symbols-B", start: 0x2980, end: 0x29FF, plane: 0 },
-        { name: "Supplemental Mathematical Operators", start: 0x2A00, end: 0x2AFF, plane: 0 },
-        { name: "Miscellaneous Symbols and Arrows", start: 0x2B00, end: 0x2BFF, plane: 0 },
-        { name: "Glagolitic", start: 0x2C00, end: 0x2C5F, plane: 0 },
-        { name: "Latin Extended-C", start: 0x2C60, end: 0x2C7F, plane: 0 },
-        { name: "Coptic", start: 0x2C80, end: 0x2CFF, plane: 0 },
-        { name: "Georgian Supplement", start: 0x2D00, end: 0x2D2F, plane: 0 },
-        { name: "Tifinagh", start: 0x2D30, end: 0x2D7F, plane: 0 },
-        { name: "Ethiopic Extended", start: 0x2D80, end: 0x2DDF, plane: 0 },
-        { name: "Cyrillic Extended-A", start: 0x2DE0, end: 0x2DFF, plane: 0 },
-        { name: "Supplemental Punctuation", start: 0x2E00, end: 0x2E7F, plane: 0 },
-        { name: "CJK Radicals Supplement", start: 0x2E80, end: 0x2EFF, plane: 0 },
-        { name: "Kangxi Radicals", start: 0x2F00, end: 0x2FDF, plane: 0 },
-        { name: "Ideographic Description Characters", start: 0x2FF0, end: 0x2FFF, plane: 0 },
-        { name: "CJK Symbols and Punctuation", start: 0x3000, end: 0x303F, plane: 0 },
-        { name: "Hiragana", start: 0x3040, end: 0x309F, plane: 0 },
-        { name: "Katakana", start: 0x30A0, end: 0x30FF, plane: 0 },
-        { name: "Bopomofo", start: 0x3100, end: 0x312F, plane: 0 },
-        { name: "Hangul Compatibility Jamo", start: 0x3130, end: 0x318F, plane: 0 },
-        { name: "Kanbun", start: 0x3190, end: 0x319F, plane: 0 },
-        { name: "Bopomofo Extended", start: 0x31A0, end: 0x31BF, plane: 0 },
-        { name: "CJK Strokes", start: 0x31C0, end: 0x31EF, plane: 0 },
-        { name: "Katakana Phonetic Extensions", start: 0x31F0, end: 0x31FF, plane: 0 },
-        { name: "Enclosed CJK Letters and Months", start: 0x3200, end: 0x32FF, plane: 0 },
-        { name: "CJK Compatibility", start: 0x3300, end: 0x33FF, plane: 0 },
-        { name: "CJK Unified Ideographs Extension A", start: 0x3400, end: 0x4DBF, plane: 0 },
-        { name: "Yijing Hexagram Symbols", start: 0x4DC0, end: 0x4DFF, plane: 0 },
-        { name: "CJK Unified Ideographs", start: 0x4E00, end: 0x9FFF, plane: 0 },
-        { name: "Yi Syllables", start: 0xA000, end: 0xA48F, plane: 0 },
-        { name: "Yi Radicals", start: 0xA490, end: 0xA4CF, plane: 0 },
-        { name: "Lisu", start: 0xA4D0, end: 0xA4FF, plane: 0 },
-        { name: "Vai", start: 0xA500, end: 0xA63F, plane: 0 },
-        { name: "Cyrillic Extended-B", start: 0xA640, end: 0xA69F, plane: 0 },
-        { name: "Bamum", start: 0xA6A0, end: 0xA6FF, plane: 0 },
-        { name: "Modifier Tone Letters", start: 0xA700, end: 0xA71F, plane: 0 },
-        { name: "Latin Extended-D", start: 0xA720, end: 0xA7FF, plane: 0 },
-        { name: "Syloti Nagri", start: 0xA800, end: 0xA82F, plane: 0 },
-        { name: "Common Indic Number Forms", start: 0xA830, end: 0xA83F, plane: 0 },
-        { name: "Phags-pa", start: 0xA840, end: 0xA87F, plane: 0 },
-        { name: "Saurashtra", start: 0xA880, end: 0xA8DF, plane: 0 },
-        { name: "Devanagari Extended", start: 0xA8E0, end: 0xA8FF, plane: 0 },
-        { name: "Kayah Li", start: 0xA900, end: 0xA92F, plane: 0 },
-        { name: "Rejang", start: 0xA930, end: 0xA95F, plane: 0 },
-        { name: "Hangul Jamo Extended-A", start: 0xA960, end: 0xA97F, plane: 0 },
-        { name: "Javanese", start: 0xA980, end: 0xA9DF, plane: 0 },
-        { name: "Myanmar Extended-B", start: 0xA9E0, end: 0xA9FF, plane: 0 },
-        { name: "Cham", start: 0xAA00, end: 0xAA5F, plane: 0 },
-        { name: "Myanmar Extended-A", start: 0xAA60, end: 0xAA7F, plane: 0 },
-        { name: "Tai Viet", start: 0xAA80, end: 0xAADF, plane: 0 },
-        { name: "Meetei Mayek Extensions", start: 0xAAE0, end: 0xAAFF, plane: 0 },
-        { name: "Ethiopic Extended-A", start: 0xAB00, end: 0xAB2F, plane: 0 },
-        { name: "Latin Extended-E", start: 0xAB30, end: 0xAB6F, plane: 0 },
-        { name: "Cherokee Supplement", start: 0xAB70, end: 0xABBF, plane: 0 },
-        { name: "Meetei Mayek", start: 0xABC0, end: 0xABFF, plane: 0 },
-        { name: "Hangul Syllables", start: 0xAC00, end: 0xD7AF, plane: 0 },
-        { name: "Hangul Jamo Extended-B", start: 0xD7B0, end: 0xD7FF, plane: 0 },
-        { name: "High Surrogates", start: 0xD800, end: 0xDB7F, plane: 0 },
-        { name: "High Private Use Surrogates", start: 0xDB80, end: 0xDBFF, plane: 0 },
-        { name: "Low Surrogates", start: 0xDC00, end: 0xDFFF, plane: 0 },
-        { name: "Private Use Area", start: 0xE000, end: 0xF8FF, plane: 0 },
-        { name: "CJK Compatibility Ideographs", start: 0xF900, end: 0xFAFF, plane: 0 },
-        { name: "Alphabetic Presentation Forms", start: 0xFB00, end: 0xFB4F, plane: 0 },
-        { name: "Arabic Presentation Forms-A", start: 0xFB50, end: 0xFDFF, plane: 0 },
-        { name: "Variation Selectors", start: 0xFE00, end: 0xFE0F, plane: 0 },
-        { name: "Vertical Forms", start: 0xFE10, end: 0xFE1F, plane: 0 },
-        { name: "Combining Half Marks", start: 0xFE20, end: 0xFE2F, plane: 0 },
-        { name: "CJK Compatibility Forms", start: 0xFE30, end: 0xFE4F, plane: 0 },
-        { name: "Small Form Variants", start: 0xFE50, end: 0xFE6F, plane: 0 },
-        { name: "Arabic Presentation Forms-B", start: 0xFE70, end: 0xFEFF, plane: 0 },
-        { name: "Halfwidth and Fullwidth Forms", start: 0xFF00, end: 0xFFEF, plane: 0 },
-        { name: "Specials", start: 0xFFF0, end: 0xFFFF, plane: 0 },
-        { name: "Linear B Syllabary", start: 0x10000, end: 0x1007F, plane: 1 },
-        { name: "Linear B Ideograms", start: 0x10080, end: 0x100FF, plane: 1 },
-        { name: "Aegean Numbers", start: 0x10100, end: 0x1013F, plane: 1 },
-        { name: "Ancient Greek Numbers", start: 0x10140, end: 0x1018F, plane: 1 },
-        { name: "Ancient Symbols", start: 0x10190, end: 0x101CF, plane: 1 },
-        { name: "Phaistos Disc", start: 0x101D0, end: 0x101FF, plane: 1 },
-        { name: "Lycian", start: 0x10280, end: 0x1029F, plane: 1 },
-        { name: "Carian", start: 0x102A0, end: 0x102DF, plane: 1 },
-        { name: "Coptic Epact Numbers", start: 0x102E0, end: 0x102FF, plane: 1 },
-        { name: "Old Italic", start: 0x10300, end: 0x1032F, plane: 1 },
-        { name: "Gothic", start: 0x10330, end: 0x1034F, plane: 1 },
-        { name: "Old Permic", start: 0x10350, end: 0x1037F, plane: 1 },
-        { name: "Ugaritic", start: 0x10380, end: 0x1039F, plane: 1 },
-        { name: "Old Persian", start: 0x103A0, end: 0x103DF, plane: 1 },
-        { name: "Deseret", start: 0x10400, end: 0x1044F, plane: 1 },
-        { name: "Shavian", start: 0x10450, end: 0x1047F, plane: 1 },
-        { name: "Osmanya", start: 0x10480, end: 0x104AF, plane: 1 },
-        { name: "Osage", start: 0x104B0, end: 0x104FF, plane: 1 },
-        { name: "Elbasan", start: 0x10500, end: 0x1052F, plane: 1 },
-        { name: "Caucasian Albanian", start: 0x10530, end: 0x1056F, plane: 1 },
-        { name: "Vithkuqi", start: 0x10570, end: 0x105BF, plane: 1 },
-        { name: "Todhri", start: 0x105C0, end: 0x105FF, plane: 1 },
-        { name: "Linear A", start: 0x10600, end: 0x1077F, plane: 1 },
-        { name: "Latin Extended-F", start: 0x10780, end: 0x107BF, plane: 1 },
-        { name: "Cypriot Syllabary", start: 0x10800, end: 0x1083F, plane: 1 },
-        { name: "Imperial Aramaic", start: 0x10840, end: 0x1085F, plane: 1 },
-        { name: "Palmyrene", start: 0x10860, end: 0x1087F, plane: 1 },
-        { name: "Nabataean", start: 0x10880, end: 0x108AF, plane: 1 },
-        { name: "Hatran", start: 0x108E0, end: 0x108FF, plane: 1 },
-        { name: "Phoenician", start: 0x10900, end: 0x1091F, plane: 1 },
-        { name: "Lydian", start: 0x10920, end: 0x1093F, plane: 1 },
-        { name: "Sidetic", start: 0x10940, end: 0x1095F, plane: 1 },
-        { name: "Meroitic Hieroglyphs", start: 0x10980, end: 0x1099F, plane: 1 },
-        { name: "Meroitic Cursive", start: 0x109A0, end: 0x109FF, plane: 1 },
-        { name: "Kharoshthi", start: 0x10A00, end: 0x10A5F, plane: 1 },
-        { name: "Old South Arabian", start: 0x10A60, end: 0x10A7F, plane: 1 },
-        { name: "Old North Arabian", start: 0x10A80, end: 0x10A9F, plane: 1 },
-        { name: "Manichaean", start: 0x10AC0, end: 0x10AFF, plane: 1 },
-        { name: "Avestan", start: 0x10B00, end: 0x10B3F, plane: 1 },
-        { name: "Inscriptional Parthian", start: 0x10B40, end: 0x10B5F, plane: 1 },
-        { name: "Inscriptional Pahlavi", start: 0x10B60, end: 0x10B7F, plane: 1 },
-        { name: "Psalter Pahlavi", start: 0x10B80, end: 0x10BAF, plane: 1 },
-        { name: "Old Turkic", start: 0x10C00, end: 0x10C4F, plane: 1 },
-        { name: "Old Hungarian", start: 0x10C80, end: 0x10CFF, plane: 1 },
-        { name: "Hanifi Rohingya", start: 0x10D00, end: 0x10D3F, plane: 1 },
-        { name: "Garay", start: 0x10D40, end: 0x10D8F, plane: 1 },
-        { name: "Rumi Numeral Symbols", start: 0x10E60, end: 0x10E7F, plane: 1 },
-        { name: "Yezidi", start: 0x10E80, end: 0x10EBF, plane: 1 },
-        { name: "Arabic Extended-C", start: 0x10EC0, end: 0x10EFF, plane: 1 },
-        { name: "Old Sogdian", start: 0x10F00, end: 0x10F2F, plane: 1 },
-        { name: "Sogdian", start: 0x10F30, end: 0x10F6F, plane: 1 },
-        { name: "Old Uyghur", start: 0x10F70, end: 0x10FAF, plane: 1 },
-        { name: "Chorasmian", start: 0x10FB0, end: 0x10FDF, plane: 1 },
-        { name: "Elymaic", start: 0x10FE0, end: 0x10FFF, plane: 1 },
-        { name: "Brahmi", start: 0x11000, end: 0x1107F, plane: 1 },
-        { name: "Kaithi", start: 0x11080, end: 0x110CF, plane: 1 },
-        { name: "Sora Sompeng", start: 0x110D0, end: 0x110FF, plane: 1 },
-        { name: "Chakma", start: 0x11100, end: 0x1114F, plane: 1 },
-        { name: "Mahajani", start: 0x11150, end: 0x1117F, plane: 1 },
-        { name: "Sharada", start: 0x11180, end: 0x111DF, plane: 1 },
-        { name: "Sinhala Archaic Numbers", start: 0x111E0, end: 0x111FF, plane: 1 },
-        { name: "Khojki", start: 0x11200, end: 0x1124F, plane: 1 },
-        { name: "Multani", start: 0x11280, end: 0x112AF, plane: 1 },
-        { name: "Khudawadi", start: 0x112B0, end: 0x112FF, plane: 1 },
-        { name: "Grantha", start: 0x11300, end: 0x1137F, plane: 1 },
-        { name: "Tulu-Tigalari", start: 0x11380, end: 0x113FF, plane: 1 },
-        { name: "Newa", start: 0x11400, end: 0x1147F, plane: 1 },
-        { name: "Tirhuta", start: 0x11480, end: 0x114DF, plane: 1 },
-        { name: "Siddham", start: 0x11580, end: 0x115FF, plane: 1 },
-        { name: "Modi", start: 0x11600, end: 0x1165F, plane: 1 },
-        { name: "Mongolian Supplement", start: 0x11660, end: 0x1167F, plane: 1 },
-        { name: "Takri", start: 0x11680, end: 0x116CF, plane: 1 },
-        { name: "Myanmar Extended-C", start: 0x116D0, end: 0x116FF, plane: 1 },
-        { name: "Ahom", start: 0x11700, end: 0x1174F, plane: 1 },
-        { name: "Dogra", start: 0x11800, end: 0x1184F, plane: 1 },
-        { name: "Warang Citi", start: 0x118A0, end: 0x118FF, plane: 1 },
-        { name: "Dives Akuru", start: 0x11900, end: 0x1195F, plane: 1 },
-        { name: "Nandinagari", start: 0x119A0, end: 0x119FF, plane: 1 },
-        { name: "Zanabazar Square", start: 0x11A00, end: 0x11A4F, plane: 1 },
-        { name: "Soyombo", start: 0x11A50, end: 0x11AAF, plane: 1 },
-        { name: "Unified Canadian Aboriginal Syllabics Extended-A", start: 0x11AB0, end: 0x11ABF, plane: 1 },
-        { name: "Pau Cin Hau", start: 0x11AC0, end: 0x11AFF, plane: 1 },
-        { name: "Devanagari Extended-A", start: 0x11B00, end: 0x11B5F, plane: 1 },
-        { name: "Sharada Supplement", start: 0x11B60, end: 0x11B7F, plane: 1 },
-        { name: "Sunuwar", start: 0x11BC0, end: 0x11BFF, plane: 1 },
-        { name: "Bhaiksuki", start: 0x11C00, end: 0x11C6F, plane: 1 },
-        { name: "Marchen", start: 0x11C70, end: 0x11CBF, plane: 1 },
-        { name: "Masaram Gondi", start: 0x11D00, end: 0x11D5F, plane: 1 },
-        { name: "Gunjala Gondi", start: 0x11D60, end: 0x11DAF, plane: 1 },
-        { name: "Tolong Siki", start: 0x11DB0, end: 0x11DEF, plane: 1 },
-        { name: "Makasar", start: 0x11EE0, end: 0x11EFF, plane: 1 },
-        { name: "Kawi", start: 0x11F00, end: 0x11F5F, plane: 1 },
-        { name: "Lisu Supplement", start: 0x11FB0, end: 0x11FBF, plane: 1 },
-        { name: "Tamil Supplement", start: 0x11FC0, end: 0x11FFF, plane: 1 },
-        { name: "Cuneiform", start: 0x12000, end: 0x123FF, plane: 1 },
-        { name: "Cuneiform Numbers and Punctuation", start: 0x12400, end: 0x1247F, plane: 1 },
-        { name: "Early Dynastic Cuneiform", start: 0x12480, end: 0x1254F, plane: 1 },
-        { name: "Cypro-Minoan", start: 0x12F90, end: 0x12FFF, plane: 1 },
-        { name: "Egyptian Hieroglyphs", start: 0x13000, end: 0x1342F, plane: 1 },
-        { name: "Egyptian Hieroglyph Format Controls", start: 0x13430, end: 0x1345F, plane: 1 },
-        { name: "Egyptian Hieroglyphs Extended-A", start: 0x13460, end: 0x143FF, plane: 1 },
-        { name: "Anatolian Hieroglyphs", start: 0x14400, end: 0x1467F, plane: 1 },
-        { name: "Gurung Khema", start: 0x16100, end: 0x1613F, plane: 1 },
-        { name: "Bamum Supplement", start: 0x16800, end: 0x16A3F, plane: 1 },
-        { name: "Mro", start: 0x16A40, end: 0x16A6F, plane: 1 },
-        { name: "Tangsa", start: 0x16A70, end: 0x16ACF, plane: 1 },
-        { name: "Bassa Vah", start: 0x16AD0, end: 0x16AFF, plane: 1 },
-        { name: "Pahawh Hmong", start: 0x16B00, end: 0x16B8F, plane: 1 },
-        { name: "Kirat Rai", start: 0x16D40, end: 0x16D7F, plane: 1 },
-        { name: "Medefaidrin", start: 0x16E40, end: 0x16E9F, plane: 1 },
-        { name: "Beria Erfe", start: 0x16EA0, end: 0x16EDF, plane: 1 },
-        { name: "Miao", start: 0x16F00, end: 0x16F9F, plane: 1 },
-        { name: "Ideographic Symbols and Punctuation", start: 0x16FE0, end: 0x16FFF, plane: 1 },
-        { name: "Tangut", start: 0x17000, end: 0x187FF, plane: 1 },
-        { name: "Tangut Components", start: 0x18800, end: 0x18AFF, plane: 1 },
-        { name: "Khitan Small Script", start: 0x18B00, end: 0x18CFF, plane: 1 },
-        { name: "Tangut Supplement", start: 0x18D00, end: 0x18D7F, plane: 1 },
-        { name: "Tangut Components Supplement", start: 0x18D80, end: 0x18DFF, plane: 1 },
-        { name: "Kana Extended-B", start: 0x1AFF0, end: 0x1AFFF, plane: 1 },
-        { name: "Kana Supplement", start: 0x1B000, end: 0x1B0FF, plane: 1 },
-        { name: "Kana Extended-A", start: 0x1B100, end: 0x1B12F, plane: 1 },
-        { name: "Small Kana Extension", start: 0x1B130, end: 0x1B16F, plane: 1 },
-        { name: "Nushu", start: 0x1B170, end: 0x1B2FF, plane: 1 },
-        { name: "Duployan", start: 0x1BC00, end: 0x1BC9F, plane: 1 },
-        { name: "Shorthand Format Controls", start: 0x1BCA0, end: 0x1BCAF, plane: 1 },
-        { name: "Symbols for Legacy Computing Supplement", start: 0x1CC00, end: 0x1CEBF, plane: 1 },
-        { name: "Miscellaneous Symbols Supplement", start: 0x1CEC0, end: 0x1CEFF, plane: 1 },
-        { name: "Znamenny Musical Notation", start: 0x1CF00, end: 0x1CFCF, plane: 1 },
-        { name: "Byzantine Musical Symbols", start: 0x1D000, end: 0x1D0FF, plane: 1 },
-        { name: "Musical Symbols", start: 0x1D100, end: 0x1D1FF, plane: 1 },
-        { name: "Ancient Greek Musical Notation", start: 0x1D200, end: 0x1D24F, plane: 1 },
-        { name: "Kaktovik Numerals", start: 0x1D2C0, end: 0x1D2DF, plane: 1 },
-        { name: "Mayan Numerals", start: 0x1D2E0, end: 0x1D2FF, plane: 1 },
-        { name: "Tai Xuan Jing Symbols", start: 0x1D300, end: 0x1D35F, plane: 1 },
-        { name: "Counting Rod Numerals", start: 0x1D360, end: 0x1D37F, plane: 1 },
-        { name: "Mathematical Alphanumeric Symbols", start: 0x1D400, end: 0x1D7FF, plane: 1 },
-        { name: "Sutton SignWriting", start: 0x1D800, end: 0x1DAAF, plane: 1 },
-        { name: "Latin Extended-G", start: 0x1DF00, end: 0x1DFFF, plane: 1 },
-        { name: "Glagolitic Supplement", start: 0x1E000, end: 0x1E02F, plane: 1 },
-        { name: "Cyrillic Extended-D", start: 0x1E030, end: 0x1E08F, plane: 1 },
-        { name: "Nyiakeng Puachue Hmong", start: 0x1E100, end: 0x1E14F, plane: 1 },
-        { name: "Toto", start: 0x1E290, end: 0x1E2BF, plane: 1 },
-        { name: "Wancho", start: 0x1E2C0, end: 0x1E2FF, plane: 1 },
-        { name: "Nag Mundari", start: 0x1E4D0, end: 0x1E4FF, plane: 1 },
-        { name: "Ol Onal", start: 0x1E5D0, end: 0x1E5FF, plane: 1 },
-        { name: "Tai Yo", start: 0x1E6C0, end: 0x1E6FF, plane: 1 },
-        { name: "Ethiopic Extended-B", start: 0x1E7E0, end: 0x1E7FF, plane: 1 },
-        { name: "Mende Kikakui", start: 0x1E800, end: 0x1E8DF, plane: 1 },
-        { name: "Adlam", start: 0x1E900, end: 0x1E95F, plane: 1 },
-        { name: "Indic Siyaq Numbers", start: 0x1EC70, end: 0x1ECBF, plane: 1 },
-        { name: "Ottoman Siyaq Numbers", start: 0x1ED00, end: 0x1ED4F, plane: 1 },
-        { name: "Arabic Mathematical Alphabetic Symbols", start: 0x1EE00, end: 0x1EEFF, plane: 1 },
-        { name: "Mahjong Tiles", start: 0x1F000, end: 0x1F02F, plane: 1 },
-        { name: "Domino Tiles", start: 0x1F030, end: 0x1F09F, plane: 1 },
-        { name: "Playing Cards", start: 0x1F0A0, end: 0x1F0FF, plane: 1 },
-        { name: "Enclosed Alphanumeric Supplement", start: 0x1F100, end: 0x1F1FF, plane: 1 },
-        { name: "Enclosed Ideographic Supplement", start: 0x1F200, end: 0x1F2FF, plane: 1 },
-        { name: "Miscellaneous Symbols and Pictographs", start: 0x1F300, end: 0x1F5FF, plane: 1 },
-        { name: "Emoticons", start: 0x1F600, end: 0x1F64F, plane: 1 },
-        { name: "Ornamental Dingbats", start: 0x1F650, end: 0x1F67F, plane: 1 },
-        { name: "Transport and Map Symbols", start: 0x1F680, end: 0x1F6FF, plane: 1 },
-        { name: "Alchemical Symbols", start: 0x1F700, end: 0x1F77F, plane: 1 },
-        { name: "Geometric Shapes Extended", start: 0x1F780, end: 0x1F7FF, plane: 1 },
-        { name: "Supplemental Arrows-C", start: 0x1F800, end: 0x1F8FF, plane: 1 },
-        { name: "Supplemental Symbols and Pictographs", start: 0x1F900, end: 0x1F9FF, plane: 1 },
-        { name: "Chess Symbols", start: 0x1FA00, end: 0x1FA6F, plane: 1 },
-        { name: "Symbols and Pictographs Extended-A", start: 0x1FA70, end: 0x1FAFF, plane: 1 },
-        { name: "Symbols for Legacy Computing", start: 0x1FB00, end: 0x1FBFF, plane: 1 },
-        { name: "CJK Unified Ideographs Extension B", start: 0x20000, end: 0x2A6DF, plane: 2 },
-        { name: "CJK Unified Ideographs Extension C", start: 0x2A700, end: 0x2B73F, plane: 2 },
-        { name: "CJK Unified Ideographs Extension D", start: 0x2B740, end: 0x2B81F, plane: 2 },
-        { name: "CJK Unified Ideographs Extension E", start: 0x2B820, end: 0x2CEAF, plane: 2 },
-        { name: "CJK Unified Ideographs Extension F", start: 0x2CEB0, end: 0x2EBEF, plane: 2 },
-        { name: "CJK Unified Ideographs Extension I", start: 0x2EBF0, end: 0x2EE5F, plane: 2 },
-        { name: "CJK Compatibility Ideographs Supplement", start: 0x2F800, end: 0x2FA1F, plane: 2 },
-        { name: "CJK Unified Ideographs Extension G", start: 0x30000, end: 0x3134F, plane: 3 },
-        { name: "CJK Unified Ideographs Extension H", start: 0x31350, end: 0x323AF, plane: 3 },
-        { name: "CJK Unified Ideographs Extension J", start: 0x323B0, end: 0x3347F, plane: 3 },
-        { name: "Tags", start: 0xE0000, end: 0xE007F, plane: 14 },
-        { name: "Variation Selectors Supplement", start: 0xE0100, end: 0xE01EF, plane: 14 },
-        { name: "Supplementary Private Use Area-A", start: 0xF0000, end: 0xFFFFF, plane: 15 },
-        { name: "Supplementary Private Use Area-B", start: 0x100000, end: 0x10FFFF, plane: 16 }
+        { name: "Basic Latin", start: 0x0000, end: 0x007F, plane: 0, age: "1.1" },
+        { name: "Latin-1 Supplement", start: 0x0080, end: 0x00FF, plane: 0, age: "1.1" },
+        { name: "Latin Extended-A", start: 0x0100, end: 0x017F, plane: 0, age: "1.1" },
+        { name: "Latin Extended-B", start: 0x0180, end: 0x024F, plane: 0, age: "1.1" },
+        { name: "IPA Extensions", start: 0x0250, end: 0x02AF, plane: 0, age: "1.1" },
+        { name: "Spacing Modifier Letters", start: 0x02B0, end: 0x02FF, plane: 0, age: "1.1" },
+        { name: "Combining Diacritical Marks", start: 0x0300, end: 0x036F, plane: 0, age: "1.1" },
+        { name: "Greek and Coptic", start: 0x0370, end: 0x03FF, plane: 0, age: "1.1" },
+        { name: "Cyrillic", start: 0x0400, end: 0x04FF, plane: 0, age: "1.1" },
+        { name: "Cyrillic Supplement", start: 0x0500, end: 0x052F, plane: 0, age: "3.2" },
+        { name: "Armenian", start: 0x0530, end: 0x058F, plane: 0, age: "1.1" },
+        { name: "Hebrew", start: 0x0590, end: 0x05FF, plane: 0, age: "1.1" },
+        { name: "Arabic", start: 0x0600, end: 0x06FF, plane: 0, age: "1.1" },
+        { name: "Syriac", start: 0x0700, end: 0x074F, plane: 0, age: "3.0" },
+        { name: "Arabic Supplement", start: 0x0750, end: 0x077F, plane: 0, age: "4.1" },
+        { name: "Thaana", start: 0x0780, end: 0x07BF, plane: 0, age: "3.0" },
+        { name: "NKo", start: 0x07C0, end: 0x07FF, plane: 0, age: "5.0" },
+        { name: "Samaritan", start: 0x0800, end: 0x083F, plane: 0, age: "5.2" },
+        { name: "Mandaic", start: 0x0840, end: 0x085F, plane: 0, age: "6.0" },
+        { name: "Syriac Supplement", start: 0x0860, end: 0x086F, plane: 0, age: "10.0" },
+        { name: "Arabic Extended-B", start: 0x0870, end: 0x089F, plane: 0, age: "14.0" },
+        { name: "Arabic Extended-A", start: 0x08A0, end: 0x08FF, plane: 0, age: "6.1" },
+        { name: "Devanagari", start: 0x0900, end: 0x097F, plane: 0, age: "1.1" },
+        { name: "Bengali", start: 0x0980, end: 0x09FF, plane: 0, age: "1.1" },
+        { name: "Gurmukhi", start: 0x0A00, end: 0x0A7F, plane: 0, age: "1.1" },
+        { name: "Gujarati", start: 0x0A80, end: 0x0AFF, plane: 0, age: "1.1" },
+        { name: "Oriya", start: 0x0B00, end: 0x0B7F, plane: 0, age: "1.1" },
+        { name: "Tamil", start: 0x0B80, end: 0x0BFF, plane: 0, age: "1.1" },
+        { name: "Telugu", start: 0x0C00, end: 0x0C7F, plane: 0, age: "1.1" },
+        { name: "Kannada", start: 0x0C80, end: 0x0CFF, plane: 0, age: "1.1" },
+        { name: "Malayalam", start: 0x0D00, end: 0x0D7F, plane: 0, age: "1.1" },
+        { name: "Sinhala", start: 0x0D80, end: 0x0DFF, plane: 0, age: "3.0" },
+        { name: "Thai", start: 0x0E00, end: 0x0E7F, plane: 0, age: "1.1" },
+        { name: "Lao", start: 0x0E80, end: 0x0EFF, plane: 0, age: "1.1" },
+        { name: "Tibetan", start: 0x0F00, end: 0x0FFF, plane: 0, age: "2.0" },
+        { name: "Myanmar", start: 0x1000, end: 0x109F, plane: 0, age: "3.0" },
+        { name: "Georgian", start: 0x10A0, end: 0x10FF, plane: 0, age: "1.1" },
+        { name: "Hangul Jamo", start: 0x1100, end: 0x11FF, plane: 0, age: "1.1" },
+        { name: "Ethiopic", start: 0x1200, end: 0x137F, plane: 0, age: "3.0" },
+        { name: "Ethiopic Supplement", start: 0x1380, end: 0x139F, plane: 0, age: "4.1" },
+        { name: "Cherokee", start: 0x13A0, end: 0x13FF, plane: 0, age: "3.0" },
+        { name: "Unified Canadian Aboriginal Syllabics", start: 0x1400, end: 0x167F, plane: 0, age: "3.0" },
+        { name: "Ogham", start: 0x1680, end: 0x169F, plane: 0, age: "3.0" },
+        { name: "Runic", start: 0x16A0, end: 0x16FF, plane: 0, age: "3.0" },
+        { name: "Tagalog", start: 0x1700, end: 0x171F, plane: 0, age: "3.2" },
+        { name: "Hanunoo", start: 0x1720, end: 0x173F, plane: 0, age: "3.2" },
+        { name: "Buhid", start: 0x1740, end: 0x175F, plane: 0, age: "3.2" },
+        { name: "Tagbanwa", start: 0x1760, end: 0x177F, plane: 0, age: "3.2" },
+        { name: "Khmer", start: 0x1780, end: 0x17FF, plane: 0, age: "3.0" },
+        { name: "Mongolian", start: 0x1800, end: 0x18AF, plane: 0, age: "3.0" },
+        { name: "Unified Canadian Aboriginal Syllabics Extended", start: 0x18B0, end: 0x18FF, plane: 0, age: "5.2" },
+        { name: "Limbu", start: 0x1900, end: 0x194F, plane: 0, age: "4.0" },
+        { name: "Tai Le", start: 0x1950, end: 0x197F, plane: 0, age: "4.0" },
+        { name: "New Tai Lue", start: 0x1980, end: 0x19DF, plane: 0, age: "4.1" },
+        { name: "Khmer Symbols", start: 0x19E0, end: 0x19FF, plane: 0, age: "4.0" },
+        { name: "Buginese", start: 0x1A00, end: 0x1A1F, plane: 0, age: "4.1" },
+        { name: "Tai Tham", start: 0x1A20, end: 0x1AAF, plane: 0, age: "5.2" },
+        { name: "Combining Diacritical Marks Extended", start: 0x1AB0, end: 0x1AFF, plane: 0, age: "7.0" },
+        { name: "Balinese", start: 0x1B00, end: 0x1B7F, plane: 0, age: "5.0" },
+        { name: "Sundanese", start: 0x1B80, end: 0x1BBF, plane: 0, age: "5.1" },
+        { name: "Batak", start: 0x1BC0, end: 0x1BFF, plane: 0, age: "6.0" },
+        { name: "Lepcha", start: 0x1C00, end: 0x1C4F, plane: 0, age: "5.1" },
+        { name: "Ol Chiki", start: 0x1C50, end: 0x1C7F, plane: 0, age: "5.1" },
+        { name: "Cyrillic Extended-C", start: 0x1C80, end: 0x1C8F, plane: 0, age: "9.0" },
+        { name: "Georgian Extended", start: 0x1C90, end: 0x1CBF, plane: 0, age: "11.0" },
+        { name: "Sundanese Supplement", start: 0x1CC0, end: 0x1CCF, plane: 0, age: "6.1" },
+        { name: "Vedic Extensions", start: 0x1CD0, end: 0x1CFF, plane: 0, age: "5.2" },
+        { name: "Phonetic Extensions", start: 0x1D00, end: 0x1D7F, plane: 0, age: "4.0" },
+        { name: "Phonetic Extensions Supplement", start: 0x1D80, end: 0x1DBF, plane: 0, age: "4.1" },
+        { name: "Combining Diacritical Marks Supplement", start: 0x1DC0, end: 0x1DFF, plane: 0, age: "4.1" },
+        { name: "Latin Extended Additional", start: 0x1E00, end: 0x1EFF, plane: 0, age: "1.1" },
+        { name: "Greek Extended", start: 0x1F00, end: 0x1FFF, plane: 0, age: "1.1" },
+        { name: "General Punctuation", start: 0x2000, end: 0x206F, plane: 0, age: "1.1" },
+        { name: "Superscripts and Subscripts", start: 0x2070, end: 0x209F, plane: 0, age: "1.1" },
+        { name: "Currency Symbols", start: 0x20A0, end: 0x20CF, plane: 0, age: "1.1" },
+        { name: "Combining Diacritical Marks for Symbols", start: 0x20D0, end: 0x20FF, plane: 0, age: "1.1" },
+        { name: "Letterlike Symbols", start: 0x2100, end: 0x214F, plane: 0, age: "1.1" },
+        { name: "Number Forms", start: 0x2150, end: 0x218F, plane: 0, age: "1.1" },
+        { name: "Arrows", start: 0x2190, end: 0x21FF, plane: 0, age: "1.1" },
+        { name: "Mathematical Operators", start: 0x2200, end: 0x22FF, plane: 0, age: "1.1" },
+        { name: "Miscellaneous Technical", start: 0x2300, end: 0x23FF, plane: 0, age: "1.1" },
+        { name: "Control Pictures", start: 0x2400, end: 0x243F, plane: 0, age: "1.1" },
+        { name: "Optical Character Recognition", start: 0x2440, end: 0x245F, plane: 0, age: "1.1" },
+        { name: "Enclosed Alphanumerics", start: 0x2460, end: 0x24FF, plane: 0, age: "1.1" },
+        { name: "Box Drawing", start: 0x2500, end: 0x257F, plane: 0, age: "1.1" },
+        { name: "Block Elements", start: 0x2580, end: 0x259F, plane: 0, age: "1.1" },
+        { name: "Geometric Shapes", start: 0x25A0, end: 0x25FF, plane: 0, age: "1.1" },
+        { name: "Miscellaneous Symbols", start: 0x2600, end: 0x26FF, plane: 0, age: "1.1" },
+        { name: "Dingbats", start: 0x2700, end: 0x27BF, plane: 0, age: "1.1" },
+        { name: "Miscellaneous Mathematical Symbols-A", start: 0x27C0, end: 0x27EF, plane: 0, age: "3.2" },
+        { name: "Supplemental Arrows-A", start: 0x27F0, end: 0x27FF, plane: 0, age: "3.2" },
+        { name: "Braille Patterns", start: 0x2800, end: 0x28FF, plane: 0, age: "3.0" },
+        { name: "Supplemental Arrows-B", start: 0x2900, end: 0x297F, plane: 0, age: "3.2" },
+        { name: "Miscellaneous Mathematical Symbols-B", start: 0x2980, end: 0x29FF, plane: 0, age: "3.2" },
+        { name: "Supplemental Mathematical Operators", start: 0x2A00, end: 0x2AFF, plane: 0, age: "3.2" },
+        { name: "Miscellaneous Symbols and Arrows", start: 0x2B00, end: 0x2BFF, plane: 0, age: "4.0" },
+        { name: "Glagolitic", start: 0x2C00, end: 0x2C5F, plane: 0, age: "4.1" },
+        { name: "Latin Extended-C", start: 0x2C60, end: 0x2C7F, plane: 0, age: "5.0" },
+        { name: "Coptic", start: 0x2C80, end: 0x2CFF, plane: 0, age: "4.1" },
+        { name: "Georgian Supplement", start: 0x2D00, end: 0x2D2F, plane: 0, age: "4.1" },
+        { name: "Tifinagh", start: 0x2D30, end: 0x2D7F, plane: 0, age: "4.1" },
+        { name: "Ethiopic Extended", start: 0x2D80, end: 0x2DDF, plane: 0, age: "4.1" },
+        { name: "Cyrillic Extended-A", start: 0x2DE0, end: 0x2DFF, plane: 0, age: "5.1" },
+        { name: "Supplemental Punctuation", start: 0x2E00, end: 0x2E7F, plane: 0, age: "4.1" },
+        { name: "CJK Radicals Supplement", start: 0x2E80, end: 0x2EFF, plane: 0, age: "3.0" },
+        { name: "Kangxi Radicals", start: 0x2F00, end: 0x2FDF, plane: 0, age: "3.0" },
+        { name: "Ideographic Description Characters", start: 0x2FF0, end: 0x2FFF, plane: 0, age: "3.0" },
+        { name: "CJK Symbols and Punctuation", start: 0x3000, end: 0x303F, plane: 0, age: "1.1" },
+        { name: "Hiragana", start: 0x3040, end: 0x309F, plane: 0, age: "1.1" },
+        { name: "Katakana", start: 0x30A0, end: 0x30FF, plane: 0, age: "1.1" },
+        { name: "Bopomofo", start: 0x3100, end: 0x312F, plane: 0, age: "1.1" },
+        { name: "Hangul Compatibility Jamo", start: 0x3130, end: 0x318F, plane: 0, age: "1.1" },
+        { name: "Kanbun", start: 0x3190, end: 0x319F, plane: 0, age: "1.1" },
+        { name: "Bopomofo Extended", start: 0x31A0, end: 0x31BF, plane: 0, age: "3.0" },
+        { name: "CJK Strokes", start: 0x31C0, end: 0x31EF, plane: 0, age: "4.1" },
+        { name: "Katakana Phonetic Extensions", start: 0x31F0, end: 0x31FF, plane: 0, age: "3.2" },
+        { name: "Enclosed CJK Letters and Months", start: 0x3200, end: 0x32FF, plane: 0, age: "1.1" },
+        { name: "CJK Compatibility", start: 0x3300, end: 0x33FF, plane: 0, age: "1.1" },
+        { name: "CJK Unified Ideographs Extension A", start: 0x3400, end: 0x4DBF, plane: 0, age: "3.0" },
+        { name: "Yijing Hexagram Symbols", start: 0x4DC0, end: 0x4DFF, plane: 0, age: "4.0" },
+        { name: "CJK Unified Ideographs", start: 0x4E00, end: 0x9FFF, plane: 0, age: "1.1" },
+        { name: "Yi Syllables", start: 0xA000, end: 0xA48F, plane: 0, age: "3.0" },
+        { name: "Yi Radicals", start: 0xA490, end: 0xA4CF, plane: 0, age: "3.0" },
+        { name: "Lisu", start: 0xA4D0, end: 0xA4FF, plane: 0, age: "5.2" },
+        { name: "Vai", start: 0xA500, end: 0xA63F, plane: 0, age: "5.1" },
+        { name: "Cyrillic Extended-B", start: 0xA640, end: 0xA69F, plane: 0, age: "5.1" },
+        { name: "Bamum", start: 0xA6A0, end: 0xA6FF, plane: 0, age: "5.2" },
+        { name: "Modifier Tone Letters", start: 0xA700, end: 0xA71F, plane: 0, age: "4.1" },
+        { name: "Latin Extended-D", start: 0xA720, end: 0xA7FF, plane: 0, age: "5.0" },
+        { name: "Syloti Nagri", start: 0xA800, end: 0xA82F, plane: 0, age: "4.1" },
+        { name: "Common Indic Number Forms", start: 0xA830, end: 0xA83F, plane: 0, age: "5.2" },
+        { name: "Phags-pa", start: 0xA840, end: 0xA87F, plane: 0, age: "5.0" },
+        { name: "Saurashtra", start: 0xA880, end: 0xA8DF, plane: 0, age: "5.1" },
+        { name: "Devanagari Extended", start: 0xA8E0, end: 0xA8FF, plane: 0, age: "5.2" },
+        { name: "Kayah Li", start: 0xA900, end: 0xA92F, plane: 0, age: "5.1" },
+        { name: "Rejang", start: 0xA930, end: 0xA95F, plane: 0, age: "5.1" },
+        { name: "Hangul Jamo Extended-A", start: 0xA960, end: 0xA97F, plane: 0, age: "5.2" },
+        { name: "Javanese", start: 0xA980, end: 0xA9DF, plane: 0, age: "5.2" },
+        { name: "Myanmar Extended-B", start: 0xA9E0, end: 0xA9FF, plane: 0, age: "7.0" },
+        { name: "Cham", start: 0xAA00, end: 0xAA5F, plane: 0, age: "5.1" },
+        { name: "Myanmar Extended-A", start: 0xAA60, end: 0xAA7F, plane: 0, age: "5.2" },
+        { name: "Tai Viet", start: 0xAA80, end: 0xAADF, plane: 0, age: "5.2" },
+        { name: "Meetei Mayek Extensions", start: 0xAAE0, end: 0xAAFF, plane: 0, age: "6.1" },
+        { name: "Ethiopic Extended-A", start: 0xAB00, end: 0xAB2F, plane: 0, age: "6.0" },
+        { name: "Latin Extended-E", start: 0xAB30, end: 0xAB6F, plane: 0, age: "7.0" },
+        { name: "Cherokee Supplement", start: 0xAB70, end: 0xABBF, plane: 0, age: "8.0" },
+        { name: "Meetei Mayek", start: 0xABC0, end: 0xABFF, plane: 0, age: "5.2" },
+        { name: "Hangul Syllables", start: 0xAC00, end: 0xD7AF, plane: 0, age: "2.0" },
+        { name: "Hangul Jamo Extended-B", start: 0xD7B0, end: 0xD7FF, plane: 0, age: "5.2" },
+        { name: "High Surrogates", start: 0xD800, end: 0xDB7F, plane: 0, age: "2.0" },
+        { name: "High Private Use Surrogates", start: 0xDB80, end: 0xDBFF, plane: 0, age: "2.0" },
+        { name: "Low Surrogates", start: 0xDC00, end: 0xDFFF, plane: 0, age: "2.0" },
+        { name: "Private Use Area", start: 0xE000, end: 0xF8FF, plane: 0, age: "1.1" },
+        { name: "CJK Compatibility Ideographs", start: 0xF900, end: 0xFAFF, plane: 0, age: "1.1" },
+        { name: "Alphabetic Presentation Forms", start: 0xFB00, end: 0xFB4F, plane: 0, age: "1.1" },
+        { name: "Arabic Presentation Forms-A", start: 0xFB50, end: 0xFDFF, plane: 0, age: "1.1" },
+        { name: "Variation Selectors", start: 0xFE00, end: 0xFE0F, plane: 0, age: "3.2" },
+        { name: "Vertical Forms", start: 0xFE10, end: 0xFE1F, plane: 0, age: "4.1" },
+        { name: "Combining Half Marks", start: 0xFE20, end: 0xFE2F, plane: 0, age: "1.1" },
+        { name: "CJK Compatibility Forms", start: 0xFE30, end: 0xFE4F, plane: 0, age: "1.1" },
+        { name: "Small Form Variants", start: 0xFE50, end: 0xFE6F, plane: 0, age: "1.1" },
+        { name: "Arabic Presentation Forms-B", start: 0xFE70, end: 0xFEFF, plane: 0, age: "1.1" },
+        { name: "Halfwidth and Fullwidth Forms", start: 0xFF00, end: 0xFFEF, plane: 0, age: "1.1" },
+        { name: "Specials", start: 0xFFF0, end: 0xFFFF, plane: 0, age: "1.1" },
+        { name: "Linear B Syllabary", start: 0x10000, end: 0x1007F, plane: 1, age: "4.0" },
+        { name: "Linear B Ideograms", start: 0x10080, end: 0x100FF, plane: 1, age: "4.0" },
+        { name: "Aegean Numbers", start: 0x10100, end: 0x1013F, plane: 1, age: "4.0" },
+        { name: "Ancient Greek Numbers", start: 0x10140, end: 0x1018F, plane: 1, age: "4.1" },
+        { name: "Ancient Symbols", start: 0x10190, end: 0x101CF, plane: 1, age: "5.1" },
+        { name: "Phaistos Disc", start: 0x101D0, end: 0x101FF, plane: 1, age: "5.1" },
+        { name: "Lycian", start: 0x10280, end: 0x1029F, plane: 1, age: "5.1" },
+        { name: "Carian", start: 0x102A0, end: 0x102DF, plane: 1, age: "5.1" },
+        { name: "Coptic Epact Numbers", start: 0x102E0, end: 0x102FF, plane: 1, age: "7.0" },
+        { name: "Old Italic", start: 0x10300, end: 0x1032F, plane: 1, age: "3.1" },
+        { name: "Gothic", start: 0x10330, end: 0x1034F, plane: 1, age: "3.1" },
+        { name: "Old Permic", start: 0x10350, end: 0x1037F, plane: 1, age: "7.0" },
+        { name: "Ugaritic", start: 0x10380, end: 0x1039F, plane: 1, age: "4.0" },
+        { name: "Old Persian", start: 0x103A0, end: 0x103DF, plane: 1, age: "4.1" },
+        { name: "Deseret", start: 0x10400, end: 0x1044F, plane: 1, age: "3.1" },
+        { name: "Shavian", start: 0x10450, end: 0x1047F, plane: 1, age: "4.0" },
+        { name: "Osmanya", start: 0x10480, end: 0x104AF, plane: 1, age: "4.0" },
+        { name: "Osage", start: 0x104B0, end: 0x104FF, plane: 1, age: "9.0" },
+        { name: "Elbasan", start: 0x10500, end: 0x1052F, plane: 1, age: "7.0" },
+        { name: "Caucasian Albanian", start: 0x10530, end: 0x1056F, plane: 1, age: "7.0" },
+        { name: "Vithkuqi", start: 0x10570, end: 0x105BF, plane: 1, age: "14.0" },
+        { name: "Todhri", start: 0x105C0, end: 0x105FF, plane: 1, age: "16.0" },
+        { name: "Linear A", start: 0x10600, end: 0x1077F, plane: 1, age: "7.0" },
+        { name: "Latin Extended-F", start: 0x10780, end: 0x107BF, plane: 1, age: "14.0" },
+        { name: "Cypriot Syllabary", start: 0x10800, end: 0x1083F, plane: 1, age: "4.0" },
+        { name: "Imperial Aramaic", start: 0x10840, end: 0x1085F, plane: 1, age: "5.2" },
+        { name: "Palmyrene", start: 0x10860, end: 0x1087F, plane: 1, age: "7.0" },
+        { name: "Nabataean", start: 0x10880, end: 0x108AF, plane: 1, age: "7.0" },
+        { name: "Hatran", start: 0x108E0, end: 0x108FF, plane: 1, age: "8.0" },
+        { name: "Phoenician", start: 0x10900, end: 0x1091F, plane: 1, age: "5.0" },
+        { name: "Lydian", start: 0x10920, end: 0x1093F, plane: 1, age: "5.1" },
+        { name: "Sidetic", start: 0x10940, end: 0x1095F, plane: 1, age: "17.0" },
+        { name: "Meroitic Hieroglyphs", start: 0x10980, end: 0x1099F, plane: 1, age: "6.1" },
+        { name: "Meroitic Cursive", start: 0x109A0, end: 0x109FF, plane: 1, age: "6.1" },
+        { name: "Kharoshthi", start: 0x10A00, end: 0x10A5F, plane: 1, age: "4.1" },
+        { name: "Old South Arabian", start: 0x10A60, end: 0x10A7F, plane: 1, age: "5.2" },
+        { name: "Old North Arabian", start: 0x10A80, end: 0x10A9F, plane: 1, age: "7.0" },
+        { name: "Manichaean", start: 0x10AC0, end: 0x10AFF, plane: 1, age: "7.0" },
+        { name: "Avestan", start: 0x10B00, end: 0x10B3F, plane: 1, age: "5.2" },
+        { name: "Inscriptional Parthian", start: 0x10B40, end: 0x10B5F, plane: 1, age: "5.2" },
+        { name: "Inscriptional Pahlavi", start: 0x10B60, end: 0x10B7F, plane: 1, age: "5.2" },
+        { name: "Psalter Pahlavi", start: 0x10B80, end: 0x10BAF, plane: 1, age: "7.0" },
+        { name: "Old Turkic", start: 0x10C00, end: 0x10C4F, plane: 1, age: "5.2" },
+        { name: "Old Hungarian", start: 0x10C80, end: 0x10CFF, plane: 1, age: "8.0" },
+        { name: "Hanifi Rohingya", start: 0x10D00, end: 0x10D3F, plane: 1, age: "11.0" },
+        { name: "Garay", start: 0x10D40, end: 0x10D8F, plane: 1, age: "16.0" },
+        { name: "Rumi Numeral Symbols", start: 0x10E60, end: 0x10E7F, plane: 1, age: "5.2" },
+        { name: "Yezidi", start: 0x10E80, end: 0x10EBF, plane: 1, age: "13.0" },
+        { name: "Arabic Extended-C", start: 0x10EC0, end: 0x10EFF, plane: 1, age: "15.0" },
+        { name: "Old Sogdian", start: 0x10F00, end: 0x10F2F, plane: 1, age: "11.0" },
+        { name: "Sogdian", start: 0x10F30, end: 0x10F6F, plane: 1, age: "11.0" },
+        { name: "Old Uyghur", start: 0x10F70, end: 0x10FAF, plane: 1, age: "14.0" },
+        { name: "Chorasmian", start: 0x10FB0, end: 0x10FDF, plane: 1, age: "13.0" },
+        { name: "Elymaic", start: 0x10FE0, end: 0x10FFF, plane: 1, age: "12.0" },
+        { name: "Brahmi", start: 0x11000, end: 0x1107F, plane: 1, age: "6.0" },
+        { name: "Kaithi", start: 0x11080, end: 0x110CF, plane: 1, age: "5.2" },
+        { name: "Sora Sompeng", start: 0x110D0, end: 0x110FF, plane: 1, age: "6.1" },
+        { name: "Chakma", start: 0x11100, end: 0x1114F, plane: 1, age: "6.1" },
+        { name: "Mahajani", start: 0x11150, end: 0x1117F, plane: 1, age: "7.0" },
+        { name: "Sharada", start: 0x11180, end: 0x111DF, plane: 1, age: "6.1" },
+        { name: "Sinhala Archaic Numbers", start: 0x111E0, end: 0x111FF, plane: 1, age: "7.0" },
+        { name: "Khojki", start: 0x11200, end: 0x1124F, plane: 1, age: "7.0" },
+        { name: "Multani", start: 0x11280, end: 0x112AF, plane: 1, age: "8.0" },
+        { name: "Khudawadi", start: 0x112B0, end: 0x112FF, plane: 1, age: "7.0" },
+        { name: "Grantha", start: 0x11300, end: 0x1137F, plane: 1, age: "7.0" },
+        { name: "Tulu-Tigalari", start: 0x11380, end: 0x113FF, plane: 1, age: "16.0" },
+        { name: "Newa", start: 0x11400, end: 0x1147F, plane: 1, age: "9.0" },
+        { name: "Tirhuta", start: 0x11480, end: 0x114DF, plane: 1, age: "7.0" },
+        { name: "Siddham", start: 0x11580, end: 0x115FF, plane: 1, age: "7.0" },
+        { name: "Modi", start: 0x11600, end: 0x1165F, plane: 1, age: "7.0" },
+        { name: "Mongolian Supplement", start: 0x11660, end: 0x1167F, plane: 1, age: "9.0" },
+        { name: "Takri", start: 0x11680, end: 0x116CF, plane: 1, age: "6.1" },
+        { name: "Myanmar Extended-C", start: 0x116D0, end: 0x116FF, plane: 1, age: "16.0" },
+        { name: "Ahom", start: 0x11700, end: 0x1174F, plane: 1, age: "8.0" },
+        { name: "Dogra", start: 0x11800, end: 0x1184F, plane: 1, age: "11.0" },
+        { name: "Warang Citi", start: 0x118A0, end: 0x118FF, plane: 1, age: "7.0" },
+        { name: "Dives Akuru", start: 0x11900, end: 0x1195F, plane: 1, age: "13.0" },
+        { name: "Nandinagari", start: 0x119A0, end: 0x119FF, plane: 1, age: "12.0" },
+        { name: "Zanabazar Square", start: 0x11A00, end: 0x11A4F, plane: 1, age: "10.0" },
+        { name: "Soyombo", start: 0x11A50, end: 0x11AAF, plane: 1, age: "10.0" },
+        { name: "Unified Canadian Aboriginal Syllabics Extended-A", start: 0x11AB0, end: 0x11ABF, plane: 1, age: "14.0" },
+        { name: "Pau Cin Hau", start: 0x11AC0, end: 0x11AFF, plane: 1, age: "7.0" },
+        { name: "Devanagari Extended-A", start: 0x11B00, end: 0x11B5F, plane: 1, age: "15.0" },
+        { name: "Sharada Supplement", start: 0x11B60, end: 0x11B7F, plane: 1, age: "17.0" },
+        { name: "Sunuwar", start: 0x11BC0, end: 0x11BFF, plane: 1, age: "16.0" },
+        { name: "Bhaiksuki", start: 0x11C00, end: 0x11C6F, plane: 1, age: "9.0" },
+        { name: "Marchen", start: 0x11C70, end: 0x11CBF, plane: 1, age: "9.0" },
+        { name: "Masaram Gondi", start: 0x11D00, end: 0x11D5F, plane: 1, age: "10.0" },
+        { name: "Gunjala Gondi", start: 0x11D60, end: 0x11DAF, plane: 1, age: "11.0" },
+        { name: "Tolong Siki", start: 0x11DB0, end: 0x11DEF, plane: 1, age: "17.0" },
+        { name: "Bengali Supplement", start: 0x11DF0, end: 0x11DFF, plane: 1, age: "18.0" },
+        { name: "Makasar", start: 0x11EE0, end: 0x11EFF, plane: 1, age: "11.0" },
+        { name: "Kawi", start: 0x11F00, end: 0x11F5F, plane: 1, age: "15.0" },
+        { name: "Lisu Supplement", start: 0x11FB0, end: 0x11FBF, plane: 1, age: "13.0" },
+        { name: "Tamil Supplement", start: 0x11FC0, end: 0x11FFF, plane: 1, age: "12.0" },
+        { name: "Cuneiform", start: 0x12000, end: 0x123FF, plane: 1, age: "5.0" },
+        { name: "Cuneiform Numbers and Punctuation", start: 0x12400, end: 0x1247F, plane: 1, age: "5.0" },
+        { name: "Early Dynastic Cuneiform", start: 0x12480, end: 0x1254F, plane: 1, age: "8.0" },
+        { name: "Archaic Cuneiform Numerals", start: 0x12550, end: 0x1268F, plane: 1, age: "18.0" },
+        { name: "Cypro-Minoan", start: 0x12F90, end: 0x12FFF, plane: 1, age: "14.0" },
+        { name: "Egyptian Hieroglyphs", start: 0x13000, end: 0x1342F, plane: 1, age: "5.2" },
+        { name: "Egyptian Hieroglyph Format Controls", start: 0x13430, end: 0x1345F, plane: 1, age: "12.0" },
+        { name: "Egyptian Hieroglyphs Extended-A", start: 0x13460, end: 0x143FF, plane: 1, age: "16.0" },
+        { name: "Anatolian Hieroglyphs", start: 0x14400, end: 0x1467F, plane: 1, age: "8.0" },
+        { name: "Gurung Khema", start: 0x16100, end: 0x1613F, plane: 1, age: "16.0" },
+        { name: "Bamum Supplement", start: 0x16800, end: 0x16A3F, plane: 1, age: "6.0" },
+        { name: "Mro", start: 0x16A40, end: 0x16A6F, plane: 1, age: "7.0" },
+        { name: "Tangsa", start: 0x16A70, end: 0x16ACF, plane: 1, age: "14.0" },
+        { name: "Bassa Vah", start: 0x16AD0, end: 0x16AFF, plane: 1, age: "7.0" },
+        { name: "Pahawh Hmong", start: 0x16B00, end: 0x16B8F, plane: 1, age: "7.0" },
+        { name: "Kirat Rai", start: 0x16D40, end: 0x16D7F, plane: 1, age: "16.0" },
+        { name: "Medefaidrin", start: 0x16E40, end: 0x16E9F, plane: 1, age: "11.0" },
+        { name: "Beria Erfe", start: 0x16EA0, end: 0x16EDF, plane: 1, age: "17.0" },
+        { name: "Miao", start: 0x16F00, end: 0x16F9F, plane: 1, age: "6.1" },
+        { name: "Ideographic Symbols and Punctuation", start: 0x16FE0, end: 0x16FFF, plane: 1, age: "9.0" },
+        { name: "Tangut", start: 0x17000, end: 0x187FF, plane: 1, age: "9.0" },
+        { name: "Tangut Components", start: 0x18800, end: 0x18AFF, plane: 1, age: "9.0" },
+        { name: "Khitan Small Script", start: 0x18B00, end: 0x18CFF, plane: 1, age: "13.0" },
+        { name: "Tangut Supplement", start: 0x18D00, end: 0x18D7F, plane: 1, age: "13.0" },
+        { name: "Tangut Components Supplement", start: 0x18D80, end: 0x18DFF, plane: 1, age: "17.0" },
+        { name: "Jurchen", start: 0x18E00, end: 0x1919F, plane: 1, age: "18.0" },
+        { name: "Jurchen Radicals", start: 0x191A0, end: 0x191DF, plane: 1, age: "18.0" },
+        { name: "Kana Extended-B", start: 0x1AFF0, end: 0x1AFFF, plane: 1, age: "14.0" },
+        { name: "Kana Supplement", start: 0x1B000, end: 0x1B0FF, plane: 1, age: "6.0" },
+        { name: "Kana Extended-A", start: 0x1B100, end: 0x1B12F, plane: 1, age: "10.0" },
+        { name: "Small Kana Extension", start: 0x1B130, end: 0x1B16F, plane: 1, age: "12.0" },
+        { name: "Nushu", start: 0x1B170, end: 0x1B2FF, plane: 1, age: "10.0" },
+        { name: "Duployan", start: 0x1BC00, end: 0x1BC9F, plane: 1, age: "7.0" },
+        { name: "Shorthand Format Controls", start: 0x1BCA0, end: 0x1BCAF, plane: 1, age: "7.0" },
+        { name: "Symbols for Legacy Computing Supplement", start: 0x1CC00, end: 0x1CEBF, plane: 1, age: "16.0" },
+        { name: "Miscellaneous Symbols Supplement", start: 0x1CEC0, end: 0x1CEFF, plane: 1, age: "17.0" },
+        { name: "Znamenny Musical Notation", start: 0x1CF00, end: 0x1CFCF, plane: 1, age: "14.0" },
+        { name: "Byzantine Musical Symbols", start: 0x1D000, end: 0x1D0FF, plane: 1, age: "3.1" },
+        { name: "Musical Symbols", start: 0x1D100, end: 0x1D1FF, plane: 1, age: "3.1" },
+        { name: "Ancient Greek Musical Notation", start: 0x1D200, end: 0x1D24F, plane: 1, age: "4.1" },
+        { name: "Musical Symbols Supplement", start: 0x1D250, end: 0x1D28F, plane: 1, age: "18.0" },
+        { name: "Kaktovik Numerals", start: 0x1D2C0, end: 0x1D2DF, plane: 1, age: "15.0" },
+        { name: "Mayan Numerals", start: 0x1D2E0, end: 0x1D2FF, plane: 1, age: "11.0" },
+        { name: "Tai Xuan Jing Symbols", start: 0x1D300, end: 0x1D35F, plane: 1, age: "4.0" },
+        { name: "Counting Rod Numerals", start: 0x1D360, end: 0x1D37F, plane: 1, age: "5.0" },
+        { name: "Mathematical Alphanumeric Symbols", start: 0x1D400, end: 0x1D7FF, plane: 1, age: "3.1" },
+        { name: "Sutton SignWriting", start: 0x1D800, end: 0x1DAAF, plane: 1, age: "8.0" },
+        { name: "Miscellaneous Symbols and Arrows Extended", start: 0x1DB00, end: 0x1DBFF, plane: 1, age: "18.0" },
+        { name: "Latin Extended-G", start: 0x1DF00, end: 0x1DFFF, plane: 1, age: "14.0" },
+        { name: "Glagolitic Supplement", start: 0x1E000, end: 0x1E02F, plane: 1, age: "9.0" },
+        { name: "Cyrillic Extended-D", start: 0x1E030, end: 0x1E08F, plane: 1, age: "15.0" },
+        { name: "Nyiakeng Puachue Hmong", start: 0x1E100, end: 0x1E14F, plane: 1, age: "12.0" },
+        { name: "Toto", start: 0x1E290, end: 0x1E2BF, plane: 1, age: "14.0" },
+        { name: "Wancho", start: 0x1E2C0, end: 0x1E2FF, plane: 1, age: "12.0" },
+        { name: "Nag Mundari", start: 0x1E4D0, end: 0x1E4FF, plane: 1, age: "15.0" },
+        { name: "Ol Onal", start: 0x1E5D0, end: 0x1E5FF, plane: 1, age: "16.0" },
+        { name: "Tai Yo", start: 0x1E6C0, end: 0x1E6FF, plane: 1, age: "17.0" },
+        { name: "Ethiopic Extended-B", start: 0x1E7E0, end: 0x1E7FF, plane: 1, age: "14.0" },
+        { name: "Mende Kikakui", start: 0x1E800, end: 0x1E8DF, plane: 1, age: "7.0" },
+        { name: "Adlam", start: 0x1E900, end: 0x1E95F, plane: 1, age: "9.0" },
+        { name: "Indic Siyaq Numbers", start: 0x1EC70, end: 0x1ECBF, plane: 1, age: "11.0" },
+        { name: "Ottoman Siyaq Numbers", start: 0x1ED00, end: 0x1ED4F, plane: 1, age: "12.0" },
+        { name: "Arabic Mathematical Alphabetic Symbols", start: 0x1EE00, end: 0x1EEFF, plane: 1, age: "6.1" },
+        { name: "Mahjong Tiles", start: 0x1F000, end: 0x1F02F, plane: 1, age: "5.1" },
+        { name: "Domino Tiles", start: 0x1F030, end: 0x1F09F, plane: 1, age: "5.1" },
+        { name: "Playing Cards", start: 0x1F0A0, end: 0x1F0FF, plane: 1, age: "6.0" },
+        { name: "Enclosed Alphanumeric Supplement", start: 0x1F100, end: 0x1F1FF, plane: 1, age: "5.2" },
+        { name: "Enclosed Ideographic Supplement", start: 0x1F200, end: 0x1F2FF, plane: 1, age: "5.2" },
+        { name: "Miscellaneous Symbols and Pictographs", start: 0x1F300, end: 0x1F5FF, plane: 1, age: "6.0" },
+        { name: "Emoticons", start: 0x1F600, end: 0x1F64F, plane: 1, age: "6.0" },
+        { name: "Ornamental Dingbats", start: 0x1F650, end: 0x1F67F, plane: 1, age: "7.0" },
+        { name: "Transport and Map Symbols", start: 0x1F680, end: 0x1F6FF, plane: 1, age: "6.0" },
+        { name: "Alchemical Symbols", start: 0x1F700, end: 0x1F77F, plane: 1, age: "6.0" },
+        { name: "Geometric Shapes Extended", start: 0x1F780, end: 0x1F7FF, plane: 1, age: "7.0" },
+        { name: "Supplemental Arrows-C", start: 0x1F800, end: 0x1F8FF, plane: 1, age: "7.0" },
+        { name: "Supplemental Symbols and Pictographs", start: 0x1F900, end: 0x1F9FF, plane: 1, age: "8.0" },
+        { name: "Chess Symbols", start: 0x1FA00, end: 0x1FA6F, plane: 1, age: "11.0" },
+        { name: "Symbols and Pictographs Extended-A", start: 0x1FA70, end: 0x1FAFF, plane: 1, age: "12.0" },
+        { name: "Symbols for Legacy Computing", start: 0x1FB00, end: 0x1FBFF, plane: 1, age: "13.0" },
+        { name: "CJK Unified Ideographs Extension B", start: 0x20000, end: 0x2A6DF, plane: 2, age: "3.1" },
+        { name: "CJK Unified Ideographs Extension C", start: 0x2A700, end: 0x2B73F, plane: 2, age: "5.2" },
+        { name: "CJK Unified Ideographs Extension D", start: 0x2B740, end: 0x2B81F, plane: 2, age: "6.0" },
+        { name: "CJK Unified Ideographs Extension E", start: 0x2B820, end: 0x2CEAF, plane: 2, age: "8.0" },
+        { name: "CJK Unified Ideographs Extension F", start: 0x2CEB0, end: 0x2EBEF, plane: 2, age: "10.0" },
+        { name: "CJK Unified Ideographs Extension I", start: 0x2EBF0, end: 0x2EE5F, plane: 2, age: "15.1" },
+        { name: "CJK Compatibility Ideographs Supplement", start: 0x2F800, end: 0x2FA1F, plane: 2, age: "3.1" },
+        { name: "CJK Unified Ideographs Extension G", start: 0x30000, end: 0x3134F, plane: 3, age: "13.0" },
+        { name: "CJK Unified Ideographs Extension H", start: 0x31350, end: 0x323AF, plane: 3, age: "15.0" },
+        { name: "CJK Unified Ideographs Extension J", start: 0x323B0, end: 0x3347F, plane: 3, age: "17.0" },
+        { name: "Seal", start: 0x3D000, end: 0x3FC3F, plane: 3, age: "18.0" },
+        { name: "Tags", start: 0xE0000, end: 0xE007F, plane: 14, age: "3.1" },
+        { name: "Variation Selectors Supplement", start: 0xE0100, end: 0xE01EF, plane: 14, age: "4.0" },
+        { name: "Supplementary Private Use Area-A", start: 0xF0000, end: 0xFFFFF, plane: 15, age: "2.0" },
+        { name: "Supplementary Private Use Area-B", start: 0x100000, end: 0x10FFFF, plane: 16, age: "2.0" }
       ],
 
       egyptianGardinerCodes: "A001 A002 A003 A004 A005 A005A A006 A006A A006B A007 A008 A009 A010 A011 A012 A013 A014 A014A A015 A016 A017 A017A A018 A019 A020 A021 A022 A023 A024 A025 A026 A027 A028 A029 A030 A031 A032 A032A A033 A034 A035 A036 A037 A038 A039 A040 A040A A041 A042 A042A A043 A043A A044 A045 A045A A046 A047 A048 A049 A050 A051 A052 A053 A054 A055 A056 A057 A058 A059 A060 A061 A062 A063 A064 A065 A066 A067 A068 A069 A070 B001 B002 B003 B004 B005 B005A B006 B007 B008 B009 C001 C002 C002A C002B C002C C003 C004 C005 C006 C007 C008 C009 C010 C010A C011 C012 C013 C014 C015 C016 C017 C018 C019 C020 C021 C022 C023 C024 D001 D002 D003 D004 D005 D006 D007 D008 D008A D009 D010 D011 D012 D013 D014 D015 D016 D017 D018 D019 D020 D021 D022 D023 D024 D025 D026 D027 D027A D028 D029 D030 D031 D031A D032 D033 D034 D034A D035 D036 D037 D038 D039 D040 D041 D042 D043 D044 D045 D046 D046A D047 D048 D048A D049 D050 D050A D050B D050C D050D D050E D050F D050G D050H D050I D051 D052 D052A D053 D054 D054A D055 D056 D057 D058 D059 D060 D061 D062 D063 D064 D065 D066 D067 D067A D067B D067C D067D D067E D067F D067G D067H E001 E002 E003 E004 E005 E006 E007 E008 E008A E009 E009A E010 E011 E012 E013 E014 E015 E016 E016A E017 E017A E018 E019 E020 E020A E021 E022 E023 E024 E025 E026 E027 E028 E028A E029 E030 E031 E032 E033 E034 E034A E036 E037 E038 F001 F001A F002 F003 F004 F005 F006 F007 F008 F009 F010 F011 F012 F013 F013A F014 F015 F016 F017 F018 F019 F020 F021 F021A F022 F023 F024 F025 F026 F027 F028 F029 F030 F031 F031A F032 F033 F034 F035 F036 F037 F037A F038 F038A F039 F040 F041 F042 F043 F044 F045 F045A F046 F046A F047 F047A F048 F049 F050 F051 F051A F051B F051C F052 F053 G001 G002 G003 G004 G005 G006 G006A G007 G007A G007B G008 G009 G010 G011 G011A G012 G013 G014 G015 G016 G017 G018 G019 G020 G020A G021 G022 G023 G024 G025 G026 G026A G027 G028 G029 G030 G031 G032 G033 G034 G035 G036 G036A G037 G037A G038 G039 G040 G041 G042 G043 G043A G044 G045 G045A G046 G047 G048 G049 G050 G051 G052 G053 G054 H001 H002 H003 H004 H005 H006 H006A H007 H008 I001 I002 I003 I004 I005 I005A I006 I007 I008 I009 I009A I010 I010A I011 I011A I012 I013 I014 I015 K001 K002 K003 K004 K005 K006 K007 K008 L001 L002 L002A L003 L004 L005 L006 L006A L007 L008 M001 M001A M001B M002 M003 M003A M004 M005 M006 M007 M008 M009 M010 M010A M011 M012 M012A M012B M012C M012D M012E M012F M012G M012H M013 M014 M015 M015A M016 M016A M017 M017A M018 M019 M020 M021 M022 M022A M023 M024 M024A M025 M026 M027 M028 M028A M029 M030 M031 M031A M032 M033 M033A M033B M034 M035 M036 M037 M038 M039 M040 M040A M041 M042 M043 M044 N001 N002 N003 N004 N005 N006 N007 N008 N009 N010 N011 N012 N013 N014 N015 N016 N017 N018 N018A N018B N019 N020 N021 N022 N023 N024 N025 N025A N026 N027 N028 N029 N030 N031 N032 N033 N033A N034 N034A N035 N035A N036 N037 N037A N038 N039 N040 N041 N042 NL001 NL002 NL003 NL004 NL005 NL005A NL006 NL007 NL008 NL009 NL010 NL011 NL012 NL013 NL014 NL015 NL016 NL017 NL017A NL018 NL019 NL020 NU001 NU002 NU003 NU004 NU005 NU006 NU007 NU008 NU009 NU010 NU010A NU011 NU011A NU012 NU013 NU014 NU015 NU016 NU017 NU018 NU018A NU019 NU020 NU021 NU022 NU022A O001 O001A O002 O003 O004 O005 O005A O006 O006A O006B O006C O006D O006E O006F O007 O008 O009 O010 O010A O010B O010C O011 O012 O013 O014 O015 O016 O017 O018 O019 O019A O020 O020A O021 O022 O023 O024 O024A O025 O025A O026 O027 O028 O029 O029A O030 O030A O031 O032 O033 O033A O034 O035 O036 O036A O036B O036C O036D O037 O038 O039 O040 O041 O042 O043 O044 O045 O046 O047 O048 O049 O050 O050A O050B O051 P001 P001A P002 P003 P003A P004 P005 P006 P007 P008 P009 P010 P011 Q001 Q002 Q003 Q004 Q005 Q006 Q007 R001 R002 R002A R003 R003A R003B R004 R005 R006 R007 R008 R009 R010 R010A R011 R012 R013 R014 R015 R016 R016A R017 R018 R019 R020 R021 R022 R023 R024 R025 R026 R027 R028 R029 S001 S002 S002A S003 S004 S005 S006 S006A S007 S008 S009 S010 S011 S012 S013 S014 S014A S014B S015 S016 S017 S017A S018 S019 S020 S021 S022 S023 S024 S025 S026 S026A S026B S027 S028 S029 S030 S031 S032 S033 S034 S035 S035A S036 S037 S038 S039 S040 S041 S042 S043 S044 S045 S046 T001 T002 T003 T003A T004 T005 T006 T007 T007A T008 T008A T009 T009A T010 T011 T011A T012 T013 T014 T015 T016 T016A T017 T018 T019 T020 T021 T022 T023 T024 T025 T026 T027 T028 T029 T030 T031 T032 T032A T033 T033A T034 T035 T036 U001 U002 U003 U004 U005 U006 U006A U006B U007 U008 U009 U010 U011 U012 U013 U014 U015 U016 U017 U018 U019 U020 U021 U022 U023 U023A U024 U025 U026 U027 U028 U029 U029A U030 U031 U032 U032A U033 U034 U035 U036 U037 U038 U039 U040 U041 U042 V001 V001A V001B V001C V001D V001E V001F V001G V001H V001I V002 V002A V003 V004 V005 V006 V007 V007A V007B V008 V009 V010 V011 V011A V011B V011C V012 V012A V012B V013 V014 V015 V016 V017 V018 V019 V020 V020A V020B V020C V020D V020E V020F V020G V020H V020I V020J V020K V020L V021 V022 V023 V023A V024 V025 V026 V027 V028 V028A V029 V029A V030 V030A V031 V031A V032 V033 V033A V034 V035 V036 V037 V037A V038 V039 V040 V040A W001 W002 W003 W003A W004 W005 W006 W007 W008 W009 W009A W010 W010A W011 W012 W013 W014 W014A W015 W016 W017 W017A W018 W018A W019 W020 W021 W022 W023 W024 W024A W025 X001 X002 X003 X004 X004A X004B X005 X006 X006A X007 X008 X008A Y001 Y001A Y002 Y003 Y004 Y005 Y006 Y007 Y008 Z001 Z002 Z002A Z002B Z002C Z002D Z003 Z003A Z003B Z004 Z004A Z005 Z005A Z006 Z007 Z008 Z009 Z010 Z011 Z012 Z013 Z014 Z015 Z015A Z015B Z015C Z015D Z015E Z015F Z015G Z015H Z015I Z016 Z016A Z016B Z016C Z016D Z016E Z016F Z016G Z016H AA001 AA002 AA003 AA004 AA005 AA006 AA007 AA007A AA007B AA008 AA009 AA010 AA011 AA012 AA013 AA014 AA015 AA016 AA017 AA018 AA019 AA020 AA021 AA022 AA023 AA024 AA025 AA026 AA027 AA028 AA029 AA030 AA031 AA032 V011D".split(" "),
@@ -5561,11 +5578,141 @@ const SBCS_TABLES = {
         'Cn': 'Other, unassigned'
       },
 
-      loadUnicodeData(url = 'files/UnicodeData.txt') {
-        if (this.unicodeDataLoaded) return Promise.resolve(true);
-        if (this.unicodeDataLoading) return this.unicodeDataLoading;
+      eastAsianWidthDescriptions: {
+        'A': 'Ambiguous',
+        'F': 'Fullwidth',
+        'H': 'Halfwidth',
+        'N': 'Neutral',
+        'Na': 'Narrow',
+        'W': 'Wide'
+      },
 
-        // Node.js environment fallback
+      lineBreakDescriptions: {
+        'BK': 'Mandatory Break', 'CR': 'Carriage Return', 'LF': 'Line Feed', 'CM': 'Combining Mark',
+        'NL': 'Next Line', 'SG': 'Surrogate', 'WJ': 'Word Joiner', 'ZW': 'Zero Width Space',
+        'GL': 'Non-breaking ("Glue")', 'SP': 'Space', 'B2': 'Break Opportunity Before and After',
+        'BA': 'Break After', 'BB': 'Break Before', 'HY': 'Hyphen', 'CB': 'Contingent Break Opportunity',
+        'CL': 'Close Punctuation', 'CP': 'Close Parenthesis', 'EX': 'Exclamation / Interrogation',
+        'IN': 'Inseparable', 'NS': 'Nonstarter', 'OP': 'Open Punctuation', 'QU': 'Quotation',
+        'IS': 'Infix Numeric Separator', 'NU': 'Numeric', 'PO': 'Postfix Numeric', 'PR': 'Prefix Numeric',
+        'SY': 'Symbols Allowing Break After', 'AI': 'Ambiguous (Alphabetic or Ideographic)',
+        'AL': 'Alphabetic', 'HL': 'Hebrew Letter', 'ID': 'Ideographic', 'RI': 'Regional Indicator',
+        'EB': 'Emoji Base', 'EM': 'Emoji Modifier', 'ZWJ': 'Zero Width Joiner', 'XX': 'Unknown'
+      },
+
+      _loadScriptAsset(src, onLoaded) {
+        if (typeof document === 'undefined') return Promise.resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+        return new Promise((resolve) => {
+          const existing = document.querySelector(`script[src="${src}"]`) || document.querySelector(`script[src="./${src}"]`);
+          if (existing) {
+            resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = src;
+          script.onload = () => {
+            resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+          };
+          script.onerror = () => {
+            if (!src.startsWith('./') && !src.startsWith('/')) {
+              const fallback = document.createElement('script');
+              fallback.src = './' + src;
+              fallback.onload = () => resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+              fallback.onerror = () => resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+              document.head.appendChild(fallback);
+              return;
+            }
+            resolve(typeof onLoaded === 'function' ? onLoaded() : null);
+          };
+          document.head.appendChild(script);
+        });
+      },
+
+      loadCoreProps(url = 'files/unicode-data/core-props.json') {
+        if (this.corePropsLoaded) return Promise.resolve(this.coreProps);
+        if (this.corePropsLoading) return this.corePropsLoading;
+
+        if (typeof window !== 'undefined' && window.__UNICODE_CORE_PROPS__) {
+          this.coreProps = window.__UNICODE_CORE_PROPS__;
+          this.corePropsLoaded = true;
+          this._dispatchCorePropsLoaded();
+          return Promise.resolve(this.coreProps);
+        }
+
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), url),
+              path.resolve(process.cwd(), 'files/unicode-data/core-props.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/core-props.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.coreProps = JSON.parse(fs.readFileSync(p, 'utf8'));
+                this.corePropsLoaded = true;
+                return Promise.resolve(this.coreProps);
+              }
+            }
+          } catch (e) {}
+        }
+
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          this.corePropsLoading = fetch(url)
+            .then(res => {
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              return res.json();
+            })
+            .then(data => {
+              this.coreProps = data;
+              this.corePropsLoaded = true;
+              this._dispatchCorePropsLoaded();
+              return data;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/core-props.js', () => {
+              this.coreProps = window.__UNICODE_CORE_PROPS__;
+              this.corePropsLoaded = !!this.coreProps;
+              if (this.corePropsLoaded) this._dispatchCorePropsLoaded();
+              return this.coreProps;
+            }))
+            .finally(() => {
+              this.corePropsLoading = null;
+            });
+          return this.corePropsLoading;
+        }
+
+        this.corePropsLoading = this._loadScriptAsset('files/unicode-data/core-props.js', () => {
+          this.coreProps = window.__UNICODE_CORE_PROPS__;
+          this.corePropsLoaded = !!this.coreProps;
+          if (this.corePropsLoaded) this._dispatchCorePropsLoaded();
+          return this.coreProps;
+        }).finally(() => {
+          this.corePropsLoading = null;
+        });
+        return this.corePropsLoading;
+      },
+
+      _dispatchCorePropsLoaded() {
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          try {
+            window.dispatchEvent(new CustomEvent('coreprops-loaded', { detail: { coreProps: this.coreProps } }));
+          } catch (e) {}
+        }
+      },
+
+      loadUnicodeData(url = 'files/UnicodeData.txt') {
+        const corePromise = this.loadCoreProps();
+
+        if (this.unicodeDataLoaded) return corePromise.then(() => true);
+        if (this.unicodeDataLoading) return Promise.all([corePromise, this.unicodeDataLoading]).then(() => true);
+
+        if (typeof window !== 'undefined' && window.__UNICODEDATA_RAW__) {
+          this.parseUnicodeData(window.__UNICODEDATA_RAW__);
+          this.unicodeDataLoaded = true;
+          return corePromise.then(() => true);
+        }
+
         if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
           try {
             const fs = require('fs');
@@ -5582,13 +5729,13 @@ const SBCS_TABLES = {
               if (fs.existsSync(candidates[i])) {
                 this.parseUnicodeData(fs.readFileSync(candidates[i], 'utf8'));
                 this.unicodeDataLoaded = true;
-                return Promise.resolve(true);
+                return corePromise.then(() => true);
               }
             }
           } catch (e) { }
         }
 
-        if (typeof fetch === 'function') {
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
           this.unicodeDataLoading = fetch(url)
             .then(res => {
               if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -5598,25 +5745,47 @@ const SBCS_TABLES = {
               this.parseUnicodeData(text);
               return true;
             })
-            .catch(err => {
-              if (!url.startsWith('./') && !url.startsWith('/')) {
-                return fetch('./' + url)
-                  .then(r => r.text())
-                  .then(txt => {
-                    this.parseUnicodeData(txt);
-                    return true;
-                  })
-                  .catch(() => false);
+            .catch(() => this._loadScriptAsset('files/unicode-data/unicodedata.js', () => {
+              if (typeof window !== 'undefined' && window.__UNICODEDATA_RAW__) {
+                this.parseUnicodeData(window.__UNICODEDATA_RAW__);
+                return true;
               }
               return false;
-            })
+            }))
             .finally(() => {
               this.unicodeDataLoading = null;
             });
-          return this.unicodeDataLoading;
+          return Promise.all([corePromise, this.unicodeDataLoading]).then(() => true);
         }
 
-        return Promise.resolve(false);
+        this.unicodeDataLoading = this._loadScriptAsset('files/unicode-data/unicodedata.js', () => {
+          if (typeof window !== 'undefined' && window.__UNICODEDATA_RAW__) {
+            this.parseUnicodeData(window.__UNICODEDATA_RAW__);
+            return true;
+          }
+          return false;
+        }).finally(() => {
+          this.unicodeDataLoading = null;
+        });
+
+        return Promise.all([corePromise, this.unicodeDataLoading]).then(() => true);
+      },
+
+      binarySearchRange(ranges, cp) {
+        if (!ranges || !ranges.length) return null;
+        let low = 0, high = ranges.length - 1;
+        while (low <= high) {
+          const mid = (low + high) >> 1;
+          const r = ranges[mid];
+          if (cp < r[0]) {
+            high = mid - 1;
+          } else if (cp > r[1]) {
+            low = mid + 1;
+          } else {
+            return r[2];
+          }
+        }
+        return null;
       },
 
       parseUnicodeData(text) {
@@ -5655,7 +5824,302 @@ const SBCS_TABLES = {
         }
       },
 
-      getUnicodeBlock(cp) {
+      // On-demand intelligence loaders
+      ensureUnihan(cp) {
+        const isBmp = cp <= 0xFFFF;
+        const cacheProp = isBmp ? 'unihanBmpCache' : 'unihanExtCache';
+        const globalProp = isBmp ? '__UNIHAN_BMP__' : '__UNIHAN_EXT__';
+        const jsonFile = isBmp ? 'files/unicode-data/unihan-bmp.json' : 'files/unicode-data/unihan-ext.json';
+        const jsFile = isBmp ? 'files/unicode-data/unihan-bmp.js' : 'files/unicode-data/unihan-ext.js';
+
+        if (this[cacheProp]) return Promise.resolve(this[cacheProp][cp] || this[cacheProp][String(cp)] || null);
+        if (typeof window !== 'undefined' && window[globalProp]) {
+          this[cacheProp] = window[globalProp];
+          return Promise.resolve(this[cacheProp][cp] || this[cacheProp][String(cp)] || null);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), jsonFile),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../' + jsonFile) : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this[cacheProp] = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this[cacheProp][cp] || this[cacheProp][String(cp)] || null);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch(jsonFile)
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this[cacheProp] = data;
+              return data[cp] || data[String(cp)] || null;
+            })
+            .catch(() => this._loadScriptAsset(jsFile, () => {
+              this[cacheProp] = window[globalProp];
+              return this[cacheProp] ? (this[cacheProp][cp] || this[cacheProp][String(cp)] || null) : null;
+            }));
+        }
+        return this._loadScriptAsset(jsFile, () => {
+          this[cacheProp] = window[globalProp];
+          return this[cacheProp] ? (this[cacheProp][cp] || this[cacheProp][String(cp)] || null) : null;
+        });
+      },
+
+      ensureRSIndex() {
+        if (this.rsIndexCache) return Promise.resolve(this.rsIndexCache);
+        if (typeof window !== 'undefined' && window.__UNICODE_RSINDEX__) {
+          this.rsIndexCache = window.__UNICODE_RSINDEX__;
+          return Promise.resolve(this.rsIndexCache);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/rsindex.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/rsindex.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.rsIndexCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.rsIndexCache);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/rsindex.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.rsIndexCache = data;
+              return data;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/rsindex.js', () => {
+              this.rsIndexCache = window.__UNICODE_RSINDEX__;
+              return this.rsIndexCache;
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/rsindex.js', () => {
+          this.rsIndexCache = window.__UNICODE_RSINDEX__;
+          return this.rsIndexCache;
+        });
+      },
+
+      findRadicalForCodePoint(cp) {
+        if (!this.rsIndexCache) {
+          if (typeof window !== 'undefined' && window.__UNICODE_RSINDEX__) {
+            this.rsIndexCache = window.__UNICODE_RSINDEX__;
+          }
+        }
+        if (!this.rsIndexCache) return null;
+        if (!this._rsCpMap) {
+          const map = new Map();
+          for (let r = 0; r < this.rsIndexCache.length; r++) {
+            const rad = this.rsIndexCache[r];
+            for (let g = 0; g < rad.groups.length; g++) {
+              const grp = rad.groups[g];
+              for (let i = 0; i < grp.cps.length; i++) {
+                map.set(grp.cps[i], { rad: rad.num, s: grp.s, radChar: rad.char, radName: rad.name });
+              }
+            }
+          }
+          this._rsCpMap = map;
+        }
+        return this._rsCpMap.get(cp) || null;
+      },
+
+      ensureUnikemet(cp) {
+        if (this.unikemetCache) return Promise.resolve(this.unikemetCache[cp] || this.unikemetCache[String(cp)] || null);
+        if (typeof window !== 'undefined' && window.__UNICODE_KEMET__) {
+          this.unikemetCache = window.__UNICODE_KEMET__;
+          return Promise.resolve(this.unikemetCache[cp] || this.unikemetCache[String(cp)] || null);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/unikemet.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/unikemet.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.unikemetCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.unikemetCache[cp] || this.unikemetCache[String(cp)] || null);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/unikemet.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.unikemetCache = data;
+              return data[cp] || data[String(cp)] || null;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/unikemet.js', () => {
+              this.unikemetCache = window.__UNICODE_KEMET__;
+              return this.unikemetCache ? (this.unikemetCache[cp] || this.unikemetCache[String(cp)] || null) : null;
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/unikemet.js', () => {
+          this.unikemetCache = window.__UNICODE_KEMET__;
+          return this.unikemetCache ? (this.unikemetCache[cp] || this.unikemetCache[String(cp)] || null) : null;
+        });
+      },
+
+      ensureNamesList(cp) {
+        if (this.namesListCache) return Promise.resolve(this.namesListCache[cp] || this.namesListCache[String(cp)] || null);
+        if (typeof window !== 'undefined' && window.__UNICODE_NAMESLIST__) {
+          this.namesListCache = window.__UNICODE_NAMESLIST__;
+          return Promise.resolve(this.namesListCache[cp] || this.namesListCache[String(cp)] || null);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/nameslist.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/nameslist.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.namesListCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.namesListCache[cp] || this.namesListCache[String(cp)] || null);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/nameslist.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.namesListCache = data;
+              return data[cp] || data[String(cp)] || null;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/nameslist.js', () => {
+              this.namesListCache = window.__UNICODE_NAMESLIST__;
+              return this.namesListCache ? (this.namesListCache[cp] || this.namesListCache[String(cp)] || null) : null;
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/nameslist.js', () => {
+          this.namesListCache = window.__UNICODE_NAMESLIST__;
+          return this.namesListCache ? (this.namesListCache[cp] || this.namesListCache[String(cp)] || null) : null;
+        });
+      },
+
+      ensureSecurity(cp) {
+        const resolveSec = (data) => {
+          if (!data) return { confusable: null, idStatus: 'Default' };
+          const conf = (data.confusables && (data.confusables[cp] || data.confusables[String(cp)])) || null;
+          const idSt = this.binarySearchRange(data.id_status, cp);
+          return { confusable: conf, idStatus: idSt || 'Default' };
+        };
+
+        if (this.securityCache) return Promise.resolve(resolveSec(this.securityCache));
+        if (typeof window !== 'undefined' && window.__UNICODE_SECURITY__) {
+          this.securityCache = window.__UNICODE_SECURITY__;
+          return Promise.resolve(resolveSec(this.securityCache));
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/security.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/security.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.securityCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(resolveSec(this.securityCache));
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/security.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.securityCache = data;
+              return resolveSec(data);
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/security.js', () => {
+              this.securityCache = window.__UNICODE_SECURITY__;
+              return resolveSec(this.securityCache);
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/security.js', () => {
+          this.securityCache = window.__UNICODE_SECURITY__;
+          return resolveSec(this.securityCache);
+        });
+      },
+
+      ensureEmoji(cp) {
+        if (this.emojiCache) return Promise.resolve(this.emojiCache[cp] || this.emojiCache[String(cp)] || null);
+        if (typeof window !== 'undefined' && window.__UNICODE_EMOJI__) {
+          this.emojiCache = window.__UNICODE_EMOJI__;
+          return Promise.resolve(this.emojiCache[cp] || this.emojiCache[String(cp)] || null);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/emoji.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/emoji.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.emojiCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.emojiCache[cp] || this.emojiCache[String(cp)] || null);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/emoji.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.emojiCache = data;
+              return data[cp] || data[String(cp)] || null;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/emoji.js', () => {
+              this.emojiCache = window.__UNICODE_EMOJI__;
+              return this.emojiCache ? (this.emojiCache[cp] || this.emojiCache[String(cp)] || null) : null;
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/emoji.js', () => {
+          this.emojiCache = window.__UNICODE_EMOJI__;
+          return this.emojiCache ? (this.emojiCache[cp] || this.emojiCache[String(cp)] || null) : null;
+        });
+      },
+
+getUnicodeBlock(cp) {
         for (let i = 0; i < this.blocks.length; i++) {
           const b = this.blocks[i];
           if (cp >= b.start && cp <= b.end) return b;
@@ -5728,6 +6192,44 @@ const SBCS_TABLES = {
       },
 
       getUnicodeScript(cp) {
+        if (this.coreProps && this.coreProps.scripts) {
+          const s = this.binarySearchRange(this.coreProps.scripts, cp);
+          if (s) return s.replace(/_/g, ' ');
+        }
+        const block = this.getUnicodeBlock(cp);
+        if (block && block.name) {
+          const bn = block.name;
+          if (bn.includes('Egyptian Hieroglyphs')) return 'Egyptian Hieroglyphs';
+          if (bn.includes('Latin')) return 'Latin';
+          if (bn.includes('Greek')) return 'Greek';
+          if (bn.includes('Cyrillic')) return 'Cyrillic';
+          if (bn.includes('Arabic')) return 'Arabic';
+          if (bn.includes('Hebrew')) return 'Hebrew';
+          if (bn.includes('Devanagari')) return 'Devanagari';
+          if (bn.includes('Bengali')) return 'Bengali';
+          if (bn.includes('Gurmukhi')) return 'Gurmukhi';
+          if (bn.includes('Gujarati')) return 'Gujarati';
+          if (bn.includes('Oriya')) return 'Oriya';
+          if (bn.includes('Tamil')) return 'Tamil';
+          if (bn.includes('Telugu')) return 'Telugu';
+          if (bn.includes('Kannada')) return 'Kannada';
+          if (bn.includes('Malayalam')) return 'Malayalam';
+          if (bn.includes('Sinhala')) return 'Sinhala';
+          if (bn.includes('Thai')) return 'Thai';
+          if (bn.includes('Lao')) return 'Lao';
+          if (bn.includes('Tibetan')) return 'Tibetan';
+          if (bn.includes('Myanmar')) return 'Myanmar';
+          if (bn.includes('Georgian')) return 'Georgian';
+          if (bn.includes('Hangul')) return 'Hangul';
+          if (bn.includes('Ethiopic')) return 'Ethiopic';
+          if (bn.includes('Cherokee')) return 'Cherokee';
+          if (bn.includes('Khmer')) return 'Khmer';
+          if (bn.includes('Mongolian')) return 'Mongolian';
+          if (bn.includes('Armenian')) return 'Armenian';
+          if (bn.includes('CJK') || bn.includes('Kangxi') || bn.includes('Ideographic')) return 'Han';
+          if (bn.includes('Hiragana')) return 'Hiragana';
+          if (bn.includes('Katakana')) return 'Katakana';
+        }
         let ch;
         try { ch = String.fromCodePoint(cp); } catch (e) { return 'Unknown'; }
         const scripts = [
@@ -5768,7 +6270,71 @@ const SBCS_TABLES = {
         return 'Common';
       },
 
-      getUnicodeCharName(cp, block) {
+      getUnicodeAge(cp) {
+        if (this.coreProps && this.coreProps.age) {
+          const a = this.binarySearchRange(this.coreProps.age, cp);
+          if (a) return a;
+        }
+        const block = this.getUnicodeBlock(cp);
+        if (block && block.age) return block.age;
+        return 'Unassigned';
+      },
+
+      getEastAsianWidth(cp) {
+        let code = null;
+        if (this.coreProps && this.coreProps.eaw) {
+          code = this.binarySearchRange(this.coreProps.eaw, cp);
+        }
+        if (!code) {
+          const block = this.getUnicodeBlock(cp);
+          if (block && block.name && (block.name.includes('CJK') || block.name.includes('Hangul') || block.name.includes('Hiragana') || block.name.includes('Katakana') || block.name.includes('Bopomofo'))) {
+            code = 'W';
+          } else {
+            code = 'N';
+          }
+        }
+        return { code, name: this.eastAsianWidthDescriptions[code] || code };
+      },
+
+      getLineBreak(cp) {
+        let code = null;
+        if (this.coreProps && this.coreProps.lb) {
+          code = this.binarySearchRange(this.coreProps.lb, cp);
+        }
+        if (!code) {
+          const block = this.getUnicodeBlock(cp);
+          if (block && block.name && block.name.includes('Egyptian')) code = 'AL';
+          else code = 'XX';
+        }
+        return { code, name: this.lineBreakDescriptions[code] || code };
+      },
+
+      getIndicCategories(cp) {
+        if (!this.coreProps) return null;
+        const pos = this.coreProps.indic_pos ? this.binarySearchRange(this.coreProps.indic_pos, cp) : null;
+        const syl = this.coreProps.indic_syl ? this.binarySearchRange(this.coreProps.indic_syl, cp) : null;
+        if (!pos && !syl) return null;
+        return { positional: pos, syllabic: syl };
+      },
+
+      getArabicShaping(cp) {
+        if (!this.coreProps || !this.coreProps.arabic_shaping) return null;
+        const sh = this.coreProps.arabic_shaping[cp] || this.coreProps.arabic_shaping[String(cp)];
+        if (!sh) return null;
+        return { joiningType: sh[0], joiningGroup: sh[1] };
+      },
+
+      getBidiMirroring(cp) {
+        if (!this.coreProps || !this.coreProps.bidi_mirroring) return null;
+        return this.coreProps.bidi_mirroring[cp] || this.coreProps.bidi_mirroring[String(cp)] || null;
+      },
+
+      getNameAliases(cp) {
+        if (!this.coreProps || !this.coreProps.name_aliases) return [];
+        return this.coreProps.name_aliases[cp] || this.coreProps.name_aliases[String(cp)] || [];
+      },
+
+getUnicodeCharName(cp, block) {
         if (this.charNames[cp]) return this.charNames[cp];
         const hex = cp.toString(16).toUpperCase().padStart(4, '0');
 
@@ -5924,6 +6490,18 @@ const SBCS_TABLES = {
 
         if (!category) category = this.getUnicodeCategory(cp);
         const script = this.getUnicodeScript(cp);
+        const age = this.getUnicodeAge(cp);
+        const isNewIn18 = (age === '18.0');
+        const eastAsianWidth = this.getEastAsianWidth(cp);
+        const lineBreak = this.getLineBreak(cp);
+        const indic = this.getIndicCategories(cp);
+        const arabic = this.getArabicShaping(cp);
+        const mirroredCp = this.getBidiMirroring(cp);
+        const formalAliases = this.getNameAliases(cp);
+        let mirroredChar = '';
+        if (mirroredCp) {
+          try { mirroredChar = String.fromCodePoint(mirroredCp); } catch (e) { }
+        }
 
         // Format decomposition nicely
         let decompFormatted = '';
@@ -6042,7 +6620,17 @@ const SBCS_TABLES = {
           nfkd,
           isControl,
           controlLabel,
-          isAssigned: category.code !== 'Cn' && category.code !== 'Cs'
+          isAssigned: category.code !== 'Cn' && category.code !== 'Cs',
+          script,
+          age,
+          isNewIn18,
+          eastAsianWidth,
+          lineBreak,
+          indic,
+          arabic,
+          mirroredCp,
+          mirroredChar,
+          formalAliases
         };
       },
 
@@ -6114,6 +6702,19 @@ const SBCS_TABLES = {
               if (!results.some(r => r.cp === cp)) {
                 results.push(this.getUnicodeCharInfo(cp));
               }
+            }
+          }
+        }
+
+        // Search Unihan cache if loaded (matches pinyin, cantonese, or definition)
+        if (this.unihanBmpCache && qUpper.length >= 2) {
+          const qLow = query.toLowerCase();
+          for (const [cpStr, han] of Object.entries(this.unihanBmpCache)) {
+            if (results.length >= limit) break;
+            const cp = parseInt(cpStr, 10);
+            if (results.some(r => r.cp === cp)) continue;
+            if ((han.m && han.m.toLowerCase() === qLow) || (han.c && han.c.toLowerCase() === qLow) || (han.d && han.d.toLowerCase().includes(qLow))) {
+              results.push(this.getUnicodeCharInfo(cp));
             }
           }
         }
@@ -6191,6 +6792,31 @@ const SBCS_TABLES = {
       { id: "prescription", name: "medical prescription & clinical pad", category: "document & commerce", desc: "client-side medical prescription and clinical pad generator with Ibn Sina Hospital clinical standard, mixed English/Bengali Purno typography, dosage matrix helpers, and vector A4 PDF export.", cli: "prescription [--ui] [ibn-sina|minimal|sample|new] / rx / pad" }
     ]
   };
+
+  if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const baseDir = path.resolve(process.cwd(), 'files/unicode-data');
+      const cpFile = path.join(baseDir, 'core-props.json');
+      if (fs.existsSync(cpFile) && TextEngine.unicodemap && !TextEngine.unicodemap.corePropsLoaded) {
+        TextEngine.unicodemap.coreProps = JSON.parse(fs.readFileSync(cpFile, 'utf8'));
+        TextEngine.unicodemap.corePropsLoaded = true;
+      }
+      const rsFile = path.join(baseDir, 'rsindex.json');
+      if (fs.existsSync(rsFile) && TextEngine.unicodemap && !TextEngine.unicodemap.rsIndexCache) {
+        TextEngine.unicodemap.rsIndexCache = JSON.parse(fs.readFileSync(rsFile, 'utf8'));
+      }
+      const hanFile = path.join(baseDir, 'unihan-bmp.json');
+      if (fs.existsSync(hanFile) && TextEngine.unicodemap && !TextEngine.unicodemap.unihanBmpCache) {
+        TextEngine.unicodemap.unihanBmpCache = JSON.parse(fs.readFileSync(hanFile, 'utf8'));
+      }
+            const kmFile = path.join(baseDir, 'unikemet.json');
+      if (fs.existsSync(kmFile) && TextEngine.unicodemap && !TextEngine.unicodemap.unikemetCache) {
+        TextEngine.unicodemap.unikemetCache = JSON.parse(fs.readFileSync(kmFile, 'utf8'));
+      }
+    } catch (e) {}
+  }
 
   if (TextEngine.unicodemap && typeof TextEngine.unicodemap.loadUnicodeData === 'function') {
     TextEngine.unicodemap.loadUnicodeData();

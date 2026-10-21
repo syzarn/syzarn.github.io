@@ -465,7 +465,7 @@ Quick Commands:
         'README.md': {
           type: 'file',
           date: 'Oct 30 17:50',
-          content: `type 'help' for commands. quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`
+          content: `type 'help' for commands. quick: 'cv', 'tools', 'experience', 'works', 'languages', 'projects', 'skills'`
         },
         'manifesto.tdcy3': {
           type: 'file',
@@ -2340,25 +2340,71 @@ Volume  : ${vol}%`;
         case 'unicodemap':
           html = `
             <div class="tm-unimap-wrap">
-              <div class="tm-unimap-toolbar">
+              <div class="tm-unimap-top-bar">
+                <div class="tm-unimap-tabs">
+                  <button type="button" class="tm-unimap-tab-btn active" id="tm-unimap-tab-map" data-tab="map">⊞ Character Map</button>
+                  <button type="button" class="tm-unimap-tab-btn" id="tm-unimap-tab-rs" data-tab="rsindex">㊎ RSIndex</button>
+                </div>
+                <div class="tm-unimap-nav-group" style="font-size:0.75rem;">
+                  <span>font:</span>
+                  <select class="tm-select" id="tm-unimap-font-select" style="width: 175px;" title="Select font for character grid">
+                    <option value="unifont" selected>Unifont 18.0 (Standard)</option>
+                    <option value="unifont-t">Unifont 18.0 Traditional (Taiwan)</option>
+                    <option value="unifont-jp">Unifont 18.0 Japanese (JIS X 0213)</option>
+                    <option value="unifont-csur">Unifont 18.0 CSUR (ConScript PUA)</option>
+                    <option value="native">native / system font</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Character Map Toolbar -->
+              <div class="tm-unimap-toolbar" id="tm-unimap-toolbar-map">
                 <div class="tm-unimap-nav-group">
                   <span class="c-accent ansi-bold">plane:</span>
-                  <select class="tm-select" id="tm-unimap-plane-select" style="max-width: 190px;"></select>
+                  <select class="tm-select" id="tm-unimap-plane-select" style="max-width: 195px;"></select>
 
                   <span class="c-accent ansi-bold" style="margin-left:4px;">block:</span>
                   <select class="tm-select" id="tm-unimap-block-select" style="max-width: 250px;"></select>
 
-                  <button type="button" class="tm-btn" id="tm-unimap-prev-blk" title="Previous Block: Jump to previous Unicode block">◀ blk</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-next-blk" title="Next Block: Jump to next Unicode block">blk ▶</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-prev-page" title="Previous Page: Step back 256 code points">◀ page</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-next-page" title="Next Page: Step forward 256 code points">page ▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-blk" title="Previous Block">◀ blk</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-blk" title="Next Block">blk ▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-page" title="Previous 256 Code Points">◀ page</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-page" title="Next 256 Code Points">page ▶</button>
                 </div>
 
                 <div class="tm-unimap-nav-group">
-                  <span>font:</span>
-                  <select class="tm-select" id="tm-unimap-font-select" style="width: 155px;" title="Select font for Unicode character grid only">
-                    <option value="unifont" selected>Unifont</option>
-                    <option value="native">native / system font</option>
+                  <span>filter:</span>
+                  <select class="tm-select" id="tm-unimap-filter-select" style="width: 155px;" title="Filter code points by Unicode version">
+                    <option value="all">all characters</option>
+                    <option value="18.0">Unicode 18.0</option>
+                    <option value="17.0">Unicode 17.0</option>
+                    <option value="16.0">Unicode 16.0</option>
+                    <option value="15.1">Unicode 15.1</option>
+                    <option value="15.0">Unicode 15.0</option>
+                    <option value="14.0">Unicode 14.0</option>
+                    <option value="13.0">Unicode 13.0</option>
+                    <option value="12.1">Unicode 12.1</option>
+                    <option value="12.0">Unicode 12.0</option>
+                    <option value="11.0">Unicode 11.0</option>
+                    <option value="10.0">Unicode 10.0</option>
+                    <option value="9.0">Unicode 9.0</option>
+                    <option value="8.0">Unicode 8.0</option>
+                    <option value="7.0">Unicode 7.0</option>
+                    <option value="6.3">Unicode 6.3</option>
+                    <option value="6.2">Unicode 6.2</option>
+                    <option value="6.1">Unicode 6.1</option>
+                    <option value="6.0">Unicode 6.0</option>
+                    <option value="5.2">Unicode 5.2</option>
+                    <option value="5.1">Unicode 5.1</option>
+                    <option value="5.0">Unicode 5.0</option>
+                    <option value="4.1">Unicode 4.1</option>
+                    <option value="4.0">Unicode 4.0</option>
+                    <option value="3.2">Unicode 3.2</option>
+                    <option value="3.1">Unicode 3.1</option>
+                    <option value="3.0">Unicode 3.0</option>
+                    <option value="2.1">Unicode 2.1</option>
+                    <option value="2.0">Unicode 2.0</option>
+                    <option value="1.1">Unicode 1.1</option>
                   </select>
 
                   <span>go to:</span>
@@ -2366,16 +2412,37 @@ Volume  : ${vol}%`;
                   <button type="button" class="tm-btn" id="tm-unimap-goto-btn">go</button>
 
                   <span>search:</span>
-                  <input type="text" class="tm-input" id="tm-unimap-search-input" placeholder="name or keyword..." style="width: 135px;">
+                  <input type="text" class="tm-input" id="tm-unimap-search-input" placeholder="name, pinyin, meaning..." style="width: 145px;">
                 </div>
               </div>
 
-              <div id="tm-unimap-search-results" style="display:none; max-height: 85px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:4px; padding:4px 8px; font-size:0.75rem;"></div>
+              <!-- RSIndex Toolbar -->
+              <div class="tm-unimap-toolbar" id="tm-unimap-toolbar-rs" style="display:none;">
+                <div class="tm-unimap-nav-group">
+                  <span class="c-accent ansi-bold">radical:</span>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-rad" title="Previous Radical">◀</button>
+                  <select class="tm-select" id="tm-unimap-rs-rad-select" style="min-width: 230px; max-width: 320px;"></select>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-rad" title="Next Radical">▶</button>
+
+                  <span class="c-accent ansi-bold" style="margin-left:6px;">strokes:</span>
+                  <select class="tm-select" id="tm-unimap-rs-stroke-select" style="max-width: 160px;"></select>
+                </div>
+
+                <div class="tm-unimap-nav-group">
+                  <span>find CJK:</span>
+                  <input type="text" class="tm-input" id="tm-unimap-rs-find-input" placeholder="Char or U+XXXX" style="width: 120px;">
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-find-btn">find</button>
+                </div>
+              </div>
+
+              <div id="tm-unimap-search-results" style="display:none; max-height: 110px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:4px; padding:4px 8px; font-size:0.75rem;"></div>
 
               <div class="tm-unimap-layout">
-                <div class="tm-unimap-grid-pane">
+                <!-- Character Map Grid Pane -->
+                <div class="tm-unimap-grid-pane" id="tm-unimap-pane-map">
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
                     <div>range: <span id="tm-unimap-range-lbl" class="c-accent" style="font-family:monospace; font-weight:bold;">U+0000-U+00FF</span> (<span id="tm-unimap-block-lbl">Basic Latin</span>)</div>
+                    <div id="tm-unimap-filter-indicator" style="display:none; color:var(--accent-color); font-weight:bold; font-size:0.72rem;">Unicode Filter Active</div>
                   </div>
 
                   <div class="tm-unimap-grid-container" id="tm-unimap-grid-container">
@@ -2383,11 +2450,26 @@ Volume  : ${vol}%`;
                   </div>
                 </div>
 
+                <!-- RSIndex Grouped Pane -->
+                <div class="tm-unimap-grid-pane" id="tm-unimap-pane-rs" style="display:none;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
+                    <div>radical: <span id="tm-unimap-rs-info-lbl" class="c-accent" style="font-weight:bold;">Radical #1 (one) 一</span></div>
+                    <div id="tm-unimap-rs-total-lbl" style="color:#aaa; font-size:0.72rem;">335 characters</div>
+                  </div>
+
+                  <div class="tm-unimap-rs-container" id="tm-unimap-rs-container">
+                    <div style="padding:20px; text-align:center; color:#888;">Loading Radical-Stroke Index...</div>
+                  </div>
+                </div>
+
                 <div class="tm-unimap-inspector" id="tm-unimap-inspector">
                   <div class="tm-unimap-preview-header">
                     <div class="tm-unimap-preview-box font-unifont" id="tm-unimap-preview-glyph">A</div>
                     <div class="tm-unimap-char-title">
-                      <div class="tm-unimap-cp-badge" id="tm-unimap-cp-badge">U+0041</div>
+                      <div style="display:flex; align-items:center; gap:6px;">
+                        <div class="tm-unimap-cp-badge" id="tm-unimap-cp-badge">U+0041</div>
+                        <span id="tm-unimap-age-pill" class="tm-unimap-tag">Unicode 1.1</span>
+                      </div>
                       <div class="tm-unimap-name-badge" id="tm-unimap-name-badge">LATIN CAPITAL LETTER A</div>
                     </div>
                   </div>
@@ -2397,29 +2479,80 @@ Volume  : ${vol}%`;
                       <tr><td class="prop-lbl">decimal:</td><td class="prop-val" id="tm-unimap-p-dec">65</td></tr>
                       <tr><td class="prop-lbl">block:</td><td class="prop-val" id="tm-unimap-p-block">Basic Latin</td></tr>
                       <tr><td class="prop-lbl">plane:</td><td class="prop-val" id="tm-unimap-p-plane">Plane 0 (BMP)</td></tr>
+                      <tr><td class="prop-lbl">script:</td><td class="prop-val" id="tm-unimap-p-script">Latin</td></tr>
                       <tr><td class="prop-lbl">category:</td><td class="prop-val" id="tm-unimap-p-cat">Lu (Letter, uppercase)</td></tr>
                       <tr><td class="prop-lbl">bidi class:</td><td class="prop-val" id="tm-unimap-p-bidi">L (Left-to-Right)</td></tr>
                       <tr><td class="prop-lbl">combining:</td><td class="prop-val" id="tm-unimap-p-ccc">0 (Spacing / Base)</td></tr>
-                      <tr><td class="prop-lbl">script:</td><td class="prop-val" id="tm-unimap-p-script">Latin</td></tr>
+                      <tr><td class="prop-lbl">ea width:</td><td class="prop-val" id="tm-unimap-p-eaw">Na (Narrow)</td></tr>
+                      <tr><td class="prop-lbl">line break:</td><td class="prop-val" id="tm-unimap-p-lb">AL (Alphabetic)</td></tr>
+                      <tr id="tm-unimap-row-mirrored" style="display:none;"><td class="prop-lbl">mirrored:</td><td class="prop-val" id="tm-unimap-p-mirrored">No</td></tr>
                       <tr id="tm-unimap-row-decomp" style="display:none;"><td class="prop-lbl">decomp:</td><td class="prop-val" id="tm-unimap-p-decomp">-</td></tr>
                       <tr id="tm-unimap-row-numeric" style="display:none;"><td class="prop-lbl">numeric:</td><td class="prop-val" id="tm-unimap-p-numeric">-</td></tr>
                       <tr id="tm-unimap-row-cases" style="display:none;"><td class="prop-lbl">mappings:</td><td class="prop-val" id="tm-unimap-p-cases">-</td></tr>
+                      <tr id="tm-unimap-row-indic" style="display:none;"><td class="prop-lbl">indic:</td><td class="prop-val" id="tm-unimap-p-indic">-</td></tr>
+                      <tr id="tm-unimap-row-arabic" style="display:none;"><td class="prop-lbl">arabic join:</td><td class="prop-val" id="tm-unimap-p-arabic">-</td></tr>
                       <tr id="tm-unimap-row-alias" style="display:none;"><td class="prop-lbl">alias:</td><td class="prop-val" id="tm-unimap-p-alias">-</td></tr>
-                      <tr><td class="prop-lbl">mirrored:</td><td class="prop-val" id="tm-unimap-p-mirrored">No</td></tr>
-                      <tr><td class="prop-lbl">UTF-8:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf8" title="click to copy">41</span></td></tr>
-                      <tr><td class="prop-lbl">UTF-16:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf16" title="click to copy">0041</span></td></tr>
-                      <tr><td class="prop-lbl">HTML dec:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmldec" title="click to copy">&#65;</span></td></tr>
-                      <tr><td class="prop-lbl">HTML hex:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlhex" title="click to copy">&#x0041;</span></td></tr>
-                      <tr><td class="prop-lbl">HTML entity:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlent" title="click to copy">-</span></td></tr>
-                      <tr><td class="prop-lbl">escape:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-escape" title="click to copy">\u0041</span></td></tr>
                     </tbody>
                   </table>
 
-                  <div class="tm-unimap-actions">
+                  <!-- Dynamic Script-Specific Cards -->
+                  <div id="tm-unimap-card-cjk" class="tm-unimap-card" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <div class="tm-unimap-card-title">Unihan (CJK Ideograph Data)</div>
+                      <span id="tm-unimap-cjk-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="Switch to RSIndex tab and view this character">㊎ view in RSIndex →</span>
+                    </div>
+                    <div id="tm-unimap-cjk-content" class="tm-unimap-cjk-content"></div>
+                  </div>
+
+                  <div id="tm-unimap-card-kemet" class="tm-unimap-card" style="display:none;">
+                    <div class="tm-unimap-card-title">Egyptian Hieroglyph (Unikemet)</div>
+                    <div><strong>gardiner:</strong> <span id="tm-unimap-kemet-code" class="c-accent">-</span></div>
+                    <div><strong>description:</strong> <span id="tm-unimap-kemet-desc" style="color:#ddd;">-</span></div>
+                    <div><strong>function:</strong> <span id="tm-unimap-kemet-func">-</span></div>
+                  </div>
+
+                  <div id="tm-unimap-card-emoji" class="tm-unimap-card" style="display:none;">
+                    <div class="tm-unimap-card-title">Emoji Metadata</div>
+                    <div><strong>group:</strong> <span id="tm-unimap-emoji-group" class="c-accent">-</span></div>
+                    <div><strong>subgroup:</strong> <span id="tm-unimap-emoji-subgroup">-</span></div>
+                    <div><strong>qualification:</strong> <span id="tm-unimap-emoji-status">-</span></div>
+                  </div>
+
+                  <div id="tm-unimap-card-security" class="tm-unimap-card" style="display:none;">
+                    <div class="tm-unimap-card-title">Security & Confusables</div>
+                    <div id="tm-unimap-sec-conf-row" style="display:none;"><strong>confusable with:</strong> <span id="tm-unimap-sec-target" class="tm-unimap-link">-</span> (<span id="tm-unimap-sec-type">-</span>)</div>
+                    <div><strong>id status:</strong> <span id="tm-unimap-sec-idstatus">-</span></div>
+                  </div>
+
+                  <div id="tm-unimap-card-nameslist" class="tm-unimap-card" style="display:none;">
+                    <div class="tm-unimap-card-title">Annotations & Cross-References</div>
+                    <div id="tm-unimap-nl-aliases" style="display:none; color:#bbb;"></div>
+                    <div id="tm-unimap-nl-notes" style="display:none; color:#bbb;"></div>
+                    <div id="tm-unimap-nl-seealso" style="display:none;"></div>
+                  </div>
+
+                  <div class="tm-unimap-card-title" style="margin-top:2px;">Encodings & Escape Sequences</div>
+                  <table class="tm-unimap-props-table">
+                    <tbody>
+                      <tr><td class="prop-lbl">UTF-8:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf8" title="click to copy">41</span></td></tr>
+                      <tr><td class="prop-lbl">UTF-16:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf16" title="click to copy">0041</span></td></tr>
+                      <tr><td class="prop-lbl">UTF-32:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf32" title="click to copy">00000041</span></td></tr>
+                      <tr><td class="prop-lbl">HTML dec:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmldec" title="click to copy">&#65;</span></td></tr>
+                      <tr><td class="prop-lbl">HTML hex:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlhex" title="click to copy">&#x0041;</span></td></tr>
+                      <tr><td class="prop-lbl">HTML ent:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlent" title="click to copy">-</span></td></tr>
+                      <tr><td class="prop-lbl">JS escape:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-escape" title="click to copy">\\u0041</span></td></tr>
+                      <tr><td class="prop-lbl">Python:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-pyescape" title="click to copy">\\x41</span></td></tr>
+                      <tr><td class="prop-lbl">CSS:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-cssescape" title="click to copy">\\41 </span></td></tr>
+                      <tr><td class="prop-lbl">URL enc:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-urlenc" title="click to copy">%41</span></td></tr>
+                    </tbody>
+                  </table>
+
+                  <div class="tm-unimap-actions" style="margin-top:6px;">
+                    <button type="button" class="tm-btn" id="tm-unimap-prev-char-btn" title="Previous character">◀</button>
                     <button type="button" class="tm-btn tm-btn-primary" id="tm-unimap-insert-btn" style="flex:1;">insert</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-char-btn">copy char</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-cp-btn">copy U+</button>
-                    <button type="button" class="tm-btn" id="tm-unimap-inspect-sel-btn" title="inspect selected">inspect selected</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-next-char-btn" title="Next character">▶</button>
                   </div>
                 </div>
               </div>
@@ -3785,17 +3918,22 @@ Volume  : ${vol}%`;
         let currentCp = 0x0041;
         let pageStart = 0x0000;
         let currentFontMode = 'unifont';
+        let currentFilter = 'all';
 
         const planeSelect = document.getElementById('tm-unimap-plane-select');
         const blockSelect = document.getElementById('tm-unimap-block-select');
         const fontSelect = document.getElementById('tm-unimap-font-select');
+        const filterSelect = document.getElementById('tm-unimap-filter-select');
         const gridEl = document.getElementById('tm-unimap-grid');
         const rangeLbl = document.getElementById('tm-unimap-range-lbl');
         const blockLbl = document.getElementById('tm-unimap-block-lbl');
+        const filterIndicator = document.getElementById('tm-unimap-grid-filter-status') || document.getElementById('tm-unimap-filter-indicator');
         const prevBlkBtn = document.getElementById('tm-unimap-prev-blk');
         const nextBlkBtn = document.getElementById('tm-unimap-next-blk');
         const prevPageBtn = document.getElementById('tm-unimap-prev-page');
         const nextPageBtn = document.getElementById('tm-unimap-next-page');
+        const prevCharBtn = document.getElementById('tm-unimap-prev-char-btn');
+        const nextCharBtn = document.getElementById('tm-unimap-next-char-btn');
         const gotoInput = document.getElementById('tm-unimap-goto-input');
         const gotoBtn = document.getElementById('tm-unimap-goto-btn');
         const searchInput = document.getElementById('tm-unimap-search-input');
@@ -3804,11 +3942,30 @@ Volume  : ${vol}%`;
         const insertBtn = document.getElementById('tm-unimap-insert-btn');
         const copyCharBtn = document.getElementById('tm-unimap-copy-char-btn');
         const copyCpBtn = document.getElementById('tm-unimap-copy-cp-btn');
-        const inspectSelBtn = document.getElementById('tm-unimap-inspect-sel-btn');
+        let activeTab = 'map';
+        let currentRadicalNum = 1;
+        let rsData = (engine && engine.rsIndexCache) || (typeof window !== 'undefined' && window.__UNICODE_RSINDEX__) || null;
+
+        const tabMapBtn = document.getElementById('tm-unimap-tab-map');
+        const tabRsBtn = document.getElementById('tm-unimap-tab-rs');
+        const toolbarMap = document.getElementById('tm-unimap-toolbar-map');
+        const toolbarRs = document.getElementById('tm-unimap-toolbar-rs');
+        const paneMap = document.getElementById('tm-unimap-pane-map');
+        const paneRs = document.getElementById('tm-unimap-pane-rs');
+        const radSelect = document.getElementById('tm-unimap-rs-rad-select');
+        const strokeSelect = document.getElementById('tm-unimap-rs-stroke-select');
+        const prevRadBtn = document.getElementById('tm-unimap-rs-prev-rad');
+        const nextRadBtn = document.getElementById('tm-unimap-rs-next-rad');
+        const rsContainer = document.getElementById('tm-unimap-rs-container');
+        const rsInfoLbl = document.getElementById('tm-unimap-rs-info-lbl');
+        const rsTotalLbl = document.getElementById('tm-unimap-rs-total-lbl');
+        const rsFindInput = document.getElementById('tm-unimap-rs-find-input');
+        const rsFindBtn = document.getElementById('tm-unimap-rs-find-btn');
+        const rsJumpBtn = document.getElementById('tm-unimap-cjk-rs-jump');
         const textarea = document.getElementById('tm-textarea');
 
         if (planeSelect) {
-          planeSelect.innerHTML = `<option value="all">All Planes (346 Blocks)</option>` + engine.planes.map(p =>
+          planeSelect.innerHTML = `<option value="all">All Planes (${engine.blocks.length} Blocks)</option>` + engine.planes.map(p =>
             `<option value="${p.id}">${escapeHTML(p.name)}</option>`
           ).join('');
         }
@@ -3843,6 +4000,8 @@ Volume  : ${vol}%`;
           }
         };
 
+        populateBlocks('all');
+
         const updateInspector = (cp) => {
           currentCp = cp;
           const info = engine.getUnicodeCharInfo(cp);
@@ -3859,14 +4018,65 @@ Volume  : ${vol}%`;
 
           setTxt('tm-unimap-cp-badge', info.formattedHex);
           setTxt('tm-unimap-name-badge', info.name);
+
+          const agePill = document.getElementById('tm-unimap-age-pill');
+          if (agePill) {
+            agePill.textContent = `Unicode ${info.age}`;
+            if (info.isNewIn18) {
+              agePill.className = 'tm-unimap-tag tag-new';
+              agePill.title = 'New addition in Unicode 18.0 (2026)!';
+            } else {
+              agePill.className = 'tm-unimap-tag';
+              agePill.title = `Introduced in Unicode ${info.age}`;
+            }
+          }
+
           setTxt('tm-unimap-p-dec', info.dec);
           setTxt('tm-unimap-p-block', info.block.name);
           setTxt('tm-unimap-p-plane', info.plane.name);
+          setTxt('tm-unimap-p-script', info.script);
           setTxt('tm-unimap-p-cat', `${info.category.code} (${info.category.name})`);
           setTxt('tm-unimap-p-bidi', `${info.bidiClass ? `${info.bidiClass.code} (${info.bidiClass.name})` : 'L (Left-to-Right)'}`);
           setTxt('tm-unimap-p-ccc', `${info.combiningClass ? `${info.combiningClass.value} (${info.combiningClass.name})` : '0 (Spacing / Base)'}`);
-          setTxt('tm-unimap-p-script', info.script);
-          setTxt('tm-unimap-p-mirrored', info.bidiMirrored ? 'Yes' : 'No');
+          setTxt('tm-unimap-p-eaw', `${info.eastAsianWidth.code} (${info.eastAsianWidth.name})`);
+          setTxt('tm-unimap-p-lb', `${info.lineBreak.code} (${info.lineBreak.name})`);
+
+          // Mirrored
+          const mirroredRow = document.getElementById('tm-unimap-row-mirrored');
+          if (mirroredRow) {
+            if (info.bidiMirrored && info.mirroredCp) {
+              mirroredRow.style.display = '';
+              const mHex = 'U+' + info.mirroredCp.toString(16).toUpperCase().padStart(4, '0');
+              const elVal = document.getElementById('tm-unimap-p-mirrored');
+              if (elVal) {
+                elVal.innerHTML = `<span class="tm-unimap-link" data-jump-cp="${info.mirroredCp}">Yes → ${mHex} (${escapeHTML(info.mirroredChar)})</span>`;
+              }
+            } else {
+              mirroredRow.style.display = 'none';
+            }
+          }
+
+          // Indic
+          const indicRow = document.getElementById('tm-unimap-row-indic');
+          if (indicRow) {
+            if (info.indic && (info.indic.positional || info.indic.syllabic)) {
+              indicRow.style.display = '';
+              setTxt('tm-unimap-p-indic', `${info.indic.syllabic || 'Base'} [Pos: ${info.indic.positional || 'None'}]`);
+            } else {
+              indicRow.style.display = 'none';
+            }
+          }
+
+          // Arabic
+          const arabicRow = document.getElementById('tm-unimap-row-arabic');
+          if (arabicRow) {
+            if (info.arabic) {
+              arabicRow.style.display = '';
+              setTxt('tm-unimap-p-arabic', `${info.arabic.joiningType} (${info.arabic.joiningGroup})`);
+            } else {
+              arabicRow.style.display = 'none';
+            }
+          }
 
           const decompRow = document.getElementById('tm-unimap-row-decomp');
           if (decompRow) {
@@ -3900,20 +4110,237 @@ Volume  : ${vol}%`;
 
           const aliasRow = document.getElementById('tm-unimap-row-alias');
           if (aliasRow) {
-            if (info.oldName) {
+            const aliasItems = [];
+            if (info.oldName) aliasItems.push(`1.0: ${info.oldName}`);
+            if (info.formalAliases && info.formalAliases.length > 0) {
+              info.formalAliases.forEach(a => aliasItems.push(`${a[0]} (${a[1]})`));
+            }
+            if (aliasItems.length > 0) {
               aliasRow.style.display = '';
-              setTxt('tm-unimap-p-alias', info.oldName);
+              setTxt('tm-unimap-p-alias', aliasItems.join(', '));
             } else {
               aliasRow.style.display = 'none';
             }
           }
 
+          // Specialized Cards: CJK
+          const cjkCard = document.getElementById('tm-unimap-card-cjk');
+          const cjkContent = document.getElementById('tm-unimap-cjk-content');
+          if (cjkCard) {
+            const isCjk = (cp >= 0x3400 && cp <= 0x4DBF) || (cp >= 0x4E00 && cp <= 0x9FFF) || (cp >= 0x20000 && cp <= 0x3347F);
+            if (isCjk) {
+              cjkCard.style.display = 'flex';
+              if (cjkContent) cjkContent.innerHTML = '<div style="color:#777; font-size:0.72rem;">Loading Unihan properties...</div>';
+              engine.ensureUnihan(cp).then(han => {
+                if (currentCp !== cp) return;
+                if (!han) {
+                  if (cjkContent) cjkContent.innerHTML = '<div style="color:#777; font-size:0.72rem;">No Unihan readings recorded for this character.</div>';
+                  return;
+                }
+
+                const addRow = (label, val, isAccent = false, isQuote = false) => {
+                  if (!val) return '';
+                  return `<div style="line-height:1.35;"><span style="color:#888;">${escapeHTML(label)}:</span> <span class="${isAccent ? 'c-accent ansi-bold' : ''}" style="${isQuote ? 'color:#eee;' : ''}">${val}</span></div>`;
+                };
+
+                const formatVariantList = (str) => {
+                  if (!str) return '';
+                  const tokens = str.trim().split(/\s+/);
+                  return tokens.map(tok => {
+                    const m = tok.match(/^(U\+[0-9A-Fa-f]{4,6})(?:<([^>]+))?$/i);
+                    if (!m) return escapeHTML(tok);
+                    const hex = m[1].toUpperCase();
+                    const rawSources = m[2];
+                    const cp = parseInt(hex.slice(2), 16);
+                    let ch = '';
+                    try { ch = String.fromCodePoint(cp); } catch (e) {}
+
+                    let out = `<span class="tm-unimap-link" data-jump-cp="${cp}">${hex}${ch ? ` (${escapeHTML(ch)})` : ''}</span>`;
+                    if (rawSources) {
+                      const cleanSources = rawSources.split(',').map(s => {
+                        const [name, qual] = s.split(':');
+                        const cleanName = name.replace(/^k/, '');
+                        if (qual) return `${cleanName} (${qual})`;
+                        return cleanName;
+                      }).join(', ');
+                      out += ` <span class="c-dim" style="font-size:0.68rem; background:#181818; border:1px solid #282828; padding:0 4px; border-radius:3px;" title="Dictionary sources: ${escapeHTML(cleanSources)}">[${escapeHTML(cleanSources)}]</span>`;
+                    }
+                    return out;
+                  }).join(', ');
+                };
+
+                let rsFormatted = han.rs || '-';
+                if (han.rs) {
+                  const m = han.rs.match(/^(\d+)('?)\.(\d+)$/);
+                  if (m) {
+                    const radNum = parseInt(m[1], 10);
+                    let radChar = '';
+                    if (engine.rsIndexCache) {
+                      const rObj = engine.rsIndexCache.find(r => r.num === radNum);
+                      if (rObj) radChar = rObj.char;
+                    }
+                    rsFormatted = `${radNum}${radChar ? `(${radChar})` : ''}${m[2]}.${m[3]}`;
+                  }
+                }
+
+                let html = '';
+                html += addRow('standard radical-stroke count', escapeHTML(rsFormatted));
+                html += addRow('total number of strokes', escapeHTML(han.s || '-'));
+                html += addRow('definition', escapeHTML(han.d || '(none)'), false, true);
+                html += addRow('pīnyīn reading', escapeHTML(han.m || ''), true);
+                html += addRow('Cantonese reading', escapeHTML(han.c || ''));
+                html += addRow('Tang dynasty pronunciation', escapeHTML(han.tang || ''));
+                html += addRow('pronunciation and frequency by Xiandai Hanyu Pinlu Cidian', escapeHTML(han.pinlu || ''));
+                html += addRow('Hànyǔ Pīnyīn reading in the Xiàndài Hànyǔ Cídiǎn', escapeHTML(han.xhc || ''));
+                html += addRow('Hànyǔ Pīnyīn reading', escapeHTML(han.hypy || ''));
+                html += addRow('Hànyǔ Pīnyīn reading in Tōngyòng Guīfàn Hànzì Zìdiǎn', escapeHTML(han.tgh || ''));
+                html += addRow('Mandarin and Cantonese readings in the Soengmou San Zidin', escapeHTML(han.smszd || ''));
+                html += addRow('Fanqie reading', escapeHTML(han.fq || ''));
+                html += addRow('Japanese pronunciation', escapeHTML(han.ja_kun || ''));
+                html += addRow('Sino-Japanese pronunciation', escapeHTML(han.ja_on || ''));
+                html += addRow('Japanese reading in Kana', escapeHTML(han.ja_kana || ''));
+                html += addRow('Korean pronunciation', escapeHTML(han.ko || ''));
+                html += addRow('Korean pronunciation in Hangul', escapeHTML(han.ko_hangul || ''));
+                html += addRow('pronunciation in Quốc ngữ', escapeHTML(han.vi || ''));
+                html += addRow('Cangjie input code', escapeHTML(han.cj || ''));
+                html += addRow('Four-Corner Code', escapeHTML(han.fc || ''));
+                html += addRow('Hong Kong primary grade level', escapeHTML(han.gr || ''));
+                html += addRow('Phonetic series', escapeHTML(han.ph || ''));
+                html += addRow('Chinese numeric value', escapeHTML(han.num || ''));
+                if (han.sim) html += addRow('simplified variant', formatVariantList(han.sim));
+                if (han.trad) html += addRow('traditional variant', formatVariantList(han.trad));
+                if (han.sem) html += addRow('semantic variant', formatVariantList(han.sem));
+                if (han.zvar) html += addRow('z-variant', formatVariantList(han.zvar));
+
+                if (cjkContent) cjkContent.innerHTML = html;
+              });
+            } else {
+              cjkCard.style.display = 'none';
+            }
+          }
+
+          // Specialized Cards: Egyptian Hieroglyphs
+          const kemetCard = document.getElementById('tm-unimap-card-kemet');
+          if (kemetCard) {
+            const isKemet = (cp >= 0x13000 && cp <= 0x143FF);
+            if (isKemet) {
+              kemetCard.style.display = 'flex';
+              engine.ensureUnikemet(cp).then(km => {
+                if (currentCp !== cp) return;
+                setTxt('tm-unimap-kemet-code', km && km.g ? km.g : '-');
+                setTxt('tm-unimap-kemet-desc', km && km.desc ? km.desc : '-');
+                setTxt('tm-unimap-kemet-func', km && km.func ? km.func : '-');
+              });
+            } else {
+              kemetCard.style.display = 'none';
+            }
+          }
+
+          // Specialized Cards: Emoji
+          const emojiCard = document.getElementById('tm-unimap-card-emoji');
+          if (emojiCard) {
+            engine.ensureEmoji(cp).then(em => {
+              if (currentCp !== cp) return;
+              if (em) {
+                emojiCard.style.display = 'flex';
+                setTxt('tm-unimap-emoji-group', em[0] || '-');
+                setTxt('tm-unimap-emoji-subgroup', em[1] || '-');
+                setTxt('tm-unimap-emoji-status', em[2] || '-');
+              } else {
+                emojiCard.style.display = 'none';
+              }
+            });
+          }
+
+          // Specialized Cards: Security & Confusables
+          const secCard = document.getElementById('tm-unimap-card-security');
+          if (secCard) {
+            engine.ensureSecurity(cp).then(sec => {
+              if (currentCp !== cp) return;
+              if (sec && (sec.confusable || (sec.idStatus && sec.idStatus !== 'Allowed'))) {
+                secCard.style.display = 'flex';
+                const confRow = document.getElementById('tm-unimap-sec-conf-row');
+                if (confRow) {
+                  if (sec.confusable) {
+                    confRow.style.display = '';
+                    const tgtHex = sec.confusable[0];
+                    let tgtChar = '';
+                    try { tgtChar = String.fromCodePoint(parseInt(tgtHex, 16)); } catch(e) {}
+                    const elTgt = document.getElementById('tm-unimap-sec-target');
+                    if (elTgt) {
+                      elTgt.textContent = `U+${tgtHex} ${tgtChar ? `(${tgtChar})` : ''}`;
+                      elTgt.dataset.jumpCp = parseInt(tgtHex, 16);
+                    }
+                    setTxt('tm-unimap-sec-type', sec.confusable[1]);
+                  } else {
+                    confRow.style.display = 'none';
+                  }
+                }
+                setTxt('tm-unimap-sec-idstatus', sec.idStatus === 'Allowed' ? 'Allowed in identifiers (UAX #31)' : `${sec.idStatus} in identifiers`);
+              } else {
+                secCard.style.display = 'none';
+              }
+            });
+          }
+
+          // Specialized Cards: NamesList Annotations
+          const nlCard = document.getElementById('tm-unimap-card-nameslist');
+          if (nlCard) {
+            engine.ensureNamesList(cp).then(nl => {
+              if (currentCp !== cp) return;
+              if (nl && (nl.a || nl.n || nl.x)) {
+                nlCard.style.display = 'flex';
+                const elAliases = document.getElementById('tm-unimap-nl-aliases');
+                if (elAliases) {
+                  if (nl.a && nl.a.length > 0) {
+                    elAliases.style.display = '';
+                    elAliases.innerHTML = nl.a.map(a => `<div>• = ${escapeHTML(a)}</div>`).join('');
+                  } else {
+                    elAliases.style.display = 'none';
+                  }
+                }
+                const elNotes = document.getElementById('tm-unimap-nl-notes');
+                if (elNotes) {
+                  if (nl.n && nl.n.length > 0) {
+                    elNotes.style.display = '';
+                    elNotes.innerHTML = nl.n.map(n => `<div>• * ${escapeHTML(n)}</div>`).join('');
+                  } else {
+                    elNotes.style.display = 'none';
+                  }
+                }
+                const elSee = document.getElementById('tm-unimap-nl-seealso');
+                if (elSee) {
+                  if (nl.x && nl.x.length > 0) {
+                    elSee.style.display = '';
+                    elSee.innerHTML = nl.x.map(xStr => {
+                      const hexM = xStr.match(/([0-9A-Fa-f]{4,6})/);
+                      if (hexM) {
+                        const targetCp = parseInt(hexM[1], 16);
+                        return `<div>→ <span class="tm-unimap-link" data-jump-cp="${targetCp}">see also ${escapeHTML(xStr)}</span></div>`;
+                      }
+                      return `<div>→ see also ${escapeHTML(xStr)}</div>`;
+                    }).join('');
+                  } else {
+                    elSee.style.display = 'none';
+                  }
+                }
+              } else {
+                nlCard.style.display = 'none';
+              }
+            });
+          }
+
+          // Encodings
           setTxt('tm-unimap-p-utf8', info.utf8Hex || '-');
           setTxt('tm-unimap-p-utf16', info.utf16Hex || '-');
+          setTxt('tm-unimap-p-utf32', info.utf32Hex || '-');
           setTxt('tm-unimap-p-htmldec', info.htmlDec);
           setTxt('tm-unimap-p-htmlhex', info.htmlHex);
           setTxt('tm-unimap-p-htmlent', info.htmlNamed || '-');
           setTxt('tm-unimap-p-escape', info.escapeJs);
+          setTxt('tm-unimap-p-pyescape', info.escapePython);
+          setTxt('tm-unimap-p-cssescape', info.escapeCss);
+          setTxt('tm-unimap-p-urlenc', info.percentEncoded || '-');
 
           if (gridEl) {
             const cells = gridEl.querySelectorAll('.tm-unimap-cell');
@@ -3946,6 +4373,11 @@ Volume  : ${vol}%`;
           if (blockSelect) {
             const opt = Array.from(blockSelect.options).find(o => parseInt(o.value, 10) === blk.start);
             if (opt) blockSelect.value = opt.value;
+          }
+
+          if (filterIndicator) {
+            filterIndicator.style.display = currentFilter === 'all' ? 'none' : 'block';
+            filterIndicator.textContent = `Unicode ${currentFilter} Filter Active`;
           }
 
           let gridHtml = '<div class="tm-unimap-col-hdr">U+</div>';
@@ -3982,8 +4414,22 @@ Volume  : ${vol}%`;
                 display = escapeHTML(info.char || '');
               }
 
-              const title = `${info.formattedHex}: ${escapeHTML(info.name)}`;
-              gridHtml += `<div class="${cellClass}" data-cp="${cp}" title="${title}">${display}</div>`;
+              let badgeStyle = '';
+              if (info.isNewIn18) {
+                cellClass += ' new-in-18';
+                badgeStyle = 'style="box-shadow: inset 0 0 0 1px #00ff66;"';
+              }
+
+              if (currentFilter !== 'all') {
+                if (info.age === currentFilter) {
+                  badgeStyle = 'style="box-shadow: inset 0 0 0 1px var(--accent-color);"';
+                } else {
+                  cellClass += ' dim';
+                }
+              }
+
+              const title = `${info.formattedHex}: ${escapeHTML(info.name)} [Unicode ${info.age}]`;
+              gridHtml += `<div class="${cellClass}" ${badgeStyle} data-cp="${cp}" title="${title}">${display}</div>`;
             }
           }
 
@@ -4022,12 +4468,91 @@ Volume  : ${vol}%`;
           });
         }
 
+        // Delegate clicks on jump links in inspector
+        const inspPane = document.getElementById('tm-unimap-inspector');
+        if (inspPane) {
+          inspPane.addEventListener('click', (e) => {
+            const link = e.target.closest('.tm-unimap-link[data-jump-cp]');
+            if (link && link.dataset.jumpCp) {
+              const cp = parseInt(link.dataset.jumpCp, 10);
+              jumpToCodePoint(cp);
+              this.setStatus(`Jumped to U+${cp.toString(16).toUpperCase().padStart(4, '0')}`);
+            }
+          });
+        }
+
         if (fontSelect) {
           fontSelect.addEventListener('change', () => {
             currentFontMode = fontSelect.value;
             if (gridEl) gridEl.className = `tm-unimap-grid font-${currentFontMode}`;
             if (previewGlyph) previewGlyph.className = `tm-unimap-preview-box font-${currentFontMode}`;
-            this.setStatus(`Font switched to ${currentFontMode === 'unifont' ? 'Unifont' : 'Native / System Font'}`);
+            this.setStatus(`Font switched to ${fontSelect.options[fontSelect.selectedIndex].text}`);
+          });
+        }
+
+        const versionFirstCp = {
+          '18.0': 0x0558,
+          '17.0': 0x088F,
+          '16.0': 0x0897,
+          '15.1': 0x2FFC,
+          '15.0': 0x0CF3,
+          '14.0': 0x061D,
+          '13.0': 0x08BE,
+          '12.1': 0x32FF,
+          '12.0': 0x0C77,
+          '11.0': 0x0560,
+          '10.0': 0x0860,
+          '9.0': 0x08B6,
+          '8.0': 0x08B3,
+          '7.0': 0x037F,
+          '6.3': 0x061C,
+          '6.2': 0x20BA,
+          '6.1': 0x058F,
+          '6.0': 0x0526,
+          '5.2': 0x0524,
+          '5.1': 0x0370,
+          '5.0': 0x0242,
+          '4.1': 0x0237,
+          '4.0': 0x0221,
+          '3.2': 0x0220,
+          '3.1': 0x03F4,
+          '3.0': 0x01F6,
+          '2.1': 0x20AC,
+          '2.0': 0x0591,
+          '1.1': 0x0000
+        };
+
+        if (filterSelect) {
+          filterSelect.addEventListener('change', () => {
+            currentFilter = filterSelect.value;
+            if (currentFilter !== 'all') {
+              const target = versionFirstCp[currentFilter];
+              if (target !== undefined) {
+                jumpToCodePoint(target);
+              } else {
+                renderGrid();
+              }
+              this.setStatus(`Filtered to Unicode ${currentFilter} additions`);
+            } else {
+              renderGrid();
+              this.setStatus('Showing all Unicode characters');
+            }
+          });
+        }
+
+        if (prevCharBtn) {
+          prevCharBtn.addEventListener('click', () => {
+            if (currentCp > 0) {
+              jumpToCodePoint(currentCp - 1);
+            }
+          });
+        }
+
+        if (nextCharBtn) {
+          nextCharBtn.addEventListener('click', () => {
+            if (currentCp < 0x10FFFF) {
+              jumpToCodePoint(currentCp + 1);
+            }
           });
         }
 
@@ -4147,7 +4672,7 @@ Volume  : ${vol}%`;
               return;
             }
 
-            const results = engine.searchUnicode(q, 20);
+            const results = engine.searchUnicode(q, 25);
             if (results.length === 0) {
               searchResults.style.display = 'block';
               searchResults.innerHTML = '<span class="c-dim">no matches found</span>';
@@ -4156,11 +4681,12 @@ Volume  : ${vol}%`;
 
             searchResults.style.display = 'block';
             searchResults.innerHTML = results.map(r => `
-              <div class="tm-unimap-search-item" data-cp="${r.cp}" style="display:flex; align-items:center; gap:8px; padding:2px 4px; cursor:pointer; border-bottom:1px solid #222;">
+              <div class="tm-unimap-search-item" data-cp="${r.cp}" style="display:flex; align-items:center; gap:8px; padding:3px 4px; cursor:pointer; border-bottom:1px solid #222;">
                 <span class="c-accent" style="font-family:monospace; min-width:65px;">${r.formattedHex}</span>
                 <span style="font-size:1.1rem; min-width:24px; text-align:center;">${escapeHTML(r.char || ' ')}</span>
                 <span style="color:#ddd; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(r.name)}</span>
                 <span class="c-dim" style="font-size:0.7rem;">${escapeHTML(r.block.name)}</span>
+                ${r.isNewIn18 ? '<span class="tm-unimap-tag tag-new" style="font-size:0.6rem;">18.0</span>' : ''}
               </div>
             `).join('');
           });
@@ -4218,33 +4744,10 @@ Volume  : ${vol}%`;
           });
         }
 
-        if (inspectSelBtn && textarea) {
-          inspectSelBtn.addEventListener('click', () => {
-            let targetChar = '';
-            if (textarea.selectionStart !== undefined && textarea.selectionEnd > textarea.selectionStart) {
-              targetChar = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
-            } else if (textarea.selectionStart !== undefined && textarea.selectionStart < textarea.value.length) {
-              targetChar = textarea.value.substring(textarea.selectionStart, textarea.selectionStart + 2);
-            } else if (textarea.value.length > 0) {
-              targetChar = textarea.value.substring(0, 2);
-            }
-
-            if (!targetChar) {
-              this.setStatus('Editor is empty. Type or paste text to inspect.');
-              return;
-            }
-
-            const cp = targetChar.codePointAt(0);
-            if (cp !== undefined) {
-              jumpToCodePoint(cp);
-              this.setStatus(`Inspecting '${String.fromCodePoint(cp)}' (U+${cp.toString(16).toUpperCase().padStart(4, '0')}) from editor`);
-            }
-          });
-        }
-
         const copyableIds = [
-          'tm-unimap-p-utf8', 'tm-unimap-p-utf16', 'tm-unimap-p-htmldec',
-          'tm-unimap-p-htmlhex', 'tm-unimap-p-htmlent', 'tm-unimap-p-escape'
+          'tm-unimap-p-utf8', 'tm-unimap-p-utf16', 'tm-unimap-p-utf32', 'tm-unimap-p-htmldec',
+          'tm-unimap-p-htmlhex', 'tm-unimap-p-htmlent', 'tm-unimap-p-escape',
+          'tm-unimap-p-pyescape', 'tm-unimap-p-cssescape', 'tm-unimap-p-urlenc'
         ];
         copyableIds.forEach(id => {
           const el = document.getElementById(id);
@@ -4266,15 +4769,215 @@ Volume  : ${vol}%`;
           if (cp !== undefined) currentCp = cp;
         }
 
-        populateBlocks('all');
-        if (planeSelect) planeSelect.value = 'all';
+                const switchTab = (tab) => {
+          activeTab = tab;
+          if (tab === 'map') {
+            if (tabMapBtn) tabMapBtn.classList.add('active');
+            if (tabRsBtn) tabRsBtn.classList.remove('active');
+            if (toolbarMap) toolbarMap.style.display = 'flex';
+            if (toolbarRs) toolbarRs.style.display = 'none';
+            if (paneMap) paneMap.style.display = 'flex';
+            if (paneRs) paneRs.style.display = 'none';
+          } else {
+            if (tabMapBtn) tabMapBtn.classList.remove('active');
+            if (tabRsBtn) tabRsBtn.classList.add('active');
+            if (toolbarMap) toolbarMap.style.display = 'none';
+            if (toolbarRs) toolbarRs.style.display = 'flex';
+            if (paneMap) paneMap.style.display = 'none';
+            if (paneRs) paneRs.style.display = 'flex';
+            ensureRSIndexLoadedAndRender(currentRadicalNum);
+          }
+        };
+
+        if (tabMapBtn) tabMapBtn.addEventListener('click', () => switchTab('map'));
+        if (tabRsBtn) tabRsBtn.addEventListener('click', () => switchTab('rsindex'));
+
+        const updateStrokeSelect = (rad) => {
+          if (!strokeSelect) return;
+          strokeSelect.innerHTML = `<option value="all">All strokes (${rad.groups.length} groups)</option>` +
+            rad.groups.map(g => `<option value="${g.s}">${g.s} strokes (${g.cps.length})</option>`).join('');
+        };
+
+        const renderRadical = (radNum, targetCpToScroll) => {
+          if (!rsData || !rsContainer) return;
+          const rad = rsData.find(r => r.num === radNum) || rsData[0];
+          currentRadicalNum = rad.num;
+          if (radSelect && radSelect.value !== String(rad.num)) {
+            radSelect.value = String(rad.num);
+          }
+          if (rsInfoLbl) rsInfoLbl.textContent = `Radical #${rad.num} (${rad.name}) ${rad.char}`;
+          if (rsTotalLbl) rsTotalLbl.textContent = `${rad.total} characters in ${rad.groups.length} stroke groups`;
+          updateStrokeSelect(rad);
+
+          let html = '';
+          rad.groups.forEach(group => {
+            html += `<div class="tm-unimap-rs-section" id="tm-unimap-rs-sec-${group.s}" data-stroke="${group.s}">
+              <div class="tm-unimap-rs-header">
+                <span>Radical #${rad.num} (${escapeHTML(rad.name)}) ${escapeHTML(rad.char)} / ${group.s} strokes</span>
+                <span class="tm-unimap-rs-count">${group.cps.length}</span>
+              </div>
+              <div class="tm-unimap-rs-grid font-${currentFontMode}">`;
+            group.cps.forEach(cp => {
+              let ch = '';
+              try { ch = String.fromCodePoint(cp); } catch (e) {}
+              const hex = 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
+              const isActive = (cp === currentCp);
+              html += `<div class="tm-unimap-rs-cell${isActive ? ' active' : ''}" data-cp="${cp}" title="${hex}: ${escapeHTML(ch)}">${escapeHTML(ch)}</div>`;
+            });
+            html += `</div></div>`;
+          });
+
+          rsContainer.innerHTML = html;
+
+          if (targetCpToScroll) {
+            setTimeout(() => {
+              const activeEl = rsContainer.querySelector(`.tm-unimap-rs-cell[data-cp="${targetCpToScroll}"]`);
+              if (activeEl) {
+                activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }, 50);
+          }
+        };
+
+        const ensureRSIndexLoadedAndRender = (targetRadNum, targetCp) => {
+          if (rsData) {
+            if (radSelect && radSelect.children.length === 0) {
+              radSelect.innerHTML = rsData.map(r =>
+                `<option value="${r.num}">Radical #${r.num} (${escapeHTML(r.name)}) ${escapeHTML(r.char)} — ${r.total} chars</option>`
+              ).join('');
+            }
+            renderRadical(targetRadNum || currentRadicalNum, targetCp);
+            return Promise.resolve(rsData);
+          }
+          if (rsContainer) rsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Loading Radical-Stroke Index (102,999 CJK characters)...</div>';
+          return engine.ensureRSIndex().then(data => {
+            rsData = data;
+            if (radSelect) {
+              radSelect.innerHTML = rsData.map(r =>
+                `<option value="${r.num}">Radical #${r.num} (${escapeHTML(r.name)}) ${escapeHTML(r.char)} — ${r.total} chars</option>`
+              ).join('');
+            }
+            renderRadical(targetRadNum || currentRadicalNum, targetCp);
+            return rsData;
+          }).catch(err => {
+            if (rsContainer) rsContainer.innerHTML = `<div style="padding:20px; color:#ff5555;">Failed to load RSIndex: ${escapeHTML(err.message)}</div>`;
+          });
+        };
+
+        if (radSelect) {
+          radSelect.addEventListener('change', () => {
+            const num = parseInt(radSelect.value, 10);
+            renderRadical(num);
+          });
+        }
+
+        if (prevRadBtn) {
+          prevRadBtn.addEventListener('click', () => {
+            if (currentRadicalNum > 1) {
+              renderRadical(currentRadicalNum - 1);
+            }
+          });
+        }
+
+        if (nextRadBtn) {
+          nextRadBtn.addEventListener('click', () => {
+            if (currentRadicalNum < 214) {
+              renderRadical(currentRadicalNum + 1);
+            }
+          });
+        }
+
+        if (strokeSelect) {
+          strokeSelect.addEventListener('change', () => {
+            const sVal = strokeSelect.value;
+            if (sVal === 'all') {
+              if (rsContainer) rsContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              const sec = document.getElementById(`tm-unimap-rs-sec-${sVal}`);
+              if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+
+        if (rsContainer) {
+          rsContainer.addEventListener('click', (e) => {
+            const cell = e.target.closest('.tm-unimap-rs-cell');
+            if (cell && cell.dataset.cp) {
+              const cp = parseInt(cell.dataset.cp, 10);
+              updateInspector(cp);
+              rsContainer.querySelectorAll('.tm-unimap-rs-cell.active').forEach(c => c.classList.remove('active'));
+              cell.classList.add('active');
+            }
+          });
+
+          rsContainer.addEventListener('dblclick', (e) => {
+            const cell = e.target.closest('.tm-unimap-rs-cell');
+            if (cell && cell.dataset.cp) {
+              const cp = parseInt(cell.dataset.cp, 10);
+              updateInspector(cp);
+              if (insertBtn) insertBtn.click();
+            }
+          });
+        }
+
+        const handleFindCJK = () => {
+          if (!rsFindInput || !rsFindInput.value.trim()) return;
+          const val = rsFindInput.value.trim();
+          let targetCp = null;
+          const hexM = val.match(/^(?:u\+|0x)?([0-9a-f]{4,6})$/i);
+          if (hexM) {
+            targetCp = parseInt(hexM[1], 16);
+          } else if (val.length >= 1) {
+            targetCp = val.codePointAt(0);
+          }
+          if (targetCp === null || isNaN(targetCp)) return;
+
+          const info = engine.findRadicalForCodePoint(targetCp);
+          if (info) {
+            currentCp = targetCp;
+            ensureRSIndexLoadedAndRender(info.rad, targetCp);
+            updateInspector(targetCp);
+            this.setStatus(`Found '${String.fromCodePoint(targetCp)}': Radical #${info.rad} (${info.radName}) ${info.radChar}, ${info.s} strokes`);
+          } else {
+            this.setStatus(`Character U+${targetCp.toString(16).toUpperCase()} not found in Kangxi Radical-Stroke index`);
+          }
+        };
+
+        if (rsFindBtn) rsFindBtn.addEventListener('click', handleFindCJK);
+        if (rsFindInput) {
+          rsFindInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleFindCJK();
+            }
+          });
+        }
+
+        if (rsJumpBtn) {
+          rsJumpBtn.addEventListener('click', () => {
+            const info = engine.findRadicalForCodePoint(currentCp);
+            if (info) {
+              switchTab('rsindex');
+              ensureRSIndexLoadedAndRender(info.rad, currentCp);
+              this.setStatus(`Switched to RSIndex for Radical #${info.rad} (${info.radName}) ${info.radChar}`);
+            } else {
+              switchTab('rsindex');
+              ensureRSIndexLoadedAndRender(1, currentCp);
+            }
+          });
+        }
+
         jumpToCodePoint(currentCp);
+
+        if (engine.ensureUnihan && !engine.unihanBmpCache) {
+          engine.ensureUnihan(0x4E00);
+        }
 
         if (engine.loadUnicodeData && !engine.unicodeDataLoaded) {
           engine.loadUnicodeData().then(() => {
             if (this.activeToolId === 'unicodemap') {
               updateInspector(currentCp);
-              this.setStatus(`UnicodeData.txt loaded (${engine.unicodeDatabase.size} characters indexed)`);
+              this.setStatus(`Unicode 18.0.0 database loaded (${engine.unicodeDatabase.size} characters indexed)`);
             }
           });
         }
@@ -6105,8 +6808,11 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
           }
           out += `<div>│ <span class="c-dim">Decimal   :</span> ${info.dec}</div>`;
           out += `<div>│ <span class="c-dim">Block     :</span> ${escapeHTML(info.block.name)} (Plane ${info.plane.id})</div>`;
+          out += `<div>│ <span class="c-dim">Version   :</span> Unicode ${escapeHTML(info.age)}${info.isNewIn18 ? ' <span class="c-accent ansi-bold">[New in 18.0]</span>' : ''}</div>`;
           out += `<div>│ <span class="c-dim">Category  :</span> ${escapeHTML(info.category.code)} - ${escapeHTML(info.category.name)}</div>`;
           out += `<div>│ <span class="c-dim">Bidi Class:</span> ${escapeHTML(info.bidiClass.code)} (${escapeHTML(info.bidiClass.name)})</div>`;
+          out += `<div>│ <span class="c-dim">EA Width  :</span> ${escapeHTML(info.eastAsianWidth.code)} (${escapeHTML(info.eastAsianWidth.name)})</div>`;
+          out += `<div>│ <span class="c-dim">Line Break:</span> ${escapeHTML(info.lineBreak.code)} (${escapeHTML(info.lineBreak.name)})</div>`;
           if (info.combiningClass && info.combiningClass.value !== '0') {
             out += `<div>│ <span class="c-dim">Combining :</span> ${escapeHTML(info.combiningClass.value)} (${escapeHTML(info.combiningClass.name)})</div>`;
           }
@@ -9270,7 +9976,7 @@ __(@)(@)--------------------------------------(@)(@)__`;
   }
 
   function renderWelcomeBanner() {
-    bannerEl.innerHTML = `type 'help' for commands.<br>quick: 'cv', 'experience', 'works', 'languages', 'projects', 'skills'`;
+    bannerEl.innerHTML = `type 'help' for commands.<br>quick: 'cv', 'tools', 'experience', 'works', 'languages', 'projects', 'skills'`;
   }
 
   window.addEventListener('DOMContentLoaded', () => {

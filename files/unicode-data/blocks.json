@@ -1,0 +1,2473 @@
+[
+  {
+    "name": "Basic Latin",
+    "start": 0,
+    "end": 127,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Latin-1 Supplement",
+    "start": 128,
+    "end": 255,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Latin Extended-A",
+    "start": 256,
+    "end": 383,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Latin Extended-B",
+    "start": 384,
+    "end": 591,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "IPA Extensions",
+    "start": 592,
+    "end": 687,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Spacing Modifier Letters",
+    "start": 688,
+    "end": 767,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Combining Diacritical Marks",
+    "start": 768,
+    "end": 879,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Greek and Coptic",
+    "start": 880,
+    "end": 1023,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Cyrillic",
+    "start": 1024,
+    "end": 1279,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Cyrillic Supplement",
+    "start": 1280,
+    "end": 1327,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Armenian",
+    "start": 1328,
+    "end": 1423,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Hebrew",
+    "start": 1424,
+    "end": 1535,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Arabic",
+    "start": 1536,
+    "end": 1791,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Syriac",
+    "start": 1792,
+    "end": 1871,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Arabic Supplement",
+    "start": 1872,
+    "end": 1919,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Thaana",
+    "start": 1920,
+    "end": 1983,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "NKo",
+    "start": 1984,
+    "end": 2047,
+    "plane": 0,
+    "age": "5.0"
+  },
+  {
+    "name": "Samaritan",
+    "start": 2048,
+    "end": 2111,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Mandaic",
+    "start": 2112,
+    "end": 2143,
+    "plane": 0,
+    "age": "6.0"
+  },
+  {
+    "name": "Syriac Supplement",
+    "start": 2144,
+    "end": 2159,
+    "plane": 0,
+    "age": "10.0"
+  },
+  {
+    "name": "Arabic Extended-B",
+    "start": 2160,
+    "end": 2207,
+    "plane": 0,
+    "age": "14.0"
+  },
+  {
+    "name": "Arabic Extended-A",
+    "start": 2208,
+    "end": 2303,
+    "plane": 0,
+    "age": "6.1"
+  },
+  {
+    "name": "Devanagari",
+    "start": 2304,
+    "end": 2431,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Bengali",
+    "start": 2432,
+    "end": 2559,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Gurmukhi",
+    "start": 2560,
+    "end": 2687,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Gujarati",
+    "start": 2688,
+    "end": 2815,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Oriya",
+    "start": 2816,
+    "end": 2943,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Tamil",
+    "start": 2944,
+    "end": 3071,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Telugu",
+    "start": 3072,
+    "end": 3199,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Kannada",
+    "start": 3200,
+    "end": 3327,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Malayalam",
+    "start": 3328,
+    "end": 3455,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Sinhala",
+    "start": 3456,
+    "end": 3583,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Thai",
+    "start": 3584,
+    "end": 3711,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Lao",
+    "start": 3712,
+    "end": 3839,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Tibetan",
+    "start": 3840,
+    "end": 4095,
+    "plane": 0,
+    "age": "2.0"
+  },
+  {
+    "name": "Myanmar",
+    "start": 4096,
+    "end": 4255,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Georgian",
+    "start": 4256,
+    "end": 4351,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Hangul Jamo",
+    "start": 4352,
+    "end": 4607,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Ethiopic",
+    "start": 4608,
+    "end": 4991,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Ethiopic Supplement",
+    "start": 4992,
+    "end": 5023,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Cherokee",
+    "start": 5024,
+    "end": 5119,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Unified Canadian Aboriginal Syllabics",
+    "start": 5120,
+    "end": 5759,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Ogham",
+    "start": 5760,
+    "end": 5791,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Runic",
+    "start": 5792,
+    "end": 5887,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Tagalog",
+    "start": 5888,
+    "end": 5919,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Hanunoo",
+    "start": 5920,
+    "end": 5951,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Buhid",
+    "start": 5952,
+    "end": 5983,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Tagbanwa",
+    "start": 5984,
+    "end": 6015,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Khmer",
+    "start": 6016,
+    "end": 6143,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Mongolian",
+    "start": 6144,
+    "end": 6319,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Unified Canadian Aboriginal Syllabics Extended",
+    "start": 6320,
+    "end": 6399,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Limbu",
+    "start": 6400,
+    "end": 6479,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "Tai Le",
+    "start": 6480,
+    "end": 6527,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "New Tai Lue",
+    "start": 6528,
+    "end": 6623,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Khmer Symbols",
+    "start": 6624,
+    "end": 6655,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "Buginese",
+    "start": 6656,
+    "end": 6687,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Tai Tham",
+    "start": 6688,
+    "end": 6831,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Combining Diacritical Marks Extended",
+    "start": 6832,
+    "end": 6911,
+    "plane": 0,
+    "age": "7.0"
+  },
+  {
+    "name": "Balinese",
+    "start": 6912,
+    "end": 7039,
+    "plane": 0,
+    "age": "5.0"
+  },
+  {
+    "name": "Sundanese",
+    "start": 7040,
+    "end": 7103,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Batak",
+    "start": 7104,
+    "end": 7167,
+    "plane": 0,
+    "age": "6.0"
+  },
+  {
+    "name": "Lepcha",
+    "start": 7168,
+    "end": 7247,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Ol Chiki",
+    "start": 7248,
+    "end": 7295,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Cyrillic Extended-C",
+    "start": 7296,
+    "end": 7311,
+    "plane": 0,
+    "age": "9.0"
+  },
+  {
+    "name": "Georgian Extended",
+    "start": 7312,
+    "end": 7359,
+    "plane": 0,
+    "age": "11.0"
+  },
+  {
+    "name": "Sundanese Supplement",
+    "start": 7360,
+    "end": 7375,
+    "plane": 0,
+    "age": "6.1"
+  },
+  {
+    "name": "Vedic Extensions",
+    "start": 7376,
+    "end": 7423,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Phonetic Extensions",
+    "start": 7424,
+    "end": 7551,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "Phonetic Extensions Supplement",
+    "start": 7552,
+    "end": 7615,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Combining Diacritical Marks Supplement",
+    "start": 7616,
+    "end": 7679,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Latin Extended Additional",
+    "start": 7680,
+    "end": 7935,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Greek Extended",
+    "start": 7936,
+    "end": 8191,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "General Punctuation",
+    "start": 8192,
+    "end": 8303,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Superscripts and Subscripts",
+    "start": 8304,
+    "end": 8351,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Currency Symbols",
+    "start": 8352,
+    "end": 8399,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Combining Diacritical Marks for Symbols",
+    "start": 8400,
+    "end": 8447,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Letterlike Symbols",
+    "start": 8448,
+    "end": 8527,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Number Forms",
+    "start": 8528,
+    "end": 8591,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Arrows",
+    "start": 8592,
+    "end": 8703,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Mathematical Operators",
+    "start": 8704,
+    "end": 8959,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Miscellaneous Technical",
+    "start": 8960,
+    "end": 9215,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Control Pictures",
+    "start": 9216,
+    "end": 9279,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Optical Character Recognition",
+    "start": 9280,
+    "end": 9311,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Enclosed Alphanumerics",
+    "start": 9312,
+    "end": 9471,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Box Drawing",
+    "start": 9472,
+    "end": 9599,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Block Elements",
+    "start": 9600,
+    "end": 9631,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Geometric Shapes",
+    "start": 9632,
+    "end": 9727,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Miscellaneous Symbols",
+    "start": 9728,
+    "end": 9983,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Dingbats",
+    "start": 9984,
+    "end": 10175,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Miscellaneous Mathematical Symbols-A",
+    "start": 10176,
+    "end": 10223,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Supplemental Arrows-A",
+    "start": 10224,
+    "end": 10239,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Braille Patterns",
+    "start": 10240,
+    "end": 10495,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Supplemental Arrows-B",
+    "start": 10496,
+    "end": 10623,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Miscellaneous Mathematical Symbols-B",
+    "start": 10624,
+    "end": 10751,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Supplemental Mathematical Operators",
+    "start": 10752,
+    "end": 11007,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Miscellaneous Symbols and Arrows",
+    "start": 11008,
+    "end": 11263,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "Glagolitic",
+    "start": 11264,
+    "end": 11359,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Latin Extended-C",
+    "start": 11360,
+    "end": 11391,
+    "plane": 0,
+    "age": "5.0"
+  },
+  {
+    "name": "Coptic",
+    "start": 11392,
+    "end": 11519,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Georgian Supplement",
+    "start": 11520,
+    "end": 11567,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Tifinagh",
+    "start": 11568,
+    "end": 11647,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Ethiopic Extended",
+    "start": 11648,
+    "end": 11743,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Cyrillic Extended-A",
+    "start": 11744,
+    "end": 11775,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Supplemental Punctuation",
+    "start": 11776,
+    "end": 11903,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "CJK Radicals Supplement",
+    "start": 11904,
+    "end": 12031,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Kangxi Radicals",
+    "start": 12032,
+    "end": 12255,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Ideographic Description Characters",
+    "start": 12272,
+    "end": 12287,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "CJK Symbols and Punctuation",
+    "start": 12288,
+    "end": 12351,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Hiragana",
+    "start": 12352,
+    "end": 12447,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Katakana",
+    "start": 12448,
+    "end": 12543,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Bopomofo",
+    "start": 12544,
+    "end": 12591,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Hangul Compatibility Jamo",
+    "start": 12592,
+    "end": 12687,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Kanbun",
+    "start": 12688,
+    "end": 12703,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Bopomofo Extended",
+    "start": 12704,
+    "end": 12735,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "CJK Strokes",
+    "start": 12736,
+    "end": 12783,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Katakana Phonetic Extensions",
+    "start": 12784,
+    "end": 12799,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Enclosed CJK Letters and Months",
+    "start": 12800,
+    "end": 13055,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "CJK Compatibility",
+    "start": 13056,
+    "end": 13311,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension A",
+    "start": 13312,
+    "end": 19903,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Yijing Hexagram Symbols",
+    "start": 19904,
+    "end": 19967,
+    "plane": 0,
+    "age": "4.0"
+  },
+  {
+    "name": "CJK Unified Ideographs",
+    "start": 19968,
+    "end": 40959,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Yi Syllables",
+    "start": 40960,
+    "end": 42127,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Yi Radicals",
+    "start": 42128,
+    "end": 42191,
+    "plane": 0,
+    "age": "3.0"
+  },
+  {
+    "name": "Lisu",
+    "start": 42192,
+    "end": 42239,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Vai",
+    "start": 42240,
+    "end": 42559,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Cyrillic Extended-B",
+    "start": 42560,
+    "end": 42655,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Bamum",
+    "start": 42656,
+    "end": 42751,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Modifier Tone Letters",
+    "start": 42752,
+    "end": 42783,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Latin Extended-D",
+    "start": 42784,
+    "end": 43007,
+    "plane": 0,
+    "age": "5.0"
+  },
+  {
+    "name": "Syloti Nagri",
+    "start": 43008,
+    "end": 43055,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Common Indic Number Forms",
+    "start": 43056,
+    "end": 43071,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Phags-pa",
+    "start": 43072,
+    "end": 43135,
+    "plane": 0,
+    "age": "5.0"
+  },
+  {
+    "name": "Saurashtra",
+    "start": 43136,
+    "end": 43231,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Devanagari Extended",
+    "start": 43232,
+    "end": 43263,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Kayah Li",
+    "start": 43264,
+    "end": 43311,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Rejang",
+    "start": 43312,
+    "end": 43359,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Hangul Jamo Extended-A",
+    "start": 43360,
+    "end": 43391,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Javanese",
+    "start": 43392,
+    "end": 43487,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Myanmar Extended-B",
+    "start": 43488,
+    "end": 43519,
+    "plane": 0,
+    "age": "7.0"
+  },
+  {
+    "name": "Cham",
+    "start": 43520,
+    "end": 43615,
+    "plane": 0,
+    "age": "5.1"
+  },
+  {
+    "name": "Myanmar Extended-A",
+    "start": 43616,
+    "end": 43647,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Tai Viet",
+    "start": 43648,
+    "end": 43743,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Meetei Mayek Extensions",
+    "start": 43744,
+    "end": 43775,
+    "plane": 0,
+    "age": "6.1"
+  },
+  {
+    "name": "Ethiopic Extended-A",
+    "start": 43776,
+    "end": 43823,
+    "plane": 0,
+    "age": "6.0"
+  },
+  {
+    "name": "Latin Extended-E",
+    "start": 43824,
+    "end": 43887,
+    "plane": 0,
+    "age": "7.0"
+  },
+  {
+    "name": "Cherokee Supplement",
+    "start": 43888,
+    "end": 43967,
+    "plane": 0,
+    "age": "8.0"
+  },
+  {
+    "name": "Meetei Mayek",
+    "start": 43968,
+    "end": 44031,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "Hangul Syllables",
+    "start": 44032,
+    "end": 55215,
+    "plane": 0,
+    "age": "2.0"
+  },
+  {
+    "name": "Hangul Jamo Extended-B",
+    "start": 55216,
+    "end": 55295,
+    "plane": 0,
+    "age": "5.2"
+  },
+  {
+    "name": "High Surrogates",
+    "start": 55296,
+    "end": 56191,
+    "plane": 0,
+    "age": "2.0"
+  },
+  {
+    "name": "High Private Use Surrogates",
+    "start": 56192,
+    "end": 56319,
+    "plane": 0,
+    "age": "2.0"
+  },
+  {
+    "name": "Low Surrogates",
+    "start": 56320,
+    "end": 57343,
+    "plane": 0,
+    "age": "2.0"
+  },
+  {
+    "name": "Private Use Area",
+    "start": 57344,
+    "end": 63743,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "CJK Compatibility Ideographs",
+    "start": 63744,
+    "end": 64255,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Alphabetic Presentation Forms",
+    "start": 64256,
+    "end": 64335,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Arabic Presentation Forms-A",
+    "start": 64336,
+    "end": 65023,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Variation Selectors",
+    "start": 65024,
+    "end": 65039,
+    "plane": 0,
+    "age": "3.2"
+  },
+  {
+    "name": "Vertical Forms",
+    "start": 65040,
+    "end": 65055,
+    "plane": 0,
+    "age": "4.1"
+  },
+  {
+    "name": "Combining Half Marks",
+    "start": 65056,
+    "end": 65071,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "CJK Compatibility Forms",
+    "start": 65072,
+    "end": 65103,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Small Form Variants",
+    "start": 65104,
+    "end": 65135,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Arabic Presentation Forms-B",
+    "start": 65136,
+    "end": 65279,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Halfwidth and Fullwidth Forms",
+    "start": 65280,
+    "end": 65519,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Specials",
+    "start": 65520,
+    "end": 65535,
+    "plane": 0,
+    "age": "1.1"
+  },
+  {
+    "name": "Linear B Syllabary",
+    "start": 65536,
+    "end": 65663,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Linear B Ideograms",
+    "start": 65664,
+    "end": 65791,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Aegean Numbers",
+    "start": 65792,
+    "end": 65855,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Ancient Greek Numbers",
+    "start": 65856,
+    "end": 65935,
+    "plane": 1,
+    "age": "4.1"
+  },
+  {
+    "name": "Ancient Symbols",
+    "start": 65936,
+    "end": 65999,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Phaistos Disc",
+    "start": 66000,
+    "end": 66047,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Lycian",
+    "start": 66176,
+    "end": 66207,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Carian",
+    "start": 66208,
+    "end": 66271,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Coptic Epact Numbers",
+    "start": 66272,
+    "end": 66303,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Old Italic",
+    "start": 66304,
+    "end": 66351,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Gothic",
+    "start": 66352,
+    "end": 66383,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Old Permic",
+    "start": 66384,
+    "end": 66431,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Ugaritic",
+    "start": 66432,
+    "end": 66463,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Old Persian",
+    "start": 66464,
+    "end": 66527,
+    "plane": 1,
+    "age": "4.1"
+  },
+  {
+    "name": "Deseret",
+    "start": 66560,
+    "end": 66639,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Shavian",
+    "start": 66640,
+    "end": 66687,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Osmanya",
+    "start": 66688,
+    "end": 66735,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Osage",
+    "start": 66736,
+    "end": 66815,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Elbasan",
+    "start": 66816,
+    "end": 66863,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Caucasian Albanian",
+    "start": 66864,
+    "end": 66927,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Vithkuqi",
+    "start": 66928,
+    "end": 67007,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Todhri",
+    "start": 67008,
+    "end": 67071,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Linear A",
+    "start": 67072,
+    "end": 67455,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Latin Extended-F",
+    "start": 67456,
+    "end": 67519,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Cypriot Syllabary",
+    "start": 67584,
+    "end": 67647,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Imperial Aramaic",
+    "start": 67648,
+    "end": 67679,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Palmyrene",
+    "start": 67680,
+    "end": 67711,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Nabataean",
+    "start": 67712,
+    "end": 67759,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Hatran",
+    "start": 67808,
+    "end": 67839,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Phoenician",
+    "start": 67840,
+    "end": 67871,
+    "plane": 1,
+    "age": "5.0"
+  },
+  {
+    "name": "Lydian",
+    "start": 67872,
+    "end": 67903,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Sidetic",
+    "start": 67904,
+    "end": 67935,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Meroitic Hieroglyphs",
+    "start": 67968,
+    "end": 67999,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Meroitic Cursive",
+    "start": 68000,
+    "end": 68095,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Kharoshthi",
+    "start": 68096,
+    "end": 68191,
+    "plane": 1,
+    "age": "4.1"
+  },
+  {
+    "name": "Old South Arabian",
+    "start": 68192,
+    "end": 68223,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Old North Arabian",
+    "start": 68224,
+    "end": 68255,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Manichaean",
+    "start": 68288,
+    "end": 68351,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Avestan",
+    "start": 68352,
+    "end": 68415,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Inscriptional Parthian",
+    "start": 68416,
+    "end": 68447,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Inscriptional Pahlavi",
+    "start": 68448,
+    "end": 68479,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Psalter Pahlavi",
+    "start": 68480,
+    "end": 68527,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Old Turkic",
+    "start": 68608,
+    "end": 68687,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Old Hungarian",
+    "start": 68736,
+    "end": 68863,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Hanifi Rohingya",
+    "start": 68864,
+    "end": 68927,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Garay",
+    "start": 68928,
+    "end": 69007,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Rumi Numeral Symbols",
+    "start": 69216,
+    "end": 69247,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Yezidi",
+    "start": 69248,
+    "end": 69311,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Arabic Extended-C",
+    "start": 69312,
+    "end": 69375,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Old Sogdian",
+    "start": 69376,
+    "end": 69423,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Sogdian",
+    "start": 69424,
+    "end": 69487,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Old Uyghur",
+    "start": 69488,
+    "end": 69551,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Chorasmian",
+    "start": 69552,
+    "end": 69599,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Elymaic",
+    "start": 69600,
+    "end": 69631,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Brahmi",
+    "start": 69632,
+    "end": 69759,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Kaithi",
+    "start": 69760,
+    "end": 69839,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Sora Sompeng",
+    "start": 69840,
+    "end": 69887,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Chakma",
+    "start": 69888,
+    "end": 69967,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Mahajani",
+    "start": 69968,
+    "end": 70015,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Sharada",
+    "start": 70016,
+    "end": 70111,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Sinhala Archaic Numbers",
+    "start": 70112,
+    "end": 70143,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Khojki",
+    "start": 70144,
+    "end": 70223,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Multani",
+    "start": 70272,
+    "end": 70319,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Khudawadi",
+    "start": 70320,
+    "end": 70399,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Grantha",
+    "start": 70400,
+    "end": 70527,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Tulu-Tigalari",
+    "start": 70528,
+    "end": 70655,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Newa",
+    "start": 70656,
+    "end": 70783,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Tirhuta",
+    "start": 70784,
+    "end": 70879,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Siddham",
+    "start": 71040,
+    "end": 71167,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Modi",
+    "start": 71168,
+    "end": 71263,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Mongolian Supplement",
+    "start": 71264,
+    "end": 71295,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Takri",
+    "start": 71296,
+    "end": 71375,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Myanmar Extended-C",
+    "start": 71376,
+    "end": 71423,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Ahom",
+    "start": 71424,
+    "end": 71503,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Dogra",
+    "start": 71680,
+    "end": 71759,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Warang Citi",
+    "start": 71840,
+    "end": 71935,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Dives Akuru",
+    "start": 71936,
+    "end": 72031,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Nandinagari",
+    "start": 72096,
+    "end": 72191,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Zanabazar Square",
+    "start": 72192,
+    "end": 72271,
+    "plane": 1,
+    "age": "10.0"
+  },
+  {
+    "name": "Soyombo",
+    "start": 72272,
+    "end": 72367,
+    "plane": 1,
+    "age": "10.0"
+  },
+  {
+    "name": "Unified Canadian Aboriginal Syllabics Extended-A",
+    "start": 72368,
+    "end": 72383,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Pau Cin Hau",
+    "start": 72384,
+    "end": 72447,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Devanagari Extended-A",
+    "start": 72448,
+    "end": 72543,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Sharada Supplement",
+    "start": 72544,
+    "end": 72575,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Sunuwar",
+    "start": 72640,
+    "end": 72703,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Bhaiksuki",
+    "start": 72704,
+    "end": 72815,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Marchen",
+    "start": 72816,
+    "end": 72895,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Masaram Gondi",
+    "start": 72960,
+    "end": 73055,
+    "plane": 1,
+    "age": "10.0"
+  },
+  {
+    "name": "Gunjala Gondi",
+    "start": 73056,
+    "end": 73135,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Tolong Siki",
+    "start": 73136,
+    "end": 73199,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Bengali Supplement",
+    "start": 73200,
+    "end": 73215,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Makasar",
+    "start": 73440,
+    "end": 73471,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Kawi",
+    "start": 73472,
+    "end": 73567,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Lisu Supplement",
+    "start": 73648,
+    "end": 73663,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Tamil Supplement",
+    "start": 73664,
+    "end": 73727,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Cuneiform",
+    "start": 73728,
+    "end": 74751,
+    "plane": 1,
+    "age": "5.0"
+  },
+  {
+    "name": "Cuneiform Numbers and Punctuation",
+    "start": 74752,
+    "end": 74879,
+    "plane": 1,
+    "age": "5.0"
+  },
+  {
+    "name": "Early Dynastic Cuneiform",
+    "start": 74880,
+    "end": 75087,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Archaic Cuneiform Numerals",
+    "start": 75088,
+    "end": 75407,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Cypro-Minoan",
+    "start": 77712,
+    "end": 77823,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Egyptian Hieroglyphs",
+    "start": 77824,
+    "end": 78895,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Egyptian Hieroglyph Format Controls",
+    "start": 78896,
+    "end": 78943,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Egyptian Hieroglyphs Extended-A",
+    "start": 78944,
+    "end": 82943,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Anatolian Hieroglyphs",
+    "start": 82944,
+    "end": 83583,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Gurung Khema",
+    "start": 90368,
+    "end": 90431,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Bamum Supplement",
+    "start": 92160,
+    "end": 92735,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Mro",
+    "start": 92736,
+    "end": 92783,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Tangsa",
+    "start": 92784,
+    "end": 92879,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Bassa Vah",
+    "start": 92880,
+    "end": 92927,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Pahawh Hmong",
+    "start": 92928,
+    "end": 93071,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Kirat Rai",
+    "start": 93504,
+    "end": 93567,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Medefaidrin",
+    "start": 93760,
+    "end": 93855,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Beria Erfe",
+    "start": 93856,
+    "end": 93919,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Miao",
+    "start": 93952,
+    "end": 94111,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Ideographic Symbols and Punctuation",
+    "start": 94176,
+    "end": 94207,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Tangut",
+    "start": 94208,
+    "end": 100351,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Tangut Components",
+    "start": 100352,
+    "end": 101119,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Khitan Small Script",
+    "start": 101120,
+    "end": 101631,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Tangut Supplement",
+    "start": 101632,
+    "end": 101759,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "Tangut Components Supplement",
+    "start": 101760,
+    "end": 101887,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Jurchen",
+    "start": 101888,
+    "end": 102815,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Jurchen Radicals",
+    "start": 102816,
+    "end": 102879,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Kana Extended-B",
+    "start": 110576,
+    "end": 110591,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Kana Supplement",
+    "start": 110592,
+    "end": 110847,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Kana Extended-A",
+    "start": 110848,
+    "end": 110895,
+    "plane": 1,
+    "age": "10.0"
+  },
+  {
+    "name": "Small Kana Extension",
+    "start": 110896,
+    "end": 110959,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Nushu",
+    "start": 110960,
+    "end": 111359,
+    "plane": 1,
+    "age": "10.0"
+  },
+  {
+    "name": "Duployan",
+    "start": 113664,
+    "end": 113823,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Shorthand Format Controls",
+    "start": 113824,
+    "end": 113839,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Symbols for Legacy Computing Supplement",
+    "start": 117760,
+    "end": 118463,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Miscellaneous Symbols Supplement",
+    "start": 118464,
+    "end": 118527,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Znamenny Musical Notation",
+    "start": 118528,
+    "end": 118735,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Byzantine Musical Symbols",
+    "start": 118784,
+    "end": 119039,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Musical Symbols",
+    "start": 119040,
+    "end": 119295,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Ancient Greek Musical Notation",
+    "start": 119296,
+    "end": 119375,
+    "plane": 1,
+    "age": "4.1"
+  },
+  {
+    "name": "Musical Symbols Supplement",
+    "start": 119376,
+    "end": 119439,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Kaktovik Numerals",
+    "start": 119488,
+    "end": 119519,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Mayan Numerals",
+    "start": 119520,
+    "end": 119551,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Tai Xuan Jing Symbols",
+    "start": 119552,
+    "end": 119647,
+    "plane": 1,
+    "age": "4.0"
+  },
+  {
+    "name": "Counting Rod Numerals",
+    "start": 119648,
+    "end": 119679,
+    "plane": 1,
+    "age": "5.0"
+  },
+  {
+    "name": "Mathematical Alphanumeric Symbols",
+    "start": 119808,
+    "end": 120831,
+    "plane": 1,
+    "age": "3.1"
+  },
+  {
+    "name": "Sutton SignWriting",
+    "start": 120832,
+    "end": 121519,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Miscellaneous Symbols and Arrows Extended",
+    "start": 121600,
+    "end": 121855,
+    "plane": 1,
+    "age": "18.0"
+  },
+  {
+    "name": "Latin Extended-G",
+    "start": 122624,
+    "end": 122879,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Glagolitic Supplement",
+    "start": 122880,
+    "end": 122927,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Cyrillic Extended-D",
+    "start": 122928,
+    "end": 123023,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Nyiakeng Puachue Hmong",
+    "start": 123136,
+    "end": 123215,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Toto",
+    "start": 123536,
+    "end": 123583,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Wancho",
+    "start": 123584,
+    "end": 123647,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Nag Mundari",
+    "start": 124112,
+    "end": 124159,
+    "plane": 1,
+    "age": "15.0"
+  },
+  {
+    "name": "Ol Onal",
+    "start": 124368,
+    "end": 124415,
+    "plane": 1,
+    "age": "16.0"
+  },
+  {
+    "name": "Tai Yo",
+    "start": 124608,
+    "end": 124671,
+    "plane": 1,
+    "age": "17.0"
+  },
+  {
+    "name": "Ethiopic Extended-B",
+    "start": 124896,
+    "end": 124927,
+    "plane": 1,
+    "age": "14.0"
+  },
+  {
+    "name": "Mende Kikakui",
+    "start": 124928,
+    "end": 125151,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Adlam",
+    "start": 125184,
+    "end": 125279,
+    "plane": 1,
+    "age": "9.0"
+  },
+  {
+    "name": "Indic Siyaq Numbers",
+    "start": 126064,
+    "end": 126143,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Ottoman Siyaq Numbers",
+    "start": 126208,
+    "end": 126287,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Arabic Mathematical Alphabetic Symbols",
+    "start": 126464,
+    "end": 126719,
+    "plane": 1,
+    "age": "6.1"
+  },
+  {
+    "name": "Mahjong Tiles",
+    "start": 126976,
+    "end": 127023,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Domino Tiles",
+    "start": 127024,
+    "end": 127135,
+    "plane": 1,
+    "age": "5.1"
+  },
+  {
+    "name": "Playing Cards",
+    "start": 127136,
+    "end": 127231,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Enclosed Alphanumeric Supplement",
+    "start": 127232,
+    "end": 127487,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Enclosed Ideographic Supplement",
+    "start": 127488,
+    "end": 127743,
+    "plane": 1,
+    "age": "5.2"
+  },
+  {
+    "name": "Miscellaneous Symbols and Pictographs",
+    "start": 127744,
+    "end": 128511,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Emoticons",
+    "start": 128512,
+    "end": 128591,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Ornamental Dingbats",
+    "start": 128592,
+    "end": 128639,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Transport and Map Symbols",
+    "start": 128640,
+    "end": 128767,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Alchemical Symbols",
+    "start": 128768,
+    "end": 128895,
+    "plane": 1,
+    "age": "6.0"
+  },
+  {
+    "name": "Geometric Shapes Extended",
+    "start": 128896,
+    "end": 129023,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Supplemental Arrows-C",
+    "start": 129024,
+    "end": 129279,
+    "plane": 1,
+    "age": "7.0"
+  },
+  {
+    "name": "Supplemental Symbols and Pictographs",
+    "start": 129280,
+    "end": 129535,
+    "plane": 1,
+    "age": "8.0"
+  },
+  {
+    "name": "Chess Symbols",
+    "start": 129536,
+    "end": 129647,
+    "plane": 1,
+    "age": "11.0"
+  },
+  {
+    "name": "Symbols and Pictographs Extended-A",
+    "start": 129648,
+    "end": 129791,
+    "plane": 1,
+    "age": "12.0"
+  },
+  {
+    "name": "Symbols for Legacy Computing",
+    "start": 129792,
+    "end": 130047,
+    "plane": 1,
+    "age": "13.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension B",
+    "start": 131072,
+    "end": 173791,
+    "plane": 2,
+    "age": "3.1"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension C",
+    "start": 173824,
+    "end": 177983,
+    "plane": 2,
+    "age": "5.2"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension D",
+    "start": 177984,
+    "end": 178207,
+    "plane": 2,
+    "age": "6.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension E",
+    "start": 178208,
+    "end": 183983,
+    "plane": 2,
+    "age": "8.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension F",
+    "start": 183984,
+    "end": 191471,
+    "plane": 2,
+    "age": "10.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension I",
+    "start": 191472,
+    "end": 192095,
+    "plane": 2,
+    "age": "15.1"
+  },
+  {
+    "name": "CJK Compatibility Ideographs Supplement",
+    "start": 194560,
+    "end": 195103,
+    "plane": 2,
+    "age": "3.1"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension G",
+    "start": 196608,
+    "end": 201551,
+    "plane": 3,
+    "age": "13.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension H",
+    "start": 201552,
+    "end": 205743,
+    "plane": 3,
+    "age": "15.0"
+  },
+  {
+    "name": "CJK Unified Ideographs Extension J",
+    "start": 205744,
+    "end": 210047,
+    "plane": 3,
+    "age": "17.0"
+  },
+  {
+    "name": "Seal",
+    "start": 249856,
+    "end": 261183,
+    "plane": 3,
+    "age": "18.0"
+  },
+  {
+    "name": "Tags",
+    "start": 917504,
+    "end": 917631,
+    "plane": 14,
+    "age": "3.1"
+  },
+  {
+    "name": "Variation Selectors Supplement",
+    "start": 917760,
+    "end": 917999,
+    "plane": 14,
+    "age": "4.0"
+  },
+  {
+    "name": "Supplementary Private Use Area-A",
+    "start": 983040,
+    "end": 1048575,
+    "plane": 15,
+    "age": "2.0"
+  },
+  {
+    "name": "Supplementary Private Use Area-B",
+    "start": 1048576,
+    "end": 1114111,
+    "plane": 16,
+    "age": "2.0"
+  }
+]
