@@ -5040,6 +5040,8 @@ const SBCS_TABLES = {
       corePropsLoading: null,
       unikemetCache: (typeof window !== 'undefined' && window.__UNICODE_KEMET__) || null,
       rsIndexCache: (typeof window !== 'undefined' && window.__UNICODE_RSINDEX__) || null,
+      cjkPedagogyCache: (typeof window !== 'undefined' && window.__CJK_PEDAGOGY__) || null,
+      cjkStrokesCache: (typeof window !== 'undefined' && window.__CJK_STROKES__) || null,
       unihanBmpCache: (typeof window !== 'undefined' && window.__UNIHAN_BMP__) || null,
       unihanExtCache: (typeof window !== 'undefined' && window.__UNIHAN_EXT__) || null,
       emojiCache: (typeof window !== 'undefined' && window.__UNICODE_EMOJI__) || null,
@@ -5938,6 +5940,149 @@ const SBCS_TABLES = {
           this._rsCpMap = map;
         }
         return this._rsCpMap.get(cp) || null;
+      },
+
+      ensurePedagogy() {
+        if (this.cjkPedagogyCache) return Promise.resolve(this.cjkPedagogyCache);
+        if (typeof window !== 'undefined' && window.__CJK_PEDAGOGY__) {
+          this.cjkPedagogyCache = window.__CJK_PEDAGOGY__;
+          return Promise.resolve(this.cjkPedagogyCache);
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/cjk-pedagogy.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/cjk-pedagogy.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.cjkPedagogyCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.cjkPedagogyCache);
+              }
+            }
+          } catch (e) {}
+        }
+        if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+          return fetch('files/unicode-data/cjk-pedagogy.json')
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            })
+            .then(data => {
+              this.cjkPedagogyCache = data;
+              return data;
+            })
+            .catch(() => this._loadScriptAsset('files/unicode-data/cjk-pedagogy.js', () => {
+              this.cjkPedagogyCache = window.__CJK_PEDAGOGY__;
+              return this.cjkPedagogyCache;
+            }));
+        }
+        return this._loadScriptAsset('files/unicode-data/cjk-pedagogy.js', () => {
+          this.cjkPedagogyCache = window.__CJK_PEDAGOGY__;
+          return this.cjkPedagogyCache;
+        });
+      },
+
+      getPedagogicalInfo(cp) {
+        if (!this.cjkPedagogyCache && typeof window !== 'undefined' && window.__CJK_PEDAGOGY__) {
+          this.cjkPedagogyCache = window.__CJK_PEDAGOGY__;
+        }
+        if (!this.cjkPedagogyCache || !this.cjkPedagogyCache.characters) return null;
+        return this.cjkPedagogyCache.characters[cp] || this.cjkPedagogyCache.characters[String(cp)] || null;
+      },
+
+      ensureStrokes(cp) {
+        if (this.cjkStrokesCache && (this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)])) {
+          return Promise.resolve(this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)]);
+        }
+        if (typeof window !== 'undefined' && window.__CJK_STROKES__) {
+          this.cjkStrokesCache = window.__CJK_STROKES__;
+          if (this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)]) {
+            return Promise.resolve(this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)]);
+          }
+        }
+        if (typeof require === 'function' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+          try {
+            const fs = require('fs');
+            const path = require('path');
+            const candidates = [
+              path.resolve(process.cwd(), 'files/unicode-data/cjk-strokes.json'),
+              typeof __dirname !== 'undefined' ? path.resolve(__dirname, '../files/unicode-data/cjk-strokes.json') : null
+            ].filter(Boolean);
+            for (const p of candidates) {
+              if (fs.existsSync(p)) {
+                this.cjkStrokesCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+                return Promise.resolve(this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)] || null);
+              }
+            }
+          } catch (e) {}
+        }
+
+        const fallbackFetch = () => {
+          const hex5 = cp.toString(16).toLowerCase().padStart(5, '0');
+          const kvgUrl = `https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex5}.svg`;
+          if (typeof fetch === 'function') {
+            return fetch(kvgUrl)
+              .then(r => {
+                if (!r.ok) throw new Error('Not found in KanjiVG');
+                return r.text();
+              })
+              .then(svgText => {
+                const strokes = [];
+                const regex = /<path[^>]+d="([^"]+)"/g;
+                let m;
+                while ((m = regex.exec(svgText)) !== null) {
+                  strokes.push(m[1]);
+                }
+                if (strokes.length > 0) {
+                  const entry = { s: strokes, isKvg: true };
+                  if (!this.cjkStrokesCache) this.cjkStrokesCache = {};
+                  this.cjkStrokesCache[cp] = entry;
+                  return entry;
+                }
+                return null;
+              })
+              .catch(() => null);
+          }
+          return Promise.resolve(null);
+        };
+
+        if (!this.cjkStrokesCache) {
+          if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+            return fetch('files/unicode-data/cjk-strokes.json')
+              .then(r => r.json())
+              .then(data => {
+                this.cjkStrokesCache = data;
+                return data[cp] || data[String(cp)] || fallbackFetch();
+              })
+              .catch(() => this._loadScriptAsset('files/unicode-data/cjk-strokes.js', () => {
+                this.cjkStrokesCache = window.__CJK_STROKES__ || {};
+                return this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)] || fallbackFetch();
+              }));
+          }
+          return this._loadScriptAsset('files/unicode-data/cjk-strokes.js', () => {
+            this.cjkStrokesCache = window.__CJK_STROKES__ || {};
+            return this.cjkStrokesCache[cp] || this.cjkStrokesCache[String(cp)] || fallbackFetch();
+          });
+        }
+
+        return fallbackFetch();
+      },
+
+      decomposeWord(str) {
+        if (!str || typeof str !== 'string') return [];
+        const chars = Array.from(str);
+        return chars.map(ch => {
+          const cp = ch.codePointAt(0);
+          return {
+            char: ch,
+            cp,
+            hex: 'U+' + cp.toString(16).toUpperCase().padStart(4, '0'),
+            pedagogy: this.getPedagogicalInfo(cp)
+          };
+        });
       },
 
       ensureUnikemet(cp) {

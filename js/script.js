@@ -2416,23 +2416,75 @@ Volume  : ${vol}%`;
                 </div>
               </div>
 
-              <!-- RSIndex Toolbar -->
-              <div class="tm-unimap-toolbar" id="tm-unimap-toolbar-rs" style="display:none;">
+              <!-- RSIndex & Pedagogical Workbench Toolbar -->
+              <div class="tm-unimap-toolbar" id="tm-unimap-toolbar-rs" style="display:none; flex-wrap:wrap; gap:8px;">
                 <div class="tm-unimap-nav-group">
+                  <span class="c-accent ansi-bold">schema:</span>
+                  <select class="tm-select" id="tm-unimap-rs-schema-select" style="font-weight:600; min-width:175px;">
+                    <option value="kangxi">Kangxi Radical-Stroke (214 Radicals)</option>
+                    <option value="hsk">HSK 3.0 (Bands 1 — 7-9)</option>
+                    <option value="tocfl">TOCFL Taiwan (Novice — Band C)</option>
+                    <option value="joyo">Japanese Jōyō Grade (Grade 1-6, Secondary)</option>
+                    <option value="jlpt">JLPT Band (N5 Beginner — N1 Advanced)</option>
+                    <option value="zipf">Spoken Frequency (Zipfian Scale)</option>
+                  </select>
+                </div>
+
+                <!-- Kangxi Controls -->
+                <div class="tm-unimap-nav-group" id="tm-unimap-rs-kangxi-controls">
                   <span class="c-accent ansi-bold">radical:</span>
                   <button type="button" class="tm-btn" id="tm-unimap-rs-prev-rad" title="Previous Radical">◀</button>
-                  <select class="tm-select" id="tm-unimap-rs-rad-select" style="min-width: 230px; max-width: 320px;"></select>
+                  <select class="tm-select" id="tm-unimap-rs-rad-select" style="min-width: 200px; max-width: 290px;"></select>
                   <button type="button" class="tm-btn" id="tm-unimap-rs-next-rad" title="Next Radical">▶</button>
 
-                  <span class="c-accent ansi-bold" style="margin-left:6px;">strokes:</span>
-                  <select class="tm-select" id="tm-unimap-rs-stroke-select" style="max-width: 160px;"></select>
+                  <span class="c-accent ansi-bold" style="margin-left:4px;">strokes:</span>
+                  <select class="tm-select" id="tm-unimap-rs-stroke-select" style="max-width: 120px;"></select>
                 </div>
 
-                <div class="tm-unimap-nav-group">
-                  <span>find CJK:</span>
-                  <input type="text" class="tm-input" id="tm-unimap-rs-find-input" placeholder="Char or U+XXXX" style="width: 120px;">
-                  <button type="button" class="tm-btn" id="tm-unimap-rs-find-btn">find</button>
+                <!-- Pedagogical Group Controls -->
+                <div class="tm-unimap-nav-group" id="tm-unimap-rs-ped-controls" style="display:none;">
+                  <span class="c-accent ansi-bold">tier:</span>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-ped" title="Previous Tier">◀</button>
+                  <select class="tm-select" id="tm-unimap-rs-ped-select" style="min-width: 220px;"></select>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-ped" title="Next Tier">▶</button>
                 </div>
+
+                <div class="tm-unimap-nav-group" style="margin-left:auto;">
+                  <span>find / word:</span>
+                  <input type="text" class="tm-input" id="tm-unimap-rs-find-input" placeholder="Char, word (e.g. 学习), or U+XXXX" style="width: 180px;">
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-find-btn">inspect</button>
+                </div>
+
+                <!-- Mode & Learning Controls -->
+                <div class="tm-unimap-nav-group" id="tm-unimap-study-modes" style="display:none; width:100%; border-top:1px solid #222; padding-top:6px; margin-top:2px;">
+                  <span class="c-accent ansi-bold">view:</span>
+                  <div class="tm-btn-group">
+                    <button type="button" class="tm-btn active" id="tm-unimap-mode-grid">grid</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-mode-deck">study deck</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-mode-vocab">vocabulary list</button>
+                  </div>
+
+                  <span class="c-accent ansi-bold" style="margin-left:10px;" id="tm-unimap-filter-label">status:</span>
+                  <select class="tm-select" id="tm-unimap-mastery-filter" style="max-width:130px;">
+                    <option value="all">all characters</option>
+                    <option value="unlearned">unlearned</option>
+                    <option value="learning">learning</option>
+                    <option value="review">review</option>
+                    <option value="mastered">mastered</option>
+                    <option value="starred">starred</option>
+                  </select>
+
+                  <button type="button" class="tm-btn" id="tm-unimap-export-anki" style="margin-left:auto;" title="Export current tier to Anki (.tsv)">export deck (.tsv)</button>
+                </div>
+              </div>
+
+              <!-- Multi-Character Word Decomposition Drawer -->
+              <div id="tm-unimap-rs-word-decomp" style="display:none; margin: 4px 0 8px 0; padding: 8px 12px; background: #121212; border: 1px solid #282828; border-radius: 4px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:0.75rem; color:#888;">Word Decomposition: <strong id="tm-unimap-decomp-word" class="c-accent" style="font-size:0.95rem;"></strong></span>
+                  <button type="button" class="tm-btn" id="tm-unimap-decomp-close" style="padding:1px 6px; font-size:0.7rem;">✕ close</button>
+                </div>
+                <div id="tm-unimap-decomp-chips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
               </div>
 
               <div id="tm-unimap-search-results" style="display:none; max-height: 110px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:4px; padding:4px 8px; font-size:0.75rem;"></div>
@@ -2450,15 +2502,86 @@ Volume  : ${vol}%`;
                   </div>
                 </div>
 
-                <!-- RSIndex Grouped Pane -->
+                <!-- RSIndex Grouped Pane & Learner Suite -->
                 <div class="tm-unimap-grid-pane" id="tm-unimap-pane-rs" style="display:none;">
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
-                    <div>radical: <span id="tm-unimap-rs-info-lbl" class="c-accent" style="font-weight:bold;">Radical #1 (one) 一</span></div>
+                    <div><span id="tm-unimap-rs-schema-lbl">radical:</span> <span id="tm-unimap-rs-info-lbl" class="c-accent" style="font-weight:bold;">Radical #1 (one) 一</span></div>
                     <div id="tm-unimap-rs-total-lbl" style="color:#aaa; font-size:0.72rem;">335 characters</div>
                   </div>
 
+                  <!-- Study Progress Box -->
+                  <div id="tm-unimap-study-progress-box" style="display:none; margin: 4px 0 8px 0; padding: 6px 12px; background: #0c0c0c; border: 1px solid #222; border-radius: 4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; margin-bottom:4px;">
+                      <div id="tm-unimap-progress-text"><span class="c-accent ansi-bold">progress:</span> <span id="tm-unimap-progress-stats">0 / 0 learned (0%)</span></div>
+                      <div id="tm-unimap-progress-substats" style="color:#888; font-size:0.7rem;">0 mastered · 0 starred</div>
+                    </div>
+                    <div class="tm-unimap-progress-track">
+                      <div id="tm-unimap-progress-fill" class="tm-unimap-progress-fill" style="width: 0%;"></div>
+                    </div>
+                  </div>
+
+                  <!-- Grid Container (Database View) -->
                   <div class="tm-unimap-rs-container" id="tm-unimap-rs-container">
                     <div style="padding:20px; text-align:center; color:#888;">Loading Radical-Stroke Index...</div>
+                  </div>
+
+                  <!-- Flashcard Study Deck Pane -->
+                  <div id="tm-unimap-rs-deck" class="tm-unimap-deck-container" style="display:none;">
+                    <div class="tm-deck-header">
+                      <div id="tm-deck-card-counter" class="tm-deck-counter">card 1 of 0</div>
+                      <div style="display:flex; gap:8px;">
+                        <button type="button" class="tm-btn tm-deck-btn" id="tm-deck-star-btn">star</button>
+                        <button type="button" class="tm-btn tm-deck-btn" id="tm-deck-shuffle-btn">shuffle</button>
+                      </div>
+                    </div>
+
+                    <div class="tm-deck-card" id="tm-deck-card">
+                      <div class="tm-deck-front" id="tm-deck-front">
+                        <div class="tm-deck-glyph-box">
+                          <div class="tm-deck-glyph font-unifont" id="tm-deck-char">-</div>
+                        </div>
+                        <div class="tm-deck-hint" id="tm-deck-hint">-</div>
+                        <button type="button" class="tm-btn tm-deck-reveal-btn" id="tm-deck-reveal-btn">reveal answer (space)</button>
+                      </div>
+
+                      <div class="tm-deck-back" id="tm-deck-back" style="display:none;">
+                        <div class="tm-deck-readings-box">
+                          <div style="display:flex; align-items:center; gap:8px;">
+                            <div class="tm-deck-pinyin c-accent" id="tm-deck-pinyin">-</div>
+                            <button type="button" class="tm-btn" id="tm-deck-audio-btn" style="padding:1px 6px; font-size:0.7rem;">pronounce</button>
+                          </div>
+                          <div class="tm-deck-definition" id="tm-deck-definition">-</div>
+                          <div class="tm-deck-kanji" id="tm-deck-kanji" style="display:none; color:#ddd; font-size:0.78rem;"></div>
+                        </div>
+
+                        <div class="tm-deck-compounds" id="tm-deck-compounds"></div>
+
+                        <div class="tm-deck-grading-box">
+                          <div class="tm-deck-grading-label">grade recall:</div>
+                          <div class="tm-deck-grades">
+                            <button type="button" class="tm-deck-grade grade-again" data-grade="again" id="tm-deck-grade-again">again (1)</button>
+                            <button type="button" class="tm-deck-grade grade-hard" data-grade="hard" id="tm-deck-grade-hard">hard (2)</button>
+                            <button type="button" class="tm-deck-grade grade-good" data-grade="good" id="tm-deck-grade-good">good (3)</button>
+                            <button type="button" class="tm-deck-grade grade-easy" data-grade="easy" id="tm-deck-grade-easy">easy (4)</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tm-deck-nav">
+                      <button type="button" class="tm-btn" id="tm-deck-prev-btn">previous</button>
+                      <button type="button" class="tm-btn" id="tm-deck-next-btn">next</button>
+                      <button type="button" class="tm-btn" id="tm-deck-reset-btn" style="margin-left:auto;">reset deck stats</button>
+                    </div>
+                  </div>
+
+                  <!-- Vocabulary List Pane -->
+                  <div id="tm-unimap-rs-vocab" class="tm-unimap-vocab-pane" style="display:none;">
+                    <div class="tm-vocab-toolbar">
+                      <div id="tm-vocab-count-lbl" style="font-size:0.75rem; color:#888;">0 words in tier</div>
+                      <input type="text" class="tm-input" id="tm-vocab-filter-input" placeholder="filter words, pīnyīn, meaning..." style="width:200px;">
+                    </div>
+                    <div class="tm-vocab-list-scroll" id="tm-vocab-list-scroll"></div>
                   </div>
                 </div>
 
@@ -2494,6 +2617,47 @@ Volume  : ${vol}%`;
                       <tr id="tm-unimap-row-alias" style="display:none;"><td class="prop-lbl">alias:</td><td class="prop-val" id="tm-unimap-p-alias">-</td></tr>
                     </tbody>
                   </table>
+
+                  <!-- Specialized Cards: Pedagogical Proficiency & Curricular Benchmarks -->
+                  <div id="tm-unimap-card-pedagogy" class="tm-unimap-card" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <div class="tm-unimap-card-title">Pedagogical Benchmarks</div>
+                      <span id="tm-unimap-ped-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="View in Pedagogical Workbench">㊎ view in workbench →</span>
+                    </div>
+                    <div id="tm-unimap-ped-badges" class="tm-unimap-ped-badges"></div>
+                    <div id="tm-unimap-ped-meaning-row" style="margin-top:6px; font-size:0.75rem; line-height:1.4; display:none; background:#111; border:1px solid #222; border-radius:4px; padding:5px 8px;">
+                      <div id="tm-unimap-ped-pinyin-line" style="display:none;"><span style="color:#888;">pīnyīn:</span> <span id="tm-unimap-ped-pinyin" class="c-accent ansi-bold" style="font-size:0.88rem;"></span></div>
+                      <div id="tm-unimap-ped-def-line" style="display:none;"><span style="color:#888;">definition:</span> <span id="tm-unimap-ped-definition" style="color:#eee;"></span></div>
+                      <div id="tm-unimap-ped-kanji-line" style="display:none;"><span style="color:#888;">kanji:</span> <span id="tm-unimap-ped-kanji-onkun" class="c-accent"></span> <span id="tm-unimap-ped-kanji-meaning" style="color:#ddd;"></span></div>
+                    </div>
+                    <div id="tm-unimap-ped-ids-container" class="tm-unimap-ids-container">
+                      <div style="font-size:0.72rem; color:#888;">structural decomposition (IDS):</div>
+                      <div id="tm-unimap-ped-ids-tree" class="tm-unimap-ids-tree"></div>
+                    </div>
+                  </div>
+
+                  <!-- Specialized Cards: Curriculum Vocabulary & Compounds -->
+                  <div id="tm-unimap-card-compounds" class="tm-unimap-card" style="display:none;">
+                    <div class="tm-unimap-card-title">Curriculum Vocabulary & Compounds</div>
+                    <div id="tm-unimap-ped-vocab-list" class="tm-unimap-vocab-list"></div>
+                  </div>
+
+                  <!-- Specialized Cards: Interactive Vector Stroke Order Player -->
+                  <div id="tm-unimap-card-stroke-player" class="tm-unimap-card" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <div class="tm-unimap-card-title">Vector Stroke Order</div>
+                      <span id="tm-unimap-stroke-count-lbl" class="tm-stroke-counter">-</span>
+                    </div>
+                    <div class="tm-unimap-stroke-player">
+                      <div class="tm-unimap-stroke-canvas-box" id="tm-unimap-stroke-canvas-box"></div>
+                      <div class="tm-stroke-controls">
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-prev" title="Previous Stroke">◀ Step</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-play" title="Play / Pause Animation">▶ Play</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-next" title="Next Stroke">Step ▶</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-reset" title="Reset View">↺ Full</button>
+                      </div>
+                    </div>
+                  </div>
 
                   <!-- Dynamic Script-Specific Cards -->
                   <div id="tm-unimap-card-cjk" class="tm-unimap-card" style="display:none;">
@@ -3962,6 +4126,128 @@ Volume  : ${vol}%`;
         const rsFindInput = document.getElementById('tm-unimap-rs-find-input');
         const rsFindBtn = document.getElementById('tm-unimap-rs-find-btn');
         const rsJumpBtn = document.getElementById('tm-unimap-cjk-rs-jump');
+
+        const schemaSelect = document.getElementById('tm-unimap-rs-schema-select');
+        const kangxiControls = document.getElementById('tm-unimap-rs-kangxi-controls');
+        const pedControls = document.getElementById('tm-unimap-rs-ped-controls');
+        const pedSelect = document.getElementById('tm-unimap-rs-ped-select');
+        const prevPedBtn = document.getElementById('tm-unimap-rs-prev-ped');
+        const nextPedBtn = document.getElementById('tm-unimap-rs-next-ped');
+        const wordDecompBox = document.getElementById('tm-unimap-rs-word-decomp');
+        const decompWordLbl = document.getElementById('tm-unimap-decomp-word');
+        const decompChipsBox = document.getElementById('tm-unimap-decomp-chips');
+        const decompCloseBtn = document.getElementById('tm-unimap-decomp-close');
+        const pedJumpBtn = document.getElementById('tm-unimap-ped-rs-jump');
+
+        let currentSchema = 'kangxi';
+        let currentPedTier = '1';
+        let pedData = (engine && engine.cjkPedagogyCache) || (typeof window !== 'undefined' && window.__CJK_PEDAGOGY__) || null;
+        let strokePlayerTimer = null;
+        let strokePlayerIdx = -1;
+        let strokePlayerData = null;
+
+        // Learner Suite Elements & State
+        const studyModesBox = document.getElementById('tm-unimap-study-modes');
+        const modeGridBtn = document.getElementById('tm-unimap-mode-grid');
+        const modeDeckBtn = document.getElementById('tm-unimap-mode-deck');
+        const modeVocabBtn = document.getElementById('tm-unimap-mode-vocab');
+        const masteryFilterSelect = document.getElementById('tm-unimap-mastery-filter');
+        const exportAnkiBtn = document.getElementById('tm-unimap-export-anki');
+
+        const studyProgressBox = document.getElementById('tm-unimap-study-progress-box');
+        const progressStatsEl = document.getElementById('tm-unimap-progress-stats');
+        const progressSubstatsEl = document.getElementById('tm-unimap-progress-substats');
+        const progressFillEl = document.getElementById('tm-unimap-progress-fill');
+
+        const deckPane = document.getElementById('tm-unimap-rs-deck');
+        const deckCardCounter = document.getElementById('tm-deck-card-counter');
+        const deckStarBtn = document.getElementById('tm-deck-star-btn');
+        const deckShuffleBtn = document.getElementById('tm-deck-shuffle-btn');
+        const deckFront = document.getElementById('tm-deck-front');
+        const deckChar = document.getElementById('tm-deck-char');
+        const deckHint = document.getElementById('tm-deck-hint');
+        const deckRevealBtn = document.getElementById('tm-deck-reveal-btn');
+        const deckBack = document.getElementById('tm-deck-back');
+        const deckPinyin = document.getElementById('tm-deck-pinyin');
+        const deckAudioBtn = document.getElementById('tm-deck-audio-btn');
+        const deckDef = document.getElementById('tm-deck-definition');
+        const deckKanji = document.getElementById('tm-deck-kanji');
+        const deckCompounds = document.getElementById('tm-deck-compounds');
+        const deckGradeAgain = document.getElementById('tm-deck-grade-again');
+        const deckGradeHard = document.getElementById('tm-deck-grade-hard');
+        const deckGradeGood = document.getElementById('tm-deck-grade-good');
+        const deckGradeEasy = document.getElementById('tm-deck-grade-easy');
+        const deckPrevBtn = document.getElementById('tm-deck-prev-btn');
+        const deckNextBtn = document.getElementById('tm-deck-next-btn');
+        const deckResetBtn = document.getElementById('tm-deck-reset-btn');
+
+        const vocabPane = document.getElementById('tm-unimap-rs-vocab');
+        const vocabCountLbl = document.getElementById('tm-vocab-count-lbl');
+        const vocabFilterInput = document.getElementById('tm-vocab-filter-input');
+        const vocabListScroll = document.getElementById('tm-vocab-list-scroll');
+
+        let currentViewMode = 'grid'; // 'grid' | 'deck' | 'vocab'
+        let currentMasteryFilter = 'all';
+        let deckCards = [];
+        let deckIndex = 0;
+        let deckFlipped = false;
+
+        const MASTERY_KEY = 'tm_cjk_mastery_v1';
+        const loadMasteryStore = () => {
+          try {
+            return JSON.parse(localStorage.getItem(MASTERY_KEY) || '{}');
+          } catch (e) { return {}; }
+        };
+        const saveMasteryStore = (store) => {
+          try {
+            localStorage.setItem(MASTERY_KEY, JSON.stringify(store));
+          } catch (e) { }
+        };
+        const getCharMastery = (cp) => {
+          const store = loadMasteryStore();
+          return store[cp] || { status: 'unlearned', reps: 0, starred: false };
+        };
+        const updateCharMastery = (cp, grade) => {
+          const store = loadMasteryStore();
+          const cur = store[cp] || { status: 'unlearned', reps: 0, starred: false };
+          cur.last = Date.now();
+          if (grade === 'again') {
+            cur.status = 'learning';
+            cur.reps = 0;
+          } else if (grade === 'hard') {
+            cur.status = 'learning';
+            cur.reps = Math.max(1, cur.reps || 0);
+          } else if (grade === 'good') {
+            cur.status = 'review';
+            cur.reps = (cur.reps || 0) + 1;
+          } else if (grade === 'easy') {
+            cur.status = 'mastered';
+            cur.reps = (cur.reps || 0) + 2;
+          }
+          store[cp] = cur;
+          saveMasteryStore(store);
+          return cur;
+        };
+        const toggleCharStar = (cp) => {
+          const store = loadMasteryStore();
+          const cur = store[cp] || { status: 'unlearned', reps: 0, starred: false };
+          cur.starred = !cur.starred;
+          store[cp] = cur;
+          saveMasteryStore(store);
+          return cur.starred;
+        };
+
+        const speakText = (text, lang) => {
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            try {
+              window.speechSynthesis.cancel();
+              const u = new SpeechSynthesisUtterance(text);
+              u.lang = lang || (currentSchema === 'jlpt' || currentSchema === 'joyo' ? 'ja-JP' : 'zh-CN');
+              u.rate = 0.85;
+              window.speechSynthesis.speak(u);
+            } catch (e) { }
+          }
+        };
         const textarea = document.getElementById('tm-textarea');
 
         if (planeSelect) {
@@ -4123,6 +4409,303 @@ Volume  : ${vol}%`;
             }
           }
 
+          // Specialized Cards: Pedagogical Proficiency & Curricular Benchmarks
+          const pedCard = document.getElementById('tm-unimap-card-pedagogy');
+          const pedBadgesEl = document.getElementById('tm-unimap-ped-badges');
+          const pedIdsTreeEl = document.getElementById('tm-unimap-ped-ids-tree');
+          const compCard = document.getElementById('tm-unimap-card-compounds');
+          const compListEl = document.getElementById('tm-unimap-ped-vocab-list');
+          const strokeCard = document.getElementById('tm-unimap-card-stroke-player');
+          const strokeBoxEl = document.getElementById('tm-unimap-stroke-canvas-box');
+          const strokeCountLbl = document.getElementById('tm-unimap-stroke-count-lbl');
+          const strokeBtnPrev = document.getElementById('tm-stroke-btn-prev');
+          const strokeBtnPlay = document.getElementById('tm-stroke-btn-play');
+          const strokeBtnNext = document.getElementById('tm-stroke-btn-next');
+          const strokeBtnReset = document.getElementById('tm-stroke-btn-reset');
+
+          const isCjkChar = (cp >= 0x3400 && cp <= 0x4DBF) || (cp >= 0x4E00 && cp <= 0x9FFF) || (cp >= 0x20000 && cp <= 0x3347F);
+
+          if (isCjkChar && pedCard) {
+            engine.ensurePedagogy().then(pData => {
+              if (currentCp !== cp) return;
+              const charRec = pData && pData.characters && (pData.characters[cp] || pData.characters[String(cp)]);
+              if (charRec) {
+                pedCard.style.display = 'flex';
+                let bHtml = '';
+                if (charRec.hsk) bHtml += `<span class="tm-unimap-ped-badge badge-hsk">HSK 3.0: Band ${charRec.hsk}</span>`;
+                if (charRec.tocfl) bHtml += `<span class="tm-unimap-ped-badge badge-tocfl">TOCFL: ${escapeHTML(charRec.tocfl)}</span>`;
+                if (charRec.joyo) {
+                  const jName = charRec.joyo === 8 ? 'Secondary' : `Grade ${charRec.joyo}`;
+                  bHtml += `<span class="tm-unimap-ped-badge badge-joyo">Jōyō: ${jName}</span>`;
+                }
+                if (charRec.jlpt) bHtml += `<span class="tm-unimap-ped-badge badge-jlpt">JLPT: ${charRec.jlpt}</span>`;
+                if (charRec.zipf) {
+                  let zDesc = 'Low';
+                  if (charRec.zipf >= 5.5) zDesc = 'Core';
+                  else if (charRec.zipf >= 4.5) zDesc = 'Conversational';
+                  else if (charRec.zipf >= 3.5) zDesc = 'General';
+                  bHtml += `<span class="tm-unimap-ped-badge badge-zipf">Zipf: ${charRec.zipf} (${zDesc})</span>`;
+                }
+                if (pedBadgesEl) pedBadgesEl.innerHTML = bHtml || '<span style="color:#666; font-size:0.72rem;">No curriculum levels assigned</span>';
+
+                // Render Character Meaning & Pīnyīn Row
+                const meaningRow = document.getElementById('tm-unimap-ped-meaning-row');
+                const pedPinyinLine = document.getElementById('tm-unimap-ped-pinyin-line');
+                const pedPinyinEl = document.getElementById('tm-unimap-ped-pinyin');
+                const pedDefLine = document.getElementById('tm-unimap-ped-def-line');
+                const pedDefEl = document.getElementById('tm-unimap-ped-definition');
+                const pedKanjiLine = document.getElementById('tm-unimap-ped-kanji-line');
+                const pedKanjiOnKun = document.getElementById('tm-unimap-ped-kanji-onkun');
+                const pedKanjiMeaning = document.getElementById('tm-unimap-ped-kanji-meaning');
+
+                if (meaningRow) {
+                  let hasMeaning = false;
+                  if (charRec.pinyin) {
+                    if (pedPinyinLine) pedPinyinLine.style.display = '';
+                    if (pedPinyinEl) pedPinyinEl.textContent = charRec.pinyin;
+                    hasMeaning = true;
+                  } else if (pedPinyinLine) {
+                    pedPinyinLine.style.display = 'none';
+                  }
+
+                  if (charRec.definition) {
+                    if (pedDefLine) pedDefLine.style.display = '';
+                    if (pedDefEl) pedDefEl.textContent = charRec.definition;
+                    hasMeaning = true;
+                  } else if (pedDefLine) {
+                    pedDefLine.style.display = 'none';
+                  }
+
+                  if (charRec.kanji && (charRec.kanji.on || charRec.kanji.kun || charRec.kanji.m)) {
+                    if (pedKanjiLine) pedKanjiLine.style.display = '';
+                    const onkun = [charRec.kanji.on, charRec.kanji.kun].filter(Boolean).join(' / ');
+                    if (pedKanjiOnKun) pedKanjiOnKun.textContent = onkun ? `[${onkun}]` : '';
+                    if (pedKanjiMeaning) pedKanjiMeaning.textContent = charRec.kanji.m || '';
+                    hasMeaning = true;
+                  } else if (pedKanjiLine) {
+                    pedKanjiLine.style.display = 'none';
+                  }
+
+                  meaningRow.style.display = hasMeaning ? 'block' : 'none';
+                }
+
+                // Render IDS
+                if (pedIdsTreeEl) {
+                  const idsStr = charRec.ids || '';
+                  if (idsStr) {
+                    const idcOps = {
+                      '⿰': 'Left-to-Right',
+                      '⿱': 'Above-to-Below',
+                      '⿲': 'Left-to-Right (Ternary)',
+                      '⿳': 'Above-to-Below (Ternary)',
+                      '⿴': 'Full Surround',
+                      '⿵': 'Surround from Above',
+                      '⿶': 'Surround from Below',
+                      '⿷': 'Surround from Left',
+                      '⿸': 'Surround Upper-Left',
+                      '⿹': 'Surround Upper-Right',
+                      '⿺': 'Surround Lower-Left',
+                      '⿻': 'Overlaid',
+                      '⿾': 'Horizontal Reflection',
+                      '⿿': 'Rotation'
+                    };
+                    const parts = Array.from(idsStr);
+                    let treeHtml = '';
+                    parts.forEach(ch => {
+                      const code = ch.codePointAt(0);
+                      if (idcOps[ch]) {
+                        treeHtml += `<span class="tm-unimap-ids-op" title="${idcOps[ch]}">${escapeHTML(ch)} [${idcOps[ch]}]</span> `;
+                      } else {
+                        treeHtml += `<button type="button" class="tm-unimap-ids-chip" data-jump-cp="${code}" title="Jump to constituent: ${escapeHTML(ch)} (U+${code.toString(16).toUpperCase()})">${escapeHTML(ch)}</button> `;
+                      }
+                    });
+                    pedIdsTreeEl.innerHTML = treeHtml;
+                  } else {
+                    pedIdsTreeEl.innerHTML = '<span style="color:#666; font-size:0.72rem;">(Atomic ideograph)</span>';
+                  }
+                }
+
+                // Render Vocabulary Compounds
+                if (compCard && compListEl) {
+                  if (charRec.words && charRec.words.length > 0) {
+                    compCard.style.display = 'flex';
+                    let vHtml = '';
+                    charRec.words.forEach(wObj => {
+                      const wChars = Array.from(wObj.w);
+                      const wLinked = wChars.map(c => {
+                        const code = c.codePointAt(0);
+                        return `<span class="tm-unimap-vocab-char-link" data-jump-cp="${code}" title="Inspect '${c}' (U+${code.toString(16).toUpperCase()})">${escapeHTML(c)}</span>`;
+                      }).join('');
+                      const reading = wObj.r ? ` / ${escapeHTML(wObj.r)}` : (wObj.p ? ` / ${escapeHTML(wObj.p)}` : '');
+                      const meaning = wObj.m ? escapeHTML(wObj.m) : '';
+                      vHtml += `<div class="tm-unimap-vocab-item">
+                        <div>
+                          <span class="tm-unimap-vocab-word c-accent">${wLinked}</span>
+                          <span style="color:#888; font-size:0.72rem;">${reading}</span>
+                          ${meaning ? `<div style="color:#bbb; font-size:0.7rem;">${meaning}</div>` : ''}
+                        </div>
+                        <div class="tm-unimap-vocab-meta">
+                          <span class="tm-unimap-ped-badge ${wObj.lvl.startsWith('HSK') ? 'badge-hsk' : 'badge-jlpt'}">${escapeHTML(wObj.lvl)}</span>
+                        </div>
+                      </div>`;
+                    });
+                    compListEl.innerHTML = vHtml;
+                  } else {
+                    compCard.style.display = 'none';
+                  }
+                }
+              } else {
+                pedCard.style.display = 'none';
+                if (compCard) compCard.style.display = 'none';
+              }
+            });
+
+            // Vector Stroke Order Player
+            if (strokeCard && strokeBoxEl) {
+              if (strokePlayerTimer) {
+                clearInterval(strokePlayerTimer);
+                strokePlayerTimer = null;
+              }
+              strokeBoxEl.innerHTML = '<div style="color:#666; font-size:0.72rem;">Loading stroke paths...</div>';
+              engine.ensureStrokes(cp).then(stk => {
+                if (currentCp !== cp) return;
+                if (!stk || !stk.s || stk.s.length === 0) {
+                  strokeCard.style.display = 'none';
+                  strokePlayerData = null;
+                  return;
+                }
+                strokeCard.style.display = 'flex';
+                strokePlayerData = stk;
+                const totalStrokes = stk.s.length;
+                strokePlayerIdx = totalStrokes - 1;
+
+                const isKvg = !!stk.isKvg;
+                const viewBox = isKvg ? "0 0 109 109" : "0 0 1024 1024";
+                const w = isKvg ? 109 : 1024;
+                const half = w / 2;
+
+                const renderSvgFrame = (activeIdx, isFull = false) => {
+                  let svg = `<svg viewBox="${viewBox}" class="tm-unimap-stroke-svg">
+                    <g class="tm-stroke-grid">
+                      <line x1="0" y1="${half}" x2="${w}" y2="${half}" class="tm-stroke-guide-line" />
+                      <line x1="${half}" y1="0" x2="${half}" y2="${w}" class="tm-stroke-guide-line" />
+                      <line x1="0" y1="0" x2="${w}" y2="${w}" class="tm-stroke-guide-line" />
+                      <line x1="${w}" y1="0" x2="0" y2="${w}" class="tm-stroke-guide-line" />
+                    </g>`;
+
+                  if (!isKvg) {
+                    svg += `<g transform="scale(1, -1) translate(0, -900)">`;
+                  } else {
+                    svg += `<g style="fill:none; stroke-width:3.5; stroke-linecap:round; stroke-linejoin:round;">`;
+                  }
+
+                  stk.s.forEach((d, idx) => {
+                    const isDrawn = isFull || idx <= activeIdx;
+                    const isActive = !isFull && idx === activeIdx;
+                    if (isKvg) {
+                      const strokeColor = isActive ? 'var(--accent-color)' : (isDrawn ? '#ddd' : '#333');
+                      svg += `<path d="${d}" style="stroke:${strokeColor};" class="tm-stroke-path${isDrawn ? ' drawn' : ''}${isActive ? ' active' : ''}" data-idx="${idx}" />`;
+                    } else {
+                      svg += `<path d="${d}" class="tm-stroke-path${isDrawn ? ' drawn' : ''}${isActive ? ' active' : ''}" data-idx="${idx}" />`;
+                    }
+                  });
+
+                  svg += `</g>`;
+
+                  if (!isKvg && stk.m) {
+                    svg += `<g class="tm-stroke-numbers">`;
+                    stk.m.forEach((pts, idx) => {
+                      if (pts && pts[0]) {
+                        const pt = pts[0];
+                        const nx = pt[0];
+                        const ny = 900 - pt[1] - 10;
+                        const isNumActive = !isFull && idx === activeIdx;
+                        svg += `<text x="${nx}" y="${ny}" class="tm-stroke-num" style="${isNumActive ? 'fill:var(--accent-color); font-weight:bold;' : ''}">${idx + 1}</text>`;
+                      }
+                    });
+                    svg += `</g>`;
+                  }
+
+                  svg += `</svg>`;
+                  strokeBoxEl.innerHTML = svg;
+
+                  if (strokeCountLbl) {
+                    if (isFull) {
+                      strokeCountLbl.textContent = `${totalStrokes} strokes (complete)`;
+                    } else {
+                      strokeCountLbl.textContent = `Stroke ${activeIdx + 1} of ${totalStrokes}`;
+                    }
+                  }
+                };
+
+                renderSvgFrame(strokePlayerIdx, true);
+
+                if (strokeBtnPlay) {
+                  strokeBtnPlay.onclick = () => {
+                    if (strokePlayerTimer) {
+                      clearInterval(strokePlayerTimer);
+                      strokePlayerTimer = null;
+                      strokeBtnPlay.textContent = '▶ Play';
+                      strokeBtnPlay.classList.remove('active');
+                    } else {
+                      strokeBtnPlay.textContent = '⏸ Pause';
+                      strokeBtnPlay.classList.add('active');
+                      if (strokePlayerIdx >= totalStrokes - 1) {
+                        strokePlayerIdx = -1;
+                      }
+                      strokePlayerTimer = setInterval(() => {
+                        strokePlayerIdx++;
+                        if (strokePlayerIdx >= totalStrokes) {
+                          clearInterval(strokePlayerTimer);
+                          strokePlayerTimer = null;
+                          strokeBtnPlay.textContent = '▶ Play';
+                          strokeBtnPlay.classList.remove('active');
+                          renderSvgFrame(totalStrokes - 1, true);
+                          return;
+                        }
+                        renderSvgFrame(strokePlayerIdx, false);
+                      }, 550);
+                    }
+                  };
+                }
+
+                if (strokeBtnPrev) {
+                  strokeBtnPrev.onclick = () => {
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    if (strokePlayerIdx > 0) {
+                      strokePlayerIdx--;
+                      renderSvgFrame(strokePlayerIdx, false);
+                    }
+                  };
+                }
+
+                if (strokeBtnNext) {
+                  strokeBtnNext.onclick = () => {
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    if (strokePlayerIdx < totalStrokes - 1) {
+                      strokePlayerIdx++;
+                      renderSvgFrame(strokePlayerIdx, false);
+                    } else {
+                      renderSvgFrame(totalStrokes - 1, true);
+                    }
+                  };
+                }
+
+                if (strokeBtnReset) {
+                  strokeBtnReset.onclick = () => {
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    strokePlayerIdx = totalStrokes - 1;
+                    renderSvgFrame(strokePlayerIdx, true);
+                  };
+                }
+              });
+            }
+          } else {
+            if (pedCard) pedCard.style.display = 'none';
+            if (compCard) compCard.style.display = 'none';
+            if (strokeCard) strokeCard.style.display = 'none';
+          }
+
           // Specialized Cards: CJK
           const cjkCard = document.getElementById('tm-unimap-card-cjk');
           const cjkContent = document.getElementById('tm-unimap-cjk-content');
@@ -4153,7 +4736,7 @@ Volume  : ${vol}%`;
                     const rawSources = m[2];
                     const cp = parseInt(hex.slice(2), 16);
                     let ch = '';
-                    try { ch = String.fromCodePoint(cp); } catch (e) {}
+                    try { ch = String.fromCodePoint(cp); } catch (e) { }
 
                     let out = `<span class="tm-unimap-link" data-jump-cp="${cp}">${hex}${ch ? ` (${escapeHTML(ch)})` : ''}</span>`;
                     if (rawSources) {
@@ -4265,7 +4848,7 @@ Volume  : ${vol}%`;
                     confRow.style.display = '';
                     const tgtHex = sec.confusable[0];
                     let tgtChar = '';
-                    try { tgtChar = String.fromCodePoint(parseInt(tgtHex, 16)); } catch(e) {}
+                    try { tgtChar = String.fromCodePoint(parseInt(tgtHex, 16)); } catch (e) { }
                     const elTgt = document.getElementById('tm-unimap-sec-target');
                     if (elTgt) {
                       elTgt.textContent = `U+${tgtHex} ${tgtChar ? `(${tgtChar})` : ''}`;
@@ -4769,7 +5352,7 @@ Volume  : ${vol}%`;
           if (cp !== undefined) currentCp = cp;
         }
 
-                const switchTab = (tab) => {
+        const switchTab = (tab) => {
           activeTab = tab;
           if (tab === 'map') {
             if (tabMapBtn) tabMapBtn.classList.add('active');
@@ -4813,13 +5396,13 @@ Volume  : ${vol}%`;
           rad.groups.forEach(group => {
             html += `<div class="tm-unimap-rs-section" id="tm-unimap-rs-sec-${group.s}" data-stroke="${group.s}">
               <div class="tm-unimap-rs-header">
-                <span>Radical #${rad.num} (${escapeHTML(rad.name)}) ${escapeHTML(rad.char)} / ${group.s} strokes</span>
+                <span>Radical #${rad.num} (${escapeHTML(rad.name)}) ${escapeHTML(rad.char)} / ${group.s} residual strokes</span>
                 <span class="tm-unimap-rs-count">${group.cps.length}</span>
               </div>
               <div class="tm-unimap-rs-grid font-${currentFontMode}">`;
             group.cps.forEach(cp => {
               let ch = '';
-              try { ch = String.fromCodePoint(cp); } catch (e) {}
+              try { ch = String.fromCodePoint(cp); } catch (e) { }
               const hex = 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
               const isActive = (cp === currentCp);
               html += `<div class="tm-unimap-rs-cell${isActive ? ' active' : ''}" data-cp="${cp}" title="${hex}: ${escapeHTML(ch)}">${escapeHTML(ch)}</div>`;
@@ -4837,6 +5420,351 @@ Volume  : ${vol}%`;
               }
             }, 50);
           }
+        };
+
+        const updatePedGroupSelect = (schemaId) => {
+          if (!pedSelect || !pedData || !pedData.schemas || !pedData.schemas[schemaId]) return;
+          const schemaObj = pedData.schemas[schemaId];
+          const keys = Object.keys(schemaObj);
+          pedSelect.innerHTML = keys.map(k => {
+            const count = schemaObj[k].length;
+            let label = k;
+            if (schemaId === 'hsk') label = `Band ${k}`;
+            return `<option value="${k}">${label} (${count} characters)</option>`;
+          }).join('');
+        };
+
+        const updateStudyProgress = (cps) => {
+          if (!studyProgressBox || !progressStatsEl || !progressFillEl || !cps) return;
+          const total = cps.length;
+          if (total === 0) return;
+          let learned = 0;
+          let mastered = 0;
+          let starred = 0;
+          const store = loadMasteryStore();
+          cps.forEach(cp => {
+            const m = store[cp];
+            if (m) {
+              if (m.status && m.status !== 'unlearned') learned++;
+              if (m.status === 'mastered') mastered++;
+              if (m.starred) starred++;
+            }
+          });
+          const pct = Math.round((learned / total) * 100);
+          progressStatsEl.textContent = `${learned} / ${total} learned (${pct}%)`;
+          if (progressSubstatsEl) progressSubstatsEl.textContent = `${mastered} mastered · ${starred} starred`;
+          progressFillEl.style.width = `${pct}%`;
+        };
+
+        const applyMasteryDecorations = () => {
+          if (!rsContainer) return;
+          const cells = rsContainer.querySelectorAll('.tm-unimap-rs-cell');
+          cells.forEach(cell => {
+            const cp = parseInt(cell.dataset.cp, 10);
+            const m = getCharMastery(cp);
+            cell.classList.remove('is-mastered', 'is-review', 'is-learning', 'is-starred');
+            if (m.status === 'mastered') cell.classList.add('is-mastered');
+            else if (m.status === 'review') cell.classList.add('is-review');
+            else if (m.status === 'learning') cell.classList.add('is-learning');
+            if (m.starred) cell.classList.add('is-starred');
+
+            if (currentMasteryFilter === 'all') {
+              cell.style.display = '';
+            } else if (currentMasteryFilter === 'unlearned') {
+              cell.style.display = (!m.status || m.status === 'unlearned') ? '' : 'none';
+            } else if (currentMasteryFilter === 'learning') {
+              cell.style.display = m.status === 'learning' ? '' : 'none';
+            } else if (currentMasteryFilter === 'review') {
+              cell.style.display = m.status === 'review' ? '' : 'none';
+            } else if (currentMasteryFilter === 'mastered') {
+              cell.style.display = m.status === 'mastered' ? '' : 'none';
+            } else if (currentMasteryFilter === 'starred') {
+              cell.style.display = m.starred ? '' : 'none';
+            }
+          });
+        };
+
+        const renderDeckCard = () => {
+          if (!deckCardCounter || !deckChar || !deckHint) return;
+          if (deckCards.length === 0) {
+            deckCardCounter.textContent = 'card 0 of 0';
+            deckChar.textContent = '-';
+            deckHint.textContent = 'no cards match current filter in this tier';
+            if (deckFront) deckFront.style.display = 'flex';
+            if (deckBack) deckBack.style.display = 'none';
+            return;
+          }
+          if (deckIndex < 0) deckIndex = 0;
+          if (deckIndex >= deckCards.length) deckIndex = deckCards.length - 1;
+
+          const cp = deckCards[deckIndex];
+          const charStr = String.fromCodePoint(cp);
+          const pInfo = engine.getPedagogicalInfo(cp);
+          const m = getCharMastery(cp);
+
+          deckCardCounter.textContent = `card ${deckIndex + 1} of ${deckCards.length} [${m.status}]`;
+          if (deckStarBtn) {
+            deckStarBtn.textContent = m.starred ? 'starred' : 'star';
+            if (m.starred) deckStarBtn.classList.add('c-accent');
+            else deckStarBtn.classList.remove('c-accent');
+          }
+
+          deckChar.textContent = charStr;
+          deckHint.textContent = `${pInfo?.ids ? 'IDS: ' + pInfo.ids : '-'} · ${pInfo?.hsk ? 'HSK ' + pInfo.hsk : (pInfo?.jlpt || '')}`;
+
+          if (deckFront) deckFront.style.display = 'flex';
+          if (deckBack) deckBack.style.display = 'none';
+          deckFlipped = false;
+
+          if (deckPinyin) deckPinyin.textContent = pInfo?.pinyin || '-';
+          if (deckDef) deckDef.textContent = pInfo?.definition || '-';
+          if (deckKanji) {
+            if (pInfo?.kanji && (pInfo.kanji.on || pInfo.kanji.kun || pInfo.kanji.m)) {
+              deckKanji.style.display = 'block';
+              const onkun = [pInfo.kanji.on, pInfo.kanji.kun].filter(Boolean).join(' / ');
+              deckKanji.textContent = `[${onkun}] ${pInfo.kanji.m || ''}`;
+            } else {
+              deckKanji.style.display = 'none';
+            }
+          }
+
+          if (deckCompounds) {
+            if (pInfo?.words && pInfo.words.length > 0) {
+              deckCompounds.innerHTML = pInfo.words.slice(0, 3).map(w => {
+                const reading = w.p ? `/ ${escapeHTML(w.p)}` : (w.r ? `/ ${escapeHTML(w.r)}` : '');
+                return `<div class="tm-deck-compound-item">
+                  <span><strong class="c-accent">${escapeHTML(w.w)}</strong> <span style="color:#888;">${reading}</span></span>
+                  <span style="color:#ddd;">${escapeHTML(w.m || '')}</span>
+                </div>`;
+              }).join('');
+            } else {
+              deckCompounds.innerHTML = '';
+            }
+          }
+
+          if (deckAudioBtn) {
+            deckAudioBtn.onclick = () => speakText(charStr);
+          }
+        };
+
+        const initDeckForTier = (cps) => {
+          if (!cps) return;
+          const store = loadMasteryStore();
+          if (currentMasteryFilter === 'all') {
+            deckCards = [...cps];
+          } else if (currentMasteryFilter === 'unlearned') {
+            deckCards = cps.filter(cp => !store[cp] || store[cp].status === 'unlearned');
+          } else if (currentMasteryFilter === 'learning') {
+            deckCards = cps.filter(cp => store[cp] && store[cp].status === 'learning');
+          } else if (currentMasteryFilter === 'review') {
+            deckCards = cps.filter(cp => store[cp] && store[cp].status === 'review');
+          } else if (currentMasteryFilter === 'mastered') {
+            deckCards = cps.filter(cp => store[cp] && store[cp].status === 'mastered');
+          } else if (currentMasteryFilter === 'starred') {
+            deckCards = cps.filter(cp => store[cp] && store[cp].starred);
+          }
+          deckIndex = 0;
+          renderDeckCard();
+        };
+
+        const renderVocabList = () => {
+          if (!vocabListScroll || !pedData) return;
+          let words = [];
+          if (pedData.tierVocab && pedData.tierVocab[currentSchema] && pedData.tierVocab[currentSchema][currentPedTier]) {
+            words = pedData.tierVocab[currentSchema][currentPedTier];
+          } else if (pedData.schemas && pedData.schemas[currentSchema]) {
+            const cps = pedData.schemas[currentSchema][currentPedTier] || [];
+            const seen = new Set();
+            cps.forEach(cp => {
+              const rec = pedData.characters[cp];
+              if (rec && rec.words) {
+                rec.words.forEach(w => {
+                  if (!seen.has(w.w)) {
+                    seen.add(w.w);
+                    words.push(w);
+                  }
+                });
+              }
+            });
+          }
+
+          const q = (vocabFilterInput ? vocabFilterInput.value.trim().toLowerCase() : '');
+          const filtered = q ? words.filter(w => {
+            return w.w.toLowerCase().includes(q) ||
+              (w.p && w.p.toLowerCase().includes(q)) ||
+              (w.r && w.r.toLowerCase().includes(q)) ||
+              (w.m && w.m.toLowerCase().includes(q));
+          }) : words;
+
+          if (vocabCountLbl) {
+            vocabCountLbl.textContent = `${filtered.length} words in ${currentSchema.toUpperCase()} ${currentPedTier} (${words.length} total)`;
+          }
+
+          let html = '';
+          filtered.forEach(w => {
+            const chars = Array.from(w.w);
+            const linkedChars = chars.map(c => {
+              const cp = c.codePointAt(0);
+              return `<span class="tm-unimap-vocab-char-link" data-jump-cp="${cp}" title="Inspect '${c}'">${escapeHTML(c)}</span>`;
+            }).join('');
+            const reading = w.p ? `/ ${escapeHTML(w.p)}` : (w.r ? `/ ${escapeHTML(w.r)}` : '');
+            html += `<div class="tm-vocab-row">
+              <div>
+                <div>
+                  <span class="tm-vocab-term c-accent">${linkedChars}</span>
+                  <span class="tm-vocab-read">${reading}</span>
+                  <button type="button" class="tm-btn" style="padding:0 5px; font-size:0.68rem; margin-left:6px;" data-speak="${escapeHTML(w.w)}">audio</button>
+                </div>
+                <div class="tm-vocab-meaning">${escapeHTML(w.m || '')}</div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:3px;">
+                <span class="tm-unimap-ped-badge ${w.lvl && w.lvl.startsWith('HSK') ? 'badge-hsk' : 'badge-jlpt'}">${escapeHTML(w.lvl || '')}</span>
+              </div>
+            </div>`;
+          });
+
+          vocabListScroll.innerHTML = html || '<div style="color:#777; padding:20px; text-align:center;">no vocabulary matching filter</div>';
+        };
+
+        const exportDeckTSV = () => {
+          if (!pedData) return;
+          const cps = (pedData.schemas[currentSchema] && pedData.schemas[currentSchema][currentPedTier]) || [];
+          let words = [];
+          if (pedData.tierVocab && pedData.tierVocab[currentSchema] && pedData.tierVocab[currentSchema][currentPedTier]) {
+            words = pedData.tierVocab[currentSchema][currentPedTier];
+          }
+
+          let tsv = '#separator:tab\n#html:true\n#tags column:5\n';
+          tsv += 'Expression\tReading\tDefinition\tDetails\tTags\n';
+          const tag = `${currentSchema}_${currentPedTier}`.replace(/\s+/g, '_');
+
+          // Characters
+          cps.forEach(cp => {
+            const rec = pedData.characters[cp];
+            if (rec) {
+              const reading = rec.pinyin || (rec.kanji ? [rec.kanji.on, rec.kanji.kun].filter(Boolean).join(' / ') : '');
+              const def = rec.definition || (rec.kanji ? rec.kanji.m : '');
+              const details = `IDS: ${rec.ids || '-'}; Strokes: ${rec.hsk || ''}`;
+              tsv += `${rec.char}\t${reading}\t${def}\t${details}\t${tag}\n`;
+            }
+          });
+
+          // Words
+          words.forEach(w => {
+            const reading = w.p || w.r || '';
+            const def = w.m || '';
+            tsv += `${w.w}\t${reading}\t${def}\tCompound Vocabulary\t${tag}\n`;
+          });
+
+          const blob = new Blob([tsv], { type: 'text/tab-separated-values;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${tag}_Deck.tsv`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          this.setStatus(`Exported ${cps.length + words.length} cards to ${tag}_Deck.tsv`);
+        };
+
+        const switchViewMode = (mode) => {
+          currentViewMode = mode;
+          if (modeGridBtn) modeGridBtn.classList.toggle('active', mode === 'grid');
+          if (modeDeckBtn) modeDeckBtn.classList.toggle('active', mode === 'deck');
+          if (modeVocabBtn) modeVocabBtn.classList.toggle('active', mode === 'vocab');
+
+          if (rsContainer) rsContainer.style.display = mode === 'grid' ? '' : 'none';
+          if (deckPane) deckPane.style.display = mode === 'deck' ? '' : 'none';
+          if (vocabPane) vocabPane.style.display = mode === 'vocab' ? '' : 'none';
+
+          if (pedData && pedData.schemas && pedData.schemas[currentSchema]) {
+            const cps = pedData.schemas[currentSchema][currentPedTier] || [];
+            if (mode === 'deck') {
+              initDeckForTier(cps);
+            } else if (mode === 'vocab') {
+              renderVocabList();
+            } else {
+              applyMasteryDecorations();
+            }
+          }
+        };
+
+        const renderPedagogicalGroup = (schemaId, tierKey, targetCpToScroll) => {
+          if (!pedData || !rsContainer) return;
+          const schemaObj = pedData.schemas[schemaId];
+          if (!schemaObj) return;
+          const cps = schemaObj[tierKey] || schemaObj[Object.keys(schemaObj)[0]] || [];
+          currentPedTier = tierKey;
+
+          if (pedSelect && pedSelect.value !== tierKey) {
+            pedSelect.value = tierKey;
+          }
+
+          const schemaTitles = {
+            hsk: 'HSK 3.0 Curriculum',
+            tocfl: 'TOCFL (Taiwan) Proficiency',
+            joyo: 'MEXT Jōyō Kanji Grade',
+            jlpt: 'JLPT Japanese Proficiency',
+            zipf: 'SUBTLEX Spoken Frequency'
+          };
+          const title = schemaTitles[schemaId] || schemaId.toUpperCase();
+          if (rsInfoLbl) rsInfoLbl.textContent = `${title} — ${tierKey}`;
+          if (rsTotalLbl) rsTotalLbl.textContent = `${cps.length} characters in benchmark tier`;
+
+          let html = `<div class="tm-unimap-rs-section">
+            <div class="tm-unimap-rs-header">
+              <span>${escapeHTML(title)} / ${escapeHTML(tierKey)}</span>
+              <span class="tm-unimap-rs-count">${cps.length}</span>
+            </div>
+            <div class="tm-unimap-rs-grid font-${currentFontMode}">`;
+
+          cps.forEach(cp => {
+            let ch = '';
+            try { ch = String.fromCodePoint(cp); } catch (e) { }
+            const hex = 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
+            const isActive = (cp === currentCp);
+            html += `<div class="tm-unimap-rs-cell${isActive ? ' active' : ''}" data-cp="${cp}" title="${hex}: ${escapeHTML(ch)}">${escapeHTML(ch)}</div>`;
+          });
+          html += `</div></div>`;
+
+          rsContainer.innerHTML = html;
+          updateStudyProgress(cps);
+          applyMasteryDecorations();
+
+          if (currentViewMode === 'deck') {
+            initDeckForTier(cps);
+          } else if (currentViewMode === 'vocab') {
+            renderVocabList();
+          }
+
+          if (targetCpToScroll) {
+            setTimeout(() => {
+              const activeEl = rsContainer.querySelector(`.tm-unimap-rs-cell[data-cp="${targetCpToScroll}"]`);
+              if (activeEl) {
+                activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }, 50);
+          }
+        };
+
+        const ensurePedagogyLoadedAndRender = (schemaId, tierKey, targetCp) => {
+          if (pedData) {
+            updatePedGroupSelect(schemaId);
+            const activeTier = tierKey || (pedData.schemas[schemaId] ? Object.keys(pedData.schemas[schemaId])[0] : '1');
+            renderPedagogicalGroup(schemaId, activeTier, targetCp);
+            return Promise.resolve(pedData);
+          }
+          if (rsContainer) rsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Loading Pedagogical CJK Dataset...</div>';
+          return engine.ensurePedagogy().then(data => {
+            pedData = data;
+            updatePedGroupSelect(schemaId);
+            const activeTier = tierKey || (pedData.schemas[schemaId] ? Object.keys(pedData.schemas[schemaId])[0] : '1');
+            renderPedagogicalGroup(schemaId, activeTier, targetCp);
+            return pedData;
+          }).catch(err => {
+            if (rsContainer) rsContainer.innerHTML = `<div style="padding:20px; color:#ff5555;">Failed to load pedagogy: ${escapeHTML(err.message)}</div>`;
+          });
         };
 
         const ensureRSIndexLoadedAndRender = (targetRadNum, targetCp) => {
@@ -4863,6 +5791,201 @@ Volume  : ${vol}%`;
             if (rsContainer) rsContainer.innerHTML = `<div style="padding:20px; color:#ff5555;">Failed to load RSIndex: ${escapeHTML(err.message)}</div>`;
           });
         };
+
+        if (modeGridBtn) modeGridBtn.addEventListener('click', () => switchViewMode('grid'));
+        if (modeDeckBtn) modeDeckBtn.addEventListener('click', () => switchViewMode('deck'));
+        if (modeVocabBtn) modeVocabBtn.addEventListener('click', () => switchViewMode('vocab'));
+
+        if (masteryFilterSelect) {
+          masteryFilterSelect.addEventListener('change', () => {
+            currentMasteryFilter = masteryFilterSelect.value;
+            if (currentViewMode === 'grid') {
+              applyMasteryDecorations();
+            } else if (currentViewMode === 'deck') {
+              const cps = (pedData && pedData.schemas[currentSchema] && pedData.schemas[currentSchema][currentPedTier]) || [];
+              initDeckForTier(cps);
+            }
+          });
+        }
+
+        if (exportAnkiBtn) {
+          exportAnkiBtn.addEventListener('click', exportDeckTSV);
+        }
+
+        if (deckRevealBtn) {
+          deckRevealBtn.addEventListener('click', () => {
+            if (deckBack) deckBack.style.display = 'flex';
+            deckFlipped = true;
+          });
+        }
+
+        const handleDeckGrade = (grade) => {
+          if (deckCards.length === 0) return;
+          const cp = deckCards[deckIndex];
+          updateCharMastery(cp, grade);
+          updateStudyProgress(deckCards);
+          applyMasteryDecorations();
+          if (deckIndex < deckCards.length - 1) {
+            deckIndex++;
+            renderDeckCard();
+          } else {
+            this.setStatus(`Finished all cards in ${currentSchema.toUpperCase()} ${currentPedTier}!`);
+            renderDeckCard();
+          }
+        };
+
+        if (deckGradeAgain) deckGradeAgain.addEventListener('click', () => handleDeckGrade('again'));
+        if (deckGradeHard) deckGradeHard.addEventListener('click', () => handleDeckGrade('hard'));
+        if (deckGradeGood) deckGradeGood.addEventListener('click', () => handleDeckGrade('good'));
+        if (deckGradeEasy) deckGradeEasy.addEventListener('click', () => handleDeckGrade('easy'));
+
+        if (deckPrevBtn) {
+          deckPrevBtn.addEventListener('click', () => {
+            if (deckIndex > 0) {
+              deckIndex--;
+              renderDeckCard();
+            }
+          });
+        }
+
+        if (deckNextBtn) {
+          deckNextBtn.addEventListener('click', () => {
+            if (deckIndex < deckCards.length - 1) {
+              deckIndex++;
+              renderDeckCard();
+            }
+          });
+        }
+
+        if (deckStarBtn) {
+          deckStarBtn.addEventListener('click', () => {
+            if (deckCards.length === 0) return;
+            const cp = deckCards[deckIndex];
+            const isStar = toggleCharStar(cp);
+            deckStarBtn.textContent = isStar ? 'starred' : 'star';
+            if (isStar) deckStarBtn.classList.add('c-accent');
+            else deckStarBtn.classList.remove('c-accent');
+            updateStudyProgress(deckCards);
+            applyMasteryDecorations();
+          });
+        }
+
+        if (deckShuffleBtn) {
+          deckShuffleBtn.addEventListener('click', () => {
+            for (let i = deckCards.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [deckCards[i], deckCards[j]] = [deckCards[j], deckCards[i]];
+            }
+            deckIndex = 0;
+            renderDeckCard();
+            this.setStatus('Shuffled study deck');
+          });
+        }
+
+        if (deckResetBtn) {
+          deckResetBtn.addEventListener('click', () => {
+            const store = loadMasteryStore();
+            deckCards.forEach(cp => delete store[cp]);
+            saveMasteryStore(store);
+            updateStudyProgress(deckCards);
+            applyMasteryDecorations();
+            renderDeckCard();
+            this.setStatus('Reset mastery for cards in this tier');
+          });
+        }
+
+        if (vocabFilterInput) {
+          vocabFilterInput.addEventListener('input', () => {
+            renderVocabList();
+          });
+        }
+
+        if (vocabPane) {
+          vocabPane.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-speak]');
+            if (btn) {
+              speakText(btn.dataset.speak);
+              return;
+            }
+            const link = e.target.closest('.tm-unimap-vocab-char-link');
+            if (link && link.dataset.jumpCp) {
+              const cp = parseInt(link.dataset.jumpCp, 10);
+              currentCp = cp;
+              updateInspector(cp);
+            }
+          });
+        }
+
+        // Keyboard shortcuts for Study Deck
+        window.addEventListener('keydown', (e) => {
+          if (activeTab !== 'rsindex' || currentViewMode !== 'deck') return;
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+          if (e.key === ' ') {
+            e.preventDefault();
+            if (!deckFlipped) {
+              if (deckBack) deckBack.style.display = 'flex';
+              deckFlipped = true;
+            }
+          } else if (deckFlipped) {
+            if (e.key === '1') { e.preventDefault(); handleDeckGrade('again'); }
+            else if (e.key === '2') { e.preventDefault(); handleDeckGrade('hard'); }
+            else if (e.key === '3') { e.preventDefault(); handleDeckGrade('good'); }
+            else if (e.key === '4') { e.preventDefault(); handleDeckGrade('easy'); }
+          }
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (deckIndex > 0) { deckIndex--; renderDeckCard(); }
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (deckIndex < deckCards.length - 1) { deckIndex++; renderDeckCard(); }
+          } else if (e.key === 's' || e.key === 'S') {
+            e.preventDefault();
+            if (deckStarBtn) deckStarBtn.click();
+          }
+        });
+
+        if (schemaSelect) {
+          schemaSelect.addEventListener('change', () => {
+            currentSchema = schemaSelect.value;
+            if (currentSchema === 'kangxi') {
+              if (kangxiControls) kangxiControls.style.display = '';
+              if (pedControls) pedControls.style.display = 'none';
+              if (studyModesBox) studyModesBox.style.display = 'none';
+              if (studyProgressBox) studyProgressBox.style.display = 'none';
+              switchViewMode('grid');
+              ensureRSIndexLoadedAndRender(currentRadicalNum, currentCp);
+            } else {
+              if (kangxiControls) kangxiControls.style.display = 'none';
+              if (pedControls) pedControls.style.display = '';
+              if (studyModesBox) studyModesBox.style.display = 'flex';
+              if (studyProgressBox) studyProgressBox.style.display = 'block';
+              ensurePedagogyLoadedAndRender(currentSchema, null, currentCp);
+            }
+          });
+        }
+
+        if (pedSelect) {
+          pedSelect.addEventListener('change', () => {
+            renderPedagogicalGroup(currentSchema, pedSelect.value);
+          });
+        }
+
+        if (prevPedBtn) {
+          prevPedBtn.addEventListener('click', () => {
+            if (!pedSelect || pedSelect.selectedIndex <= 0) return;
+            pedSelect.selectedIndex--;
+            renderPedagogicalGroup(currentSchema, pedSelect.value);
+          });
+        }
+
+        if (nextPedBtn) {
+          nextPedBtn.addEventListener('click', () => {
+            if (!pedSelect || pedSelect.selectedIndex >= pedSelect.options.length - 1) return;
+            pedSelect.selectedIndex++;
+            renderPedagogicalGroup(currentSchema, pedSelect.value);
+          });
+        }
 
         if (radSelect) {
           radSelect.addEventListener('change', () => {
@@ -4920,9 +6043,49 @@ Volume  : ${vol}%`;
           });
         }
 
+        if (decompCloseBtn && wordDecompBox) {
+          decompCloseBtn.addEventListener('click', () => {
+            wordDecompBox.style.display = 'none';
+          });
+        }
+
         const handleFindCJK = () => {
           if (!rsFindInput || !rsFindInput.value.trim()) return;
           const val = rsFindInput.value.trim();
+
+          // Check if multi-character word (e.g. 学习 or 电话)
+          const chars = Array.from(val);
+          const isMultiWord = chars.length > 1 && chars.every(c => {
+            const code = c.codePointAt(0);
+            return (code >= 0x3400 && code <= 0x4DBF) || (code >= 0x4E00 && code <= 0x9FFF) || (code >= 0x20000 && code <= 0x3347F);
+          });
+
+          if (isMultiWord) {
+            const decomposed = engine.decomposeWord(val);
+            if (wordDecompBox && decompWordLbl && decompChipsBox) {
+              decompWordLbl.textContent = val;
+              let chipsHtml = '';
+              decomposed.forEach(d => {
+                const hsk = d.pedagogy?.hsk ? `HSK ${d.pedagogy.hsk}` : '';
+                const jlpt = d.pedagogy?.jlpt ? `JLPT ${d.pedagogy.jlpt}` : '';
+                const joyo = d.pedagogy?.joyo ? (d.pedagogy.joyo === 8 ? 'Jōyō Sec' : `Grade ${d.pedagogy.joyo}`) : '';
+                const tags = [hsk, jlpt, joyo].filter(Boolean).join(', ');
+                chipsHtml += `<button type="button" class="tm-unimap-ids-chip" data-jump-cp="${d.cp}" style="padding:4px 10px; font-size:0.85rem;" title="Inspect ${d.char} (${d.hex})">
+                  <span style="font-weight:bold; font-size:1.1rem; color:var(--accent-color);">${d.char}</span>
+                  ${tags ? `<span style="font-size:0.7rem; color:#888; margin-left:6px;">[${tags}]</span>` : ''}
+                </button>`;
+              });
+              decompChipsBox.innerHTML = chipsHtml;
+              wordDecompBox.style.display = '';
+            }
+            // Focus first character
+            const firstCp = decomposed[0].cp;
+            currentCp = firstCp;
+            updateInspector(firstCp);
+            this.setStatus(`Decomposed word '${val}' into ${decomposed.length} characters`);
+            return;
+          }
+
           let targetCp = null;
           const hexM = val.match(/^(?:u\+|0x)?([0-9a-f]{4,6})$/i);
           if (hexM) {
@@ -4932,14 +6095,35 @@ Volume  : ${vol}%`;
           }
           if (targetCp === null || isNaN(targetCp)) return;
 
-          const info = engine.findRadicalForCodePoint(targetCp);
-          if (info) {
-            currentCp = targetCp;
-            ensureRSIndexLoadedAndRender(info.rad, targetCp);
-            updateInspector(targetCp);
-            this.setStatus(`Found '${String.fromCodePoint(targetCp)}': Radical #${info.rad} (${info.radName}) ${info.radChar}, ${info.s} strokes`);
+          currentCp = targetCp;
+          updateInspector(targetCp);
+
+          if (currentSchema === 'kangxi') {
+            const info = engine.findRadicalForCodePoint(targetCp);
+            if (info) {
+              ensureRSIndexLoadedAndRender(info.rad, targetCp);
+              this.setStatus(`Found '${String.fromCodePoint(targetCp)}': Radical #${info.rad} (${info.radName}) ${info.radChar}, ${info.s} residual strokes`);
+            } else {
+              this.setStatus(`Character U+${targetCp.toString(16).toUpperCase()} not found in Kangxi Radical-Stroke index`);
+            }
           } else {
-            this.setStatus(`Character U+${targetCp.toString(16).toUpperCase()} not found in Kangxi Radical-Stroke index`);
+            // Find which tier in currentSchema contains targetCp
+            if (pedData && pedData.schemas && pedData.schemas[currentSchema]) {
+              const schemaObj = pedData.schemas[currentSchema];
+              let foundTier = null;
+              for (const [tKey, list] of Object.entries(schemaObj)) {
+                if (list.includes(targetCp)) {
+                  foundTier = tKey;
+                  break;
+                }
+              }
+              if (foundTier) {
+                renderPedagogicalGroup(currentSchema, foundTier, targetCp);
+                this.setStatus(`Found '${String.fromCodePoint(targetCp)}' in ${currentSchema.toUpperCase()} ${foundTier}`);
+              } else {
+                this.setStatus(`'${String.fromCodePoint(targetCp)}' not ranked in ${currentSchema.toUpperCase()}`);
+              }
+            }
           }
         };
 
@@ -4958,11 +6142,39 @@ Volume  : ${vol}%`;
             const info = engine.findRadicalForCodePoint(currentCp);
             if (info) {
               switchTab('rsindex');
+              if (schemaSelect) schemaSelect.value = 'kangxi';
+              currentSchema = 'kangxi';
+              if (kangxiControls) kangxiControls.style.display = '';
+              if (pedControls) pedControls.style.display = 'none';
               ensureRSIndexLoadedAndRender(info.rad, currentCp);
               this.setStatus(`Switched to RSIndex for Radical #${info.rad} (${info.radName}) ${info.radChar}`);
             } else {
               switchTab('rsindex');
               ensureRSIndexLoadedAndRender(1, currentCp);
+            }
+          });
+        }
+
+        if (pedJumpBtn) {
+          pedJumpBtn.addEventListener('click', () => {
+            switchTab('rsindex');
+            // Check pedagogical info for current character
+            const pInfo = engine.getPedagogicalInfo(currentCp);
+            if (pInfo && pInfo.hsk) {
+              currentSchema = 'hsk';
+              if (schemaSelect) schemaSelect.value = 'hsk';
+              if (kangxiControls) kangxiControls.style.display = 'none';
+              if (pedControls) pedControls.style.display = '';
+              ensurePedagogyLoadedAndRender('hsk', String(pInfo.hsk), currentCp);
+            } else if (pInfo && pInfo.jlpt) {
+              currentSchema = 'jlpt';
+              if (schemaSelect) schemaSelect.value = 'jlpt';
+              if (kangxiControls) kangxiControls.style.display = 'none';
+              if (pedControls) pedControls.style.display = '';
+              ensurePedagogyLoadedAndRender('jlpt', pInfo.jlpt, currentCp);
+            } else {
+              const info = engine.findRadicalForCodePoint(currentCp);
+              ensureRSIndexLoadedAndRender(info ? info.rad : 1, currentCp);
             }
           });
         }

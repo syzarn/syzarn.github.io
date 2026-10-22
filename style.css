@@ -6074,3 +6074,542 @@ optgroup[disabled] option {
 
 
 
+
+
+/* ==========================================================================
+   Pedagogical CJK Workbench & Stroke Order Player
+   ========================================================================== */
+
+.tm-unimap-ped-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tm-unimap-ped-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: monospace;
+  letter-spacing: 0.3px;
+  user-select: none;
+}
+
+.tm-unimap-ped-badge.badge-hsk {
+  background: rgba(0, 230, 118, 0.15);
+  border: 1px solid rgba(0, 230, 118, 0.5);
+  color: #00e676;
+}
+
+.tm-unimap-ped-badge.badge-tocfl {
+  background: rgba(33, 150, 243, 0.15);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+  color: #42a5f5;
+}
+
+.tm-unimap-ped-badge.badge-joyo {
+  background: rgba(171, 71, 188, 0.15);
+  border: 1px solid rgba(171, 71, 188, 0.5);
+  color: #ce93d8;
+}
+
+.tm-unimap-ped-badge.badge-jlpt {
+  background: rgba(255, 167, 38, 0.15);
+  border: 1px solid rgba(255, 167, 38, 0.5);
+  color: #ffa726;
+}
+
+.tm-unimap-ped-badge.badge-zipf {
+  background: rgba(38, 198, 218, 0.15);
+  border: 1px solid rgba(38, 198, 218, 0.5);
+  color: #26c6da;
+}
+
+.tm-unimap-ids-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #222;
+}
+
+.tm-unimap-ids-tree {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.76rem;
+}
+
+.tm-unimap-ids-chip {
+  background: #181818;
+  border: 1px solid #333;
+  color: #eee;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tm-unimap-ids-chip:hover {
+  background: var(--accent-color);
+  color: #000;
+  border-color: #fff;
+  font-weight: bold;
+}
+
+.tm-unimap-ids-op {
+  color: #888;
+  font-size: 0.74rem;
+  font-style: italic;
+}
+
+.tm-unimap-vocab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.tm-unimap-vocab-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #121212;
+  border: 1px solid #242424;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+}
+
+.tm-unimap-vocab-word {
+  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.tm-unimap-vocab-char-link {
+  cursor: pointer;
+  padding: 0 1px;
+  border-bottom: 1px dashed #555;
+  transition: all 0.1s ease;
+}
+
+.tm-unimap-vocab-char-link:hover {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.tm-unimap-vocab-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.tm-unimap-stroke-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.tm-unimap-stroke-canvas-box {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  background: #0d0d0d;
+  border: 1px solid #282828;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tm-unimap-stroke-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tm-stroke-guide-line {
+  stroke: #1f1f1f;
+  stroke-width: 1;
+  stroke-dasharray: 4,4;
+}
+
+.tm-stroke-path {
+  fill: #444;
+  stroke: #333;
+  stroke-width: 1;
+  transition: fill 0.2s ease, opacity 0.2s ease;
+}
+
+.tm-stroke-path.drawn {
+  fill: #ddd;
+  stroke: #aaa;
+}
+
+.tm-stroke-path.active {
+  fill: var(--accent-color) !important;
+  stroke: #fff !important;
+  filter: drop-shadow(0 0 4px var(--accent-color));
+}
+
+.tm-stroke-num {
+  font-size: 26px;
+  fill: #888;
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+}
+
+.tm-stroke-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.tm-stroke-btn {
+  background: #181818;
+  border: 1px solid #333;
+  color: #ccc;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tm-stroke-btn:hover {
+  background: #2a2a2a;
+  border-color: #666;
+  color: #fff;
+}
+
+.tm-stroke-btn.active {
+  background: var(--accent-color);
+  color: #000;
+  border-color: #fff;
+}
+
+.tm-stroke-counter {
+  font-size: 0.72rem;
+  color: #888;
+  font-family: monospace;
+}
+
+
+/* ==========================================================================
+   Learner Suite: Progress, Flashcards (Deck), and Vocabulary View
+   ========================================================================== */
+
+/* Progress Header */
+.tm-unimap-progress-track {
+  height: 4px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.tm-unimap-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00e676, #00ff66);
+  transition: width 0.3s ease;
+}
+
+/* Cell Mastery Indicators */
+.tm-unimap-rs-cell.is-mastered {
+  border-top: 2px solid #00ff66 !important;
+}
+
+.tm-unimap-rs-cell.is-starred {
+  border-right: 2px solid #ffd700 !important;
+}
+
+.tm-unimap-rs-cell.is-learning {
+  border-top: 2px solid #ff5555 !important;
+}
+
+.tm-unimap-rs-cell.is-review {
+  border-top: 2px solid #ffb86c !important;
+}
+
+/* Flashcard Study Deck Pane */
+.tm-unimap-deck-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #090909;
+  border: 1px solid #242424;
+  border-radius: 6px;
+  min-height: 440px;
+}
+
+.tm-deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: #888;
+}
+
+.tm-deck-counter {
+  font-family: monospace;
+  color: #aaa;
+}
+
+.tm-deck-card {
+  background: #111;
+  border: 1px solid #282828;
+  border-radius: 6px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 280px;
+  justify-content: center;
+}
+
+.tm-deck-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.tm-deck-glyph-box {
+  width: 130px;
+  height: 130px;
+  background: #0a0a0a;
+  border: 1px solid #282828;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.tm-deck-glyph {
+  font-size: 5rem;
+  line-height: 1;
+  color: #fff;
+  user-select: none;
+}
+
+.tm-deck-hint {
+  font-size: 0.74rem;
+  color: #777;
+  margin-top: 10px;
+  font-family: monospace;
+}
+
+.tm-deck-reveal-btn {
+  margin-top: 18px;
+  padding: 8px 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.tm-deck-back {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tm-deck-readings-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+}
+
+.tm-deck-pinyin {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.tm-deck-definition {
+  font-size: 0.92rem;
+  color: #eee;
+  max-width: 440px;
+  line-height: 1.35;
+}
+
+.tm-deck-compounds {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-width: 440px;
+  margin-top: 6px;
+}
+
+.tm-deck-compound-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 8px;
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 3px;
+  font-size: 0.73rem;
+}
+
+.tm-deck-grading-box {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.tm-deck-grading-label {
+  font-size: 0.72rem;
+  color: #888;
+  font-family: monospace;
+}
+
+.tm-deck-grades {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Clean text-colored grading buttons with NO emojis */
+.tm-deck-grade {
+  padding: 7px 16px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #121212;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.tm-deck-grade.grade-again {
+  color: #ff5555;
+  border: 1px solid rgba(255, 85, 85, 0.4);
+}
+.tm-deck-grade.grade-again:hover {
+  background: rgba(255, 85, 85, 0.15);
+  border-color: #ff5555;
+}
+
+.tm-deck-grade.grade-hard {
+  color: #e5c07b;
+  border: 1px solid rgba(229, 192, 123, 0.4);
+}
+.tm-deck-grade.grade-hard:hover {
+  background: rgba(229, 192, 123, 0.15);
+  border-color: #e5c07b;
+}
+
+.tm-deck-grade.grade-good {
+  color: #00ff66;
+  border: 1px solid rgba(0, 255, 102, 0.4);
+}
+.tm-deck-grade.grade-good:hover {
+  background: rgba(0, 255, 102, 0.15);
+  border-color: #00ff66;
+}
+
+.tm-deck-grade.grade-easy {
+  color: #8be9fd;
+  border: 1px solid rgba(139, 233, 253, 0.4);
+}
+.tm-deck-grade.grade-easy:hover {
+  background: rgba(139, 233, 253, 0.15);
+  border-color: #8be9fd;
+}
+
+.tm-deck-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Vocabulary List View */
+.tm-unimap-vocab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 580px;
+  min-height: 380px;
+  overflow-y: auto;
+  padding: 8px 12px;
+  background: #080808;
+  border: 1px solid #282828;
+  border-radius: 4px;
+}
+
+.tm-vocab-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  background: #111;
+  border-radius: 4px;
+  border: 1px solid #222;
+}
+
+.tm-vocab-list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tm-vocab-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  transition: all 0.1s ease;
+}
+
+.tm-vocab-row:hover {
+  border-color: #444;
+  background: #161616;
+}
+
+.tm-vocab-term {
+  font-size: 1.05rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.tm-vocab-read {
+  color: #888;
+  font-size: 0.74rem;
+  margin-left: 6px;
+}
+
+.tm-vocab-meaning {
+  color: #ccc;
+  font-size: 0.73rem;
+  margin-top: 2px;
+}
