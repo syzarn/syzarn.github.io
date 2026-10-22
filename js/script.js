@@ -697,7 +697,7 @@ Quick Commands:
           });
       }
       return `<div class="audio-player-box">
-  <div class="audio-title">♫ audio player: now playing</div>
+  <div class="audio-title">♫︎ audio player: now playing</div>
   <div class="c-link">Track: ${escapeHTML(this.currentTrack)}</div>
   <div class="audio-progress">playing audio stream... use 'music pause' or 'music stop'</div>
 </div>`;
@@ -866,7 +866,7 @@ Volume  : ${vol}%`;
           } else if (this.snake.some(seg => seg.x === x && seg.y === y)) {
             frame += '■';
           } else if (this.food.x === x && this.food.y === y) {
-            frame += '★';
+            frame += '★\uFE0E';
           } else {
             frame += ' ';
           }
@@ -1018,8 +1018,8 @@ Volume  : ${vol}%`;
         <div class="tm-window" role="dialog" aria-label="text manipulation workbench">
           <div class="tm-header">
             <div class="tm-header-left">
-              <button type="button" class="tm-sidebar-toggle-btn" id="tm-sidebar-toggle" title="Toggle tools sidebar" aria-label="Toggle tools sidebar" aria-expanded="true">
-                <span class="tm-sidebar-toggle-icon">◀</span>
+              <button type="button" class="tm-sidebar-toggle-btn" id="tm-sidebar-toggle" title="toggle tools sidebar" aria-label="Toggle tools sidebar" aria-expanded="true">
+                <span class="tm-sidebar-toggle-icon">◀︎</span>
                 <span class="tm-sidebar-toggle-label">tools</span>
               </button>
               <div class="tm-title">
@@ -1027,14 +1027,14 @@ Volume  : ${vol}%`;
                 <span class="tm-badge" id="tm-active-tool-badge">count characters words sentences lines</span>
               </div>
             </div>
-            <button type="button" class="tm-close-btn" id="tm-close-btn" title="close workbench (esc)">✕ close [esc]</button>
+            <button type="button" class="tm-close-btn" id="tm-close-btn" title="close workbench (esc)">✕︎ close [esc]</button>
           </div>
           <div class="tm-body">
-            <div class="tm-sidebar-backdrop" id="tm-sidebar-backdrop" title="Close sidebar"></div>
+            <div class="tm-sidebar-backdrop" id="tm-sidebar-backdrop" title="close sidebar"></div>
             <div class="tm-sidebar" id="tm-sidebar">
               <div class="tm-sidebar-header">
-                <span class="tm-sidebar-heading">ALL TOOLS</span>
-                <button type="button" class="tm-sidebar-collapse-btn" id="tm-sidebar-collapse-btn" title="Collapse sidebar" aria-label="Collapse sidebar">◀</button>
+                <span class="tm-sidebar-heading">all tools</span>
+                <button type="button" class="tm-sidebar-collapse-btn" id="tm-sidebar-collapse-btn" title="collapse sidebar" aria-label="Collapse sidebar">◀︎</button>
               </div>
               <div class="tm-sidebar-scroll">
                 ${sidebarHtml}
@@ -1054,7 +1054,7 @@ Volume  : ${vol}%`;
                 </div>
                 <div class="tm-toolbar-group">
                   <button type="button" class="tm-btn" id="tm-wrap-btn">wrap: off</button>
-                  <button type="button" class="tm-btn tm-btn-primary" id="tm-run-btn">▶ run tool</button>
+                  <button type="button" class="tm-btn tm-btn-primary" id="tm-run-btn">▶︎ run tool</button>
                 </div>
               </div>
               <div class="tm-editor-area">
@@ -1149,11 +1149,11 @@ Volume  : ${vol}%`;
       if (copyBtn && textarea) {
         copyBtn.addEventListener('click', () => {
           navigator.clipboard.writeText(textarea.value).then(() => {
-            this.setStatus('Text copied to clipboard!');
+            this.setStatus('text copied to clipboard');
           }).catch(() => {
             textarea.select();
             document.execCommand('copy');
-            this.setStatus('Text copied!');
+            this.setStatus('text copied');
           });
         });
       }
@@ -1186,7 +1186,7 @@ Volume  : ${vol}%`;
                 textarea.value = ev.target.result;
                 this.updateLineCounter();
                 this.updateStats();
-                this.setStatus(`Loaded ${file.name} (${file.size} bytes)`);
+                this.setStatus(`loaded ${file.name} (${file.size} bytes)`);
               }
             };
             reader.readAsText(file);
@@ -1206,7 +1206,7 @@ Volume  : ${vol}%`;
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          this.setStatus('Saved as manipulated_text.txt');
+          this.setStatus('saved as manipulated_text.txt');
         });
       }
 
@@ -1226,13 +1226,13 @@ Volume  : ${vol}%`;
         const icon = toggleBtn.querySelector('.tm-sidebar-toggle-icon');
         const label = toggleBtn.querySelector('.tm-sidebar-toggle-label');
         if (this.isSidebarCollapsed) {
-          if (icon) icon.textContent = '▶';
+          if (icon) icon.textContent = '▶︎';
           if (label) label.textContent = 'tools';
           toggleBtn.title = 'Expand tools sidebar';
           toggleBtn.setAttribute('aria-expanded', 'false');
           toggleBtn.classList.add('collapsed');
         } else {
-          if (icon) icon.textContent = '◀';
+          if (icon) icon.textContent = '◀︎';
           if (label) label.textContent = 'tools';
           toggleBtn.title = 'Collapse tools sidebar';
           toggleBtn.setAttribute('aria-expanded', 'true');
@@ -1307,9 +1307,9 @@ Volume  : ${vol}%`;
         this.historyIndex--;
         this.updateLineCounter();
         this.updateStats();
-        this.setStatus('Undo applied');
+        this.setStatus('undo applied');
       } else {
-        this.setStatus('No more undo history');
+        this.setStatus('no more undo history');
       }
     },
 
@@ -2303,7 +2303,7 @@ Volume  : ${vol}%`;
                       <span>iterations (opens):</span>
                       <input type="number" class="tm-input" id="tm-decay-iters-num" value="1" min="1" max="100" style="width: 55px;">
                       <button type="button" class="tm-btn tm-btn-primary" id="tm-decay-glitch-run-btn" style="padding: 4px 12px; font-weight: bold;">corrupt now</button>
-                      <button type="button" class="tm-btn" id="tm-decay-glitch-step-btn">+1 Step</button>
+                      <button type="button" class="tm-btn" id="tm-decay-glitch-step-btn">+1 step</button>
                       <button type="button" class="tm-btn" id="tm-decay-glitch-reset-btn">reset</button>
                     </div>
                     <div class="tm-control-row" style="margin: 0; gap: 6px; flex-wrap: wrap; align-items: center;">
@@ -2342,17 +2342,28 @@ Volume  : ${vol}%`;
             <div class="tm-unimap-wrap">
               <div class="tm-unimap-top-bar">
                 <div class="tm-unimap-tabs">
-                  <button type="button" class="tm-unimap-tab-btn active" id="tm-unimap-tab-map" data-tab="map">⊞ Character Map</button>
+                  <button type="button" class="tm-unimap-tab-btn active" id="tm-unimap-tab-map" data-tab="map">⊞ character map</button>
                   <button type="button" class="tm-unimap-tab-btn" id="tm-unimap-tab-rs" data-tab="rsindex">㊎ RSIndex</button>
                 </div>
                 <div class="tm-unimap-nav-group" style="font-size:0.75rem;">
                   <span>font:</span>
-                  <select class="tm-select" id="tm-unimap-font-select" style="width: 175px;" title="Select font for character grid">
-                    <option value="unifont" selected>Unifont 18.0 (Standard)</option>
-                    <option value="unifont-t">Unifont 18.0 Traditional (Taiwan)</option>
-                    <option value="unifont-jp">Unifont 18.0 Japanese (JIS X 0213)</option>
-                    <option value="unifont-csur">Unifont 18.0 CSUR (ConScript PUA)</option>
-                    <option value="native">native / system font</option>
+                  <select class="tm-select" id="tm-unimap-font-select" style="width: 220px;" title="select font for character grid">
+                    <optgroup label="Noto">
+                      <option value="noto-auto" selected>Noto Serif</option>
+                      <option value="noto-sc">Noto Serif SC (simplified)</option>
+                      <option value="noto-tc">Noto Serif TC (Taiwan)</option>
+                      <option value="noto-hk">Noto Serif HK (Hong Kong)</option>
+                      <option value="noto-jp">Noto Serif JP (japanese mincho)</option>
+                    </optgroup>
+                    <optgroup label="GNU Unifont">
+                      <option value="unifont">Unifont</option>
+                      <option value="unifont-t">Unifont traditional (Taiwan)</option>
+                      <option value="unifont-jp">Unifont japanese (JIS X 0213)</option>
+                      <option value="unifont-csur">Unifont CSUR (ConScript PUA)</option>
+                    </optgroup>
+                    <optgroup label="system">
+                      <option value="native">native / system font</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>
@@ -2366,15 +2377,15 @@ Volume  : ${vol}%`;
                   <span class="c-accent ansi-bold" style="margin-left:4px;">block:</span>
                   <select class="tm-select" id="tm-unimap-block-select" style="max-width: 250px;"></select>
 
-                  <button type="button" class="tm-btn" id="tm-unimap-prev-blk" title="Previous Block">◀ blk</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-next-blk" title="Next Block">blk ▶</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-prev-page" title="Previous 256 Code Points">◀ page</button>
-                  <button type="button" class="tm-btn" id="tm-unimap-next-page" title="Next 256 Code Points">page ▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-blk" title="previous block">◀︎ blk</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-blk" title="next block">blk ▶︎</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-prev-page" title="previous 256 code points">◀︎ page</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-next-page" title="next 256 code points">page ▶︎</button>
                 </div>
 
                 <div class="tm-unimap-nav-group">
                   <span>filter:</span>
-                  <select class="tm-select" id="tm-unimap-filter-select" style="width: 155px;" title="Filter code points by Unicode version">
+                  <select class="tm-select" id="tm-unimap-filter-select" style="width: 155px;" title="filter code points by Unicode version">
                     <option value="all">all characters</option>
                     <option value="18.0">Unicode 18.0</option>
                     <option value="17.0">Unicode 17.0</option>
@@ -2421,21 +2432,21 @@ Volume  : ${vol}%`;
                 <div class="tm-unimap-nav-group">
                   <span class="c-accent ansi-bold">schema:</span>
                   <select class="tm-select" id="tm-unimap-rs-schema-select" style="font-weight:600; min-width:175px;">
-                    <option value="kangxi">Kangxi Radical-Stroke (214 Radicals)</option>
-                    <option value="hsk">HSK 3.0 (Bands 1 — 7-9)</option>
-                    <option value="tocfl">TOCFL Taiwan (Novice — Band C)</option>
-                    <option value="joyo">Japanese Jōyō Grade (Grade 1-6, Secondary)</option>
-                    <option value="jlpt">JLPT Band (N5 Beginner — N1 Advanced)</option>
-                    <option value="zipf">Spoken Frequency (Zipfian Scale)</option>
+                    <option value="kangxi">kangxi radical-stroke (214 radicals)</option>
+                    <option value="hsk">HSK 3.0 (bands 1 — 7-9)</option>
+                    <option value="tocfl">TOCFL taiwan (novice — band C)</option>
+                    <option value="joyo">japanese jōyō grade (grade 1-6, secondary)</option>
+                    <option value="jlpt">JLPT band (N5 beginner — N1 advanced)</option>
+                    <option value="zipf">spoken frequency (Zipfian scale)</option>
                   </select>
                 </div>
 
                 <!-- Kangxi Controls -->
                 <div class="tm-unimap-nav-group" id="tm-unimap-rs-kangxi-controls">
                   <span class="c-accent ansi-bold">radical:</span>
-                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-rad" title="Previous Radical">◀</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-rad" title="previous radical">◀︎</button>
                   <select class="tm-select" id="tm-unimap-rs-rad-select" style="min-width: 200px; max-width: 290px;"></select>
-                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-rad" title="Next Radical">▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-rad" title="next radical">▶︎</button>
 
                   <span class="c-accent ansi-bold" style="margin-left:4px;">strokes:</span>
                   <select class="tm-select" id="tm-unimap-rs-stroke-select" style="max-width: 120px;"></select>
@@ -2444,14 +2455,14 @@ Volume  : ${vol}%`;
                 <!-- Pedagogical Group Controls -->
                 <div class="tm-unimap-nav-group" id="tm-unimap-rs-ped-controls" style="display:none;">
                   <span class="c-accent ansi-bold">tier:</span>
-                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-ped" title="Previous Tier">◀</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-prev-ped" title="previous tier">◀︎</button>
                   <select class="tm-select" id="tm-unimap-rs-ped-select" style="min-width: 220px;"></select>
-                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-ped" title="Next Tier">▶</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-rs-next-ped" title="next tier">▶︎</button>
                 </div>
 
                 <div class="tm-unimap-nav-group" style="margin-left:auto;">
                   <span>find / word:</span>
-                  <input type="text" class="tm-input" id="tm-unimap-rs-find-input" placeholder="Char, word (e.g. 学习), or U+XXXX" style="width: 180px;">
+                  <input type="text" class="tm-input" id="tm-unimap-rs-find-input" placeholder="char, word (e.g. 公主), or U+XXXX" style="width: 180px;">
                   <button type="button" class="tm-btn" id="tm-unimap-rs-find-btn">inspect</button>
                 </div>
 
@@ -2474,15 +2485,15 @@ Volume  : ${vol}%`;
                     <option value="starred">starred</option>
                   </select>
 
-                  <button type="button" class="tm-btn" id="tm-unimap-export-anki" style="margin-left:auto;" title="Export current tier to Anki (.tsv)">export deck (.tsv)</button>
+                  <button type="button" class="tm-btn" id="tm-unimap-export-anki" style="margin-left:auto;" title="export current tier to Anki (.tsv)">export deck (.tsv)</button>
                 </div>
               </div>
 
               <!-- Multi-Character Word Decomposition Drawer -->
               <div id="tm-unimap-rs-word-decomp" style="display:none; margin: 4px 0 8px 0; padding: 8px 12px; background: #121212; border: 1px solid #282828; border-radius: 4px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                  <span style="font-size:0.75rem; color:#888;">Word Decomposition: <strong id="tm-unimap-decomp-word" class="c-accent" style="font-size:0.95rem;"></strong></span>
-                  <button type="button" class="tm-btn" id="tm-unimap-decomp-close" style="padding:1px 6px; font-size:0.7rem;">✕ close</button>
+                  <span style="font-size:0.75rem; color:#888;">word decomposition: <strong id="tm-unimap-decomp-word" class="c-accent" style="font-size:0.95rem;"></strong></span>
+                  <button type="button" class="tm-btn" id="tm-unimap-decomp-close" style="padding:1px 6px; font-size:0.7rem;">✕︎ close</button>
                 </div>
                 <div id="tm-unimap-decomp-chips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
               </div>
@@ -2494,18 +2505,18 @@ Volume  : ${vol}%`;
                 <div class="tm-unimap-grid-pane" id="tm-unimap-pane-map">
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
                     <div>range: <span id="tm-unimap-range-lbl" class="c-accent" style="font-family:monospace; font-weight:bold;">U+0000-U+00FF</span> (<span id="tm-unimap-block-lbl">Basic Latin</span>)</div>
-                    <div id="tm-unimap-filter-indicator" style="display:none; color:var(--accent-color); font-weight:bold; font-size:0.72rem;">Unicode Filter Active</div>
+                    <div id="tm-unimap-filter-indicator" style="display:none; color:var(--accent-color); font-weight:bold; font-size:0.72rem;">unicode filter active</div>
                   </div>
 
                   <div class="tm-unimap-grid-container" id="tm-unimap-grid-container">
-                    <div class="tm-unimap-grid font-unifont" id="tm-unimap-grid"></div>
+                    <div class="tm-unimap-grid font-noto-auto" id="tm-unimap-grid" data-schema="kangxi"></div>
                   </div>
                 </div>
 
                 <!-- RSIndex Grouped Pane & Learner Suite -->
                 <div class="tm-unimap-grid-pane" id="tm-unimap-pane-rs" style="display:none;">
                   <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: #888;">
-                    <div><span id="tm-unimap-rs-schema-lbl">radical:</span> <span id="tm-unimap-rs-info-lbl" class="c-accent" style="font-weight:bold;">Radical #1 (one) 一</span></div>
+                    <div><span id="tm-unimap-rs-schema-lbl">radical:</span> <span id="tm-unimap-rs-info-lbl" class="c-accent" style="font-weight:bold;">radical #1 (one) 一</span></div>
                     <div id="tm-unimap-rs-total-lbl" style="color:#aaa; font-size:0.72rem;">335 characters</div>
                   </div>
 
@@ -2522,7 +2533,7 @@ Volume  : ${vol}%`;
 
                   <!-- Grid Container (Database View) -->
                   <div class="tm-unimap-rs-container" id="tm-unimap-rs-container">
-                    <div style="padding:20px; text-align:center; color:#888;">Loading Radical-Stroke Index...</div>
+                    <div style="padding:20px; text-align:center; color:#888;">loading radical-stroke index...</div>
                   </div>
 
                   <!-- Flashcard Study Deck Pane -->
@@ -2538,7 +2549,7 @@ Volume  : ${vol}%`;
                     <div class="tm-deck-card" id="tm-deck-card">
                       <div class="tm-deck-front" id="tm-deck-front">
                         <div class="tm-deck-glyph-box">
-                          <div class="tm-deck-glyph font-unifont" id="tm-deck-char">-</div>
+                          <div class="tm-deck-glyph font-noto-auto" id="tm-deck-char" data-schema="hsk">-</div>
                         </div>
                         <div class="tm-deck-hint" id="tm-deck-hint">-</div>
                         <button type="button" class="tm-btn tm-deck-reveal-btn" id="tm-deck-reveal-btn">reveal answer (space)</button>
@@ -2587,7 +2598,7 @@ Volume  : ${vol}%`;
 
                 <div class="tm-unimap-inspector" id="tm-unimap-inspector">
                   <div class="tm-unimap-preview-header">
-                    <div class="tm-unimap-preview-box font-unifont" id="tm-unimap-preview-glyph">A</div>
+                    <div class="tm-unimap-preview-box font-noto-auto" id="tm-unimap-preview-glyph" data-schema="kangxi">A</div>
                     <div class="tm-unimap-char-title">
                       <div style="display:flex; align-items:center; gap:6px;">
                         <div class="tm-unimap-cp-badge" id="tm-unimap-cp-badge">U+0041</div>
@@ -2603,12 +2614,12 @@ Volume  : ${vol}%`;
                       <tr><td class="prop-lbl">block:</td><td class="prop-val" id="tm-unimap-p-block">Basic Latin</td></tr>
                       <tr><td class="prop-lbl">plane:</td><td class="prop-val" id="tm-unimap-p-plane">Plane 0 (BMP)</td></tr>
                       <tr><td class="prop-lbl">script:</td><td class="prop-val" id="tm-unimap-p-script">Latin</td></tr>
-                      <tr><td class="prop-lbl">category:</td><td class="prop-val" id="tm-unimap-p-cat">Lu (Letter, uppercase)</td></tr>
+                      <tr><td class="prop-lbl">category:</td><td class="prop-val" id="tm-unimap-p-cat">Lu (letter, uppercase)</td></tr>
                       <tr><td class="prop-lbl">bidi class:</td><td class="prop-val" id="tm-unimap-p-bidi">L (Left-to-Right)</td></tr>
                       <tr><td class="prop-lbl">combining:</td><td class="prop-val" id="tm-unimap-p-ccc">0 (Spacing / Base)</td></tr>
                       <tr><td class="prop-lbl">ea width:</td><td class="prop-val" id="tm-unimap-p-eaw">Na (Narrow)</td></tr>
                       <tr><td class="prop-lbl">line break:</td><td class="prop-val" id="tm-unimap-p-lb">AL (Alphabetic)</td></tr>
-                      <tr id="tm-unimap-row-mirrored" style="display:none;"><td class="prop-lbl">mirrored:</td><td class="prop-val" id="tm-unimap-p-mirrored">No</td></tr>
+                      <tr id="tm-unimap-row-mirrored" style="display:none;"><td class="prop-lbl">mirrored:</td><td class="prop-val" id="tm-unimap-p-mirrored">no</td></tr>
                       <tr id="tm-unimap-row-decomp" style="display:none;"><td class="prop-lbl">decomp:</td><td class="prop-val" id="tm-unimap-p-decomp">-</td></tr>
                       <tr id="tm-unimap-row-numeric" style="display:none;"><td class="prop-lbl">numeric:</td><td class="prop-val" id="tm-unimap-p-numeric">-</td></tr>
                       <tr id="tm-unimap-row-cases" style="display:none;"><td class="prop-lbl">mappings:</td><td class="prop-val" id="tm-unimap-p-cases">-</td></tr>
@@ -2621,40 +2632,40 @@ Volume  : ${vol}%`;
                   <!-- Specialized Cards: Pedagogical Proficiency & Curricular Benchmarks -->
                   <div id="tm-unimap-card-pedagogy" class="tm-unimap-card" style="display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <div class="tm-unimap-card-title">Pedagogical Benchmarks</div>
-                      <span id="tm-unimap-ped-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="View in Pedagogical Workbench">㊎ view in workbench →</span>
+                      <div class="tm-unimap-card-title">pedagogical benchmarks</div>
+                      <span id="tm-unimap-ped-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="view in pedagogical workbench">㊎ view in workbench →</span>
                     </div>
                     <div id="tm-unimap-ped-badges" class="tm-unimap-ped-badges"></div>
-                    <div id="tm-unimap-ped-meaning-row" style="margin-top:6px; font-size:0.75rem; line-height:1.4; display:none; background:#111; border:1px solid #222; border-radius:4px; padding:5px 8px;">
-                      <div id="tm-unimap-ped-pinyin-line" style="display:none;"><span style="color:#888;">pīnyīn:</span> <span id="tm-unimap-ped-pinyin" class="c-accent ansi-bold" style="font-size:0.88rem;"></span></div>
-                      <div id="tm-unimap-ped-def-line" style="display:none;"><span style="color:#888;">definition:</span> <span id="tm-unimap-ped-definition" style="color:#eee;"></span></div>
-                      <div id="tm-unimap-ped-kanji-line" style="display:none;"><span style="color:#888;">kanji:</span> <span id="tm-unimap-ped-kanji-onkun" class="c-accent"></span> <span id="tm-unimap-ped-kanji-meaning" style="color:#ddd;"></span></div>
+                    <div id="tm-unimap-ped-meaning-row" class="tm-unimap-ped-meaning-box" style="display:none;">
+                      <div id="tm-unimap-ped-pinyin-line" class="tm-unimap-ped-line" style="display:none;"><span class="tm-unimap-ped-lbl">pīnyīn:</span> <span id="tm-unimap-ped-pinyin" class="c-accent ansi-bold" style="font-size:0.88rem;"></span></div>
+                      <div id="tm-unimap-ped-def-line" class="tm-unimap-ped-line" style="display:none;"><span class="tm-unimap-ped-lbl">definition:</span> <span id="tm-unimap-ped-definition" style="color:#eee;"></span></div>
+                      <div id="tm-unimap-ped-kanji-line" class="tm-unimap-ped-line" style="display:none;"><span class="tm-unimap-ped-lbl">kanji:</span> <span id="tm-unimap-ped-kanji-onkun" class="c-accent"></span> <span id="tm-unimap-ped-kanji-meaning" style="color:#ddd;"></span></div>
                     </div>
                     <div id="tm-unimap-ped-ids-container" class="tm-unimap-ids-container">
-                      <div style="font-size:0.72rem; color:#888;">structural decomposition (IDS):</div>
+                      <div class="tm-unimap-ped-lbl">structural decomposition (IDS):</div>
                       <div id="tm-unimap-ped-ids-tree" class="tm-unimap-ids-tree"></div>
                     </div>
                   </div>
 
                   <!-- Specialized Cards: Curriculum Vocabulary & Compounds -->
                   <div id="tm-unimap-card-compounds" class="tm-unimap-card" style="display:none;">
-                    <div class="tm-unimap-card-title">Curriculum Vocabulary & Compounds</div>
+                    <div class="tm-unimap-card-title">curriculum vocabulary & compounds</div>
                     <div id="tm-unimap-ped-vocab-list" class="tm-unimap-vocab-list"></div>
                   </div>
 
                   <!-- Specialized Cards: Interactive Vector Stroke Order Player -->
                   <div id="tm-unimap-card-stroke-player" class="tm-unimap-card" style="display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <div class="tm-unimap-card-title">Vector Stroke Order</div>
+                      <div class="tm-unimap-card-title">vector stroke order</div>
                       <span id="tm-unimap-stroke-count-lbl" class="tm-stroke-counter">-</span>
                     </div>
                     <div class="tm-unimap-stroke-player">
                       <div class="tm-unimap-stroke-canvas-box" id="tm-unimap-stroke-canvas-box"></div>
                       <div class="tm-stroke-controls">
-                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-prev" title="Previous Stroke">◀ Step</button>
-                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-play" title="Play / Pause Animation">▶ Play</button>
-                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-next" title="Next Stroke">Step ▶</button>
-                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-reset" title="Reset View">↺ Full</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-prev" title="previous stroke">◀︎ step</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-play" title="play / pause animation">▶︎ play</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-next" title="next stroke">step ▶︎</button>
+                        <button type="button" class="tm-stroke-btn" id="tm-stroke-btn-reset" title="reset view">↺︎ full</button>
                       </div>
                     </div>
                   </div>
@@ -2662,40 +2673,40 @@ Volume  : ${vol}%`;
                   <!-- Dynamic Script-Specific Cards -->
                   <div id="tm-unimap-card-cjk" class="tm-unimap-card" style="display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <div class="tm-unimap-card-title">Unihan (CJK Ideograph Data)</div>
-                      <span id="tm-unimap-cjk-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="Switch to RSIndex tab and view this character">㊎ view in RSIndex →</span>
+                      <div class="tm-unimap-card-title">unihan (CJK ideograph data)</div>
+                      <span id="tm-unimap-cjk-rs-jump" class="tm-unimap-link" style="font-size:0.7rem; cursor:pointer;" title="switch to RSIndex tab and view this character">㊎ view in RSIndex →</span>
                     </div>
                     <div id="tm-unimap-cjk-content" class="tm-unimap-cjk-content"></div>
                   </div>
 
                   <div id="tm-unimap-card-kemet" class="tm-unimap-card" style="display:none;">
-                    <div class="tm-unimap-card-title">Egyptian Hieroglyph (Unikemet)</div>
+                    <div class="tm-unimap-card-title">egyptian hieroglyph (unikemet)</div>
                     <div><strong>gardiner:</strong> <span id="tm-unimap-kemet-code" class="c-accent">-</span></div>
                     <div><strong>description:</strong> <span id="tm-unimap-kemet-desc" style="color:#ddd;">-</span></div>
                     <div><strong>function:</strong> <span id="tm-unimap-kemet-func">-</span></div>
                   </div>
 
                   <div id="tm-unimap-card-emoji" class="tm-unimap-card" style="display:none;">
-                    <div class="tm-unimap-card-title">Emoji Metadata</div>
+                    <div class="tm-unimap-card-title">emoji metadata</div>
                     <div><strong>group:</strong> <span id="tm-unimap-emoji-group" class="c-accent">-</span></div>
                     <div><strong>subgroup:</strong> <span id="tm-unimap-emoji-subgroup">-</span></div>
                     <div><strong>qualification:</strong> <span id="tm-unimap-emoji-status">-</span></div>
                   </div>
 
                   <div id="tm-unimap-card-security" class="tm-unimap-card" style="display:none;">
-                    <div class="tm-unimap-card-title">Security & Confusables</div>
+                    <div class="tm-unimap-card-title">security & confusables</div>
                     <div id="tm-unimap-sec-conf-row" style="display:none;"><strong>confusable with:</strong> <span id="tm-unimap-sec-target" class="tm-unimap-link">-</span> (<span id="tm-unimap-sec-type">-</span>)</div>
                     <div><strong>id status:</strong> <span id="tm-unimap-sec-idstatus">-</span></div>
                   </div>
 
                   <div id="tm-unimap-card-nameslist" class="tm-unimap-card" style="display:none;">
-                    <div class="tm-unimap-card-title">Annotations & Cross-References</div>
+                    <div class="tm-unimap-card-title">annotations & cross-references</div>
                     <div id="tm-unimap-nl-aliases" style="display:none; color:#bbb;"></div>
                     <div id="tm-unimap-nl-notes" style="display:none; color:#bbb;"></div>
                     <div id="tm-unimap-nl-seealso" style="display:none;"></div>
                   </div>
 
-                  <div class="tm-unimap-card-title" style="margin-top:2px;">Encodings & Escape Sequences</div>
+                  <div class="tm-unimap-card-title" style="margin-top:2px;">encodings & escape sequences</div>
                   <table class="tm-unimap-props-table">
                     <tbody>
                       <tr><td class="prop-lbl">UTF-8:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-utf8" title="click to copy">41</span></td></tr>
@@ -2705,18 +2716,18 @@ Volume  : ${vol}%`;
                       <tr><td class="prop-lbl">HTML hex:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlhex" title="click to copy">&#x0041;</span></td></tr>
                       <tr><td class="prop-lbl">HTML ent:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-htmlent" title="click to copy">-</span></td></tr>
                       <tr><td class="prop-lbl">JS escape:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-escape" title="click to copy">\\u0041</span></td></tr>
-                      <tr><td class="prop-lbl">Python:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-pyescape" title="click to copy">\\x41</span></td></tr>
+                      <tr><td class="prop-lbl">python:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-pyescape" title="click to copy">\\x41</span></td></tr>
                       <tr><td class="prop-lbl">CSS:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-cssescape" title="click to copy">\\41 </span></td></tr>
                       <tr><td class="prop-lbl">URL enc:</td><td class="prop-val"><span class="tm-unimap-copyable" id="tm-unimap-p-urlenc" title="click to copy">%41</span></td></tr>
                     </tbody>
                   </table>
 
                   <div class="tm-unimap-actions" style="margin-top:6px;">
-                    <button type="button" class="tm-btn" id="tm-unimap-prev-char-btn" title="Previous character">◀</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-prev-char-btn" title="previous character">◀︎</button>
                     <button type="button" class="tm-btn tm-btn-primary" id="tm-unimap-insert-btn" style="flex:1;">insert</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-char-btn">copy char</button>
                     <button type="button" class="tm-btn" id="tm-unimap-copy-cp-btn">copy U+</button>
-                    <button type="button" class="tm-btn" id="tm-unimap-next-char-btn" title="Next character">▶</button>
+                    <button type="button" class="tm-btn" id="tm-unimap-next-char-btn" title="next character">▶︎</button>
                   </div>
                 </div>
               </div>
@@ -3605,7 +3616,7 @@ Volume  : ${vol}%`;
             if (res.error) return this.setStatus('Barcode Error: ' + res.error);
             const ascii = window.TextEngine.generateBarcodeAscii(res, { height: 6, margin: 2, displayValue, textPosition });
             navigator.clipboard.writeText(ascii).then(() => {
-              this.setStatus('Copied ASCII barcode to clipboard');
+              this.setStatus('copied ASCII barcode to clipboard');
             }).catch(() => {
               this.setStatus('ASCII barcode ready');
             });
@@ -3638,9 +3649,9 @@ Volume  : ${vol}%`;
             if (res.error) return this.setStatus('Barcode Error: ' + res.error);
             const svgXml = window.TextEngine.generateBarcodeSvg(content, bcOpts);
             navigator.clipboard.writeText(svgXml).then(() => {
-              this.setStatus('Copied Barcode SVG XML to clipboard');
+              this.setStatus('copied barcode SVG XML to clipboard');
             }).catch(() => {
-              this.setStatus('Barcode SVG ready');
+              this.setStatus('barcode SVG ready');
             });
           });
         }
@@ -3872,7 +3883,7 @@ Volume  : ${vol}%`;
               renderCanvas(state.currentBytes);
               if (textarea) textarea.value = `[image loaded: ${file.name}]\nResolution: ${state.width} x ${state.height} px\nRaw RGBA payload: ${state.currentBytes.length} bytes\n\nReady to simulate decay or glitch.`;
               if (statusInfo) statusInfo.textContent = `Image ready: ${state.width}×${state.height}`;
-              this.setStatus(`Loaded image: ${file.name}`);
+              this.setStatus(`loaded image: ${file.name}`);
               updateEntropyMeter();
             };
             img.src = url;
@@ -3891,7 +3902,7 @@ Volume  : ${vol}%`;
             state.originalBytes = new TextEncoder().encode(text);
             state.currentBytes = new Uint8Array(state.originalBytes);
             if (statusInfo) statusInfo.textContent = `Text loaded (${state.originalBytes.length} bytes)`;
-            this.setStatus(`Loaded text file: ${file.name}`);
+            this.setStatus(`loaded text file: ${file.name}`);
             updateEntropyMeter();
           };
           reader.readAsText(file);
@@ -3947,11 +3958,11 @@ Volume  : ${vol}%`;
 
             if (state.fileType === 'image') {
               renderCanvas(state.currentBytes);
-              this.setStatus(`Open #${state.openCount}: color channels mutated`);
+              this.setStatus(`open #${state.openCount}: color channels mutated`);
             } else {
               const decayedText = engine.decodeLossyText(state.currentBytes);
               if (textarea) textarea.value = decayedText;
-              this.setStatus(`Open #${state.openCount}: printable ASCII substitutions written`);
+              this.setStatus(`open #${state.openCount}: printable ASCII substitutions written`);
             }
 
             updateEntropyMeter();
@@ -3974,7 +3985,7 @@ Volume  : ${vol}%`;
                 if (textarea) textarea.value = engine.decodeLossyText(state.currentBytes);
               }
               updateEntropyMeter();
-              this.setStatus('Reset to pristine state');
+              this.setStatus('reset to pristine state');
             }
           });
         }
@@ -4079,9 +4090,181 @@ Volume  : ${vol}%`;
         const engine = window.TextEngine && window.TextEngine.unicodemap;
         if (!engine) return;
 
+        const ensureNotoSerifCJK = () => {
+          if (document.getElementById('noto-serif-cjk-css')) return;
+          const link = document.createElement('link');
+          link.id = 'noto-serif-cjk-css';
+          link.rel = 'stylesheet';
+          link.href = 'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600&family=Noto+Serif+SC:wght@400;600&family=Noto+Serif+TC:wght@400;600&family=Noto+Serif+HK:wght@400;600&family=Noto+Serif+JP:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Serif+Armenian:wght@400;600&family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Serif+Bengali:wght@400;600&family=Noto+Serif+Hebrew:wght@400;600&family=Noto+Serif+Georgian:wght@400;600&family=Noto+Serif+Thai:wght@400;600&family=Noto+Serif+Khmer:wght@400;600&family=Noto+Serif+Sinhala:wght@400;600&family=Noto+Serif+Myanmar:wght@400;600&family=Noto+Serif+Lao:wght@400;600&family=Noto+Serif+Ethiopic:wght@400;600&family=Noto+Serif+Tibetan:wght@400;700&family=Noto+Serif+Gurmukhi:wght@400;600&family=Noto+Serif+Gujarati:wght@400;600&family=Noto+Serif+Tamil:wght@400;600&family=Noto+Serif+Telugu:wght@400;600&family=Noto+Serif+Kannada:wght@400;600&family=Noto+Serif+Malayalam:wght@400;600&family=Noto+Serif+Grantha&family=Noto+Serif+Tangut&display=swap';
+          document.head.appendChild(link);
+        };
+        ensureNotoSerifCJK();
+
+        // Pan-Unicode on-demand loader for specialized scripts without a Serif variant
+        const SPECIALIZED_NOTO_FONTS = {
+          'Egyptian Hieroglyph': 'Noto+Sans+Egyptian+Hieroglyphs',
+          'Anatolian Hieroglyphs': 'Noto+Sans+Anatolian+Hieroglyphs',
+          'Cuneiform': 'Noto+Sans+Cuneiform',
+          'Linear B': 'Noto+Sans+Linear+B',
+          'Linear A': 'Noto+Sans+Linear+A',
+          'Ugaritic': 'Noto+Sans+Ugaritic',
+          'Old Persian': 'Noto+Sans+Old+Persian',
+          'Phoenician': 'Noto+Sans+Phoenician',
+          'Imperial Aramaic': 'Noto+Sans+Imperial+Aramaic',
+          'Runic': 'Noto+Sans+Runic',
+          'Ogham': 'Noto+Sans+Ogham',
+          'Gothic': 'Noto+Sans+Gothic',
+          'Cherokee': 'Noto+Sans+Cherokee',
+          'Canadian Aboriginal': 'Noto+Sans+Canadian+Aboriginal',
+          'Mongolian': 'Noto+Sans+Mongolian',
+          'Thaana': 'Noto+Sans+Thaana',
+          'Tifinagh': 'Noto+Sans+Tifinagh',
+          'Vai': 'Noto+Sans+Vai',
+          'Bamum': 'Noto+Sans+Bamum',
+          'Javanese': 'Noto+Sans+Javanese',
+          'Balinese': 'Noto+Sans+Balinese',
+          'Sundanese': 'Noto+Sans+Sundanese',
+          'Batak': 'Noto+Sans+Batak',
+          'Buginese': 'Noto+Sans+Buginese',
+          'Cham': 'Noto+Sans+Cham',
+          'Tai Le': 'Noto+Sans+Tai+Le',
+          'New Tai Lue': 'Noto+Sans+New+Tai+Lue',
+          'Tai Tham': 'Noto+Sans+Tai+Tham',
+          'Tai Viet': 'Noto+Sans+Tai+Viet',
+          'Meetei Mayek': 'Noto+Sans+Meetei+Mayek',
+          'Lepcha': 'Noto+Sans+Lepcha',
+          'Ol Chiki': 'Noto+Sans+Ol+Chiki',
+          'Glagolitic': 'Noto+Sans+Glagolitic',
+          'Deseret': 'Noto+Sans+Deseret',
+          'Shavian': 'Noto+Sans+Shavian',
+          'Osmanya': 'Noto+Sans+Osmanya',
+          'Brahmi': 'Noto+Sans+Brahmi',
+          'Kaithi': 'Noto+Sans+Kaithi',
+          'Sharada': 'Noto+Sans+Sharada',
+          'Siddham': 'Noto+Sans+Siddham',
+          'Modi': 'Noto+Sans+Modi',
+          'Takri': 'Noto+Sans+Takri',
+          'Warang Citi': 'Noto+Sans+Warang+Citi',
+          'Nandinagari': 'Noto+Sans+Nandinagari',
+          'Soyombo': 'Noto+Sans+Soyombo',
+          'Zanabazar Square': 'Noto+Sans+Zanabazar+Square',
+          'Bhaiksuki': 'Noto+Sans+Bhaiksuki',
+          'Marchen': 'Noto+Sans+Marchen',
+          'Masaram Gondi': 'Noto+Sans+Masaram+Gondi',
+          'Gunjala Gondi': 'Noto+Sans+Gunjala+Gondi',
+          'Kawi': 'Noto+Sans+Kawi',
+          'Mro': 'Noto+Sans+Mro',
+          'Tangsa': 'Noto+Sans+Tangsa',
+          'Bassa Vah': 'Noto+Sans+Bassa+Vah',
+          'Pahawh Hmong': 'Noto+Sans+Pahawh+Hmong',
+          'Medefaidrin': 'Noto+Sans+Medefaidrin',
+          'Miao': 'Noto+Sans+Miao',
+          'Nushu': 'Noto+Sans+Nushu',
+          'Duployan': 'Noto+Sans+Duployan',
+          'SignWriting': 'Noto+Sans+SignWriting',
+          'Adlam': 'Noto+Sans+Adlam',
+          'Wancho': 'Noto+Sans+Wancho',
+          'Nag Mundari': 'Noto+Sans+Nag+Mundari',
+          'Hanifi Rohingya': 'Noto+Sans+Hanifi+Rohingya',
+          'Old Sogdian': 'Noto+Sans+Old+Sogdian',
+          'Sogdian': 'Noto+Sans+Sogdian',
+          'Chorasmian': 'Noto+Sans+Chorasmian',
+          'Elymaic': 'Noto+Sans+Elymaic',
+          'Nabataean': 'Noto+Sans+Nabataean',
+          'Palmyrene': 'Noto+Sans+Palmyrene',
+          'Hatran': 'Noto+Sans+Hatran',
+          'Lydian': 'Noto+Sans+Lydian',
+          'Carian': 'Noto+Sans+Carian',
+          'Lycian': 'Noto+Sans+Lycian',
+          'Old Italic': 'Noto+Sans+Old+Italic',
+          'Old Turkic': 'Noto+Sans+Old+Turkic',
+          'Old Hungarian': 'Noto+Sans+Old+Hungarian',
+          'Old South Arabian': 'Noto+Sans+Old+South+Arabian',
+          'Old North Arabian': 'Noto+Sans+Old+North+Arabian',
+          'Manichaean': 'Noto+Sans+Manichaean',
+          'Avestan': 'Noto+Sans+Avestan',
+          'Inscriptional Parthian': 'Noto+Sans+Inscriptional+Parthian',
+          'Inscriptional Pahlavi': 'Noto+Sans+Inscriptional+Pahlavi',
+          'Psalter Pahlavi': 'Noto+Sans+Psalter+Pahlavi',
+          'Tagalog': 'Noto+Sans+Tagalog',
+          'Hanunoo': 'Noto+Sans+Hanunoo',
+          'Buhid': 'Noto+Sans+Buhid',
+          'Tagbanwa': 'Noto+Sans+Tagbanwa',
+          'Limbu': 'Noto+Sans+Limbu',
+          'Syloti Nagri': 'Noto+Sans+Syloti+Nagri',
+          'Phags Pa': 'Noto+Sans+Phags+Pa',
+          'Phags-pa': 'Noto+Sans+Phags+Pa',
+          'Saurashtra': 'Noto+Sans+Saurashtra',
+          'Kayah Li': 'Noto+Sans+Kayah+Li',
+          'Rejang': 'Noto+Sans+Rejang',
+          'Coptic': 'Noto+Sans+Coptic',
+          'Samaritan': 'Noto+Sans+Samaritan',
+          'NKo': 'Noto+Sans+NKo',
+          'Mandaic': 'Noto+Sans+Mandaic',
+          'Syriac': 'Noto+Sans+Syriac',
+          'Yi': 'Noto+Sans+Yi',
+          'Lisu': 'Noto+Sans+Lisu',
+          'Osage': 'Noto+Sans+Osage',
+          'Elbasan': 'Noto+Sans+Elbasan',
+          'Caucasian Albanian': 'Noto+Sans+Caucasian+Albanian',
+          'Vithkuqi': 'Noto+Sans+Vithkuqi',
+          'Cypriot': 'Noto+Sans+Cypriot',
+          'Meroitic': 'Noto+Sans+Meroitic',
+          'Kharoshthi': 'Noto+Sans+Kharoshthi',
+          'Yezidi': 'Noto+Sans+Yezidi',
+          'Old Uyghur': 'Noto+Sans+Old+Uyghur',
+          'Sora Sompeng': 'Noto+Sans+Sora+Sompeng',
+          'Chakma': 'Noto+Sans+Chakma',
+          'Mahajani': 'Noto+Sans+Mahajani',
+          'Khojki': 'Noto+Sans+Khojki',
+          'Multani': 'Noto+Sans+Multani',
+          'Khudawadi': 'Noto+Sans+Khudawadi',
+          'Newa': 'Noto+Sans+Newa',
+          'Tirhuta': 'Noto+Sans+Tirhuta',
+          'Ahom': 'Noto+Sans+Ahom',
+          'Dogra': 'Noto+Sans+Dogra',
+          'Dives Akuru': 'Noto+Sans+Dives+Akuru',
+          'Pau Cin Hau': 'Noto+Sans+Pau+Cin+Hau',
+          'Sunuwar': 'Noto+Sans+Sunuwar',
+          'Makasar': 'Noto+Sans+Makasar',
+          'Nyiakeng Puachue Hmong': 'Noto+Sans+Nyiakeng+Puachue+Hmong',
+          'Toto': 'Noto+Sans+Toto',
+          'Mende Kikakui': 'Noto+Sans+Mende+Kikakui',
+          'Siyaq': 'Noto+Sans+Indic+Siyaq+Numbers',
+          'Symbols': 'Noto+Sans+Symbols+2',
+          'Arrows': 'Noto+Sans+Symbols+2',
+          'Geometric': 'Noto+Sans+Symbols+2',
+          'Box Drawing': 'Noto+Sans+Symbols+2',
+          'Block Elements': 'Noto+Sans+Symbols+2',
+          'Braille': 'Noto+Sans+Symbols+2',
+          'Mahjong': 'Noto+Sans+Symbols+2',
+          'Domino': 'Noto+Sans+Symbols+2',
+          'Playing Cards': 'Noto+Sans+Symbols+2',
+          'Mathematical': 'Noto+Sans+Math',
+          'Musical': 'Noto+Music'
+        };
+
+        const loadedNotoFonts = new Set();
+        const ensureNotoForBlock = (blockName) => {
+          if (!blockName) return;
+          let fontParam = null;
+          for (const [key, param] of Object.entries(SPECIALIZED_NOTO_FONTS)) {
+            if (blockName.includes(key)) {
+              fontParam = param;
+              break;
+            }
+          }
+          if (!fontParam || loadedNotoFonts.has(fontParam)) return;
+          loadedNotoFonts.add(fontParam);
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = 'https://fonts.googleapis.com/css2?family=' + fontParam + '&display=swap';
+          document.head.appendChild(link);
+        };
+
         let currentCp = 0x0041;
         let pageStart = 0x0000;
-        let currentFontMode = 'unifont';
+        let currentFontMode = 'noto-auto';
         let currentFilter = 'all';
 
         const planeSelect = document.getElementById('tm-unimap-plane-select');
@@ -4291,10 +4474,12 @@ Volume  : ${vol}%`;
         const updateInspector = (cp) => {
           currentCp = cp;
           const info = engine.getUnicodeCharInfo(cp);
+          if (info && info.block && info.block.name) ensureNotoForBlock(info.block.name);
 
           if (previewGlyph) {
             previewGlyph.textContent = info.isControl ? (info.controlLabel || '·') : (info.char || ' ');
             previewGlyph.style.fontSize = info.isControl ? '1.2rem' : '2.4rem';
+            previewGlyph.setAttribute('data-schema', currentSchema);
           }
 
           const setTxt = (id, val) => {
@@ -4514,7 +4699,7 @@ Volume  : ${vol}%`;
                     parts.forEach(ch => {
                       const code = ch.codePointAt(0);
                       if (idcOps[ch]) {
-                        treeHtml += `<span class="tm-unimap-ids-op" title="${idcOps[ch]}">${escapeHTML(ch)} [${idcOps[ch]}]</span> `;
+                        treeHtml += `<span class="tm-unimap-ids-op" title="${idcOps[ch]}"><span class="tm-unimap-ids-sym font-unifont">${escapeHTML(ch)}</span> <span class="tm-unimap-ids-text">[${idcOps[ch]}]</span></span> `;
                       } else {
                         treeHtml += `<button type="button" class="tm-unimap-ids-chip" data-jump-cp="${code}" title="Jump to constituent: ${escapeHTML(ch)} (U+${code.toString(16).toUpperCase()})">${escapeHTML(ch)}</button> `;
                       }
@@ -4539,10 +4724,12 @@ Volume  : ${vol}%`;
                       const reading = wObj.r ? ` / ${escapeHTML(wObj.r)}` : (wObj.p ? ` / ${escapeHTML(wObj.p)}` : '');
                       const meaning = wObj.m ? escapeHTML(wObj.m) : '';
                       vHtml += `<div class="tm-unimap-vocab-item">
-                        <div>
-                          <span class="tm-unimap-vocab-word c-accent">${wLinked}</span>
-                          <span style="color:#888; font-size:0.72rem;">${reading}</span>
-                          ${meaning ? `<div style="color:#bbb; font-size:0.7rem;">${meaning}</div>` : ''}
+                        <div class="tm-unimap-vocab-content">
+                          <div class="tm-unimap-vocab-head">
+                            <span class="tm-unimap-vocab-word c-accent">${wLinked}</span>
+                            <span class="tm-unimap-vocab-read">${reading}</span>
+                          </div>
+                          ${meaning ? `<div class="tm-unimap-vocab-meaning">${meaning}</div>` : ''}
                         </div>
                         <div class="tm-unimap-vocab-meta">
                           <span class="tm-unimap-ped-badge ${wObj.lvl.startsWith('HSK') ? 'badge-hsk' : 'badge-jlpt'}">${escapeHTML(wObj.lvl)}</span>
@@ -4633,7 +4820,7 @@ Volume  : ${vol}%`;
                     if (isFull) {
                       strokeCountLbl.textContent = `${totalStrokes} strokes (complete)`;
                     } else {
-                      strokeCountLbl.textContent = `Stroke ${activeIdx + 1} of ${totalStrokes}`;
+                      strokeCountLbl.textContent = `stroke ${activeIdx + 1} of ${totalStrokes}`;
                     }
                   }
                 };
@@ -4645,10 +4832,10 @@ Volume  : ${vol}%`;
                     if (strokePlayerTimer) {
                       clearInterval(strokePlayerTimer);
                       strokePlayerTimer = null;
-                      strokeBtnPlay.textContent = '▶ Play';
+                      strokeBtnPlay.textContent = '▶︎ play';
                       strokeBtnPlay.classList.remove('active');
                     } else {
-                      strokeBtnPlay.textContent = '⏸ Pause';
+                      strokeBtnPlay.textContent = '⏸︎ pause';
                       strokeBtnPlay.classList.add('active');
                       if (strokePlayerIdx >= totalStrokes - 1) {
                         strokePlayerIdx = -1;
@@ -4658,7 +4845,7 @@ Volume  : ${vol}%`;
                         if (strokePlayerIdx >= totalStrokes) {
                           clearInterval(strokePlayerTimer);
                           strokePlayerTimer = null;
-                          strokeBtnPlay.textContent = '▶ Play';
+                          strokeBtnPlay.textContent = '▶︎ Play';
                           strokeBtnPlay.classList.remove('active');
                           renderSvgFrame(totalStrokes - 1, true);
                           return;
@@ -4671,7 +4858,7 @@ Volume  : ${vol}%`;
 
                 if (strokeBtnPrev) {
                   strokeBtnPrev.onclick = () => {
-                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶︎ Play'; strokeBtnPlay.classList.remove('active'); } }
                     if (strokePlayerIdx > 0) {
                       strokePlayerIdx--;
                       renderSvgFrame(strokePlayerIdx, false);
@@ -4681,7 +4868,7 @@ Volume  : ${vol}%`;
 
                 if (strokeBtnNext) {
                   strokeBtnNext.onclick = () => {
-                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶︎ Play'; strokeBtnPlay.classList.remove('active'); } }
                     if (strokePlayerIdx < totalStrokes - 1) {
                       strokePlayerIdx++;
                       renderSvgFrame(strokePlayerIdx, false);
@@ -4693,7 +4880,7 @@ Volume  : ${vol}%`;
 
                 if (strokeBtnReset) {
                   strokeBtnReset.onclick = () => {
-                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶ Play'; strokeBtnPlay.classList.remove('active'); } }
+                    if (strokePlayerTimer) { clearInterval(strokePlayerTimer); strokePlayerTimer = null; if (strokeBtnPlay) { strokeBtnPlay.textContent = '▶︎ Play'; strokeBtnPlay.classList.remove('active'); } }
                     strokePlayerIdx = totalStrokes - 1;
                     renderSvgFrame(strokePlayerIdx, true);
                   };
@@ -4946,6 +5133,7 @@ Volume  : ${vol}%`;
 
           const blk = engine.getUnicodeBlock(currentCp);
           if (blockLbl) blockLbl.textContent = blk.name;
+          if (blk && blk.name) ensureNotoForBlock(blk.name);
 
           const planeId = pageStart >> 16;
           if (planeSelect && planeSelect.value !== 'all' && parseInt(planeSelect.value, 10) !== planeId) {
@@ -4960,7 +5148,7 @@ Volume  : ${vol}%`;
 
           if (filterIndicator) {
             filterIndicator.style.display = currentFilter === 'all' ? 'none' : 'block';
-            filterIndicator.textContent = `Unicode ${currentFilter} Filter Active`;
+            filterIndicator.textContent = `unicode ${currentFilter} filter active`;
           }
 
           let gridHtml = '<div class="tm-unimap-col-hdr">U+</div>';
@@ -5059,7 +5247,7 @@ Volume  : ${vol}%`;
             if (link && link.dataset.jumpCp) {
               const cp = parseInt(link.dataset.jumpCp, 10);
               jumpToCodePoint(cp);
-              this.setStatus(`Jumped to U+${cp.toString(16).toUpperCase().padStart(4, '0')}`);
+              this.setStatus(`jumped to U+${cp.toString(16).toUpperCase().padStart(4, '0')}`);
             }
           });
         }
@@ -5067,9 +5255,29 @@ Volume  : ${vol}%`;
         if (fontSelect) {
           fontSelect.addEventListener('change', () => {
             currentFontMode = fontSelect.value;
-            if (gridEl) gridEl.className = `tm-unimap-grid font-${currentFontMode}`;
-            if (previewGlyph) previewGlyph.className = `tm-unimap-preview-box font-${currentFontMode}`;
-            this.setStatus(`Font switched to ${fontSelect.options[fontSelect.selectedIndex].text}`);
+            if (currentFontMode.startsWith('noto')) {
+              ensureNotoSerifCJK();
+              const blk = engine.getUnicodeBlock(currentCp);
+              if (blk && blk.name) ensureNotoForBlock(blk.name);
+            }
+            if (gridEl) {
+              gridEl.className = `tm-unimap-grid font-${currentFontMode}`;
+              gridEl.setAttribute('data-schema', currentSchema);
+            }
+            if (previewGlyph) {
+              previewGlyph.className = `tm-unimap-preview-box font-${currentFontMode}`;
+              previewGlyph.setAttribute('data-schema', currentSchema);
+            }
+            document.querySelectorAll('.tm-unimap-rs-grid').forEach(g => {
+              g.className = `tm-unimap-rs-grid font-${currentFontMode}`;
+              g.setAttribute('data-schema', currentSchema);
+            });
+            const deckCharEl = document.getElementById('tm-deck-char');
+            if (deckCharEl) {
+              deckCharEl.className = `tm-deck-glyph font-${currentFontMode}`;
+              deckCharEl.setAttribute('data-schema', currentSchema);
+            }
+            this.setStatus(`font switched to ${fontSelect.options[fontSelect.selectedIndex].text}`);
           });
         }
 
@@ -5115,10 +5323,10 @@ Volume  : ${vol}%`;
               } else {
                 renderGrid();
               }
-              this.setStatus(`Filtered to Unicode ${currentFilter} additions`);
+              this.setStatus(`filtered to unicode ${currentFilter} additions`);
             } else {
               renderGrid();
-              this.setStatus('Showing all Unicode characters');
+              this.setStatus('showing all unicode characters');
             }
           });
         }
@@ -5175,9 +5383,9 @@ Volume  : ${vol}%`;
             if (idx > 0) {
               const targetBlk = engine.blocks[idx - 1];
               jumpToCodePoint(targetBlk.start);
-              this.setStatus(`Switched to block: ${targetBlk.name} [${formatBlockRange(targetBlk.start, targetBlk.end)}]`);
+              this.setStatus(`switched to block: ${targetBlk.name} [${formatBlockRange(targetBlk.start, targetBlk.end)}]`);
             } else {
-              this.setStatus(`Already at first block (${curBlk.name})`);
+              this.setStatus(`already at first block (${curBlk.name})`);
             }
           });
         }
@@ -5190,7 +5398,7 @@ Volume  : ${vol}%`;
               jumpToCodePoint(targetBlk.start);
               this.setStatus(`Switched to block: ${targetBlk.name} [${formatBlockRange(targetBlk.start, targetBlk.end)}]`);
             } else {
-              this.setStatus(`Already at last block (${curBlk.name})`);
+              this.setStatus(`already at last block (${curBlk.name})`);
             }
           });
         }
@@ -5200,9 +5408,9 @@ Volume  : ${vol}%`;
             if (pageStart >= 0x100) {
               jumpToCodePoint(pageStart - 0x100);
               const blk = engine.getUnicodeBlock(currentCp);
-              this.setStatus(`Page: U+${pageStart.toString(16).toUpperCase().padStart(4, '0')}-U+${Math.min(pageStart + 0xFF, 0x10FFFF).toString(16).toUpperCase().padStart(4, '0')} (${blk.name})`);
+              this.setStatus(`page: U+${pageStart.toString(16).toUpperCase().padStart(4, '0')}-U+${Math.min(pageStart + 0xFF, 0x10FFFF).toString(16).toUpperCase().padStart(4, '0')} (${blk.name})`);
             } else {
-              this.setStatus('Already at the first page (U+0000)');
+              this.setStatus('already at the first page (U+0000)');
             }
           });
         }
@@ -5213,7 +5421,7 @@ Volume  : ${vol}%`;
               const blk = engine.getUnicodeBlock(currentCp);
               this.setStatus(`Page: U+${pageStart.toString(16).toUpperCase().padStart(4, '0')}-U+${Math.min(pageStart + 0xFF, 0x10FFFF).toString(16).toUpperCase().padStart(4, '0')} (${blk.name})`);
             } else {
-              this.setStatus('Already at the last page (U+10FF00)');
+              this.setStatus('already at the last page (U+10FF00)');
             }
           });
         }
@@ -5233,7 +5441,7 @@ Volume  : ${vol}%`;
           if (val.length >= 1) {
             const cp = val.codePointAt(0);
             jumpToCodePoint(cp);
-            this.setStatus(`Jumped to '${val[0]}' (U+${cp.toString(16).toUpperCase().padStart(4, '0')})`);
+            this.setStatus(`jumped to '${val[0]}' (U+${cp.toString(16).toUpperCase().padStart(4, '0')})`);
           }
         };
         if (gotoBtn) gotoBtn.addEventListener('click', handleGoto);
@@ -5288,7 +5496,7 @@ Volume  : ${vol}%`;
           insertBtn.addEventListener('click', () => {
             const info = engine.getUnicodeCharInfo(currentCp);
             if (!info.char && info.isControl) {
-              this.setStatus(`Cannot insert control character (${info.formattedHex})`);
+              this.setStatus(`cannot insert control character (${info.formattedHex})`);
               return;
             }
             const charToInsert = info.char;
@@ -5302,7 +5510,7 @@ Volume  : ${vol}%`;
             textarea.selectionStart = textarea.selectionEnd = startPos + charToInsert.length;
             this.updateLineCounter();
             this.updateStats();
-            this.setStatus(`Inserted '${charToInsert}' (${info.formattedHex}) into editor`);
+            this.setStatus(`inserted '${charToInsert}' (${info.formattedHex}) into editor`);
             textarea.focus();
           });
         }
@@ -5312,7 +5520,7 @@ Volume  : ${vol}%`;
             const info = engine.getUnicodeCharInfo(currentCp);
             if (info.char) {
               navigator.clipboard.writeText(info.char).then(() => {
-                this.setStatus(`Copied '${info.char}' to clipboard!`);
+                this.setStatus(`copied '${info.char}' to clipboard`);
               });
             }
           });
@@ -5322,7 +5530,7 @@ Volume  : ${vol}%`;
           copyCpBtn.addEventListener('click', () => {
             const info = engine.getUnicodeCharInfo(currentCp);
             navigator.clipboard.writeText(info.formattedHex).then(() => {
-              this.setStatus(`Copied ${info.formattedHex} to clipboard!`);
+              this.setStatus(`copied ${info.formattedHex} to clipboard`);
             });
           });
         }
@@ -5339,7 +5547,7 @@ Volume  : ${vol}%`;
               const textToCopy = el.textContent.trim();
               if (textToCopy && textToCopy !== '-') {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                  this.setStatus(`Copied ${textToCopy} to clipboard!`);
+                  this.setStatus(`copied ${textToCopy} to clipboard`);
                 });
               }
             });
@@ -5399,7 +5607,7 @@ Volume  : ${vol}%`;
                 <span>Radical #${rad.num} (${escapeHTML(rad.name)}) ${escapeHTML(rad.char)} / ${group.s} residual strokes</span>
                 <span class="tm-unimap-rs-count">${group.cps.length}</span>
               </div>
-              <div class="tm-unimap-rs-grid font-${currentFontMode}">`;
+              <div class="tm-unimap-rs-grid font-${currentFontMode}" data-schema="${currentSchema}">`;
             group.cps.forEach(cp => {
               let ch = '';
               try { ch = String.fromCodePoint(cp); } catch (e) { }
@@ -5510,6 +5718,8 @@ Volume  : ${vol}%`;
           }
 
           deckChar.textContent = charStr;
+          deckChar.className = `tm-deck-glyph font-${currentFontMode}`;
+          deckChar.setAttribute('data-schema', currentSchema);
           deckHint.textContent = `${pInfo?.ids ? 'IDS: ' + pInfo.ids : '-'} · ${pInfo?.hsk ? 'HSK ' + pInfo.hsk : (pInfo?.jlpt || '')}`;
 
           if (deckFront) deckFront.style.display = 'flex';
@@ -5533,8 +5743,8 @@ Volume  : ${vol}%`;
               deckCompounds.innerHTML = pInfo.words.slice(0, 3).map(w => {
                 const reading = w.p ? `/ ${escapeHTML(w.p)}` : (w.r ? `/ ${escapeHTML(w.r)}` : '');
                 return `<div class="tm-deck-compound-item">
-                  <span><strong class="c-accent">${escapeHTML(w.w)}</strong> <span style="color:#888;">${reading}</span></span>
-                  <span style="color:#ddd;">${escapeHTML(w.m || '')}</span>
+                  <span><strong class="c-accent">${escapeHTML(w.w)}</strong> <span class="tm-deck-compound-read" style="color:#888;">${reading}</span></span>
+                  <span class="tm-deck-compound-mean" style="color:#ddd;">${escapeHTML(w.m || '')}</span>
                 </div>`;
               }).join('');
             } else {
@@ -5665,7 +5875,7 @@ Volume  : ${vol}%`;
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          this.setStatus(`Exported ${cps.length + words.length} cards to ${tag}_Deck.tsv`);
+          this.setStatus(`exported ${cps.length + words.length} cards to ${tag}_deck.tsv`);
         };
 
         const switchViewMode = (mode) => {
@@ -5717,7 +5927,7 @@ Volume  : ${vol}%`;
               <span>${escapeHTML(title)} / ${escapeHTML(tierKey)}</span>
               <span class="tm-unimap-rs-count">${cps.length}</span>
             </div>
-            <div class="tm-unimap-rs-grid font-${currentFontMode}">`;
+            <div class="tm-unimap-rs-grid font-${currentFontMode}" data-schema="${schemaId || currentSchema}">`;
 
           cps.forEach(cp => {
             let ch = '';
@@ -5829,7 +6039,7 @@ Volume  : ${vol}%`;
             deckIndex++;
             renderDeckCard();
           } else {
-            this.setStatus(`Finished all cards in ${currentSchema.toUpperCase()} ${currentPedTier}!`);
+            this.setStatus(`finished all cards in ${currentSchema.toUpperCase()} ${currentPedTier}`);
             renderDeckCard();
           }
         };
@@ -5878,7 +6088,7 @@ Volume  : ${vol}%`;
             }
             deckIndex = 0;
             renderDeckCard();
-            this.setStatus('Shuffled study deck');
+            this.setStatus('shuffled study deck');
           });
         }
 
@@ -5890,7 +6100,7 @@ Volume  : ${vol}%`;
             updateStudyProgress(deckCards);
             applyMasteryDecorations();
             renderDeckCard();
-            this.setStatus('Reset mastery for cards in this tier');
+            this.setStatus('reset mastery for cards in this tier');
           });
         }
 
@@ -5948,6 +6158,13 @@ Volume  : ${vol}%`;
         if (schemaSelect) {
           schemaSelect.addEventListener('change', () => {
             currentSchema = schemaSelect.value;
+            if (previewGlyph) previewGlyph.setAttribute('data-schema', currentSchema);
+            if (gridEl) gridEl.setAttribute('data-schema', currentSchema);
+            document.querySelectorAll('.tm-unimap-rs-grid').forEach(g => {
+              g.setAttribute('data-schema', currentSchema);
+            });
+            const deckCharEl = document.getElementById('tm-deck-char');
+            if (deckCharEl) deckCharEl.setAttribute('data-schema', currentSchema);
             if (currentSchema === 'kangxi') {
               if (kangxiControls) kangxiControls.style.display = '';
               if (pedControls) pedControls.style.display = 'none';
@@ -6082,7 +6299,7 @@ Volume  : ${vol}%`;
             const firstCp = decomposed[0].cp;
             currentCp = firstCp;
             updateInspector(firstCp);
-            this.setStatus(`Decomposed word '${val}' into ${decomposed.length} characters`);
+            this.setStatus(`decomposed word '${val}' into ${decomposed.length} characters`);
             return;
           }
 
@@ -6104,7 +6321,7 @@ Volume  : ${vol}%`;
               ensureRSIndexLoadedAndRender(info.rad, targetCp);
               this.setStatus(`Found '${String.fromCodePoint(targetCp)}': Radical #${info.rad} (${info.radName}) ${info.radChar}, ${info.s} residual strokes`);
             } else {
-              this.setStatus(`Character U+${targetCp.toString(16).toUpperCase()} not found in Kangxi Radical-Stroke index`);
+              this.setStatus(`character U+${targetCp.toString(16).toUpperCase()} not found in kangxi radical-stroke index`);
             }
           } else {
             // Find which tier in currentSchema contains targetCp
@@ -6119,7 +6336,7 @@ Volume  : ${vol}%`;
               }
               if (foundTier) {
                 renderPedagogicalGroup(currentSchema, foundTier, targetCp);
-                this.setStatus(`Found '${String.fromCodePoint(targetCp)}' in ${currentSchema.toUpperCase()} ${foundTier}`);
+                this.setStatus(`found '${String.fromCodePoint(targetCp)}' in ${currentSchema.toUpperCase()} ${foundTier}`);
               } else {
                 this.setStatus(`'${String.fromCodePoint(targetCp)}' not ranked in ${currentSchema.toUpperCase()}`);
               }
@@ -6147,7 +6364,7 @@ Volume  : ${vol}%`;
               if (kangxiControls) kangxiControls.style.display = '';
               if (pedControls) pedControls.style.display = 'none';
               ensureRSIndexLoadedAndRender(info.rad, currentCp);
-              this.setStatus(`Switched to RSIndex for Radical #${info.rad} (${info.radName}) ${info.radChar}`);
+              this.setStatus(`switched to RSIndex for radical #${info.rad} (${info.radName}) ${info.radChar}`);
             } else {
               switchTab('rsindex');
               ensureRSIndexLoadedAndRender(1, currentCp);
@@ -6189,7 +6406,7 @@ Volume  : ${vol}%`;
           engine.loadUnicodeData().then(() => {
             if (this.activeToolId === 'unicodemap') {
               updateInspector(currentCp);
-              this.setStatus(`Unicode 18.0.0 database loaded (${engine.unicodeDatabase.size} characters indexed)`);
+              this.setStatus(`unicode 18.0.0 database loaded (${engine.unicodeDatabase.size} characters indexed)`);
             }
           });
         }
@@ -6243,7 +6460,7 @@ Volume  : ${vol}%`;
               freqStr = '\n\n--- word frequency (top 25) ---\n' + stats.frequency.slice(0, 25).map(f => `${f.word.padEnd(16)} : ${String(f.count).padStart(5)} (${f.percent}%)`).join('\n');
             }
             const queryStr = query ? `\noccurrences of "${query}": ${stats.customQueryCount}` : '';
-            this.setStatus(`Count: ${stats.characters} chars, ${stats.words} words, ${stats.sentences} sentences, ${stats.lines} lines`);
+            this.setStatus(`count: ${stats.characters} chars, ${stats.words} words, ${stats.sentences} sentences, ${stats.lines} lines`);
             textarea.value = `=== text statistics ===
 characters : ${stats.characters}
 words      : ${stats.words}
@@ -6568,9 +6785,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
 
             const res = window.TextEngine.diffText(text, text2Input, { mode, ignoreWhitespace, ignoreCase });
             if (res.identical) {
-              this.setStatus('Texts are identical! (0 differences)');
+              this.setStatus('texts are identical (0 differences)');
             } else {
-              this.setStatus(`Diff: +${res.added} added, -${res.removed} removed`);
+              this.setStatus(`diff: +${res.added} added, -${res.removed} removed`);
             }
             textarea.value = res.textReport;
             break;
@@ -6583,9 +6800,9 @@ bytes      : ${stats.bytes}${queryStr}${freqStr}\n\n=== original text ===\n` + t
               textarea.value = diff.textReport;
             } else {
               if (diff.identical) {
-                this.setStatus('Maps are identical! (0 differences)');
+                this.setStatus('maps are identical (0 differences)');
               } else {
-                this.setStatus(`Differences found: ${diff.diffCount}`);
+                this.setStatus(`differences found: ${diff.diffCount}`);
               }
               textarea.value = diff.textReport;
             }
@@ -10582,7 +10799,7 @@ Saved '${escapeHTML(filename)}'.`;
 ┌──────────────┬──────────────┬──────────────┐
 │   Morning    │     Noon     │   Evening    │
 ├──────────────┼──────────────┼──────────────┤
-│  <span class="c-warn">☀ Sunny</span>     │  <span class="c-warn">☀ Clear</span>     │  <span class="c-path">☁ Light Breeze</span>│
+│  <span class="c-warn">☀︎ Sunny</span>     │  <span class="c-warn">☀︎ Clear</span>     │  <span class="c-path">☁︎ Light Breeze</span>│
 │   28 °C      │   32 °C      │   27 °C      │
 │  Humidity:65%│  Humidity:58%│  Humidity:72%│
 └──────────────┴──────────────┴──────────────┘

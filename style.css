@@ -236,6 +236,11 @@
 
 
 :root {
+  --app-font: 'TX-02 Regular', 'JetBrains Mono', monospace;
+  --font-pan-unicode-fallbacks:
+    'Noto Naskh Arabic', 'Noto Serif Armenian', 'Noto Serif Devanagari', 'Noto Serif Bengali', 'Noto Serif Hebrew', 'Noto Serif Georgian', 'Noto Serif Thai', 'Noto Serif Khmer', 'Noto Serif Sinhala', 'Noto Serif Myanmar', 'Noto Serif Lao', 'Noto Serif Ethiopic', 'Noto Serif Tibetan', 'Noto Serif Gurmukhi', 'Noto Serif Gujarati', 'Noto Serif Tamil', 'Noto Serif Telugu', 'Noto Serif Kannada', 'Noto Serif Malayalam', 'Noto Serif Oriya', 'Noto Serif Grantha', 'Noto Serif Tangut', 'Noto Serif',
+    'Noto Sans Egyptian Hieroglyphs', 'Noto Sans Anatolian Hieroglyphs', 'Noto Sans Cuneiform', 'Noto Sans Linear B', 'Noto Sans Linear A', 'Noto Sans Ugaritic', 'Noto Sans Old Persian', 'Noto Sans Phoenician', 'Noto Sans Imperial Aramaic', 'Noto Sans Runic', 'Noto Sans Ogham', 'Noto Sans Gothic', 'Noto Sans Cherokee', 'Noto Sans Canadian Aboriginal', 'Noto Sans Mongolian', 'Noto Sans Thaana', 'Noto Sans Tifinagh', 'Noto Sans Vai', 'Noto Sans Bamum', 'Noto Sans Javanese', 'Noto Sans Balinese', 'Noto Sans Sundanese', 'Noto Sans Batak', 'Noto Sans Buginese', 'Noto Sans Cham', 'Noto Sans Tai Le', 'Noto Sans New Tai Lue', 'Noto Sans Tai Tham', 'Noto Sans Tai Viet', 'Noto Sans Meetei Mayek', 'Noto Sans Lepcha', 'Noto Sans Ol Chiki', 'Noto Sans Glagolitic', 'Noto Sans Deseret', 'Noto Sans Shavian', 'Noto Sans Osmanya', 'Noto Sans Brahmi', 'Noto Sans Kaithi', 'Noto Sans Sharada', 'Noto Sans Siddham', 'Noto Sans Modi', 'Noto Sans Takri', 'Noto Sans Warang Citi', 'Noto Sans Nandinagari', 'Noto Sans Soyombo', 'Noto Sans Zanabazar Square', 'Noto Sans Bhaiksuki', 'Noto Sans Marchen', 'Noto Sans Masaram Gondi', 'Noto Sans Gunjala Gondi', 'Noto Sans Kawi', 'Noto Sans Mro', 'Noto Sans Tangsa', 'Noto Sans Bassa Vah', 'Noto Sans Pahawh Hmong', 'Noto Sans Medefaidrin', 'Noto Sans Miao', 'Noto Sans Nushu', 'Noto Sans Duployan', 'Noto Sans SignWriting', 'Noto Sans Adlam', 'Noto Sans Wancho', 'Noto Sans Nag Mundari', 'Noto Sans Hanifi Rohingya', 'Noto Sans Old Sogdian', 'Noto Sans Sogdian', 'Noto Sans Chorasmian', 'Noto Sans Elymaic', 'Noto Sans Nabataean', 'Noto Sans Palmyrene', 'Noto Sans Hatran', 'Noto Sans Lydian', 'Noto Sans Carian', 'Noto Sans Lycian', 'Noto Sans Old Italic', 'Noto Sans Old Turkic', 'Noto Sans Old Hungarian', 'Noto Sans Old South Arabian', 'Noto Sans Old North Arabian', 'Noto Sans Manichaean', 'Noto Sans Avestan', 'Noto Sans Inscriptional Parthian', 'Noto Sans Inscriptional Pahlavi', 'Noto Sans Psalter Pahlavi', 'Noto Sans Tagalog', 'Noto Sans Hanunoo', 'Noto Sans Buhid', 'Noto Sans Tagbanwa', 'Noto Sans Limbu', 'Noto Sans Syloti Nagri', 'Noto Sans Phags Pa', 'Noto Sans Saurashtra', 'Noto Sans Kayah Li', 'Noto Sans Rejang', 'Noto Sans Coptic', 'Noto Sans Samaritan', 'Noto Sans NKo', 'Noto Sans Mandaic', 'Noto Sans Syriac', 'Noto Sans Yi', 'Noto Sans Lisu', 'Noto Sans Osage', 'Noto Sans Elbasan', 'Noto Sans Caucasian Albanian', 'Noto Sans Vithkuqi', 'Noto Sans Cypriot', 'Noto Sans Meroitic', 'Noto Sans Kharoshthi', 'Noto Sans Yezidi', 'Noto Sans Old Uyghur', 'Noto Sans Sora Sompeng', 'Noto Sans Chakma', 'Noto Sans Mahajani', 'Noto Sans Khojki', 'Noto Sans Multani', 'Noto Sans Khudawadi', 'Noto Sans Newa', 'Noto Sans Tirhuta', 'Noto Sans Ahom', 'Noto Sans Dogra', 'Noto Sans Dives Akuru', 'Noto Sans Pau Cin Hau', 'Noto Sans Sunuwar', 'Noto Sans Makasar', 'Noto Sans Nyiakeng Puachue Hmong', 'Noto Sans Toto', 'Noto Sans Mende Kikakui', 'Noto Sans Indic Siyaq Numbers', 'Noto Sans Ottoman Siyaq Numbers', 'Noto Sans Mayan Numerals', 'Noto Sans Symbols', 'Noto Sans Symbols 2', 'Noto Sans Math', 'Noto Music',
+    'Segoe UI Historic', 'Unifont', 'Unifont Upper', 'Last Resort HE', serif;
   --bg-color: #000000;
   --text-color: #ffffff;
   --prompt-user: #00ff00;
@@ -433,21 +438,30 @@ body.theme-light {
   --cursor-color: #111111;
   --scroll-thumb: #dddddd;
   --scroll-thumb-hover: #bbbbbb;
+  --app-font: 'TX-02 Regular', 'JetBrains Mono', monospace;
 }
 body.font-tx02 {
-  font-family: 'TX-02 Regular', 'JetBrains Mono', monospace;
+  --app-font: 'TX-02 Regular', 'JetBrains Mono', monospace;
+  font-family: var(--app-font);
 }
 body.font-jetbrains {
-  font-family: 'JetBrains Mono', monospace;
+  --app-font: 'JetBrains Mono', monospace;
+  font-family: var(--app-font);
 }
 body.font-cartograph {
-  font-family: 'Cartograph Mono CF', monospace;
+  --app-font: 'Cartograph Mono CF', monospace;
+  font-family: var(--app-font);
 }
 body.font-system {
-  font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Mono', 'Courier New', monospace;
+  --app-font: ui-monospace, 'SF Mono', Monaco, 'Cascadia Mono', 'Courier New', monospace;
+  font-family: var(--app-font);
 }
 * {
   box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
 }
 
 html, body {
@@ -839,7 +853,7 @@ a.term-link:hover {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: inherit;
+  font-family: var(--app-font);
   color: var(--text-color);
 }
 
@@ -981,7 +995,6 @@ a.term-link:hover {
   font-weight: 700;
   color: var(--prompt-user, #38bdf8);
   letter-spacing: 0.8px;
-  text-transform: uppercase;
 }
 
 .tm-sidebar-collapse-btn {
@@ -1041,7 +1054,6 @@ a.term-link:hover {
   color: var(--prompt-user);
   font-size: 0.78rem;
   font-weight: bold;
-  text-transform: uppercase;
   letter-spacing: 0.8px;
   padding: 8px 14px 4px 14px;
 }
@@ -1985,10 +1997,63 @@ optgroup[disabled] option {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, 'Segoe UI Historic', 'Noto Sans Egyptian Hieroglyphs', 'Last Resort HE', sans-serif;
 }
 
+/* Noto Serif Pan-Unicode & Regional Stacks (Google Fonts Sliced + Native OS Fallback + Unifont Default) */
+.tm-unimap-grid.font-noto-sc,
+.tm-unimap-preview-box.font-noto-sc,
+.tm-deck-glyph.font-noto-sc {
+  font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', 'NSimSun', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-tc,
+.tm-unimap-preview-box.font-noto-tc,
+.tm-deck-glyph.font-noto-tc {
+  font-family: 'Noto Serif TC', 'Songti TC', 'LiSong Pro', 'MingLiU', 'PMingLiU', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-hk,
+.tm-unimap-preview-box.font-noto-hk,
+.tm-deck-glyph.font-noto-hk {
+  font-family: 'Noto Serif HK', 'Songti HK', 'MingLiU_HKSCS', 'MingLiU', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-jp,
+.tm-unimap-preview-box.font-noto-jp,
+.tm-deck-glyph.font-noto-jp {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS Mincho', 'MS PMincho', var(--font-pan-unicode-fallbacks);
+}
+
+/* Dynamic Curriculum Matching (Auto Mode) with Full Pan-Unicode Fallback */
+.tm-unimap-grid.font-noto-auto,
+.tm-unimap-preview-box.font-noto-auto,
+.tm-deck-glyph.font-noto-auto {
+  font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-auto[data-schema="hsk"],
+.tm-unimap-preview-box.font-noto-auto[data-schema="hsk"],
+.tm-deck-glyph.font-noto-auto[data-schema="hsk"] {
+  font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-auto[data-schema="tocfl"],
+.tm-unimap-preview-box.font-noto-auto[data-schema="tocfl"],
+.tm-deck-glyph.font-noto-auto[data-schema="tocfl"] {
+  font-family: 'Noto Serif TC', 'Songti TC', 'LiSong Pro', 'MingLiU', var(--font-pan-unicode-fallbacks);
+}
+
+.tm-unimap-grid.font-noto-auto[data-schema="joyo"],
+.tm-unimap-preview-box.font-noto-auto[data-schema="joyo"],
+.tm-deck-glyph.font-noto-auto[data-schema="joyo"],
+.tm-unimap-grid.font-noto-auto[data-schema="jlpt"],
+.tm-unimap-preview-box.font-noto-auto[data-schema="jlpt"],
+.tm-deck-glyph.font-noto-auto[data-schema="jlpt"] {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', 'MS Mincho', var(--font-pan-unicode-fallbacks);
+}
+
 .tm-unimap-col-hdr {
   background: #141414;
   color: var(--accent-color);
-  font-family: monospace;
+  font-family: var(--app-font);
   font-size: 0.74rem;
   font-weight: bold;
   padding: 5px 0;
@@ -2000,7 +2065,7 @@ optgroup[disabled] option {
 .tm-unimap-row-hdr {
   background: #121212;
   color: #888;
-  font-family: monospace;
+  font-family: var(--app-font);
   font-size: 0.72rem;
   padding: 3px 6px;
   text-align: right;
@@ -2047,7 +2112,7 @@ optgroup[disabled] option {
 .tm-unimap-cell.control {
   font-size: 0.6rem;
   color: #666;
-  font-family: monospace;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-inspector {
@@ -2064,6 +2129,7 @@ optgroup[disabled] option {
   font-size: 0.8rem;
   max-height: none;
   overflow-y: auto;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-card {
@@ -2075,6 +2141,7 @@ optgroup[disabled] option {
   flex-direction: column;
   gap: 4px;
   font-size: 0.77rem;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-cjk-content {
@@ -2098,13 +2165,13 @@ optgroup[disabled] option {
 
 .tm-unimap-card-title {
   font-size: 0.71rem;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: bold;
   color: var(--accent-color);
   border-bottom: 1px solid #1e1e1e;
   padding-bottom: 3px;
   margin-bottom: 2px;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-tag {
@@ -2115,6 +2182,7 @@ optgroup[disabled] option {
   font-weight: bold;
   background: #1c1c1c;
   color: #bbb;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-tag.tag-new {
@@ -2126,6 +2194,7 @@ optgroup[disabled] option {
   color: var(--accent-color);
   cursor: pointer;
   text-decoration: underline;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-link:hover {
@@ -2164,7 +2233,7 @@ optgroup[disabled] option {
 }
 
 .tm-unimap-cp-badge {
-  font-family: monospace;
+  font-family: var(--app-font);
   font-size: 1.15rem;
   font-weight: bold;
   color: var(--accent-color);
@@ -2175,6 +2244,7 @@ optgroup[disabled] option {
   color: #bbb;
   word-break: break-word;
   line-height: 1.3;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-props-table {
@@ -2192,11 +2262,12 @@ optgroup[disabled] option {
   color: #777;
   width: 78px;
   white-space: nowrap;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-props-table td.prop-val {
   color: #e0e0e0;
-  font-family: monospace;
+  font-family: var(--app-font);
   word-break: break-all;
 }
 
@@ -2248,7 +2319,7 @@ optgroup[disabled] option {
   color: #888;
   padding: 5px 14px;
   font-size: 0.82rem;
-  font-family: inherit;
+  font-family: var(--app-font);
   font-weight: 600;
   cursor: pointer;
   border-radius: 4px 4px 0 0;
@@ -2303,7 +2374,7 @@ optgroup[disabled] option {
   font-size: 0.76rem;
   font-weight: 600;
   color: #aaa;
-  font-family: monospace;
+  font-family: var(--app-font);
   user-select: none;
 }
 
@@ -2336,6 +2407,32 @@ optgroup[disabled] option {
 }
 .tm-unimap-rs-grid.font-native {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK SC", "Noto Sans CJK TC", "Noto Sans CJK JP", sans-serif;
+}
+
+.tm-unimap-rs-grid.font-noto-sc {
+  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-tc {
+  font-family: 'Noto Serif TC', 'Songti TC', 'MingLiU', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-hk {
+  font-family: 'Noto Serif HK', 'Songti HK', 'MingLiU_HKSCS', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-jp {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-auto {
+  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-auto[data-schema="hsk"] {
+  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-auto[data-schema="tocfl"] {
+  font-family: 'Noto Serif TC', 'Songti TC', 'MingLiU', var(--font-pan-unicode-fallbacks);
+}
+.tm-unimap-rs-grid.font-noto-auto[data-schema="joyo"],
+.tm-unimap-rs-grid.font-noto-auto[data-schema="jlpt"] {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', var(--font-pan-unicode-fallbacks);
 }
 
 .tm-unimap-rs-cell {
@@ -6094,7 +6191,7 @@ optgroup[disabled] option {
   border-radius: 12px;
   font-size: 0.72rem;
   font-weight: 600;
-  font-family: monospace;
+  font-family: var(--app-font);
   letter-spacing: 0.3px;
   user-select: none;
 }
@@ -6127,6 +6224,43 @@ optgroup[disabled] option {
   background: rgba(38, 198, 218, 0.15);
   border: 1px solid rgba(38, 198, 218, 0.5);
   color: #26c6da;
+}
+
+.tm-unimap-ped-meaning-box {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--app-font);
+}
+
+.tm-unimap-ped-line {
+  font-family: var(--app-font);
+}
+
+.tm-unimap-ped-lbl {
+  color: #888;
+  font-family: var(--app-font);
+  font-size: 0.72rem;
+}
+
+#tm-unimap-ped-pinyin {
+  font-family: var(--app-font);
+}
+
+#tm-unimap-ped-definition {
+  font-family: var(--app-font);
+}
+
+#tm-unimap-ped-kanji-onkun {
+  font-family: 'Unifont-JP', 'Unifont', var(--app-font);
+}
+
+#tm-unimap-ped-kanji-meaning {
+  font-family: var(--app-font);
 }
 
 .tm-unimap-ids-container {
@@ -6168,7 +6302,22 @@ optgroup[disabled] option {
 .tm-unimap-ids-op {
   color: #888;
   font-size: 0.74rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tm-unimap-ids-sym {
+  font-family: 'Unifont', monospace;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.tm-unimap-ids-text {
+  font-family: var(--app-font);
   font-style: italic;
+  font-size: 0.73rem;
+  color: #888;
 }
 
 .tm-unimap-vocab-list {
@@ -6187,6 +6336,22 @@ optgroup[disabled] option {
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 0.75rem;
+  font-family: var(--app-font);
+}
+
+.tm-unimap-vocab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-family: var(--app-font);
+}
+
+.tm-unimap-vocab-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .tm-unimap-vocab-word {
@@ -6207,11 +6372,27 @@ optgroup[disabled] option {
   border-bottom-color: var(--accent-color);
 }
 
+.tm-unimap-vocab-read {
+  font-family: var(--app-font);
+  color: #888;
+  font-size: 0.72rem;
+}
+
+.tm-unimap-vocab-meaning {
+  font-family: var(--app-font);
+  color: #bbb;
+  font-size: 0.72rem;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
 .tm-unimap-vocab-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1px;
+  flex-shrink: 0;
+  font-family: var(--app-font);
 }
 
 .tm-unimap-stroke-player {
@@ -6267,7 +6448,7 @@ optgroup[disabled] option {
 .tm-stroke-num {
   font-size: 26px;
   fill: #888;
-  font-family: monospace;
+  font-family: var(--app-font);
   font-weight: bold;
   user-select: none;
 }
@@ -6278,6 +6459,7 @@ optgroup[disabled] option {
   justify-content: center;
   gap: 6px;
   width: 100%;
+  font-family: var(--app-font);
 }
 
 .tm-stroke-btn {
@@ -6287,8 +6469,10 @@ optgroup[disabled] option {
   padding: 3px 8px;
   border-radius: 3px;
   font-size: 0.72rem;
+  font-family: var(--app-font);
   cursor: pointer;
   transition: all 0.15s ease;
+  user-select: none;
 }
 
 .tm-stroke-btn:hover {
@@ -6306,7 +6490,7 @@ optgroup[disabled] option {
 .tm-stroke-counter {
   font-size: 0.72rem;
   color: #888;
-  font-family: monospace;
+  font-family: var(--app-font);
 }
 
 
@@ -6367,7 +6551,7 @@ optgroup[disabled] option {
 }
 
 .tm-deck-counter {
-  font-family: monospace;
+  font-family: var(--app-font);
   color: #aaa;
 }
 
@@ -6413,7 +6597,7 @@ optgroup[disabled] option {
   font-size: 0.74rem;
   color: #777;
   margin-top: 10px;
-  font-family: monospace;
+  font-family: var(--app-font);
 }
 
 .tm-deck-reveal-btn {
@@ -6438,11 +6622,13 @@ optgroup[disabled] option {
   align-items: center;
   gap: 3px;
   text-align: center;
+  font-family: var(--app-font);
 }
 
 .tm-deck-pinyin {
   font-size: 1.4rem;
   font-weight: bold;
+  font-family: var(--app-font);
 }
 
 .tm-deck-definition {
@@ -6450,6 +6636,7 @@ optgroup[disabled] option {
   color: #eee;
   max-width: 440px;
   line-height: 1.35;
+  font-family: var(--app-font);
 }
 
 .tm-deck-compounds {
@@ -6470,6 +6657,12 @@ optgroup[disabled] option {
   border: 1px solid #222;
   border-radius: 3px;
   font-size: 0.73rem;
+  font-family: var(--app-font);
+}
+
+.tm-deck-compound-read,
+.tm-deck-compound-mean {
+  font-family: var(--app-font);
 }
 
 .tm-deck-grading-box {
@@ -6484,7 +6677,7 @@ optgroup[disabled] option {
 .tm-deck-grading-label {
   font-size: 0.72rem;
   color: #888;
-  font-family: monospace;
+  font-family: var(--app-font);
 }
 
 .tm-deck-grades {
@@ -6503,7 +6696,7 @@ optgroup[disabled] option {
   cursor: pointer;
   background: #121212;
   transition: all 0.15s ease;
-  font-family: inherit;
+  font-family: var(--app-font);
 }
 
 .tm-deck-grade.grade-again {
@@ -6589,6 +6782,7 @@ optgroup[disabled] option {
   padding: 6px 12px;
   font-size: 0.78rem;
   transition: all 0.1s ease;
+  font-family: var(--app-font);
 }
 
 .tm-vocab-row:hover {
@@ -6603,13 +6797,16 @@ optgroup[disabled] option {
 }
 
 .tm-vocab-read {
+  font-family: var(--app-font);
   color: #888;
   font-size: 0.74rem;
   margin-left: 6px;
 }
 
 .tm-vocab-meaning {
+  font-family: var(--app-font);
   color: #ccc;
   font-size: 0.73rem;
   margin-top: 2px;
+  line-height: 1.35;
 }
